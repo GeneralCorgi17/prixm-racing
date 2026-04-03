@@ -1930,6 +1930,7 @@ function getAllDays(){
 }
 function saveDayData(data){
   if(!data||!data.date||!data.venues) return;
+  // Hybrid storage: keep 5 recent days in cache, fetch older days from disk on-demand
   const MAX_STORED_DAYS=5;
   const days=getAllDays();
   days[data.date]=data;
