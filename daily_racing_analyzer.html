@@ -2041,18 +2041,39 @@ async function clearStoredData(){
   st.openRace=null;st.venue='all';
   await render();
 }
-function renderDayBar(){
+async function renderDayBar(){
   const bar=document.getElementById('dayBar');
+  // Scan race_data folder for available files
+  let availableFiles=[];
+  try{
+    const resp=await fetch('race_data/');
+    if(resp.ok){
+      const html=await resp.text();
+      const regex=/race_data_(\d{4}-\d{2}-\d{2})\.json/g;
+      let match;
+      while((match=regex.exec(html))!==null){
+        availableFiles.push(match[1]);
+      }
+    }
+  }catch(e){
+    // Fallback: use cached days only
+  }
+
   const days=getAllDays();
-  const dates=Object.keys(days).sort().reverse();
+  const cachedDates=Object.keys(days);
+  const allDates=new Set([...cachedDates,...availableFiles]);
+  const dates=Array.from(allDates).sort().reverse();
+
   if(dates.length<=1){bar.style.display='none';return;}
   bar.style.display='flex';
   const currentDate=D?.date||'';
   bar.innerHTML=`<span class="day-bar-label">Days:</span>`+dates.map(d=>{
     const dt=new Date(d+'T12:00:00');
     const label=dt.toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'});
+    const isCached=days[d]?true:false;
     const active=d===currentDate?'active':'';
-    return `<button class="day-btn ${active}" onclick="switchDay('${d}').catch(e=>console.error('switchDay error:',e))">${label}</button>`;
+    const indicator=isCached?'':' •';
+    return `<button class="day-btn ${active} ${isCached?'cached':'uncached'}" onclick="switchDay('${d}').catch(e=>console.error('switchDay error:',e))">${label}${indicator}</button>`;
   }).join('');
 }
 
@@ -2490,7 +2511,7 @@ async function render(){
     renderVenueBar();
     renderRaceCards();
   }
-  renderDayBar();
+  await renderDayBar().catch(e=>console.error('renderDayBar error:',e));
   await renderStatusBar();
   renderPDFButton();
 }
