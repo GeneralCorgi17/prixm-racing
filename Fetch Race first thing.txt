@@ -1,7 +1,0 @@
-cd C:/Users/chris/rpscrape/scripts
-python racecards.py --day 1
-
-
-Then in analyzer folder, start fetch daily races pyton.
-
-Then use JSON file of the daily race, not the date name.
