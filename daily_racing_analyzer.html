@@ -442,6 +442,8 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .day-btn{padding:5px 12px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600;background:var(--bg);color:var(--muted);border:1px solid var(--border);transition:all .15s}
 .day-btn:hover{border-color:var(--accent);color:var(--text)}
 .day-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.day-btn.cached{opacity:1;font-weight:500}
+.day-btn.uncached{opacity:0.65;font-style:italic}
 </style>
 </head>
 <body>
@@ -2056,7 +2058,7 @@ async function renderDayBar(){
       }
     }
   }catch(e){
-    // Fallback: use cached days only
+    console.warn('renderDayBar: Failed to scan race_data directory, using cached dates only:', e.message);
   }
 
   const days=getAllDays();
@@ -2064,13 +2066,14 @@ async function renderDayBar(){
   const allDates=new Set([...cachedDates,...availableFiles]);
   const dates=Array.from(allDates).sort().reverse();
 
+  // Hide day-bar if only cached single day or no dates found
   if(dates.length<=1){bar.style.display='none';return;}
   bar.style.display='flex';
   const currentDate=D?.date||'';
   bar.innerHTML=`<span class="day-bar-label">Days:</span>`+dates.map(d=>{
     const dt=new Date(d+'T12:00:00');
     const label=dt.toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'});
-    const isCached=days[d]?true:false;
+    const isCached=!!days[d]; // Use boolean coercion
     const active=d===currentDate?'active':'';
     const indicator=isCached?'':' •';
     return `<button class="day-btn ${active} ${isCached?'cached':'uncached'}" onclick="switchDay('${d}').catch(e=>console.error('switchDay error:',e))">${label}${indicator}</button>`;
