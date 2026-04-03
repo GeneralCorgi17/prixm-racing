@@ -1954,6 +1954,23 @@ function saveDayData(data){
   // Also keep legacy key for current day
   try{ localStorage.setItem('raceData',JSON.stringify(data)); }catch(e){}
 }
+async function fetchDayDataFromFile(date){
+  // Fetch race data from disk for dates outside 5-day cache
+  const filename=`race_data/race_data_${date}.json`;
+  try{
+    const response=await fetch(filename);
+    if(!response.ok) return null;
+    const data=await response.json();
+    // Optionally add to cache when fetched
+    if(data&&data.date&&data.venues){
+      saveDayData(data);
+    }
+    return data;
+  }catch(e){
+    console.warn(`Failed to fetch ${filename}:`,e);
+    return null;
+  }
+}
 function loadDayData(date){
   const days=getAllDays();
   return days[date]||null;
