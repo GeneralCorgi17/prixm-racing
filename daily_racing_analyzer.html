@@ -1464,7 +1464,7 @@ async function renderPerformance(){
       recentRaces};
   }
 
-  function renderPerfHTML(pf){
+  async function renderPerfHTML(pf){
     const s=computeStats(pf);
     // Version banner
     const _av=getAnalysisVersion();
@@ -2726,21 +2726,24 @@ async function computeThresholdAnalysis(){
   // Collect all historical picks with outcomes
   const dataPoints=[];
   const origD=D;
-  for(const date of allDates){
-    const pd=loadTop10Picks(date);
-    if(!pd||!pd.picks) continue;
-    const dayData=await loadDayData(date);
-    if(!dayData) return;
-    D={date,venues:dayData.venues};
-    pd.picks.forEach(p=>{
-      const res=getPickResult(p,hist);
-      if(!res) return;
-      if(res.status==='nr'||res.status==='pu') return;
-      const placed=res.status==='won'||res.status==='placed';
-      dataPoints.push({composite:p.composite,placed,date,horse:p.horse});
-    });
+  try {
+    for(const date of allDates){
+      const pd=loadTop10Picks(date);
+      if(!pd||!pd.picks) continue;
+      const dayData=await loadDayData(date);
+      if(!dayData) return null;
+      D={date,venues:dayData.venues};
+      pd.picks.forEach(p=>{
+        const res=getPickResult(p,hist);
+        if(!res) return;
+        if(res.status==='nr'||res.status==='pu') return;
+        const placed=res.status==='won'||res.status==='placed';
+        dataPoints.push({composite:p.composite,placed,date,horse:p.horse});
+      });
+    }
+  } finally {
+    D=origD;
   }
-  D=origD;
   if(dataPoints.length<10) return null; // need minimum sample
   // Sort by composite score descending
   dataPoints.sort((a,b)=>b.composite-a.composite);
