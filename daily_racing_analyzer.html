@@ -1143,7 +1143,7 @@ async function saveResults(venueKey,raceIdx){
   resultState[key]={ranked:[],nrs:[],editing:false};
   updateStatus();
   // Auto-refresh Top 10 picks with latest results
-  renderTopPicks();
+  await renderTopPicks().catch(e=>console.error('renderTopPicks error:',e));
   // Check if daily picks auto-calibration should run
   checkDailyPicksCalibration();
   renderDetail();
@@ -2839,7 +2839,7 @@ async function renderTopPicks(){
   // Feedback insights
   const insights=generateFeedbackInsights(perf,prevPerf);
   // Confidence Threshold Optimizer
-  const threshData=computeThresholdAnalysis();
+  const threshData=await computeThresholdAnalysis();
   const hasThresh=threshData&&threshData.optimalThreshold!==null;
   const threshVal=hasThresh?threshData.optimalThreshold:0;
   // Threshold info strip
