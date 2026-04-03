@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "races": [],
+  "calibrations": [],
+  "weight_profiles": {
+    "aw": {"form": 20, "rating": 15, "trainer": 12, "jockey": 10, "fitness": 8, "class": 8, "going": 8, "course": 6, "distance": 6, "age": 7, "weight": 8, "draw": 5, "headgear": 3, "spotlight": 2},
+    "turf_flat": {"form": 20, "rating": 15, "trainer": 12, "jockey": 10, "fitness": 8, "class": 8, "going": 8, "course": 6, "distance": 6, "age": 7, "weight": 8, "draw": 5, "headgear": 3, "spotlight": 2},
+    "nh": {"form": 20, "rating": 15, "trainer": 12, "jockey": 10, "fitness": 8, "class": 8, "going": 8, "course": 6, "distance": 6, "age": 7, "weight": 8, "draw": 5, "headgear": 3, "spotlight": 2}
+  }
+}
