@@ -453,7 +453,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 <div class="hdr-r">
 <span id="dataSourceBadge" style="font-size:11px;padding:4px 10px;border-radius:12px;font-weight:600;display:none"></span>
 <button class="vbtn" onclick="showPaste()" style="font-size:11px" title="Load fresh JSON data">📋 Load JSON</button>
-<button class="vbtn" id="clearDataBtn" onclick="clearStoredData()" style="font-size:11px;display:none" title="Clear stored data and revert to sample">🗑 Clear Data</button>
+<button class="vbtn" id="clearDataBtn" onclick="clearStoredData().catch(e=>console.error('clearStoredData error:',e))" style="font-size:11px;display:none" title="Clear stored data and revert to sample">🗑 Clear Data</button>
 <button class="vbtn" onclick="showGuide()" style="font-size:11px" title="How to use this tool">❓ Guide</button>
 <button class="vbtn" id="pdfExportBtn" onclick="exportPDF()" style="font-size:11px;border-color:var(--accent2);color:var(--accent2)" title="Download PDF cheat sheet — top 5 per race for offline use">📄 PDF</button>
 <span class="date-b" id="dateDisp">Loading...</span>
@@ -478,7 +478,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 </div>
 
 <div class="detail-view" id="detailView">
-<button class="back-btn" onclick="goBack()">← Back to Races</button>
+<button class="back-btn" onclick="goBack().catch(e=>console.error('goBack error:',e))">← Back to Races</button>
 <div id="detailContent"></div>
 </div>
 
@@ -500,10 +500,10 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 let D=null, st={venue:'all', openRace:null, sort:'score', sortDir:-1, expanded:null, detailTab:'main', riMode:'rank', h2hPair:null};
 
 // ==================== PER-DAY DATA STATUS TRACKER ====================
-function getDayStatus(date){
+async function getDayStatus(date){
   if(!date) return null;
   const hist=window._resultsHistory;
-  const dayData=loadDayData(date);
+  const dayData=await loadDayData(date);
   if(!dayData||!dayData.venues) return null;
   // Count total races for this day
   let totalRaces=0;
@@ -525,7 +525,7 @@ function getDayStatus(date){
   const calHist=getPicksCalibrationHistory();
   const hasCalibration=calHist&&calHist.lastDate===date;
   // Threshold has data? (global — computed from all historical)
-  const threshData=computeThresholdAnalysis();
+  const threshData=await computeThresholdAnalysis();
   const hasThreshold=threshData&&threshData.optimalThreshold!==null;
   // PDF exported for this date?
   const pdfLog=getPDFExportLog();
@@ -535,11 +535,11 @@ function getDayStatus(date){
   const allDone=allLogged&&hasPicks&&hasCalibration&&hasPDF;
   return {date,totalRaces,loggedRaces,allLogged,hasPicks,hasCalibration,hasThreshold,hasPDF,allDone};
 }
-function renderStatusBar(){
+async function renderStatusBar(){
   const el=document.getElementById('statusBar');if(!el) return;
   const date=D&&D.date?D.date:null;
   if(!date){el.innerHTML='';return;}
-  const s=getDayStatus(date);
+  const s=await getDayStatus(date);
   if(!s){el.innerHTML='';return;}
   const items=[];
   // Results
@@ -572,15 +572,15 @@ function renderStatusBar(){
   else badge=`<span class="sb-badge sb-badge-partial">${greenCount}/${total}</span>`;
   el.innerHTML=`<div class="sb-wrap">${badge}<div class="sb-items">${items.join('')}</div></div>`;
 }
-function updateStatus(){renderStatusBar();}
+async function updateStatus(){await renderStatusBar();}
 
 // PDF export log — persisted per date in localStorage
 function getPDFExportLog(){try{return JSON.parse(localStorage.getItem('pdfExportLog')||'{}');}catch(e){return {};}}
-function markPDFExported(date){
+async function markPDFExported(date){
   const log=getPDFExportLog();
   log[date]={exportedAt:new Date().toISOString(),filename:`racing_${date}.pdf`};
   localStorage.setItem('pdfExportLog',JSON.stringify(log));
-  renderStatusBar();
+  await renderStatusBar();
   renderPDFButton();
 }
 function renderPDFButton(){
@@ -1011,9 +1011,9 @@ function renderResultsLogger(venueKey,raceIdx){
     <div class="ri-header">
       <div class="ri-header-title">${mode==='rank'?'Click horses in finishing order':mode==='nr'?'Click to mark non-runners':'Click to mark pulled out'}${rs.editing?' (editing)':''}</div>
       <div class="ri-mode-toggle">
-        <button class="ri-mode-btn ${mode==='rank'?'active-rank':''}" onclick="st.riMode='rank';renderDetail()">🏇 Rank</button>
-        <button class="ri-mode-btn ${mode==='nr'?'active-nr':''}" onclick="st.riMode='nr';renderDetail()">🚫 NR</button>
-        <button class="ri-mode-btn ${mode==='pu'?'active-nr':''}" onclick="st.riMode='pu';renderDetail()" style="${mode==='pu'?'background:#f59e0b22;color:#f59e0b;border-color:#f59e0b':''}">⛔ PU</button>
+        <button class="ri-mode-btn ${mode==='rank'?'active-rank':''}" onclick="st.riMode='rank';renderDetail().catch(e=>console.error('renderDetail error:',e))">🏇 Rank</button>
+        <button class="ri-mode-btn ${mode==='nr'?'active-nr':''}" onclick="st.riMode='nr';renderDetail().catch(e=>console.error('renderDetail error:',e))">🚫 NR</button>
+        <button class="ri-mode-btn ${mode==='pu'?'active-nr':''}" onclick="st.riMode='pu';renderDetail().catch(e=>console.error('renderDetail error:',e))" style="${mode==='pu'?'background:#f59e0b22;color:#f59e0b;border-color:#f59e0b':''}">⛔ PU</button>
       </div>
     </div>
     <div class="ri-tiles">${race.runners.map(r=>{
@@ -1085,8 +1085,8 @@ function cancelEdit(key){
 }
 
 // Legacy compat — redirect old calls
-function showResultsInput(venueKey,raceIdx){
-  st.openRace={vk:venueKey,ri:raceIdx};st.detailTab='main';render();
+async function showResultsInput(venueKey,raceIdx){
+  st.openRace={vk:venueKey,ri:raceIdx};st.detailTab='main';await render();
 }
 
 async function saveResults(venueKey,raceIdx){
@@ -1216,7 +1216,7 @@ function submitPickResults(){
     <p>Calibration complete using ${loggedCount}/10 picks with results.</p>
     <p style="margin-top:8px">Today's picks are <b>locked</b> — they won't change so you can track them.</p>
     <p style="margin-top:4px">Adjustments will apply to <b>tomorrow's picks</b> to improve selection.</p>
-    <button class="mbtn" onclick="closeModal();renderTopPicks()" style="margin-top:12px;width:100%">OK</button>
+    <button class="mbtn" onclick="closeModal();renderTopPicks().catch(e=>console.error('renderTopPicks error:',e))" style="margin-top:12px;width:100%">OK</button>
   </div></div>`;
 }
 
@@ -1670,7 +1670,7 @@ async function renderPerformance(){
     }
 
     // ==================== CONFIDENCE THRESHOLD OPTIMIZER ====================
-    const threshPerf=computeThresholdAnalysis();
+    const threshPerf=await computeThresholdAnalysis();
     if(threshPerf&&threshPerf.optimalThreshold!==null){
       const tp=threshPerf;
       const barMax=Math.max(...tp.curve.map(c=>c.placedRate),100);
@@ -1955,25 +1955,49 @@ function saveDayData(data){
   try{ localStorage.setItem('raceData',JSON.stringify(data)); }catch(e){}
 }
 async function fetchDayDataFromFile(date){
+  // Fix 1: Validate date parameter at function start
+  if (!date || typeof date !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+    console.warn('Invalid date format:', date);
+    return null;
+  }
+
   // Fetch race data from disk for dates outside 5-day cache
   const filename=`race_data/race_data_${date}.json`;
+
+  // Fix 3: Add timeout handling
+  let timeoutId;
   try{
-    const response=await fetch(filename);
+    const controller=new AbortController();
+    timeoutId=setTimeout(() => controller.abort(), 5000); // 5 second timeout
+    const response=await fetch(filename, { signal: controller.signal });
+    clearTimeout(timeoutId);
     if(!response.ok) return null;
     const data=await response.json();
-    // Optionally add to cache when fetched
-    if(data&&data.date&&data.venues){
+
+    // Fix 2: Validate data structure and date match before caching
+    if(data && data.date === date && data.venues && Object.keys(data.venues).length > 0){
       saveDayData(data);
     }
     return data;
   }catch(e){
-    console.warn(`Failed to fetch ${filename}:`,e);
+    clearTimeout(timeoutId);
+    if (e.name === 'AbortError') {
+      console.warn(`Timeout fetching ${filename} (5s)`);
+    } else if (e instanceof SyntaxError) {
+      console.warn(`Invalid JSON in ${filename}:`, e);
+    } else {
+      console.warn(`Failed to fetch ${filename}:`, e);
+    }
     return null;
   }
 }
-function loadDayData(date){
+async function loadDayData(date){
   const days=getAllDays();
-  return days[date]||null;
+  // Check cache first
+  if(days[date]) return days[date];
+  // Not in cache — try to fetch from file
+  const fetched=await fetchDayDataFromFile(date);
+  return fetched||null;
 }
 function applyCalibratedWeightsToData(data){
   // Apply any persisted calibrated weights to rescore runners in the given data
@@ -1999,23 +2023,23 @@ function applyCalibratedWeightsToData(data){
   });
 }
 
-function switchDay(date){
-  const data=loadDayData(date);
+async function switchDay(date){
+  const data=await loadDayData(date);
   if(!data)return;
   D=filterExcludedVenues(data);
   applyCalibratedWeightsToData(D);
   window._dataSource='stored';
   st.openRace=null;st.venue='all';st.detailTab='main';
-  render();
+  await render();
 }
-function clearStoredData(){
+async function clearStoredData(){
   if(!confirm('Clear ALL stored race data? This will remove all saved days and revert to sample data.'))return;
   localStorage.removeItem('raceDays');
   localStorage.removeItem('raceData');
   window._dataSource='sample';
   D=filterExcludedVenues(EMBEDDED_DATA);
   st.openRace=null;st.venue='all';
-  render();
+  await render();
 }
 function renderDayBar(){
   const bar=document.getElementById('dayBar');
@@ -2028,7 +2052,7 @@ function renderDayBar(){
     const dt=new Date(d+'T12:00:00');
     const label=dt.toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'});
     const active=d===currentDate?'active':'';
-    return `<button class="day-btn ${active}" onclick="switchDay('${d}')">${label}</button>`;
+    return `<button class="day-btn ${active}" onclick="switchDay('${d}').catch(e=>console.error('switchDay error:',e))">${label}</button>`;
   }).join('');
 }
 
@@ -2069,7 +2093,7 @@ async function load(){
   }
   // Apply any persisted calibrated weights to rescore today's runners on load
   applyCalibratedWeightsToData(D);
-  render();
+  await render();
 }
 
 function showPaste(){
@@ -2080,12 +2104,12 @@ function showPaste(){
     <p style="margin-bottom:10px;font-size:12px;color:var(--muted)">The JSON must have this structure: <code>{"date":"...","venues":{"Wolverhampton":{"course":"...","races":[...]}}}</code><br>
     To generate it, run in Command Prompt: <code>python racecard_fetcher.py</code> then open <code>daily_race_data.json</code> with Notepad and copy all contents.</p>
     <textarea id="jsonPaste" placeholder='{"date":"2026-03-24","venues":{"Wolverhampton":{"course":"Wolverhampton","race_count":9,"races":[...]}}}'></textarea>
-    <button class="mbtn" onclick="loadPasted()">Load Data</button>
+    <button class="mbtn" onclick="loadPasted().catch(e=>console.error('loadPasted error:',e))">Load Data</button>
     <p id="pasteErr" style="color:#ef4444;margin-top:6px;font-size:12px"></p>
   </div></div>`;
 }
 
-function loadPasted(){
+async function loadPasted(){
   try{
     const raw=document.getElementById('jsonPaste').value.trim();
     if(!raw){throw new Error('Paste box is empty. Paste the contents of daily_race_data.json here.')}
@@ -2104,7 +2128,7 @@ function loadPasted(){
     saveDayData(D);
     closeModal();
     st.openRace=null; st.venue='all';
-    render();
+    await render();
   }catch(e){
     document.getElementById('pasteErr').textContent=e.message;
   }
@@ -2431,7 +2455,7 @@ function showGuide(){
 
 function closeModal(){document.getElementById('modalContainer').innerHTML=''}
 
-function render(){
+async function render(){
   const dd=document.getElementById('dateDisp'),sd=document.getElementById('statusDisp');
   // Data source indicator
   const badge=document.getElementById('dataSourceBadge');
@@ -2462,12 +2486,12 @@ function render(){
   }else{
     document.getElementById('landingView').style.display='block';
     document.getElementById('detailView').style.display='none';
-    renderTopPicks();
+    await renderTopPicks();
     renderVenueBar();
     renderRaceCards();
   }
   renderDayBar();
-  renderStatusBar();
+  await renderStatusBar();
   renderPDFButton();
 }
 
@@ -2695,17 +2719,17 @@ function generateFeedbackInsights(perf,prevPerf){
 // ==================== CONFIDENCE THRESHOLD OPTIMIZER (Engine 2) ====================
 // Scans ALL historical Top 10 picks, groups by composite score, finds the cutoff
 // where placed rate hits the target (80%). Picks above threshold = confident bets.
-function computeThresholdAnalysis(){
+async function computeThresholdAnalysis(){
   const allDates=getAllPicksDates();
   const hist=window._resultsHistory;
   if(!hist||!hist.races||allDates.length<1) return null;
   // Collect all historical picks with outcomes
   const dataPoints=[];
   const origD=D;
-  allDates.forEach(date=>{
+  for(const date of allDates){
     const pd=loadTop10Picks(date);
-    if(!pd||!pd.picks) return;
-    const dayData=loadDayData(date);
+    if(!pd||!pd.picks) continue;
+    const dayData=await loadDayData(date);
     if(!dayData) return;
     D={date,venues:dayData.venues};
     pd.picks.forEach(p=>{
@@ -2715,7 +2739,7 @@ function computeThresholdAnalysis(){
       const placed=res.status==='won'||res.status==='placed';
       dataPoints.push({composite:p.composite,placed,date,horse:p.horse});
     });
-  });
+  }
   D=origD;
   if(dataPoints.length<10) return null; // need minimum sample
   // Sort by composite score descending
@@ -2763,7 +2787,7 @@ function computeThresholdAnalysis(){
   };
 }
 
-function renderTopPicks(){
+async function renderTopPicks(){
   const el=document.getElementById('topPicksSection');
   if(!D||!D.venues){el.innerHTML='';return}
   const currentDate=D.date||'';
@@ -2790,7 +2814,7 @@ function renderTopPicks(){
     const prevData=loadTop10Picks(prevDate);
     if(prevData&&prevData.picks){
       // Load that day's data for results checking
-      const prevDayData=loadDayData(prevDate);
+      const prevDayData=await loadDayData(prevDate);
       if(prevDayData){
         const tmpD=D;D={date:prevDate,venues:prevDayData.venues};
         prevPerf=analyzePicksPerformance(prevData.picks,hist);
@@ -2883,7 +2907,7 @@ function renderTopPicks(){
         const betLanded=(st==='won'&&p.bet.type==='WIN')||(st==='placed'&&(p.bet.type==='E/W'||p.bet.type==='PLACE'))||(st==='won'&&(p.bet.type==='E/W'||p.bet.type==='PLACE'));
         const betLabel=betLanded?p.bet.type+' ✓':p.bet.type;
         const overrideTag=p.wasOverridden?`<span style="font-size:9px;color:var(--warn);display:block;margin-top:1px" title="Feedback engine chose this over raw #1: ${p.rawTop}">⚡ Override — raw #1 was ${p.rawTop}</span>`:'';
-        return `<div class="tp-card ${resCls}"${dimCard} onclick="openRace('${p.venueKey}',${p.raceIdx})">
+        return `<div class="tp-card ${resCls}"${dimCard} onclick="openRace('${p.venueKey}',${p.raceIdx}).catch(e=>console.error('openRace error:',e))">
         ${banner}
         <div class="tp-rank">${p.rank}</div>
         <div class="tp-card-body">
@@ -2906,11 +2930,11 @@ function renderTopPicks(){
       }).join('')}
     </div>
     ${allDates.length>1?`<div class="tp-history">
-      ${allDates.slice(0,14).map(d=>{
+      ${(await Promise.all(allDates.slice(0,14).map(async d=>{
         const pd=loadTop10Picks(d);
         if(!pd||!pd.picks) return '';
         const isActive=d===currentDate;
-        const dayData=loadDayData(d);
+        const dayData=await loadDayData(d);
         let wins=0,logged=0;
         if(dayData&&hist&&hist.races){
           const tmpD2=D;D={date:d,venues:dayData.venues};
@@ -2930,8 +2954,8 @@ function renderTopPicks(){
           else{bg='rgba(239,68,68,'+(0.15+(1-rate)*0.15)+')';clr='var(--text)';}
         }
         const summary=logged>0?wins+'W/'+logged:'—';
-        return `<span class="tp-hist-day ${isActive?'active':''}" onclick="switchDay('${d}')" style="background:${bg};color:${clr};border-color:${isActive?'var(--gold)':bg}" title="${d}: ${wins} wins from ${logged} logged picks">${label}<br><span style="font-size:10px;font-weight:400">${summary}</span></span>`;
-      }).join('')}
+        return `<span class="tp-hist-day ${isActive?'active':''}" onclick="switchDay('${d}').catch(e=>console.error('switchDay error:',e))" style="background:${bg};color:${clr};border-color:${isActive?'var(--gold)':bg}" title="${d}: ${wins} wins from ${logged} logged picks">${label}<br><span style="font-size:10px;font-weight:400">${summary}</span></span>`;
+      })).join('')}
     </div>`:''}
     ${insights.length?`<div class="tp-feedback">
       <div class="tp-feedback-title">Performance Insights${prevDate?' (vs '+prevDate.slice(5)+')':''}</div>
@@ -2994,7 +3018,7 @@ function renderRaceCards(){
     const dupKey=(D.date||'')+r.venueKey+r.time;
     const logged=hist&&hist.races&&hist.races.some(h=>(h.date+h.venue+h.time)===dupKey);
     const rCombos=comboByRace[r.venueKey+'_'+r.raceIdx]||[];
-    return `<div class="rc" id="${cardId}" onclick="openRace('${r.venueKey}',${r.raceIdx})">
+    return `<div class="rc" id="${cardId}" onclick="openRace('${r.venueKey}',${r.raceIdx}).catch(e=>console.error('openRace error:',e))">
       ${logged?'<span class="rc-logged">✓ LOGGED</span>':''}
       <div class="rc-head"><span class="venue">${r.course}</span><span class="time">${r.time}</span></div>
       <div class="rmeta">
@@ -3042,11 +3066,11 @@ function renderRaceCards(){
   }).join('');
 }
 
-function openRace(vk,ri){st.openRace={vk,ri};st.expanded=null;st.detailTab='main';st.h2hPair=null;render()}
-function goBack(){st.openRace=null;render()}
-function switchDetailTab(tab){st.detailTab=tab;st.h2hPair=null;renderDetail();}
+async function openRace(vk,ri){st.openRace={vk,ri};st.expanded=null;st.detailTab='main';st.h2hPair=null;await render()}
+async function goBack(){st.openRace=null;await render()}
+function switchDetailTab(tab){st.detailTab=tab;st.h2hPair=null;renderDetail().catch(e=>console.error('renderDetail error:',e));}
 
-function renderDetail(){
+async function renderDetail(){
   const {vk,ri}=st.openRace;
   const venue=D.venues[vk];if(!venue)return;
   const race=venue.races[ri];if(!race)return;
@@ -3296,7 +3320,7 @@ function doSort(key){
   renderDetail();
 }
 
-function toggleExp(name){st.expanded=st.expanded===name?null:name;renderDetail()}
+function toggleExp(name){st.expanded=st.expanded===name?null:name;renderDetail().catch(e=>console.error('renderDetail error:',e))}
 
 function renderExpandedRow(r, fieldSize, race){
   const bd=r.score_breakdown||{};
@@ -3780,7 +3804,7 @@ function renderCombos(){
         ${todayMatches.map(m=>{
           const c=m.combo;
           const typeIcon=c.type==='Horse+Jockey+Trainer'?'🏆':c.type==='Horse+Jockey'?'🐴':c.type==='Horse+Trainer'?'📋':'🤝';
-          return `<div style="background:var(--card);border-radius:8px;padding:12px 14px;border:1px solid var(--border);cursor:pointer" onclick="openRace('${m.venueKey}',${m.raceIdx})">
+          return `<div style="background:var(--card);border-radius:8px;padding:12px 14px;border:1px solid var(--border);cursor:pointer" onclick="openRace('${m.venueKey}',${m.raceIdx}).catch(e=>console.error('openRace error:',e))">
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
               <span style="font-size:14px;font-weight:700;color:var(--text)">${typeIcon} ${m.runner.name}</span>
               <span style="font-size:12px;font-weight:700;color:var(--gold)">${c.placeRate}% place · ${c.total} runs</span>
