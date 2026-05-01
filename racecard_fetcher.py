@@ -57,20 +57,45 @@ def fetch_url(url, headers=None):
     """Fetch URL with retry."""
     if headers is None:
         headers = {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-            'Accept-Language': 'en-GB,en;q=0.9',
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
+            'Accept-Language': 'en-GB,en-US;q=0.9,en;q=0.8',
+            'Accept-Encoding': 'identity',
+            'Cache-Control': 'no-cache',
+            'Sec-Ch-Ua': '"Google Chrome";v="131", "Chromium";v="131", "Not_A Brand";v="24"',
+            'Sec-Ch-Ua-Mobile': '?0',
+            'Sec-Ch-Ua-Platform': '"Windows"',
+            'Sec-Fetch-Dest': 'document',
+            'Sec-Fetch-Mode': 'navigate',
+            'Sec-Fetch-Site': 'none',
+            'Sec-Fetch-User': '?1',
+            'Upgrade-Insecure-Requests': '1',
         }
 
+    import time as _time
     req = urllib.request.Request(url, headers=headers)
     for attempt in range(3):
         try:
             with urllib.request.urlopen(req, timeout=30) as resp:
                 return resp.read().decode('utf-8', errors='replace'), resp.status
-        except (urllib.error.URLError, urllib.error.HTTPError, TimeoutError) as e:
+        except urllib.error.HTTPError as e:
+            if e.code == 406:
+                # Try with minimal headers on retry
+                fallback_headers = {
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
+                    'Accept': '*/*',
+                    'Accept-Language': 'en-GB,en;q=0.9',
+                }
+                req = urllib.request.Request(url, headers=fallback_headers)
             if attempt == 2:
                 print(f"Failed to fetch {url}: {e}")
                 return None, 0
+            _time.sleep(1)
+        except (urllib.error.URLError, TimeoutError) as e:
+            if attempt == 2:
+                print(f"Failed to fetch {url}: {e}")
+                return None, 0
+            _time.sleep(1)
     return None, 0
 
 
@@ -271,6 +296,7 @@ def fetch_racecards(date_str):
         race_data = {
             'time': time_str,
             'course': course,
+            'race_id': race_id,
             **race_info,
             'runners': [r for r in runners if not r.get('non_runner', False)],
         }
@@ -282,11 +308,24 @@ def fetch_racecards(date_str):
     return results
 
 
+def probe_availability(date_str):
+    """Quick check — probe racecard page and return (race_count, venues_list)."""
+    url = f'https://www.racingpost.com/racecards/{date_str}'
+    content, status = fetch_url(url)
+    if content and status == 200:
+        parser = RacecardLinkParser()
+        parser.feed(content)
+        courses = sorted(set(r['course'] for r in parser.race_links if r['course']))
+        return len(parser.race_links), courses
+    return 0, []
+
+
 def main():
     import argparse
     parser = argparse.ArgumentParser()
     parser.add_argument('--date', type=str, default=None)
     parser.add_argument('--tomorrow', action='store_true')
+    parser.add_argument('--probe', action='store_true', help='Check availability only, no fetch')
     args = parser.parse_args()
 
     if args.date:
@@ -296,7 +335,22 @@ def main():
     else:
         target_date = datetime.date.today().isoformat()
 
-    print(f"=== Racing Analyzer — {target_date} ===")
+    if args.probe:
+        race_count, courses = probe_availability(target_date)
+        if race_count > 0:
+            print(f"  Date: {target_date}")
+            print(f"  Status: AVAILABLE - {race_count} races, {len(courses)} venues")
+            for c in courses:
+                print(f"    {c}")
+        else:
+            print(f"  Date: {target_date}")
+            print(f"  Status: NOT READY - no races found yet")
+            now = datetime.datetime.now()
+            if now.hour < 6:
+                print(f"  Racecards typically go live after 6 AM.")
+        return
+
+    print(f"=== Prixm Racecard Fetcher — {target_date} ===")
 
     raw_data = fetch_racecards(target_date)
 
@@ -310,8 +364,8 @@ def main():
             'message': f'No races found for {target_date}. This could be a non-racing day or the data source may be unavailable.'
         }
     else:
-        # Now import scoring from fetch_daily_races
-        sys.path.insert(0, OUTPUT_DIR)
+        # Now import scoring from fetch_daily_races (in engine/ subfolder)
+        sys.path.insert(0, os.path.join(OUTPUT_DIR, 'engine'))
         from fetch_daily_races import (
             calculate_composite_score, calculate_placement_probability,
             get_confidence_label

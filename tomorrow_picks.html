@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Prixm — Tomorrow's Picks</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0f0f0f;--card:#1a1a1a;--card2:#232323;--border:#2a2a2a;--text:#e5e5e5;--muted:#888;--accent:#a78bfa;--accent2:#7c3aed;--green:#10b981;--yellow:#fbbf24;--red:#ef4444;--cyan:#06b6d4;--prixm:#e8b4e8;--prixm-bg:rgba(51,24,50,.25);--prixm-border:rgba(51,24,50,.5)}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);padding:16px;max-width:900px;margin:0 auto}
+h1{font-size:20px;font-weight:800;color:var(--prixm);margin-bottom:4px;letter-spacing:.5px}
+.sub{font-size:12px;color:var(--muted);margin-bottom:16px}
+.date-nav{display:flex;gap:8px;align-items:center;margin-bottom:16px;flex-wrap:wrap}
+.date-nav button{background:var(--card2);border:1px solid var(--border);color:var(--text);padding:6px 14px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600;transition:all .15s}
+.date-nav button:hover{border-color:var(--accent)}
+.date-nav button.active{background:var(--accent2);border-color:var(--accent);color:#fff}
+.date-nav .date-label{font-size:13px;color:var(--muted);margin-left:8px}
+.status{text-align:center;padding:40px 20px;color:var(--muted);font-size:14px}
+.status.err{color:var(--red)}
+.pick-count{font-size:12px;color:rgba(232,180,232,.6);margin-bottom:12px}
+.no-picks{text-align:center;padding:30px;color:var(--muted);font-size:13px;background:var(--card);border-radius:10px;border:1px solid var(--border)}
+.file-input-wrap{margin-bottom:16px}
+.file-input-wrap input[type=file]{display:none}
+.file-input-wrap label{display:inline-block;background:var(--card2);border:1px solid var(--border);color:var(--accent);padding:6px 14px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600;transition:all .15s}
+.file-input-wrap label:hover{border-color:var(--accent);background:var(--card)}
+/* Design C */
+.prixm-pick{background:var(--card);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:6px;transition:border-color .15s}
+.prixm-pick:hover{border-color:rgba(232,180,232,.4)}
+.prixm-accent{height:2px}
+.prixm-accent-nap{background:linear-gradient(90deg,#fbbf24,#f59e0b)}
+.prixm-accent-win{background:linear-gradient(90deg,#34d399,#059669)}
+.prixm-accent-strong{background:linear-gradient(90deg,#60a5fa,#3b82f6)}
+.prixm-accent-place{background:linear-gradient(90deg,#c084fc,#a855f7)}
+.prixm-content{padding:10px 14px}
+.prixm-main{display:flex;justify-content:space-between;align-items:flex-start}
+.prixm-left{flex:1;min-width:0}
+.prixm-cat-row{display:inline-flex;align-items:center;gap:4px;margin-bottom:4px}
+.prixm-cat-dot{width:8px;height:8px;border-radius:50%;display:inline-block}
+.prixm-cat-dot-nap{background:#fbbf24}.prixm-cat-dot-win{background:#34d399}.prixm-cat-dot-strong{background:#60a5fa}.prixm-cat-dot-place{background:#c084fc}
+.prixm-cat-text{font-size:10px;font-weight:800;letter-spacing:.5px}
+.prixm-cat-text-nap{color:#fbbf24}.prixm-cat-text-win{color:#34d399}.prixm-cat-text-strong{color:#60a5fa}.prixm-cat-text-place{color:#c084fc}
+.prixm-horse{font-size:14px;font-weight:700;color:#fff;margin-bottom:2px}
+.prixm-sub{font-size:10px;color:var(--muted)}
+.prixm-right{text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:6px}
+.prixm-bet-chip{font-size:11px;font-weight:700;padding:4px 10px;border-radius:5px;letter-spacing:.3px}
+.prixm-chip-win{background:rgba(5,150,105,.2);color:#34d399;border:1px solid rgba(5,150,105,.4)}
+.prixm-chip-ew{background:rgba(59,130,246,.15);color:#60a5fa;border:1px solid rgba(59,130,246,.3)}
+.prixm-chip-top{background:rgba(168,85,247,.12);color:#c084fc;border:1px solid rgba(168,85,247,.3)}
+.prixm-chip-skip{background:rgba(239,68,68,.1);color:#f87171;border:1px solid rgba(239,68,68,.2)}
+.prixm-edge-row{display:flex;align-items:center;gap:6px}
+.prixm-edge-label{font-size:10px;color:var(--muted)}
+.prixm-edge-bar{width:80px;height:6px;background:#2a2a2a;border-radius:3px;overflow:hidden}
+.prixm-edge-fill{height:100%;border-radius:3px}
+.prixm-edge-val{font-size:10px;font-weight:700;min-width:20px;text-align:right}
+.prixm-tags{display:flex;gap:4px;flex-wrap:wrap;margin-top:6px}
+.prixm-tag{font-size:9px;padding:2px 6px;border-radius:3px;font-weight:600}
+.prixm-tag-pos{background:rgba(5,150,105,.12);color:#34d399}
+.prixm-tag-neg{background:rgba(239,68,68,.08);color:#f87171}
+.prixm-tag-neu{background:rgba(255,255,255,.06);color:var(--muted)}
+</style>
+</head>
+<body>
+
+<h1>🎯 Prixm — Advance Picks Viewer</h1>
+<div class="sub">Standalone analysis using the same Prixm engine as the main analyzer</div>
+
+<div class="date-nav">
+  <button id="btnTomorrow" class="active" onclick="loadDate('tomorrow')">Tomorrow</button>
+  <button id="btnDayAfter" onclick="loadDate('dayafter')">Day After</button>
+  <button id="btnCustom" onclick="document.getElementById('datePicker').showPicker()">Custom Date</button>
+  <input type="date" id="datePicker" style="opacity:0;width:0;height:0;position:absolute" onchange="loadDate('custom',this.value)">
+  <span class="date-label" id="dateLabel"></span>
+</div>
+
+<div class="file-input-wrap">
+  <label for="jsonUpload">📂 Or load JSON manually</label>
+  <input type="file" id="jsonUpload" accept=".json" onchange="handleFileUpload(event)">
+</div>
+
+<div id="content"><div class="status">Select a date to load picks...</div></div>
+
+<script>
+// ==================== ENGINE (exact copy from daily_racing_analyzer.html) ====================
+const FM={
+  form:{l:'Form',mx:20},rating:{l:'Rating',mx:15},trainer:{l:'Trainer',mx:12},
+  jockey:{l:'Jockey',mx:10},fitness:{l:'Fitness',mx:8},class:{l:'Class',mx:8},
+  going:{l:'Going',mx:8},course:{l:'Course',mx:6},distance:{l:'Distance',mx:6},
+  age:{l:'Age',mx:7},weight:{l:'Weight',mx:8},draw:{l:'Draw',mx:5},
+  headgear:{l:'Headgear',mx:3},spotlight:{l:'Expert',mx:2}
+};
+const MAX_SCORE=Object.values(FM).reduce((a,f)=>a+f.mx,0);
+
+const EXCLUDED_VENUES=['happy valley','rosehill','flemington','oaklawn park','gulfstream park','meydan','sha tin','chukyo','saint-cloud','bahrain','keeneland','randwick','aqueduct','santa anita','turffontein','palermo','abu dhabi','hanshin','longchamp','deauville','free to air','scoop','morphettville','worldwide stakes','dusseldorf','chantilly','fukushima','nakayama','krefeld','world pool','churchill downs','san siro','munich'];
+
+function isExcludedVenue(v){
+  if(!v) return false;
+  const lv=(v+'').toLowerCase();
+  return EXCLUDED_VENUES.some(ex=>lv.includes(ex));
+}
+
+function calcCompetitiveProb(runnerScore,allScores,topN){
+  const fs=allScores.length;
+  if(topN>=fs) return 95;
+  const alpha=2.5;
+  const myPow=Math.pow(Math.max(runnerScore,1),alpha);
+  const allPow=allScores.map(s=>Math.pow(Math.max(s,1),alpha));
+  const totalPow=allPow.reduce((a,b)=>a+b,0);
+  const share=myPow/totalPow;
+  if(topN===1) return Math.min(95,Math.max(3,Math.round(share*100)));
+  const damp=1+0.25*(fs-topN)/fs;
+  const p=1-Math.pow(1-share,topN*damp);
+  return Math.min(95,Math.max(3,Math.round(p*100)));
+}
+
+function calcMomentum(formStr){
+  if(!formStr||formStr.length<2) return {slope:0,label:'UNKNOWN',icon:'',cls:'',tip:'Not enough form data'};
+  const positions=[];
+  for(let i=0;i<Math.min(formStr.length,6);i++){
+    const c=formStr[i];
+    if(c>='1'&&c<='9') positions.push(parseInt(c));
+    else if(c==='0') positions.push(10);
+    else positions.push(12);
+  }
+  if(positions.length<2) return {slope:0,label:'UNKNOWN',icon:'',cls:'',tip:'Not enough form data'};
+  const pts=[...positions].reverse();
+  const n=pts.length;
+  const sumX=pts.reduce((_,__,i)=>_+i,0);
+  const sumY=pts.reduce((a,v)=>a+v,0);
+  const sumXY=pts.reduce((a,v,i)=>a+i*v,0);
+  const sumX2=pts.reduce((a,_,i)=>a+i*i,0);
+  const slope=(n*sumXY-sumX*sumY)/(n*sumX2-sumX*sumX);
+  let label,icon,cls,tip;
+  if(slope<=-1.0){label='HOT';icon='🔥';cls='mom-rise';tip='Hot form';}
+  else if(slope<=-0.3){label='IMPROVING';icon='📈';cls='mom-srise';tip='Improving';}
+  else if(slope<=0.3){label='STEADY';icon='➡️';cls='mom-steady';tip='Steady';}
+  else if(slope<=1.0){label='DECLINING';icon='📉';cls='mom-sfall';tip='Declining';}
+  else{label='COLD';icon='🧊';cls='mom-fall';tip='Cold form';}
+  return {slope:Math.round(slope*100)/100,label,icon,cls,tip};
+}
+
+function buildCDP(runner,race){
+  const bd=runner.score_breakdown||{};
+  const checks=[
+    {key:'class',label:'Class',score:bd.class||0,max:FM.class.mx},
+    {key:'distance',label:'Distance',score:bd.distance||0,max:FM.distance.mx},
+    {key:'going',label:'Going',score:bd.going||0,max:FM.going.mx},
+    {key:'course',label:'Course',score:bd.course||0,max:FM.course.mx}
+  ];
+  let proven=0;
+  const cards=checks.map(c=>{
+    const pct=(c.score/c.max)*100;
+    let status;
+    if(pct>=70){status='proven';proven++;}
+    else if(pct>=40){status='untested';}
+    else{status='failed';}
+    return {label:c.label,status,pct:Math.round(pct)};
+  });
+  return {proven,total:4,cards};
+}
+
+function getPlaceLimit(fs){
+  if(fs<=4) return 1;
+  if(fs<=7) return 2;
+  if(fs<=15) return 3;
+  return 4;
+}
+
+function getBetType(runner,fieldSize,allRunners){
+  const fs=fieldSize||12;
+  const s=runner.score||0;
+  const allScores=allRunners&&allRunners.length>=2?allRunners.map(r=>r.score||0):null;
+  const isCompetitive=!!allScores;
+  const isTopRanked=!allRunners||allRunners.length<2||s>=Math.max(...allRunners.map(r=>r.score||0));
+  function cp(topN){
+    if(allScores) return calcCompetitiveProb(s,allScores,topN);
+    const n=s/MAX_SCORE;const bl=Math.min(topN/fs,1);const sk=Math.pow(n,2);return Math.min(Math.max(Math.round((bl+sk*(1-bl)*0.75)*100),5),95);
+  }
+  const pWin=cp(1),pPlace=cp(getPlaceLimit(fs)),pTop4=cp(4);
+  const pl=getPlaceLimit(fs);
+  const wT=isCompetitive?30:45,wT2=isCompetitive?25:40;
+  const ewW=isCompetitive?18:30,ewP=isCompetitive?40:55;
+  const pT=isCompetitive?35:50,p4T=isCompetitive?35:50,plT=isCompetitive?25:40;
+  if(isTopRanked&&pWin>=wT&&fs<=8) return {type:'WIN',cls:'tp-win',desc:`Win ${pWin}%`};
+  if(isTopRanked&&pWin>=wT2) return {type:'WIN',cls:'tp-win',desc:`Win ${pWin}%`};
+  if(pWin>=ewW&&pPlace>=ewP) return {type:'WIN/EW',cls:'tp-win',desc:`Win ${pWin}% · Place ${pPlace}%`};
+  if(pPlace>=pT) return {type:'EW',cls:'tp-ew',desc:`Place ${pPlace}% (top ${pl})`};
+  if(pTop4>=p4T&&fs>=8) return {type:'EW',cls:'tp-ew',desc:`Top 4 ${pTop4}%`};
+  if(pPlace>=plT) return {type:'PLACE',cls:'tp-place',desc:`Place ${pPlace}% (top ${pl})`};
+  return {type:'PLACE',cls:'tp-place',desc:`Place ${pPlace}% (top ${pl})`};
+}
+
+function calcAdjScore(runner,adj){
+  if(!adj||!runner.score_breakdown) return runner.score;
+  let s=0;
+  Object.keys(runner.score_breakdown).forEach(f=>{s+=runner.score_breakdown[f]*(adj[f]||1);});
+  return s;
+}
+
+function getTop10Picks(data){
+  if(!data||!data.venues) return [];
+  let racePicks=[];
+  Object.entries(data.venues).forEach(([vk,venue])=>{
+    const vName=(venue.course||vk).toLowerCase();
+    if(EXCLUDED_VENUES.some(ex=>vName.includes(ex))) return;
+    venue.races.forEach((race,ri)=>{
+      if(!race.runners||!race.runners.length) return;
+      const sorted=[...race.runners].sort((a,b)=>b.score-a.score);
+      const fs=race.field_size||race.runners.length;
+      const avgScore=race.runners.reduce((a,r)=>a+r.score,0)/race.runners.length;
+      const chosen=sorted[0];
+      const adjScore=chosen.score;
+      const second=sorted[1];
+      const gap=second?(chosen.score-second.score):chosen.score;
+      const deltaFromAvg=chosen.score-avgScore;
+      const spreadBonus=Math.min(Math.max(gap,0)/20,1)*15;
+      const domBonus=Math.min(Math.max(deltaFromAvg,0)/40,1)*15;
+      const composite=adjScore*0.7+spreadBonus+domBonus;
+      racePicks.push({
+        horse:chosen.name,score:chosen.score,adjScore:Math.round(adjScore*10)/10,
+        composite:Math.round(composite*10)/10,
+        confidence:chosen.confidence,venue:venue.course,time:race.time,
+        raceName:race.name,trainer:chosen.trainer,jockey:chosen.jockey,
+        form:chosen.form,fieldSize:fs,gap:Math.round(Math.abs(gap)*10)/10,
+        bet:getBetType(chosen,fs,race.runners),venueKey:vk,raceIdx:ri,
+        scoreBreakdown:chosen.score_breakdown||{},
+        hasAdj:false,wasOverridden:false,rawTop:sorted[0].name
+      });
+    });
+  });
+  racePicks.sort((a,b)=>b.composite-a.composite);
+  return racePicks.slice(0,10).map((p,i)=>({...p,rank:i+1}));
+}
+
+function getPrixmPicks(picks,data){
+  if(!picks||!picks.length||!data||!data.venues) return [];
+  const prixm=[];
+  picks.forEach(p=>{
+    const venue=data.venues[p.venueKey];
+    if(!venue) return;
+    const race=venue.races[p.raceIdx];
+    if(!race||!race.runners) return;
+    const runner=race.runners.find(r=>r.name===p.horse);
+    if(!runner) return;
+    const fs=p.fieldSize||race.field_size||race.runners.length;
+    const gap=p.gap||0;
+    const mom=calcMomentum(runner.form);
+    const cdp=buildCDP(runner,race);
+    const scorePct=Math.round(runner.score/MAX_SCORE*100);
+
+    let edge=0;
+    edge+=Math.min(gap*2.5,30);
+    edge+=cdp.proven*8;
+    edge+=scorePct>=64?15:scorePct>=55?10:5;
+    if(mom.label==='HOT')edge+=12;
+    else if(mom.label==='IMPROVING')edge+=8;
+    else if(mom.label==='STEADY')edge+=4;
+    else if(mom.label==='DECLINING')edge-=5;
+    else if(mom.label==='COLD')edge-=10;
+    if(fs<=8)edge+=6;else if(fs<=12)edge+=0;else edge-=4;
+    if(race.handicap)edge-=5;
+    edge=Math.max(0,Math.min(100,Math.round(edge)));
+
+    if(edge<40) return;
+
+    const pl=getPlaceLimit(fs);
+    const maxTopN=Math.max(1,Math.min(Math.floor(fs*0.4),pl));
+    let category,target,targetLabel,stars,catCls;
+
+    if(edge>=70&&gap>=10&&cdp.proven>=3&&(mom.label==='HOT'||mom.label==='IMPROVING'||mom.label==='STEADY')){
+      category='NAP';target=1;targetLabel='Win';stars=5;catCls='prixm-nap';
+    }else if(edge>=60&&gap>=7&&cdp.proven>=2){
+      category='WIN';target=1;targetLabel='Win';stars=4;catCls='prixm-win';
+    }else if(edge>=50&&gap>=4){
+      category='STRONG';target=Math.min(2,maxTopN);targetLabel=pl<=1?'Win':'Top '+Math.min(2,maxTopN);stars=3;catCls='prixm-strong';
+    }else if(edge>=40){
+      category='PLACE';target=Math.min(pl,maxTopN);targetLabel=pl<=1?'Win':'Top '+Math.min(pl,maxTopN);stars=2;catCls='prixm-place';
+    }else return;
+
+    prixm.push({
+      ...p,edge,category,target,targetLabel,stars,catCls,
+      cdpProven:cdp.proven,momLabel:mom.label,momIcon:mom.icon,scorePct,pl
+    });
+  });
+
+  const catOrder={NAP:0,WIN:1,STRONG:2,PLACE:3};
+  prixm.sort((a,b)=>(catOrder[a.category]||9)-(catOrder[b.category]||9)||b.edge-a.edge);
+
+  let napFound=false;
+  prixm.forEach(p=>{
+    if(p.category==='NAP'){
+      if(napFound){p.category='WIN';p.catCls='prixm-win';p.stars=4;}
+      else napFound=true;
+    }
+  });
+
+  return prixm;
+}
+
+/* ==================== SMART BET TYPE ENGINE ==================== */
+function getPrixmBetRec(pick,data){
+  const venue=data.venues[pick.venueKey];
+  const race=venue?venue.races[pick.raceIdx]:null;
+  if(!race||!race.runners) return {type:'SKIP',chip:'prixm-chip-skip',tags:[]};
+  const runner=race.runners.find(r=>r.name===pick.horse);
+  if(!runner) return {type:'SKIP',chip:'prixm-chip-skip',tags:[]};
+
+  const fs=pick.fieldSize||race.field_size||race.runners.length;
+  const gap=pick.gap||0;
+  const edge=pick.edge||0;
+  const cdpProven=pick.cdpProven||0;
+  const momLabel=pick.momLabel||'UNKNOWN';
+  const scorePct=pick.scorePct||0;
+  const isHandicap=!!race.handicap;
+  const allScores=race.runners.map(r=>r.score||0);
+  const pWin=calcCompetitiveProb(runner.score,allScores,1);
+  const placeTerms=fs<=4?1:fs<=7?2:fs<=15?3:4;
+  const pPlace=placeTerms>1?calcCompetitiveProb(runner.score,allScores,placeTerms):pWin;
+  const pTop2=fs>=2?calcCompetitiveProb(runner.score,allScores,Math.min(2,fs)):95;
+
+  const tags=[];
+  if(gap>=5) tags.push({t:'+'+gap+'pt gap',c:'pos'});
+  else if(gap>=3) tags.push({t:'+'+gap+'pt gap',c:'neu'});
+  else tags.push({t:'Tight gap (+'+gap+')',c:'neg'});
+  if(cdpProven>=3) tags.push({t:'CDP '+cdpProven+'/4',c:'pos'});
+  else if(cdpProven===2) tags.push({t:'CDP '+cdpProven+'/4',c:'neu'});
+  else tags.push({t:'CDP '+cdpProven+'/4',c:'neg'});
+  if(momLabel==='HOT') tags.push({t:'HOT form',c:'pos'});
+  else if(momLabel==='IMPROVING') tags.push({t:'IMPROVING',c:'pos'});
+  else if(momLabel==='STEADY') tags.push({t:'STEADY form',c:'neu'});
+  else if(momLabel==='DECLINING') tags.push({t:'DECLINING',c:'neg'});
+  else if(momLabel==='COLD') tags.push({t:'COLD form',c:'neg'});
+  if(fs<=6) tags.push({t:'Small field ('+fs+')',c:'pos'});
+  else if(fs>=12) tags.push({t:fs+' runners',c:'neg'});
+  else tags.push({t:fs+' runners',c:'neu'});
+  if(isHandicap) tags.push({t:'Handicap',c:'neg'});
+  if(scorePct>=64) tags.push({t:'Score '+scorePct+'%',c:'pos'});
+  else if(scorePct>=50) tags.push({t:'Score '+scorePct+'%',c:'neu'});
+  const cdpData=buildCDP(runner,race);
+  if(cdpData.cards){
+    cdpData.cards.forEach(c=>{
+      if(c.status==='failed') tags.push({t:c.label+' concern',c:'neg'});
+      else if(c.status==='untested') tags.push({t:c.label+' untested',c:'neu'});
+    });
+  }
+
+  const isRank1=runner.score>=Math.max(...allScores);
+  if(fs<=4){
+    if(isRank1&&pWin>=30&&gap>=5&&cdpProven>=2) return {type:'WIN',chip:'prixm-chip-win',tags};
+    if(isRank1&&pWin>=20&&gap>=3) return {type:'WIN',chip:'prixm-chip-win',tags};
+    return {type:'SKIP',chip:'prixm-chip-skip',tags};
+  }
+  if(isRank1&&pWin>=30&&gap>=8&&cdpProven>=3&&(momLabel==='HOT'||momLabel==='IMPROVING'||momLabel==='STEADY'))
+    return {type:'WIN',chip:'prixm-chip-win',tags};
+  if(isRank1&&pWin>=25&&gap>=6&&cdpProven>=2&&!isHandicap)
+    return {type:'WIN',chip:'prixm-chip-win',tags};
+  if(placeTerms>=3&&pPlace>=50&&gap>=4&&cdpProven>=2)
+    return {type:'EW',chip:'prixm-chip-ew',tags};
+  if(placeTerms>=3&&pPlace>=45&&gap>=3&&(momLabel==='HOT'||momLabel==='IMPROVING'))
+    return {type:'EW',chip:'prixm-chip-ew',tags};
+  if(pPlace>=35) return {type:'TOP '+placeTerms,chip:'prixm-chip-top',tags};
+  if(pTop2>=40&&placeTerms>=2) return {type:'TOP 2',chip:'prixm-chip-top',tags};
+  return {type:'SKIP',chip:'prixm-chip-skip',tags};
+}
+
+// ==================== UI LOGIC ====================
+let currentData=null;
+let currentDateStr='';
+
+function fmtDate(d){
+  const days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return days[d.getDay()]+' '+d.getDate()+' '+months[d.getMonth()]+' '+d.getFullYear();
+}
+
+function getDateStr(offset){
+  const d=new Date();
+  d.setDate(d.getDate()+offset);
+  return d.toISOString().slice(0,10);
+}
+
+function loadDate(mode,customDate){
+  document.querySelectorAll('.date-nav button').forEach(b=>b.classList.remove('active'));
+  let dateStr;
+  if(mode==='tomorrow'){
+    dateStr=getDateStr(1);
+    document.getElementById('btnTomorrow').classList.add('active');
+  }else if(mode==='dayafter'){
+    dateStr=getDateStr(2);
+    document.getElementById('btnDayAfter').classList.add('active');
+  }else{
+    dateStr=customDate;
+    document.getElementById('btnCustom').classList.add('active');
+  }
+  currentDateStr=dateStr;
+  const d=new Date(dateStr+'T12:00:00');
+  document.getElementById('dateLabel').textContent=fmtDate(d);
+  loadJSON(dateStr);
+}
+
+async function loadJSON(dateStr){
+  const el=document.getElementById('content');
+  el.innerHTML='<div class="status">Loading race_data/race_data_'+dateStr+'.json ...</div>';
+  const paths=['race_data/race_data_'+dateStr+'.json','./race_data/race_data_'+dateStr+'.json'];
+  for(const path of paths){
+    try{
+      const resp=await fetch(path);
+      if(!resp.ok) continue;
+      const data=await resp.json();
+      processData(data);
+      return;
+    }catch(e){continue;}
+  }
+  el.innerHTML='<div class="status err">No racecard found for '+dateStr+'<br><br><span style="font-size:12px;color:var(--muted)">Make sure you\'ve fetched the racecard using "Fetch Racecard.bat" first.<br>Expected file: race_data/race_data_'+dateStr+'.json</span></div>';
+}
+
+function handleFileUpload(e){
+  const file=e.target.files[0];
+  if(!file) return;
+  const reader=new FileReader();
+  reader.onload=function(ev){
+    try{
+      const data=JSON.parse(ev.target.result);
+      if(data.date){
+        currentDateStr=data.date;
+        const d=new Date(data.date+'T12:00:00');
+        document.getElementById('dateLabel').textContent=fmtDate(d)+' (uploaded)';
+        document.querySelectorAll('.date-nav button').forEach(b=>b.classList.remove('active'));
+      }
+      processData(data);
+    }catch(err){
+      document.getElementById('content').innerHTML='<div class="status err">Invalid JSON file</div>';
+    }
+  };
+  reader.readAsText(file);
+}
+
+function processData(data){
+  currentData=data;
+  const picks=getTop10Picks(data);
+  const prixm=getPrixmPicks(picks,data);
+  // Enrich with bet recommendations
+  prixm.forEach(p=>{ p.betRec=getPrixmBetRec(p,data); });
+  renderPicks(prixm,data);
+}
+
+function renderPicks(prixm,data){
+  const el=document.getElementById('content');
+  if(!prixm.length){
+    el.innerHTML='<div class="no-picks">No Prixm picks qualified for this date.<br><span style="font-size:11px;color:var(--muted);margin-top:6px;display:inline-block">Either no racecard loaded, or no selections passed the edge >= 40 quality gate.</span></div>';
+    return;
+  }
+
+  let h=`<div class="pick-count">${prixm.length} selection${prixm.length>1?'s':''} qualified · ${data.date||currentDateStr}</div>`;
+
+  prixm.forEach(p=>{
+    const cat=p.category.toLowerCase();
+    const br=p.betRec||{type:'SKIP',chip:'prixm-chip-skip',tags:[]};
+    const edgeCol=p.edge>=60?'#10b981':p.edge>=45?'#06b6d4':'#f59e0b';
+    const catLabel=p.category==='NAP'?'NAP — best bet of the day':p.category;
+    const tagsHtml=(br.tags||[]).map(t=>`<span class="prixm-tag prixm-tag-${t.c}">${t.c==='pos'?'✓':t.c==='neg'?'✗':'—'} ${t.t}</span>`).join('');
+
+    h+=`<div class="prixm-pick">
+      <div class="prixm-accent prixm-accent-${cat}"></div>
+      <div class="prixm-content">
+        <div class="prixm-main">
+          <div class="prixm-left">
+            <div class="prixm-cat-row"><span class="prixm-cat-dot prixm-cat-dot-${cat}"></span><span class="prixm-cat-text prixm-cat-text-${cat}">${catLabel}</span></div>
+            <div class="prixm-horse">${p.horse}</div>
+            <div class="prixm-sub">${p.time} ${p.venue} · ${p.trainer} · ${p.fieldSize} runners</div>
+          </div>
+          <div class="prixm-right">
+            <span class="prixm-bet-chip ${br.chip}">${br.type}</span>
+            <div class="prixm-edge-row">
+              <span class="prixm-edge-label">Edge</span>
+              <div class="prixm-edge-bar"><div class="prixm-edge-fill" style="width:${p.edge}%;background:${edgeCol}"></div></div>
+              <span class="prixm-edge-val" style="color:${edgeCol}">${p.edge}</span>
+            </div>
+          </div>
+        </div>
+        <div class="prixm-tags">${tagsHtml}</div>
+      </div>
+    </div>`;
+  });
+
+  el.innerHTML=h;
+}
+
+// Auto-load tomorrow on page open
+loadDate('tomorrow');
+</script>
+</body>
+</html>
