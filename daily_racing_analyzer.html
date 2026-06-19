@@ -646,6 +646,44 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .pl-launch.lv{opacity:1;transform:none}
 .pl-launch:hover{background:#34d399;box-shadow:0 0 28px rgba(16,185,129,.45)}
 
+/* ===== MOBILE RESPONSIVE ===== */
+@media(max-width:768px){
+  /* Tab bar — scrollable */
+  .tab-bar{overflow-x:auto;-webkit-overflow-scrolling:touch;padding:0 12px;scrollbar-width:none}
+  .tab-bar::-webkit-scrollbar{display:none}
+  .tab-btn{padding:10px 14px;font-size:12px;white-space:nowrap;flex-shrink:0}
+  /* Toolbar */
+  .vbtn{padding:6px 10px;font-size:11px}
+  /* View padding */
+  #racesView,#perfView,#combosView,#trendsView,#goldenView,#tracksView,.landing,.detail-view{padding:12px!important}
+  #fieldSizeBar{padding:0 12px}
+  /* Race cards gap */
+  .race-cards{gap:8px}
+  /* Runner table — horizontal scroll */
+  .race-card table,.runners-table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;white-space:nowrap}
+  /* Prixm picks */
+  .prixm-main{flex-direction:column;gap:8px}
+  .prixm-right{align-items:flex-start;flex-direction:row;flex-wrap:wrap;gap:8px}
+  .prixm-horse{font-size:13px}
+  .prixm-edge-bar{width:60px}
+  /* Golden dashboard + track analysis panels */
+  .gd-panel-grid,.ta-grid2,.ta-chip-strip{grid-template-columns:1fr!important}
+  /* DB badge */
+  #dbStatusBadge{font-size:9px;padding:2px 6px}
+  /* Modal */
+  .modal{width:95vw;max-width:95vw;margin:10px;padding:16px}
+  .modal select,.modal-select{width:100%}
+  /* Score grid */
+  .score-grid{grid-template-columns:1fr 1fr!important}
+  /* View-only badge */
+  [data-view-only]::after{font-size:9px;padding:3px 8px;bottom:8px;right:8px}
+}
+@media(max-width:480px){
+  .tab-btn{padding:9px 10px;font-size:11px}
+  .prixm-horse{font-size:13px}
+  #racesView,#perfView,#combosView,#trendsView,#goldenView,#tracksView,.landing{padding:8px!important}
+}
+
 </style>
 <script src="results_history.js" onerror=""></script>
 <script src="daily_race_data.js" onerror=""></script>
