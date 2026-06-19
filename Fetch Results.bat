@@ -22,26 +22,26 @@ goto END
 
 :TODAY
 echo.
-python results_fetcher.py --debug
+python scripts\results_fetcher.py --debug
 goto END
 
 :YESTERDAY
 echo.
-python results_fetcher.py --yesterday --debug
+python scripts\results_fetcher.py --yesterday --debug
 goto END
 
 :DAY_BEFORE
 echo.
 python -c "import datetime;print((datetime.date.today()-datetime.timedelta(days=2)).isoformat())" > "%TEMP%\prixm_res_date.txt"
 set /p FETCHDATE=<"%TEMP%\prixm_res_date.txt"
-python results_fetcher.py --date %FETCHDATE% --debug
+python scripts\results_fetcher.py --date %FETCHDATE% --debug
 goto END
 
 :SPECIFIC
 echo.
 set /p FETCHDATE="Enter date (YYYY-MM-DD): "
 echo.
-python results_fetcher.py --date %FETCHDATE% --debug
+python scripts\results_fetcher.py --date %FETCHDATE% --debug
 goto END
 
 :END

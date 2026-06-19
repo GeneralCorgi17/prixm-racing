@@ -19,3 +19,32 @@ desktop.ini
 # Temp
 *.tmp
 *.bak
+
+# Generated JS wrappers — keep results_history.js (needed by GitHub Pages fallback)
+daily_race_data.js
+
+# R
+.Rhistory
+
+# SQLite DB — local only, too large for git
+race_data.db
+race_data.db-wal
+race_data.db-shm
+
+# Excel output — local only
+output/
+*.xlsx
+
+# Debug files
+debug/
+
+# Logs
+logs/
+
+# Personal/sensitive
+ozzy_memory.json
+"CHRIS - Fix guide/"
+"Screenshot to inspect/"
+
+# Claude config
+.claude/

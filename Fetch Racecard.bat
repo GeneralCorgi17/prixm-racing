@@ -6,7 +6,7 @@ echo ================================
 echo.
 echo  Checking today's availability...
 echo.
-python racecard_fetcher.py --probe
+python scripts\racecard_fetcher.py --probe
 echo.
 echo --------------------------------
 echo   [1] Today's races
@@ -26,26 +26,26 @@ goto END
 
 :TODAY
 echo.
-python racecard_fetcher.py
+python scripts\racecard_fetcher.py
 goto END
 
 :TOMORROW
 echo.
-python racecard_fetcher.py --tomorrow
+python scripts\racecard_fetcher.py --tomorrow
 goto END
 
 :DAY_AFTER
 echo.
 python -c "import datetime;print((datetime.date.today()+datetime.timedelta(days=2)).isoformat())" > "%TEMP%\prixm_date.txt"
 set /p FETCHDATE=<"%TEMP%\prixm_date.txt"
-python racecard_fetcher.py --date %FETCHDATE%
+python scripts\racecard_fetcher.py --date %FETCHDATE%
 goto END
 
 :SPECIFIC
 echo.
 set /p FETCHDATE="Enter date (YYYY-MM-DD): "
 echo.
-python racecard_fetcher.py --date %FETCHDATE%
+python scripts\racecard_fetcher.py --date %FETCHDATE%
 goto END
 
 :END
