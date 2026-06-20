@@ -315,6 +315,35 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .bet-btn{background:#fff;border:1px solid #d1d5db;cursor:pointer;font-size:9px;font-weight:800;padding:2px 7px;border-radius:4px;color:#6b7280;line-height:1.2;vertical-align:middle;margin-left:6px;transition:all .15s;letter-spacing:.3px}
 .bet-btn:hover{background:#f0fdf4;border-color:#10b981;color:#10b981}
 .bet-btn.betting{background:#F0F465;border-color:#F0F465;color:#1a1a1a}
+.cmpsel-btn{background:#1a1a1a;border:1px solid #333;cursor:pointer;font-size:9px;font-weight:800;padding:2px 7px;border-radius:4px;color:#888;line-height:1.2;vertical-align:middle;margin-left:6px;transition:all .15s;letter-spacing:.3px}
+.cmpsel-btn:hover{border-color:#f59e0b;color:#f59e0b}
+.cmpsel-btn.on{background:#f59e0b22;border-color:#f59e0b;color:#f59e0b}
+.hcmp-open-btn{background:var(--accent);color:#000;border:none;padding:6px 14px;border-radius:7px;font-weight:800;font-size:12px;cursor:pointer;margin-left:auto;white-space:nowrap;display:flex;align-items:center;gap:5px}
+.hcmp-open-btn:hover{opacity:.9}
+.hcmp-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:2000;display:flex;align-items:flex-end;opacity:0;pointer-events:none;transition:opacity .2s}
+.hcmp-overlay.open{opacity:1;pointer-events:all}
+.hcmp-sheet{background:#0a0a0a;border-top:2px solid #2a2a2a;width:100%;max-height:93vh;overflow-y:auto;transform:translateY(30px);transition:transform .2s}
+.hcmp-overlay.open .hcmp-sheet{transform:translateY(0)}
+.hcmp-topbar{background:#141414;border-bottom:1px solid #222;padding:12px 20px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:10;flex-wrap:wrap}
+.hcmp-body{padding:20px}
+.hcmp-section{font-size:12px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.5px;margin:20px 0 12px;display:flex;align-items:center;gap:8px}
+.hcmp-section::after{content:'';flex:1;height:1px;background:#222}
+.hcmp-horse-cards{display:flex;gap:12px;overflow-x:auto;padding-bottom:4px;margin-bottom:4px}
+.hcmp-hcard{background:#141414;border:1px solid #222;border-radius:10px;padding:14px;min-width:210px;max-width:240px;flex-shrink:0}
+.hcmp-jcard{background:#141414;border:1px solid #222;border-radius:10px;padding:14px;min-width:240px;flex:1}
+.hcmp-jgrid{display:flex;gap:12px;overflow-x:auto;padding-bottom:4px;margin-bottom:4px}
+.hcmp-stat{text-align:center;flex:1;background:#1a1a1a;border-radius:6px;padding:7px 4px}
+.hcmp-stat-val{font-size:15px;font-weight:800;line-height:1;margin-bottom:2px}
+.hcmp-stat-lbl{font-size:10px;color:#666}
+.hcmp-cstat-btn{background:#1a1a1a;border:1px solid #2a2a2a;color:#666;padding:5px 12px;border-radius:6px;cursor:pointer;font-size:11px;font-weight:700;transition:all .15s}
+.hcmp-cstat-btn:hover{border-color:#444;color:#aaa}
+.hcmp-cstat-btn.active{background:#f59e0b;color:#000;border-color:#f59e0b}
+.hcmp-chart-box{background:#141414;border:1px solid #222;border-radius:10px;padding:16px;min-height:100px}
+.hcmp-fmini{display:flex;align-items:center;gap:5px;margin-bottom:3px}
+.hcmp-fmini-name{font-size:10px;color:#555;width:52px;flex-shrink:0}
+.hcmp-fmini-bar{flex:1;height:5px;background:#1e1e1e;border-radius:2px;overflow:hidden}
+.hcmp-fmini-fill{height:100%;border-radius:2px}
+.hcmp-fmini-val{font-size:10px;color:#555;width:28px;text-align:right;flex-shrink:0}
 .bet-type-popup{position:absolute;z-index:9999;background:#1e1e1e;border:1px solid #444;border-radius:8px;padding:6px;box-shadow:0 8px 24px rgba(0,0,0,.6);display:flex;flex-wrap:wrap;gap:4px;max-width:220px}
 .bet-type-popup button{background:#2a2a2a;border:1px solid #444;color:#e5e5e5;font-size:10px;font-weight:700;padding:4px 10px;border-radius:4px;cursor:pointer;transition:all .12s}
 .bet-type-popup button:hover{background:#F0F465;border-color:#F0F465;color:#1a1a1a}
@@ -747,11 +776,23 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 <div id="tracksView" style="display:none;padding:20px 28px;max-width:1200px;margin:0 auto"></div>
 
 <div id="modalContainer"></div>
+<div class="hcmp-overlay" id="hcmpOverlay" onclick="if(event.target===this)hcmpClose()">
+  <div class="hcmp-sheet">
+    <div class="hcmp-topbar">
+      <div>
+        <div style="font-size:15px;font-weight:700;color:#e0e0e0">⚖ Horse Comparison</div>
+        <div id="hcmpRaceLabel" style="font-size:12px;color:#666"></div>
+      </div>
+      <button onclick="hcmpClose()" style="margin-left:auto;background:none;border:1px solid #333;color:#666;padding:5px 12px;border-radius:6px;cursor:pointer;font-size:13px">× Close</button>
+    </div>
+    <div class="hcmp-body" id="hcmpBody"></div>
+  </div>
+</div>
 <div id="betPanel" class="bet-panel collapsed"></div>
 <button id="betFab" class="bp-toggle-fab" onclick="toggleBetPanel()">🎫<span class="fab-badge">0</span></button>
 
 <script>
-let D=null, st={venue:'all', fieldFilter:'all', comboFilter:false, raceTypeFilter:'all', confidenceFilter:'all', gapFilter:'all', openRace:null, sort:'score', sortDir:-1, expanded:null, detailTab:'main', riMode:'rank', h2hPair:null};
+let D=null, st={venue:'all', fieldFilter:'all', comboFilter:false, raceTypeFilter:'all', confidenceFilter:'all', gapFilter:'all', openRace:null, sort:'score', sortDir:-1, expanded:null, detailTab:'main', riMode:'rank', h2hPair:null, compareSelect:new Set()};
 
 // ==================== PER-DAY DATA STATUS TRACKER ====================
 function getDayStatus(date){
@@ -1862,12 +1903,29 @@ function computeTrackStats(venue){
   const inc=(map,k,won,placed,sp)=>{if(!map[k])map[k]=mk();map[k].runs++;if(won){map[k].wins++;map[k].sp+=(sp||1);}if(placed)map[k].placed++;};
 
   const byConf={},byGap={},byGoing={},byType={},bySurf={},bySeg={},byMonth={};
+  const byJockey={};
   let totalRuns=0,totalWins=0,totalPlaced=0,totalSP=0;
   const rows=[];
 
   const sorted=races.slice().sort((a,b)=>(a.date||'').localeCompare(b.date||''));
   sorted.forEach(race=>{
     const top=getTopPick(race);
+    // Jockey stats — all runners (not just top pick)
+    const fs0=race.field_size||(race.results||[]).filter(r=>!r.non_runner).length||0;
+    const pt0=fs0>=16?4:fs0>=8?3:fs0>=5?2:1;
+    (race.results||[]).forEach(r=>{
+      if(!r.jockey||r.non_runner||r.pull_out||r.finish_pos==null)return;
+      const jk=r.jockey;
+      if(!byJockey[jk])byJockey[jk]={runs:0,wins:0,placed:0,sp:0,rides:[]};
+      const jw=r.finish_pos===1;
+      const jp=r.finish_pos<=pt0;
+      const jsp=typeof r.sp==='number'&&r.sp<200?r.sp:null;
+      byJockey[jk].runs++;
+      if(jw){byJockey[jk].wins++;if(jsp)byJockey[jk].sp+=jsp;}
+      if(jp)byJockey[jk].placed++;
+      byJockey[jk].rides.push({date:race.date,pos:r.finish_pos,name:r.name,raceName:race.race_name||''});
+    });
+
     if(!top)return;
     const won=top.finish_pos===1;
     // Standard bookmaker place terms by field size
@@ -1920,6 +1978,13 @@ function computeTrackStats(venue){
     trend.push({date:row.date,won:row.won,rollSR:rs,i});
   });
 
+  // byJockey sorted: ≥2 rides by count desc
+  const jockeyArr=Object.entries(byJockey)
+    .filter(([,v])=>v.runs>=2)
+    .map(([name,v])=>{const sr=v.runs?v.wins/v.runs*100:0;const pr=v.runs?v.placed/v.runs*100:0;
+      return{name,runs:v.runs,wins:v.wins,placed:v.placed,sr,pr,roi:roi(v.wins,v.runs,v.sp),rides:v.rides.slice().sort((a,b)=>(a.date||'').localeCompare(b.date||''))};})
+    .sort((a,b)=>b.runs-a.runs);
+
   return{venue,totalRuns,totalWins,totalPlaced,overallSR:totalRuns?totalWins/totalRuns*100:0,
     overallPR:totalRuns?totalPlaced/totalRuns*100:0,
     avgSP:totalWins&&totalSP?totalSP/totalWins:0,
@@ -1930,6 +1995,7 @@ function computeTrackStats(venue){
     bySurf:toArr(bySurf).sort((a,b)=>b.runs-a.runs),
     bySeg:toArr(bySeg,SEG_ORDER),
     byMonth:toArr(byMonth,Object.keys(byMonth).sort()),
+    byJockey:jockeyArr,
     trend,recent:rows.slice().reverse()};
 }
 
@@ -2045,6 +2111,35 @@ function svgLine(trend,overallSR){
     <text x="${W-pR+2}" y="${ovY+4}" fill="#3b82f6" font-size="9" font-family="Segoe UI,sans-serif">${overallSR.toFixed(0)}%</text>
     ${dots}
   </svg>`;
+}
+
+function svgFinishPos(rides){
+  if(!rides||!rides.length)return'<div style="color:#555;font-size:12px;padding:20px;text-align:center">No ride data</div>';
+  const W=580,H=220,pL=38,pR=14,pT=14,pB=26,iW=W-pL-pR,iH=H-pT-pB;
+  const n=rides.length;
+  const maxY=Math.max(...rides.map(r=>r.pos),6);
+  const posToY=p=>pT+(p-1)/(maxY-1)*iH;
+  const pts=rides.map((r,i)=>({x:pL+i/Math.max(n-1,1)*iW,y:posToY(r.pos),pos:r.pos,date:r.date,name:r.name,raceName:r.raceName}));
+  const sfx=p=>p===1?'st':p===2?'nd':p===3?'rd':'th';
+  // Y labels: show every position up to 8, then thin out
+  const rawY=maxY<=8?Array.from({length:maxY},(_,i)=>i+1):maxY<=12?[1,2,3,4,5,6,8,10,12].filter(p=>p<=maxY):[1,2,3,4,5,6,8,10,12,15,20].filter(p=>p<=maxY);
+  const posLabels=rawY.map(p=>{
+    const y=posToY(p);
+    const isFirst=p===1;
+    return`<line x1="${pL}" y1="${y}" x2="${W-pR}" y2="${y}" stroke="${isFirst?'rgba(16,185,129,.25)':'#1e1e1e'}" stroke-width="${isFirst?1.5:1}"/>
+           <text x="${pL-4}" y="${y+4}" text-anchor="end" fill="${isFirst?'#10b981':'#555'}" font-size="9" font-weight="${isFirst?'700':'400'}" font-family="Segoe UI,sans-serif">${p}${sfx(p)}</text>`;
+  }).join('');
+  const step=Math.max(1,Math.floor(n/7));
+  const xLabels=pts.filter((_,i)=>i%step===0||i===n-1).map(p=>`<text x="${p.x}" y="${H-6}" text-anchor="middle" fill="#444" font-size="9" font-family="Segoe UI,sans-serif">${(p.date||'').substring(5)}</text>`).join('');
+  // connecting line
+  const linePts=pts.map(p=>`${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ');
+  const connectLine=n>=2?`<polyline points="${linePts}" fill="none" stroke="#2a3a4a" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>`:'';
+  const dots=pts.map(p=>{
+    const col=p.pos===1?'#10b981':p.pos<=3?'#f59e0b':'#f87171';
+    const tip=`${p.date||''}: ${p.name||'?'} — ${p.pos}${sfx(p.pos)}${p.raceName?' ('+p.raceName+')':''}`;
+    return`<circle cx="${p.x}" cy="${p.y}" r="5" fill="${col}" stroke="#0a0a0a" stroke-width="1.5" class="ta-dot" data-tip="${tip.replace(/"/g,'&quot;').replace(/</g,'&lt;')}"/>`;
+  }).join('');
+  return`<svg width="100%" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="overflow:visible;display:block">${posLabels}${xLabels}${connectLine}${dots}</svg>`;
 }
 
 // ---- tooltip wiring ----
@@ -2198,6 +2293,43 @@ window._taDetail=function(venue){
     </div>`;
   }).join('');
 
+  // jockey panel
+  window._taJockeyData=s.byJockey||[];
+  window._taJkySortField=null; // null=default(rides desc), 'sr', 'pr'
+  const jkArr=s.byJockey||[];
+  const jkSelect=jkArr.map(j=>`<option value="${j.name.replace(/"/g,'&quot;')}">${j.name} (${j.runs} rides · ${j.sr.toFixed(0)}% win)</option>`).join('');
+  const defaultJky=jkArr[0];
+  const defYears=defaultJky?[...new Set(defaultJky.rides.map(r=>(r.date||'').substring(0,4)))].filter(Boolean).sort().reverse():[];
+  const initYearBtns=['all',...defYears].map(y=>`<button class="ta-filter-btn${y==='all'?' active':''}" onclick="window._taJockeyChart('${(defaultJky?.name||'').replace(/'/g,"\\'").replace(/"/g,'&quot;')}',false,'${y}')">${y==='all'?'All':y}</button>`).join('');
+  const jkChartHtml=defaultJky?svgFinishPos(defaultJky.rides):'<div style="color:#555;font-size:12px;padding:20px;text-align:center">No ride data</div>';
+  const jockeyPanel=jkArr.length?`
+    <div class="ta-grid2">
+      <div style="overflow-x:auto">
+        <table class="ta-table">
+          <thead><tr>
+            <th>Jockey</th><th>Rides</th><th>Wins</th>
+            <th id="taJkyThSR" onclick="window._taJkySort('sr')" style="cursor:pointer;user-select:none;white-space:nowrap">Win% <span id="taJkyIconSR" style="color:#f59e0b;font-size:10px"></span></th>
+            <th id="taJkyThPR" onclick="window._taJkySort('pr')" style="cursor:pointer;user-select:none;white-space:nowrap">Place% <span id="taJkyIconPR" style="color:#f59e0b;font-size:10px"></span></th>
+          </tr></thead>
+          <tbody id="taJkyTbody"></tbody>
+        </table>
+      </div>
+      <div>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap">
+          <span style="font-size:12px;color:#888">Finish positions:</span>
+          <select id="taJkySelect" onchange="window._taJockeyChart(this.value)" style="background:#1a1a1a;border:1px solid #333;color:#e0e0e0;padding:5px 10px;border-radius:6px;font-size:12px;flex:1;min-width:0">${jkSelect}</select>
+        </div>
+        <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px;align-items:center">
+          <span style="font-size:11px;color:#555">Year:</span>
+          <div id="taJkyYearBtns" style="display:flex;gap:5px;flex-wrap:wrap">${initYearBtns}</div>
+        </div>
+        <div style="font-size:11px;color:#555;margin-bottom:6px">
+          <span style="color:#10b981">●</span> 1st &nbsp; <span style="color:#f59e0b">●</span> 2nd–3rd &nbsp; <span style="color:#f87171">●</span> 4th+ &nbsp;·&nbsp; top = best
+        </div>
+        <div id="taJkyChart">${jkChartHtml}</div>
+      </div>
+    </div>`:`<div style="color:#555;font-size:13px">No jockey data — requires results with jockey fields (re-fetch results to populate).</div>`;
+
   // trend chart
   const trendChart=svgLine(s.trend,s.overallSR);
 
@@ -2266,6 +2398,11 @@ window._taDetail=function(venue){
     </div>
 
     <div class="ta-panel">
+      <div class="ta-ptitle">Jockey Record at ${venue} <span>riders with ≥2 starts · click row to chart · 1st = best finish</span></div>
+      ${jockeyPanel}
+    </div>
+
+    <div class="ta-panel">
       <div class="ta-ptitle">Segment Performance</div>
       <div class="ta-seg-grid">${segCards||'<div style="color:#555;font-size:12px">No segment data</div>'}</div>
     </div>
@@ -2304,6 +2441,9 @@ window._taDetail=function(venue){
   // wire tooltips
   wireTips();
 
+  // populate jockey table (tbody is empty shell in HTML template)
+  window._taJkyRenderTable();
+
   // wire going bars → filter history
   document.querySelectorAll('#taGoingChart .ta-bar-g').forEach((el,i)=>{
     const going=goingData[i]?.label;
@@ -2316,6 +2456,59 @@ window._taDetail=function(venue){
       if(xBtn){xBtn.style.display='';xBtn.textContent=`× ${going}`;xBtn.classList.add('active');}
     });
   });
+};
+
+function _jkyRowHtml(j){
+  const col=srColor(j.sr);
+  return`<tr class="ta-hist-row ta-jky-row" onclick="window._taJockeyChart('${j.name.replace(/'/g,"\\'").replace(/"/g,'&quot;')}',true)" style="cursor:pointer">
+    <td style="font-size:12px;font-weight:600;color:#e0e0e0;max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${j.name}</td>
+    <td>${j.runs}</td>
+    <td style="color:#10b981">${j.wins}</td>
+    <td><span style="font-weight:700;color:${col}">${j.sr.toFixed(0)}%</span></td>
+    <td><span style="color:#94a3b8">${j.pr.toFixed(0)}%</span></td>
+  </tr>`;
+}
+
+window._taJkyRenderTable=function(){
+  const tbody=document.getElementById('taJkyTbody');if(!tbody)return;
+  const field=window._taJkySortField;
+  const arr=(window._taJockeyData||[]).slice();
+  if(field)arr.sort((a,b)=>b[field]-a[field]);
+  tbody.innerHTML=arr.map(_jkyRowHtml).join('');
+  // header indicators
+  ['SR','PR'].forEach(k=>{
+    const f=k.toLowerCase();
+    const icon=document.getElementById('taJkyIcon'+k);
+    const th=document.getElementById('taJkyTh'+k);
+    if(icon)icon.textContent=field===f?'▼':'';
+    if(th)th.style.color=field===f?'#f59e0b':'';
+  });
+};
+
+window._taJkySort=function(field){
+  window._taJkySortField=window._taJkySortField===field?null:field;
+  window._taJkyRenderTable();
+};
+
+window._taJockeyChart=function(name,fromRow,year){
+  const jkArr=window._taJockeyData||[];
+  const jk=jkArr.find(j=>j.name===name);
+  const el=document.getElementById('taJkyChart');
+  const yearEl=document.getElementById('taJkyYearBtns');
+  if(!el)return;
+  if(!jk){el.innerHTML='<div style="color:#555;font-size:12px;padding:16px;text-align:center">No data</div>';return;}
+  // rebuild year buttons for this jockey
+  const years=[...new Set(jk.rides.map(r=>(r.date||'').substring(0,4)))].filter(Boolean).sort().reverse();
+  const activeYear=year||'all';
+  if(yearEl){
+    yearEl.innerHTML=['all',...years].map(y=>`<button class="ta-filter-btn${y===activeYear?' active':''}" onclick="window._taJockeyChart('${name.replace(/'/g,"\\'").replace(/"/g,'&quot;')}',false,'${y}')">${y==='all'?'All':y}</button>`).join('');
+  }
+  // filter rides by year
+  const filtered=activeYear==='all'?jk.rides:jk.rides.filter(r=>(r.date||'').startsWith(activeYear));
+  el.innerHTML=svgFinishPos(filtered);
+  if(fromRow){const sel=document.getElementById('taJkySelect');if(sel)sel.value=name;}
+  document.querySelectorAll('.ta-jky-row').forEach(r=>{r.style.background=r.querySelector('td')?.textContent.trim()===name?'rgba(245,158,11,.08)':'';});
+  wireTips();
 };
 
 window.taHist=function(type,val){
@@ -4239,6 +4432,273 @@ function showGuide(){
 
 function closeModal(){document.getElementById('modalContainer').innerHTML=''}
 
+/* ==================== HORSE COMPARISON ==================== */
+const _HCMP_COLORS=['#f59e0b','#3b82f6','#10b981','#a78bfa'];
+const _HCMP_FACTORS=['form','rating','trainer','jockey','fitness','class','going','weight','age','course','distance','draw'];
+
+function hcmpToggle(name){
+  if(st.compareSelect.has(name))st.compareSelect.delete(name);
+  else st.compareSelect.add(name);
+  const id='cmpsel_'+name.replace(/[^a-zA-Z0-9]/g,'_');
+  const btn=document.getElementById(id);
+  if(btn){const on=st.compareSelect.has(name);btn.classList.toggle('on',on);btn.textContent=on?'✓ SEL':'STATS';}
+  // update compare button in tabs
+  const hdr=document.querySelector('.detail-tabs .hcmp-open-btn');
+  const n=st.compareSelect.size;
+  if(n>=2&&!hdr){
+    const tabs=document.querySelector('.detail-tabs');
+    if(tabs){const b=document.createElement('button');b.className='hcmp-open-btn';b.onclick=hcmpOpen;b.innerHTML=`⚖ Compare <span style="background:#000;color:#f59e0b;border-radius:50%;width:18px;height:18px;font-size:10px;font-weight:800;display:inline-flex;align-items:center;justify-content:center">${n}</span>`;tabs.appendChild(b);}
+  } else if(hdr){
+    if(n<2){hdr.remove();}
+    else{hdr.innerHTML=`⚖ Compare <span style="background:#000;color:#f59e0b;border-radius:50%;width:18px;height:18px;font-size:10px;font-weight:800;display:inline-flex;align-items:center;justify-content:center">${n}</span>`;hdr.onclick=hcmpOpen;}
+  }
+}
+
+function _jkyHistoryAtVenue(jockeyName,venue){
+  const hist=window._resultsHistory;
+  if(!hist||!hist.races)return[];
+  const jn=(jockeyName||'').trim().toLowerCase();
+  const vn=(venue||'').trim().toLowerCase().replace(/\s*\(aw\)$/,'');
+  const rides=[];
+  hist.races.forEach(race=>{
+    const rv=(race.venue||'').trim().toLowerCase().replace(/\s*\(aw\)$/,'');
+    if(rv!==vn)return;
+    (race.results||[]).forEach(r=>{
+      if(r.non_runner||r.pull_out||r.finish_pos==null)return;
+      if((r.jockey||'').trim().toLowerCase()!==jn)return;
+      rides.push({date:race.date,pos:r.finish_pos,name:r.name,raceName:race.race_name||''});
+    });
+  });
+  return rides.sort((a,b)=>a.date.localeCompare(b.date));
+}
+
+function _hcmpSC(sr){return sr>=65?'#10b981':sr>=40?'#f59e0b':'#f87171';}
+function _hcmpFmtSfx(p){return p===1?'st':p===2?'nd':p===3?'rd':'th';}
+
+function _hcmpBuildBody(runners,race){
+  // horse cards
+  const horseCardsHtml=runners.map((r,idx)=>{
+    const col=_HCMP_COLORS[idx%_HCMP_COLORS.length];
+    const scorePct=Math.round(r.score/MAX_SCORE*100);
+    const cdp=buildCDP(r,race);
+    const bd=r.score_breakdown||{};
+    const topFactors=_HCMP_FACTORS.map(k=>({k,v:bd[k]||0,mx:FM[k]?.mx||1}))
+      .sort((a,b)=>(b.v/b.mx)-(a.v/a.mx)).slice(0,5);
+    const fBars=topFactors.map(f=>{
+      const pct=f.mx?f.v/f.mx*100:0;
+      const fc=pct>=70?'#10b981':pct>=40?'#f59e0b':'#f87171';
+      return `<div class="hcmp-fmini"><div class="hcmp-fmini-name">${f.k}</div><div class="hcmp-fmini-bar"><div class="hcmp-fmini-fill" style="width:${pct.toFixed(0)}%;background:${fc}"></div></div><div class="hcmp-fmini-val">${f.v}/${f.mx}</div></div>`;
+    }).join('');
+    const cdpHtml=cdp.cards.map(c=>{
+      const cl=c.status==='proven'?'#10b981':c.status==='untested'?'#f59e0b':'#f87171';
+      return `<span style="font-size:9px;font-weight:700;padding:2px 5px;border-radius:3px;background:${cl}18;border:1px solid ${cl}30;color:${cl}">${c.label[0]}: ${c.statusLabel.split(' ')[1]}</span>`;
+    }).join(' ');
+    const jkStats=getConnectionStats(r.jockey,'jockey');
+    const vRides=_jkyHistoryAtVenue(r.jockey,race.course);
+    const vWins=vRides.filter(x=>x.pos===1).length;
+    const vPct=vRides.length?Math.round(vWins/vRides.length*100):0;
+    return `<div class="hcmp-hcard" style="border-top:3px solid ${col}">
+      <div style="font-size:13px;font-weight:800;color:#e0e0e0;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${r.name}</div>
+      <div style="font-size:11px;color:#666;margin-bottom:10px">${r.jockey||'?'} · ${r.trainer||'?'}</div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+        <span style="font-size:26px;font-weight:800;color:${col};line-height:1">${r.score}</span>
+        <div><div style="font-size:10px;color:#666">${scorePct}% of max</div>
+        <div style="width:80px;height:5px;background:#1e1e1e;border-radius:2px;overflow:hidden;margin-top:3px"><div style="width:${scorePct}%;height:100%;background:${col};border-radius:2px"></div></div></div>
+      </div>
+      ${fBars}
+      <div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:8px">${cdpHtml}</div>
+      <div style="margin-top:10px;padding-top:8px;border-top:1px solid #1e1e1e;font-size:11px;color:#666">
+        <div>Overall: <strong style="color:${_hcmpSC(jkStats.winPct)}">${jkStats.winPct}%</strong> win · <strong style="color:#94a3b8">${jkStats.placePct}%</strong> place (${jkStats.runs})</div>
+        <div>At ${race.course}: <strong style="color:${_hcmpSC(vPct)}">${vPct}%</strong> win (${vRides.length} rides)</div>
+      </div>
+    </div>`;
+  }).join('');
+
+  // factor table
+  const thHtml=runners.map((r,idx)=>`<th style="color:${_HCMP_COLORS[idx%_HCMP_COLORS.length]};text-align:center;font-size:11px">${r.name.split(' ')[0]}</th>`).join('');
+  const fRows=_HCMP_FACTORS.map(k=>{
+    const vals=runners.map(r=>(r.score_breakdown||{})[k]||0);
+    const best=Math.max(...vals);
+    const cells=runners.map((r,idx)=>{
+      const v=(r.score_breakdown||{})[k]||0;
+      const col=v===best&&best>0?_HCMP_COLORS[idx%_HCMP_COLORS.length]:'#555';
+      return `<td style="text-align:center;font-weight:${v===best&&best>0?800:400};color:${col};font-size:12px">${v}/${FM[k]?.mx||'?'}</td>`;
+    }).join('');
+    return `<tr><td style="font-size:11px;color:#666;text-transform:capitalize">${k}</td>${cells}</tr>`;
+  }).join('');
+
+  // jockey cards
+  const jkyCardsHtml=runners.map((r,idx)=>{
+    const col=_HCMP_COLORS[idx%_HCMP_COLORS.length];
+    const hist=_jkyHistoryAtVenue(r.jockey,race.course);
+    const wins=hist.filter(x=>x.pos===1).length;
+    const placed=hist.filter(x=>x.pos<=3).length;
+    const winPct=hist.length?Math.round(wins/hist.length*100):0;
+    const placePct=hist.length?Math.round(placed/hist.length*100):0;
+    const avgPos=hist.length?(hist.reduce((s,x)=>s+x.pos,0)/hist.length).toFixed(1):'—';
+    const chartHtml=_hcmpFinishPosChart(hist,col);
+    const initials=(r.jockey||'?').split(' ').map(w=>w[0]).join('').slice(0,2);
+    return `<div class="hcmp-jcard" style="border-top:3px solid ${col}">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+        <div style="width:34px;height:34px;border-radius:50%;background:#1a1a1a;border:2px solid ${col}40;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:${col};flex-shrink:0">${initials}</div>
+        <div><div style="font-size:13px;font-weight:700;color:#e0e0e0">${r.jockey||'?'}</div><div style="font-size:11px;color:${col}">on ${r.name}</div></div>
+      </div>
+      <div style="display:flex;gap:8px;margin-bottom:10px">
+        <div class="hcmp-stat"><div class="hcmp-stat-val" style="color:${col}">${hist.length}</div><div class="hcmp-stat-lbl">Rides</div></div>
+        <div class="hcmp-stat"><div class="hcmp-stat-val" style="color:${_hcmpSC(winPct)}">${winPct}%</div><div class="hcmp-stat-lbl">Win%</div></div>
+        <div class="hcmp-stat"><div class="hcmp-stat-val" style="color:${_hcmpSC(placePct)}">${placePct}%</div><div class="hcmp-stat-lbl">Place%</div></div>
+        <div class="hcmp-stat"><div class="hcmp-stat-val" style="color:#94a3b8">${avgPos}</div><div class="hcmp-stat-lbl">Avg Pos</div></div>
+      </div>
+      <div style="font-size:11px;color:#555;margin-bottom:6px">Finish positions at ${race.course} — 1st = top</div>
+      ${chartHtml}
+      <div style="font-size:10px;color:#555;margin-top:4px;display:flex;gap:8px">
+        <span><span style="color:#10b981">●</span> 1st</span>
+        <span><span style="color:#f59e0b">●</span> 2nd–3rd</span>
+        <span><span style="color:#f87171">●</span> 4th+</span>
+      </div>
+    </div>`;
+  }).join('');
+
+  return `
+    <div class="hcmp-section">Horse Scores</div>
+    <div class="hcmp-horse-cards">${horseCardsHtml}</div>
+
+    <div class="hcmp-section">Factor Breakdown</div>
+    <div style="overflow-x:auto;margin-bottom:8px">
+      <table style="width:100%;border-collapse:collapse;font-size:12px">
+        <thead><tr><th style="text-align:left;padding:5px 8px;color:#555;font-size:11px;border-bottom:1px solid #222;font-weight:600">Factor</th>${thHtml}</tr></thead>
+        <tbody>${fRows}</tbody>
+      </table>
+    </div>
+
+    <div class="hcmp-section">Jockey Record at ${race.course}</div>
+    <div class="hcmp-jgrid">${jkyCardsHtml}</div>
+
+    <div class="hcmp-section">Combined Graph</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;align-items:center">
+      <span style="font-size:12px;color:#666">Show:</span>
+      <button class="hcmp-cstat-btn active" id="hcmpCsb-jky-finish"   onclick="hcmpShowStat('jky-finish')">Jockey Finish Positions</button>
+      <button class="hcmp-cstat-btn"        id="hcmpCsb-jky-win"      onclick="hcmpShowStat('jky-win')">Rolling Win%</button>
+      <button class="hcmp-cstat-btn"        id="hcmpCsb-jky-place"    onclick="hcmpShowStat('jky-place')">Rolling Place%</button>
+      <button class="hcmp-cstat-btn"        id="hcmpCsb-factors"      onclick="hcmpShowStat('factors')">Factor Scores</button>
+    </div>
+    <div class="hcmp-chart-box" id="hcmpCombined"></div>
+    <div style="height:20px"></div>`;
+}
+
+window._hcmpRunners=null;
+window._hcmpRace=null;
+
+function hcmpClose(){
+  document.getElementById('hcmpOverlay').classList.remove('open');
+  document.body.style.overflow='';
+}
+
+function hcmpOpen(){
+  if(st.compareSelect.size<2)return;
+  if(!st.openRace)return;
+  const{vk,ri}=st.openRace;
+  const race=D.venues[vk]?.races[ri];
+  if(!race)return;
+  const runners=race.runners.filter(r=>st.compareSelect.has(r.name));
+  window._hcmpRunners=runners;
+  window._hcmpRace=race;
+  document.getElementById('hcmpRaceLabel').textContent=`${race.time} · ${race.course} · ${race.name}`;
+  document.getElementById('hcmpBody').innerHTML=_hcmpBuildBody(runners,race);
+  document.getElementById('hcmpOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+  hcmpShowStat('jky-finish');
+}
+
+function hcmpShowStat(type){
+  ['jky-finish','jky-win','jky-place','factors'].forEach(k=>{
+    const el=document.getElementById('hcmpCsb-'+k);
+    if(el)el.classList.toggle('active',k===type);
+  });
+  const runners=window._hcmpRunners||[];
+  const race=window._hcmpRace||{};
+  const el=document.getElementById('hcmpCombined');
+  if(!el)return;
+  if(type==='jky-finish') el.innerHTML=_hcmpCombinedFinish(runners,race);
+  else if(type==='jky-win')   el.innerHTML=_hcmpRollingRate(runners,race,'win');
+  else if(type==='jky-place') el.innerHTML=_hcmpRollingRate(runners,race,'place');
+  else if(type==='factors')   el.innerHTML=_hcmpFactorBars(runners);
+}
+
+function _hcmpFinishPosChart(rides,lineColor){
+  if(!rides||!rides.length)return'<div style="color:#555;font-size:11px;padding:10px">No ride data at this venue</div>';
+  const W=460,H=130,pL=32,pR=10,pT=10,pB=20,iW=W-pL-pR,iH=H-pT-pB;
+  const n=rides.length;
+  const maxY=Math.max(...rides.map(r=>r.pos),6);
+  const pToY=p=>pT+(p-1)/(maxY-1)*iH;
+  const pts=rides.map((r,i)=>({x:pL+i/Math.max(n-1,1)*iW,y:pToY(r.pos),pos:r.pos,date:r.date,name:r.name}));
+  const sfx=p=>p===1?'st':p===2?'nd':p===3?'rd':'th';
+  const rawY=maxY<=6?Array.from({length:maxY},(_,i)=>i+1):[1,2,3,4,5,6,8,10].filter(p=>p<=maxY);
+  const yLines=rawY.map(p=>{const y=pToY(p);return`<line x1="${pL}" y1="${y}" x2="${W-pR}" y2="${y}" stroke="${p===1?'rgba(16,185,129,.2)':'#1e1e1e'}" stroke-width="1"/><text x="${pL-3}" y="${y+4}" text-anchor="end" fill="${p===1?'#10b981':'#444'}" font-size="8" font-family="Segoe UI,sans-serif">${p}${sfx(p)}</text>`;}).join('');
+  const step=Math.max(1,Math.floor(n/5));
+  const xLabels=pts.filter((_,i)=>i%step===0||i===n-1).map(p=>`<text x="${p.x}" y="${H-2}" text-anchor="middle" fill="#444" font-size="8" font-family="Segoe UI,sans-serif">${p.date.substring(5)}</text>`).join('');
+  const lp=pts.map(p=>`${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ');
+  const line=n>=2?`<polyline points="${lp}" fill="none" stroke="${lineColor||'#2a3a4a'}" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" opacity=".5"/>`:'';
+  const dots=pts.map(p=>{const col=p.pos===1?'#10b981':p.pos<=3?'#f59e0b':'#f87171';return`<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="4" fill="${col}" stroke="#0a0a0a" stroke-width="1.5"><title>${p.date}: ${p.name} — ${p.pos}${sfx(p.pos)}</title></circle>`;}).join('');
+  return`<svg width="100%" viewBox="0 0 ${W} ${H}" style="overflow:visible;display:block">${yLines}${xLabels}${line}${dots}</svg>`;
+}
+
+function _hcmpCombinedFinish(runners,race){
+  const sfx=p=>p===1?'st':p===2?'nd':p===3?'rd':'th';
+  const series=runners.map((r,idx)=>{const rides=_jkyHistoryAtVenue(r.jockey,race.course);return{label:r.jockey,horse:r.name,color:_HCMP_COLORS[idx%_HCMP_COLORS.length],rides};}).filter(s=>s.rides.length);
+  if(!series.length)return'<div style="color:#555;padding:20px;text-align:center">No jockey data at this venue</div>';
+  const W=640,H=200,pL=36,pR=14,pT=12,pB=42,iW=W-pL-pR,iH=H-pT-pB;
+  const allDates=series.flatMap(s=>s.rides.map(r=>r.date)).sort();
+  const minT=+new Date(allDates[0]),maxT=+new Date(allDates[allDates.length-1]),span=maxT-minT||1;
+  const dToX=d=>pL+(+new Date(d)-minT)/span*iW;
+  const allPos=series.flatMap(s=>s.rides.map(r=>r.pos));
+  const maxY=Math.max(...allPos,6);
+  const pToY=p=>pT+(p-1)/(maxY-1)*iH;
+  const rawY=maxY<=8?Array.from({length:maxY},(_,i)=>i+1):[1,2,3,4,5,6,8,10].filter(p=>p<=maxY);
+  const yGrid=rawY.map(p=>{const y=pToY(p);return`<line x1="${pL}" y1="${y}" x2="${W-pR}" y2="${y}" stroke="${p===1?'rgba(16,185,129,.2)':'#1e1e1e'}" stroke-width="${p===1?1.5:1}"/><text x="${pL-4}" y="${y+4}" text-anchor="end" fill="${p===1?'#10b981':'#555'}" font-size="9" font-family="Segoe UI,sans-serif">${p}${sfx(p)}</text>`;}).join('');
+  const xLabels=Array.from({length:6},(_,i)=>{const t=minT+span*i/5;const d=new Date(t).toISOString().substring(0,10);return`<text x="${dToX(d)}" y="${H-26}" text-anchor="middle" fill="#444" font-size="9" font-family="Segoe UI,sans-serif">${d.substring(5)}</text>`;}).join('');
+  const seriesEl=series.map(s=>{const pts=s.rides.map(r=>({x:dToX(r.date),y:pToY(r.pos),pos:r.pos,date:r.date,name:r.name}));const lp=pts.map(p=>`${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ');const line=pts.length>=2?`<polyline points="${lp}" fill="none" stroke="${s.color}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" opacity=".5"/>`:'' ;const dots=pts.map(p=>`<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="4.5" fill="${s.color}" stroke="#0a0a0a" stroke-width="1.5" opacity=".9"><title>${p.date}: ${p.name} — ${p.pos}${sfx(p.pos)}</title></circle>`).join('');return line+dots;}).join('');
+  const legEl=series.map((s,i)=>`<circle cx="${i*165+5}" cy="8" r="5" fill="${s.color}"/><text x="${i*165+15}" y="12" fill="#aaa" font-size="10" font-family="Segoe UI,sans-serif">${s.label}</text>`).join('');
+  return`<svg width="100%" viewBox="0 0 ${W} ${H}" style="overflow:visible;display:block">${yGrid}${xLabels}${seriesEl}<g transform="translate(${pL},${H-16})">${legEl}</g><text x="${pL}" y="${pT-2}" fill="#555" font-size="9" font-family="Segoe UI,sans-serif">← 1st best · shared date axis</text></svg>`;
+}
+
+function _hcmpRollingRate(runners,race,field){
+  const W5=5;
+  const series=runners.map((r,idx)=>{
+    const rides=_jkyHistoryAtVenue(r.jockey,race.course);
+    const pts=rides.map((x,i)=>{const sl=rides.slice(Math.max(0,i-W5+1),i+1);const rate=field==='win'?sl.filter(r=>r.pos===1).length/sl.length*100:sl.filter(r=>r.pos<=3).length/sl.length*100;return{date:x.date,rate,name:x.name};});
+    return{label:r.jockey,horse:r.name,color:_HCMP_COLORS[idx%_HCMP_COLORS.length],pts};
+  }).filter(s=>s.pts.length>=2);
+  if(!series.length)return'<div style="color:#555;padding:20px;text-align:center">Not enough venue ride data</div>';
+  const W=640,H=180,pL=36,pR=14,pT=12,pB=42,iW=W-pL-pR,iH=H-pT-pB;
+  const allDates=series.flatMap(s=>s.pts.map(p=>p.date)).sort();
+  const minT=+new Date(allDates[0]),maxT=+new Date(allDates[allDates.length-1]),span=maxT-minT||1;
+  const dToX=d=>pL+(+new Date(d)-minT)/span*iW;
+  const rToY=r=>pT+(1-r/100)*iH;
+  const yGrid=[0,25,50,75,100].map(v=>{const y=rToY(v);return`<line x1="${pL}" y1="${y}" x2="${W-pR}" y2="${y}" stroke="${v===50?'#2a2a2a':'#1a1a1a'}" stroke-width="${v===50?1.5:1}" stroke-dasharray="${v===50?'4,3':''}"/><text x="${pL-4}" y="${y+4}" text-anchor="end" fill="#555" font-size="9" font-family="Segoe UI,sans-serif">${v}%</text>`;}).join('');
+  const xLabels=Array.from({length:6},(_,i)=>{const t=minT+span*i/5;const d=new Date(t).toISOString().substring(0,10);return`<text x="${dToX(d)}" y="${H-26}" text-anchor="middle" fill="#444" font-size="9" font-family="Segoe UI,sans-serif">${d.substring(5)}</text>`;}).join('');
+  const seriesEl=series.map(s=>{const mp=s.pts.map(p=>({x:dToX(p.date),y:rToY(p.rate),rate:p.rate,date:p.date}));const lp=mp.map(p=>`${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ');const line=`<polyline points="${lp}" fill="none" stroke="${s.color}" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>`;const dots=mp.map(p=>`<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="3.5" fill="${s.color}" stroke="#0a0a0a" stroke-width="1.5"><title>${p.date}: ${p.rate.toFixed(0)}%</title></circle>`).join('');return line+dots;}).join('');
+  const legEl=series.map((s,i)=>`<circle cx="${i*165+5}" cy="8" r="5" fill="${s.color}"/><text x="${i*165+15}" y="12" fill="#aaa" font-size="10" font-family="Segoe UI,sans-serif">${s.label}</text>`).join('');
+  const lbl=field==='win'?'Rolling Win% (last 5 rides)':'Rolling Place% top-3 (last 5 rides)';
+  return`<svg width="100%" viewBox="0 0 ${W} ${H}" style="overflow:visible;display:block">${yGrid}${xLabels}${seriesEl}<g transform="translate(${pL},${H-16})">${legEl}</g><text x="${pL}" y="${pT-2}" fill="#555" font-size="9" font-family="Segoe UI,sans-serif">${lbl}</text></svg>`;
+}
+
+function _hcmpFactorBars(runners){
+  if(!runners.length)return'';
+  const n=runners.length,factors=_HCMP_FACTORS;
+  const W=640,barH=11,gap=3,groupGap=12,pL=70,pR=20,pT=8,pB=42;
+  const groupH=n*(barH+gap)+groupGap;
+  const H=pT+factors.length*groupH+pB;
+  const bW=W-pL-pR;
+  const rows=factors.map((f,fi)=>{
+    const y0=pT+fi*groupH;
+    const bars=runners.map((r,hi)=>{const val=(r.score_breakdown||{})[f]||0,max=FM[f]?.mx||1;const pct=val/max;const w=Math.max(2,pct*bW);const y=y0+hi*(barH+gap);const col=_HCMP_COLORS[hi%_HCMP_COLORS.length];return`<rect x="${pL}" y="${y}" width="${w.toFixed(1)}" height="${barH}" rx="2" fill="${col}" opacity=".8"/><text x="${pL+w+4}" y="${y+barH*.8}" fill="${col}" font-size="9" font-family="Segoe UI,sans-serif" font-weight="700">${val}/${max}</text>`;}).join('');
+    const midY=y0+(n*(barH+gap)-gap)/2+4;
+    return`<text x="${pL-5}" y="${midY}" text-anchor="end" fill="#666" font-size="9" font-family="Segoe UI,sans-serif">${f}</text><line x1="${pL}" y1="${y0+n*(barH+gap)+2}" x2="${W-pR}" y2="${y0+n*(barH+gap)+2}" stroke="#1a1a1a" stroke-width="1"/>${bars}`;
+  }).join('');
+  const legEl=runners.map((r,i)=>`<rect x="${i*165}" y="2" width="11" height="9" rx="2" fill="${_HCMP_COLORS[i%_HCMP_COLORS.length]}"/><text x="${i*165+15}" y="11" fill="#aaa" font-size="10" font-family="Segoe UI,sans-serif">${r.name.split(' ')[0]}</text>`).join('');
+  return`<svg width="100%" viewBox="0 0 ${W} ${H}" style="overflow:visible;display:block">${rows}<g transform="translate(${pL},${H-18})">${legEl}</g></svg>`;
+}
 
 async function render(){
   window.D=D;
@@ -5631,7 +6091,7 @@ function renderRaceCards(){
   }).join('');
 }
 
-async function openRace(vk,ri){st._scrollY=window.scrollY;st.openRace={vk,ri};st.expanded=null;st.detailTab='main';st.h2hPair=null;await render();window.scrollTo(0,0)}
+async function openRace(vk,ri){st._scrollY=window.scrollY;st.openRace={vk,ri};st.expanded=null;st.detailTab='main';st.h2hPair=null;st.compareSelect=new Set();await render();window.scrollTo(0,0)}
 async function goBack(){st.openRace=null;await render();if(st._scrollY!=null){window.scrollTo(0,st._scrollY);st._scrollY=null;}}
 function switchDetailTab(tab){st.detailTab=tab;st.h2hPair=null;renderDetail().catch(e=>console.error('renderDetail error:',e));}
 
@@ -5678,6 +6138,7 @@ async function renderDetail(){
   <div class="detail-tabs">
     <button class="dtab ${tab==='main'?'active':''}" onclick="switchDetailTab('main')">MAIN</button>
     <button class="dtab ${tab==='deepdive'?'active':''}" onclick="switchDetailTab('deepdive')">DEEP DIVE</button>
+    ${(()=>{const n=st.compareSelect.size;return n>=2?`<button class="hcmp-open-btn" onclick="hcmpOpen()">⚖ Compare <span style="background:#000;color:#f59e0b;border-radius:50%;width:18px;height:18px;font-size:10px;font-weight:800;display:inline-flex;align-items:center;justify-content:center">${n}</span></button>`:'';})()}
   </div>`;
 
   if(tab==='main'){
@@ -5863,7 +6324,7 @@ function renderMainTab(runners,race,vk,ri){
     const isExp=st.expanded===r.name;
     let rows=`<tr class="${rowCl} expandable" onclick="toggleExp('${r.name.replace(/'/g,"\\'")}')">
       <td style="font-weight:700;color:var(--muted)">${r.number||'—'}</td>
-      <td><div style="font-weight:700;font-size:14px"><button class="wl-track-btn ${isWatched(r.name)?'tracked':''}" onclick="event.stopPropagation();toggleWatch('${r.name.replace(/'/g,"\\'")}','${(race.course||'').replace(/'/g,"\\'")}','${(race.name||'').replace(/'/g,"\\'")}')" title="${isWatched(r.name)?'Remove from watchlist':'Add to watchlist'}">${isWatched(r.name)?'TRACKING':'TRACK'}</button><button class="bet-btn ${isBetted(r.name,race.time||'',race.course||'')?'betting':''}" onclick="event.stopPropagation();toggleBet('${r.name.replace(/'/g,"\\'")}','${(race.time||'').replace(/'/g,"\\'")}','${(race.course||'').replace(/'/g,"\\'")}',${r.score||0})">${isBetted(r.name,race.time||'',race.course||'')?'BETTING':'BET'}</button>${r.name}${rankBadge(r.name)}${getRunnerComboBadges(r)}${getCourseSpecialistBadge(r,race)}</div><div style="font-size:11px;color:var(--muted)">${r.jockey||'?'} · ${r.trainer||'?'} ${getConnectionChangeBadge(r)}</div></td>
+      <td><div style="font-weight:700;font-size:14px"><button class="wl-track-btn ${isWatched(r.name)?'tracked':''}" onclick="event.stopPropagation();toggleWatch('${r.name.replace(/'/g,"\\'")}','${(race.course||'').replace(/'/g,"\\'")}','${(race.name||'').replace(/'/g,"\\'")}')" title="${isWatched(r.name)?'Remove from watchlist':'Add to watchlist'}">${isWatched(r.name)?'TRACKING':'TRACK'}</button><button class="bet-btn ${isBetted(r.name,race.time||'',race.course||'')?'betting':''}" onclick="event.stopPropagation();toggleBet('${r.name.replace(/'/g,"\\'")}','${(race.time||'').replace(/'/g,"\\'")}','${(race.course||'').replace(/'/g,"\\'")}',${r.score||0})">${isBetted(r.name,race.time||'',race.course||'')?'BETTING':'BET'}</button><button class="cmpsel-btn${st.compareSelect.has(r.name)?' on':''}" id="cmpsel_${r.name.replace(/[^a-zA-Z0-9]/g,'_')}" onclick="event.stopPropagation();hcmpToggle('${r.name.replace(/'/g,"\\'")}')" title="Add to compare">${st.compareSelect.has(r.name)?'✓ SEL':'STATS'}</button>${r.name}${rankBadge(r.name)}${getRunnerComboBadges(r)}${getCourseSpecialistBadge(r,race)}</div><div style="font-size:11px;color:var(--muted)">${r.jockey||'?'} · ${r.trainer||'?'} ${getConnectionChangeBadge(r)}</div></td>
       <td>${formHtml(r.form)}${(()=>{const m=calcMomentum(r.form);return m.label!=='UNKNOWN'?` <span class="mom ${m.cls}" title="${m.tip}" style="padding:1px 4px;font-size:8px;vertical-align:middle">${m.icon}</span>`:'';})()}</td>
       <td style="font-weight:600">${r.age||'?'}</td>
       <td style="font-weight:600">${r.rpr||'—'}</td>
