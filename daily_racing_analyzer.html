@@ -315,9 +315,11 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .bet-btn{background:#fff;border:1px solid #d1d5db;cursor:pointer;font-size:9px;font-weight:800;padding:2px 7px;border-radius:4px;color:#6b7280;line-height:1.2;vertical-align:middle;margin-left:6px;transition:all .15s;letter-spacing:.3px}
 .bet-btn:hover{background:#f0fdf4;border-color:#10b981;color:#10b981}
 .bet-btn.betting{background:#F0F465;border-color:#F0F465;color:#1a1a1a}
-.cmpsel-btn{background:#1a1a1a;border:1px solid #333;cursor:pointer;font-size:9px;font-weight:800;padding:2px 7px;border-radius:4px;color:#888;line-height:1.2;vertical-align:middle;margin-left:6px;transition:all .15s;letter-spacing:.3px}
+.cmpsel-btn{background:#1a1a1a;border:1px solid #333;cursor:pointer;font-size:9px;font-weight:800;padding:2px 6px;border-radius:4px;color:#888;line-height:1.2;vertical-align:middle;margin-left:4px;transition:all .15s;min-width:22px;text-align:center}
 .cmpsel-btn:hover{border-color:#f59e0b;color:#f59e0b}
 .cmpsel-btn.on{background:#f59e0b22;border-color:#f59e0b;color:#f59e0b}
+.hsp-btn{background:#1a1a1a;border:1px solid #3b82f644;cursor:pointer;font-size:9px;font-weight:800;padding:2px 7px;border-radius:4px;color:#3b82f6;line-height:1.2;vertical-align:middle;margin-left:4px;transition:all .15s;letter-spacing:.3px}
+.hsp-btn:hover{background:#3b82f618;border-color:#3b82f6}
 .hcmp-open-btn{background:var(--accent);color:#000;border:none;padding:6px 14px;border-radius:7px;font-weight:800;font-size:12px;cursor:pointer;margin-left:auto;white-space:nowrap;display:flex;align-items:center;gap:5px}
 .hcmp-open-btn:hover{opacity:.9}
 .hcmp-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:2000;display:flex;align-items:flex-end;opacity:0;pointer-events:none;transition:opacity .2s}
@@ -776,6 +778,89 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 <div id="tracksView" style="display:none;padding:20px 28px;max-width:1200px;margin:0 auto"></div>
 
 <div id="modalContainer"></div>
+<div class="hs-overlay" id="hsOverlay" onclick="if(event.target===this)hsClose()">
+  <div class="hs-sheet">
+    <div class="hs-topbar">
+      <div style="font-size:12px;color:#555" id="hsRaceLabel"></div>
+      <button class="hs-close" onclick="hsClose()">× Close</button>
+    </div>
+    <div id="hsHero" class="hs-hero"></div>
+    <div style="padding:10px 20px 0;border-bottom:1px solid #141414;background:#0a0a0a;position:sticky;top:48px;z-index:9">
+      <div class="hs-tabs" id="hsTabs">
+        <button class="hstab active" data-hstab="overview" onclick="hsTab('overview')">Overview</button>
+        <button class="hstab" data-hstab="form" onclick="hsTab('form')">Form Guide</button>
+        <button class="hstab" data-hstab="venue" onclick="hsTab('venue')">Venue</button>
+        <button class="hstab" data-hstab="jockey" onclick="hsTab('jockey')">Jockey</button>
+        <button class="hstab" data-hstab="trainer" onclick="hsTab('trainer')">Trainer</button>
+        <button class="hstab" data-hstab="field" onclick="hsTab('field')">Field</button>
+      </div>
+    </div>
+    <div id="hsBody" style="padding:18px 20px;max-width:900px;margin:0 auto"></div>
+  </div>
+</div>
+<style>
+.hs-overlay{position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:3000;display:flex;align-items:flex-end;opacity:0;pointer-events:none;transition:opacity .2s}
+.hs-overlay.open{opacity:1;pointer-events:all}
+.hs-sheet{background:#0a0a0a;border-top:2px solid #2a2a2a;width:100%;max-height:96vh;overflow-y:auto;transform:translateY(40px);transition:transform .25s}
+.hs-overlay.open .hs-sheet{transform:translateY(0)}
+.hs-topbar{background:#141414;border-bottom:1px solid #1e1e1e;padding:10px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10}
+.hs-close{background:none;border:1px solid #333;color:#666;padding:4px 11px;border-radius:5px;cursor:pointer;font-size:12px;transition:all .15s}
+.hs-close:hover{border-color:#f59e0b;color:#f59e0b}
+.hs-hero{background:linear-gradient(135deg,#0d0d0d,#111);border-bottom:1px solid #1a1a1a;padding:16px 20px}
+.hs-hero-top{display:flex;align-items:flex-start;gap:14px;margin-bottom:12px}
+.hs-score-ring{width:58px;height:58px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;border:3px solid}
+.hs-horse-name{font-size:18px;font-weight:800;color:#fff;margin-bottom:4px}
+.hs-badges{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:5px}
+.hs-sbadge{display:inline-block;padding:2px 7px;border-radius:3px;font-size:10px;font-weight:800}
+.hs-meta-row{font-size:11px;color:#666;display:flex;gap:10px;flex-wrap:wrap}
+.hs-race-strip{display:flex;gap:6px;flex-wrap:wrap}
+.hs-race-pill{background:#161616;border:1px solid #222;border-radius:4px;padding:3px 8px;font-size:11px;color:#777}
+.hs-race-pill strong{color:#bbb}
+.hs-tabs{display:flex;gap:3px;overflow-x:auto;padding-bottom:8px}
+.hstab{background:none;border:none;border-bottom:2px solid transparent;padding:5px 10px;font-size:11px;font-weight:700;cursor:pointer;color:#555;white-space:nowrap;transition:all .15s;letter-spacing:.3px}
+.hstab.active{color:#f59e0b;border-bottom-color:#f59e0b}
+.hstab:hover{color:#aaa}
+.hs-section{display:none}
+.hs-section.active{display:block}
+.hs-h2{font-size:11px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.6px;margin:0 0 10px;padding-bottom:5px;border-bottom:1px solid #1a1a1a;display:flex;align-items:center;gap:8px}
+.hs-stat-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.hs-stat-card{background:#111;border:1px solid #1e1e1e;border-radius:7px;padding:10px 12px;flex:1;min-width:70px;text-align:center}
+.hs-stat-val{font-size:18px;font-weight:800;line-height:1;margin-bottom:2px}
+.hs-stat-lbl{font-size:9px;color:#555;text-transform:uppercase;letter-spacing:.4px}
+.hs-factor-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-bottom:4px}
+.hs-factor-row{display:flex;align-items:center;gap:6px}
+.hs-factor-name{font-size:10px;color:#555;width:50px;flex-shrink:0;text-transform:capitalize}
+.hs-factor-bar{flex:1;height:7px;background:#1a1a1a;border-radius:3px;overflow:hidden}
+.hs-factor-fill{height:100%;border-radius:3px}
+.hs-factor-val{font-size:10px;width:28px;text-align:right;flex-shrink:0}
+.hs-cdp-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.hs-cdp-card{background:#111;border:1px solid #1e1e1e;border-radius:6px;padding:9px;text-align:center}
+.hs-cdp-icon{font-size:16px;margin-bottom:3px}
+.hs-cdp-lbl{font-size:9px;text-transform:uppercase;letter-spacing:.4px;color:#555;margin-bottom:3px}
+.hs-cdp-status{font-size:10px;font-weight:700;padding:1px 5px;border-radius:3px;display:inline-block;margin-bottom:3px}
+.hs-cdp-detail{font-size:9px;color:#444;line-height:1.3}
+.hs-form-table{width:100%;border-collapse:collapse;font-size:11px}
+.hs-form-table th{text-align:left;padding:4px 6px;color:#444;font-size:9px;text-transform:uppercase;letter-spacing:.3px;border-bottom:1px solid #1a1a1a;font-weight:600}
+.hs-form-table td{padding:5px 6px;border-bottom:1px solid #111;color:#888}
+.hs-form-table tr:last-child td{border:none}
+.hs-form-table tr.venue-today{background:#f59e0b07}
+.hs-pos1{color:#10b981;font-weight:800}
+.hs-pos2{color:#60a5fa;font-weight:700}
+.hs-pos3{color:#a78bfa;font-weight:700}
+.hs-pos-bad{color:#f87171}
+.hs-person-card{background:#111;border:1px solid #1e1e1e;border-radius:8px;padding:12px;display:flex;gap:12px;margin-bottom:10px}
+.hs-avatar{width:40px;height:40px;border-radius:50%;background:#1a1a1a;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;flex-shrink:0;border:2px solid}
+.hs-person-stats{display:flex;gap:14px;flex-wrap:wrap;margin-top:6px}
+.hs-pstat-val{font-size:14px;font-weight:800;line-height:1}
+.hs-pstat-lbl{font-size:9px;color:#555}
+.hs-mini-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.hs-mini-box{background:#111;border:1px solid #1e1e1e;border-radius:6px;padding:10px}
+.hs-mini-title{font-size:9px;text-transform:uppercase;letter-spacing:.4px;color:#555;margin-bottom:7px}
+.hs-mini-stats{display:flex;gap:10px}
+.hs-field-row{display:flex;align-items:center;gap:6px;padding:5px 8px;border-radius:5px;background:#111;border:1px solid #1a1a1a;margin-bottom:3px}
+.hs-field-row.is-me{background:#f59e0b0a;border-color:#f59e0b33}
+.hs-no-data{color:#444;font-size:12px;padding:16px;text-align:center;background:#111;border-radius:6px;border:1px dashed #1e1e1e}
+</style>
 <div class="hcmp-overlay" id="hcmpOverlay" onclick="if(event.target===this)hcmpClose()">
   <div class="hcmp-sheet">
     <div class="hcmp-topbar">
@@ -4432,6 +4517,465 @@ function showGuide(){
 
 function closeModal(){document.getElementById('modalContainer').innerHTML=''}
 
+/* ==================== HORSE STATS PROFILE ==================== */
+const _HS_FACTORS=['form','rating','trainer','jockey','fitness','class','going','weight','age','course','distance','draw','headgear','spotlight'];
+const _HS_FMAX={form:20,rating:15,trainer:12,jockey:10,fitness:8,class:8,going:8,weight:8,age:7,course:6,distance:6,draw:5,headgear:3,spotlight:2};
+
+window._hsRunner=null; window._hsRace=null; window._hsTab='overview';
+
+function hsOpen(name,vk,ri){
+  if(!D||!D.venues[vk]?.races[ri])return;
+  const race=D.venues[vk].races[ri];
+  const runner=race.runners.find(r=>r.name===name);
+  if(!runner)return;
+  window._hsRunner=runner; window._hsRace=race; window._hsTab='overview';
+  _hsRenderHero(); _hsRenderBody('overview');
+  document.querySelectorAll('.hstab').forEach(b=>b.classList.toggle('active',b.getAttribute('data-hstab')==='overview'));
+  document.getElementById('hsRaceLabel').textContent=`${race.time||''} · ${race.course||''} · ${race.name||''}`;
+  document.getElementById('hsOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function hsClose(){document.getElementById('hsOverlay').classList.remove('open');document.body.style.overflow='';}
+function hsTab(name){
+  window._hsTab=name;
+  document.querySelectorAll('.hstab').forEach(b=>b.classList.toggle('active',b.getAttribute('data-hstab')===name));
+  _hsRenderBody(name);
+}
+
+function _hsSC(v){return v>=20?'#10b981':v>=15?'#f59e0b':'#f87171';}
+function _hsSfx(p){return p===1?'st':p===2?'nd':p===3?'rd':'th';}
+function _hsPosClass(p){return p===1?'hs-pos1':p===2?'hs-pos2':p===3?'hs-pos3':p>=5?'hs-pos-bad':'';}
+
+/* ---------- data helpers ---------- */
+function _hsHorseHistory(name){
+  const hist=window._resultsHistory;
+  if(!hist?.races)return[];
+  const hn=name.toLowerCase().trim();
+  const runs=[];
+  hist.races.forEach(race=>{
+    const r=(race.results||[]).find(x=>x.name?.toLowerCase().trim()===hn);
+    if(!r||r.non_runner||r.finish_pos==null)return;
+    runs.push({date:race.date,venue:race.venue,going:race.going,dist:race.distance||race.dist,
+      pos:r.finish_pos,beaten:r.distance_beaten,jockey:r.jockey||'?',
+      race:race.race_name||'',sp:r.sp,cls:race.race_class||''});
+  });
+  return runs.sort((a,b)=>b.date.localeCompare(a.date));
+}
+
+function _hsHorseAtVenue(name,venue){
+  const all=_hsHorseHistory(name);
+  const vn=(venue||'').toLowerCase().replace(/\s*\(aw\)$/,'');
+  const runs=all.filter(r=>(r.venue||'').toLowerCase().replace(/\s*\(aw\)$/,'')===vn);
+  const wins=runs.filter(r=>r.pos===1).length;
+  const places=runs.filter(r=>r.pos<=3).length;
+  return{runs,wins,places,total:runs.length,
+    winPct:runs.length?+(wins/runs.length*100).toFixed(1):0,
+    placePct:runs.length?+(places/runs.length*100).toFixed(1):0};
+}
+
+function _hsJkyAtVenue(jky,venue){
+  const hist=window._resultsHistory;
+  if(!hist?.races)return{runs:0,wins:0,places:0,winPct:0,placePct:0,rides:[]};
+  const jn=(jky||'').toLowerCase().trim();
+  const vn=(venue||'').toLowerCase().replace(/\s*\(aw\)$/,'');
+  let runs=0,wins=0,places=0; const rides=[];
+  hist.races.forEach(race=>{
+    if((race.venue||'').toLowerCase().replace(/\s*\(aw\)$/,'')!==vn)return;
+    (race.results||[]).forEach(r=>{
+      if(r.non_runner||r.finish_pos==null||(r.jockey||'').toLowerCase().trim()!==jn)return;
+      runs++;if(r.finish_pos===1)wins++;if(r.finish_pos<=3)places++;
+      rides.push({date:race.date,pos:r.finish_pos,horse:r.name||'?'});
+    });
+  });
+  return{runs,wins,places,winPct:runs?+(wins/runs*100).toFixed(1):0,placePct:runs?+(places/runs*100).toFixed(1):0,
+    rides:rides.sort((a,b)=>a.date.localeCompare(b.date))};
+}
+
+function _hsJkyOnHorse(jky,horseName){
+  const hist=window._resultsHistory;
+  if(!hist?.races)return{runs:0,wins:0,places:0,winPct:0,placePct:0};
+  const jn=(jky||'').toLowerCase().trim(),hn=horseName.toLowerCase().trim();
+  let runs=0,wins=0,places=0;
+  hist.races.forEach(race=>{
+    (race.results||[]).forEach(r=>{
+      if(r.non_runner||r.finish_pos==null)return;
+      if(r.name?.toLowerCase().trim()!==hn||(r.jockey||'').toLowerCase().trim()!==jn)return;
+      runs++;if(r.finish_pos===1)wins++;if(r.finish_pos<=3)places++;
+    });
+  });
+  return{runs,wins,places,winPct:runs?+(wins/runs*100).toFixed(1):0,placePct:runs?+(places/runs*100).toFixed(1):0};
+}
+
+function _hsJkyRecentRides(jky,limit=8){
+  const hist=window._resultsHistory;
+  if(!hist?.races)return[];
+  const jn=(jky||'').toLowerCase().trim();
+  const rides=[];
+  hist.races.forEach(race=>{
+    (race.results||[]).forEach(r=>{
+      if(r.non_runner||r.finish_pos==null||(r.jockey||'').toLowerCase().trim()!==jn)return;
+      rides.push({date:race.date,venue:race.venue,pos:r.finish_pos,horse:r.name});
+    });
+  });
+  return rides.sort((a,b)=>b.date.localeCompare(a.date)).slice(0,limit);
+}
+
+function _hsTrnAtVenue(trn,venue){
+  const hist=window._resultsHistory;
+  if(!hist?.races)return{runs:0,wins:0,winPct:0};
+  const tn=(trn||'').toLowerCase().trim(),vn=(venue||'').toLowerCase().replace(/\s*\(aw\)$/,'');
+  // trainers are on racecard runners, not in results — use getConnectionStats which scans race.trainer_stats if present
+  // fallback: count trainer's horses finishing at venue via trainer field on result
+  let runs=0,wins=0;
+  hist.races.forEach(race=>{
+    if((race.venue||'').toLowerCase().replace(/\s*\(aw\)$/,'')!==vn)return;
+    (race.results||[]).forEach(r=>{
+      if(r.non_runner||r.finish_pos==null||(r.trainer||'').toLowerCase().trim()!==tn)return;
+      runs++;if(r.finish_pos===1)wins++;
+    });
+  });
+  return{runs,wins,winPct:runs?+(wins/runs*100).toFixed(1):0};
+}
+
+function _hsTrnOnGoing(trn,going){
+  const hist=window._resultsHistory;
+  if(!hist?.races)return{runs:0,wins:0,winPct:0};
+  const tn=(trn||'').toLowerCase().trim(),gn=(going||'').toLowerCase().replace(/[\s-]+/g,'');
+  let runs=0,wins=0;
+  hist.races.forEach(race=>{
+    if((race.going||'').toLowerCase().replace(/[\s-]+/g,'')!==gn)return;
+    (race.results||[]).forEach(r=>{
+      if(r.non_runner||r.finish_pos==null||(r.trainer||'').toLowerCase().trim()!==tn)return;
+      runs++;if(r.finish_pos===1)wins++;
+    });
+  });
+  return{runs,wins,winPct:runs?+(wins/runs*100).toFixed(1):0};
+}
+
+/* ---------- SVG helpers ---------- */
+function _hsSvgFinish(rides,lineColor,W=500,H=140){
+  if(!rides?.length)return'<div class="hs-no-data">No ride data at this venue</div>';
+  const pL=32,pR=10,pT=10,pB=20,iW=W-pL-pR,iH=H-pT-pB;
+  const n=rides.length,maxY=Math.max(...rides.map(r=>r.pos),6);
+  const pToY=p=>pT+(p-1)/(maxY-1)*iH;
+  const pts=rides.map((r,i)=>({x:pL+i/Math.max(n-1,1)*iW,y:pToY(r.pos),pos:r.pos,date:r.date,horse:r.horse||r.name||'?'}));
+  const yL=Array.from({length:maxY},(_,i)=>i+1).map(p=>{const y=pToY(p);return`<line x1="${pL}" y1="${y}" x2="${W-pR}" y2="${y}" stroke="${p===1?'rgba(16,185,129,.2)':'#1a1a1a'}" stroke-width="1"/><text x="${pL-3}" y="${y+3}" text-anchor="end" fill="${p===1?'#10b981':'#444'}" font-size="8" font-family="Segoe UI,sans-serif">${p}${_hsSfx(p)}</text>`;}).join('');
+  const lp=pts.map(p=>`${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ');
+  const line=n>=2?`<polyline points="${lp}" fill="none" stroke="${lineColor||'#2a3a4a'}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" opacity=".55"/>`:'' ;
+  const step=Math.max(1,Math.floor(n/5));
+  const xL=pts.filter((_,i)=>i%step===0||i===n-1).map(p=>`<text x="${p.x.toFixed(1)}" y="${H-2}" text-anchor="middle" fill="#444" font-size="8" font-family="Segoe UI,sans-serif">${p.date?.substring(5)||''}</text>`).join('');
+  const dots=pts.map(p=>{const c=p.pos===1?'#10b981':p.pos<=3?'#f59e0b':'#f87171';return`<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="4.5" fill="${c}" stroke="#0a0a0a" stroke-width="1.5"><title>${p.date}: ${p.horse} — ${p.pos}${_hsSfx(p.pos)}</title></circle>`;}).join('');
+  return`<svg width="100%" viewBox="0 0 ${W} ${H}" style="display:block;overflow:visible">${yL}${xL}${line}${dots}<text x="${pL}" y="${pT-2}" fill="#444" font-size="8" font-family="Segoe UI,sans-serif">← 1st best</text></svg>`;
+}
+
+/* ---------- hero ---------- */
+function _hsRenderHero(){
+  const r=window._hsRunner,race=window._hsRace;
+  const scorePct=Math.round(r.score/MAX_SCORE*100);
+  const pickCol=scorePct>=77?'#f59e0b':scorePct>=64?'#10b981':scorePct>=55?'#3b82f6':'#a78bfa';
+  // gap calc
+  const sorted=[...race.runners].sort((a,b)=>(b.score||0)-(a.score||0));
+  const myRank=sorted.findIndex(x=>x.name===r.name)+1;
+  const gap=myRank===1&&sorted[1]?r.score-(sorted[1].score||0):sorted[0]?(sorted[0].score||0)-r.score:0;
+  const gapCol=gap>=18?'#10b981':gap>=10?'#f59e0b':'#888';
+  const cdp=buildCDP(r,race);
+  const provenCount=cdp.cards.filter(c=>c.status==='proven').length;
+  const concernCount=cdp.cards.filter(c=>c.status==='failed').length;
+  const going=race.going||'';
+  document.getElementById('hsHero').innerHTML=`
+    <div class="hs-hero-top">
+      <div class="hs-score-ring" style="border-color:${pickCol};background:${pickCol}12">
+        <div style="font-size:19px;font-weight:800;color:${pickCol};line-height:1">${r.score}</div>
+        <div style="font-size:8px;color:#666;margin-top:1px">${scorePct}%</div>
+      </div>
+      <div style="flex:1">
+        <div class="hs-horse-name">${r.name}</div>
+        <div class="hs-badges">
+          ${r.pick?`<span class="hs-sbadge" style="background:${pickCol};color:#000">${r.pick}</span>`:''}
+          ${myRank===1?'<span class="hs-sbadge" style="background:#10b98118;border:1px solid #10b98144;color:#10b981">TOP SCORE</span>':''}
+          <span class="hs-sbadge" style="background:#1a1a1a;color:#888">#${myRank} of ${race.runners.length}</span>
+          <span class="hs-sbadge" style="background:${gapCol}18;border:1px solid ${gapCol}44;color:${gapCol}">Gap ${myRank===1?'+':'-'}${Math.abs(gap)}</span>
+          ${r.sp?`<span class="hs-sbadge" style="background:#1a1a1a;color:#777">SP ${r.sp}</span>`:''}
+          ${provenCount>=3?'<span class="hs-sbadge" style="background:#10b98118;border:1px solid #10b98133;color:#10b981">✓ CDP Strong</span>':concernCount>=2?'<span class="hs-sbadge" style="background:#f8717118;border:1px solid #f8717133;color:#f87171">⚠ CDP Concern</span>':''}
+        </div>
+        <div class="hs-meta-row">
+          <span>${r.jockey||'?'}</span><span>${r.trainer||'?'}</span>
+          ${r.age?`<span>Age ${r.age}</span>`:''}${r.lbs?`<span>${r.lbs}lb</span>`:''}
+        </div>
+      </div>
+    </div>
+    <div class="hs-race-strip">
+      <div class="hs-race-pill"><strong>${race.time||''}</strong></div>
+      <div class="hs-race-pill"><strong>${race.course||''}</strong></div>
+      ${race.distance?`<div class="hs-race-pill">${race.distance}</div>`:''}
+      ${going?`<div class="hs-race-pill" style="color:#aaa">${going}</div>`:''}
+      ${race.class||race.cls?`<div class="hs-race-pill">${race.class||race.cls}</div>`:''}
+      <div class="hs-race-pill">${race.runners.length} runners</div>
+    </div>`;
+}
+
+/* ---------- body sections ---------- */
+function _hsRenderBody(tab){
+  const el=document.getElementById('hsBody');
+  if(!el)return;
+  const r=window._hsRunner,race=window._hsRace;
+  if(tab==='overview') el.innerHTML=_hsSectionOverview(r,race);
+  else if(tab==='form')    el.innerHTML=_hsSectionForm(r,race);
+  else if(tab==='venue')   el.innerHTML=_hsSectionVenue(r,race);
+  else if(tab==='jockey')  el.innerHTML=_hsSectionJockey(r,race);
+  else if(tab==='trainer') el.innerHTML=_hsSectionTrainer(r,race);
+  else if(tab==='field')   el.innerHTML=_hsSectionField(r,race);
+}
+
+function _hsSectionOverview(r,race){
+  const bd=r.score_breakdown||{};
+  const factorHtml=_HS_FACTORS.map(f=>{
+    const v=bd[f]||0,mx=_HS_FMAX[f]||1,pct=v/mx*100;
+    const col=pct>=70?'#10b981':pct>=40?'#f59e0b':'#f87171';
+    return`<div class="hs-factor-row">
+      <div class="hs-factor-name">${f}</div>
+      <div class="hs-factor-bar"><div class="hs-factor-fill" style="width:${pct.toFixed(0)}%;background:${col}"></div></div>
+      <div class="hs-factor-val" style="color:${pct>=70?col:'#555'}">${v}/${mx}</div>
+    </div>`;
+  }).join('');
+
+  const cdp=buildCDP(r,race);
+  const cdpHtml=cdp.cards.map(c=>{
+    const col=c.status==='proven'?'#10b981':c.status==='untested'?'#f59e0b':'#f87171';
+    const cls=c.status==='proven'?'hs-cdp-proven':c.status==='untested'?'hs-cdp-untested':'hs-cdp-concern';
+    return`<div class="hs-cdp-card">
+      <div class="hs-cdp-icon">${c.label==='Class'?'🏆':c.label==='Distance'?'📏':c.label==='Going'?'🌿':'📍'}</div>
+      <div class="hs-cdp-lbl">${c.label}</div>
+      <span class="hs-cdp-status ${cls}" style="background:${col}18;color:${col}">${c.statusLabel}</span>
+      <div class="hs-cdp-detail">${c.pct}% · ${c.note||''}</div>
+    </div>`;
+  }).join('');
+
+  const scorePct=Math.round(r.score/MAX_SCORE*100);
+  const topFactor=_HS_FACTORS.map(f=>({f,v:bd[f]||0,mx:_HS_FMAX[f]||1})).sort((a,b)=>(b.v/b.mx)-(a.v/a.mx))[0];
+
+  return`<div class="hs-section active">
+    <div style="display:flex;gap:8px;margin-bottom:14px">
+      <div class="hs-stat-card"><div class="hs-stat-val" style="color:#f59e0b">${r.score}</div><div class="hs-stat-lbl">Score</div></div>
+      <div class="hs-stat-card"><div class="hs-stat-val" style="color:#aaa">${scorePct}%</div><div class="hs-stat-lbl">Of max</div></div>
+      <div class="hs-stat-card"><div class="hs-stat-val" style="color:#10b981">${cdp.proven}</div><div class="hs-stat-lbl">CDP proven</div></div>
+      <div class="hs-stat-card"><div class="hs-stat-val" style="color:#555">${topFactor?topFactor.f:'—'}</div><div class="hs-stat-lbl">Top factor</div></div>
+    </div>
+    <div class="hs-h2">Score Breakdown</div>
+    <div class="hs-factor-grid">${factorHtml}</div>
+    <div style="margin-top:16px"></div>
+    <div class="hs-h2">Conditions Check (CDP)</div>
+    <div class="hs-cdp-grid">${cdpHtml}</div>
+  </div>`;
+}
+
+function _hsSectionForm(r,race){
+  const hist=_hsHorseHistory(r.name);
+  if(!hist.length)return`<div class="hs-section active"><div class="hs-no-data">No historical runs found for ${r.name}</div></div>`;
+  const venue=(race.course||'').toLowerCase().replace(/\s*\(aw\)$/,'');
+  const last3=hist.slice(0,3);
+  const recentWins=last3.filter(x=>x.pos===1).length;
+  const recentPlaced=last3.filter(x=>x.pos<=3).length;
+  const formStr=hist.slice(0,8).map(x=>x.pos<=3?String(x.pos):'F').join('-');
+  const rows=hist.slice(0,12).map(x=>{
+    const isVenue=(x.venue||'').toLowerCase().replace(/\s*\(aw\)$/,'')===venue;
+    const posCls=_hsPosClass(x.pos);
+    const posStr=`${x.pos}${_hsSfx(x.pos)}`;
+    const beatStr=x.beaten!=null?(x.pos===1?'—':`${x.beaten}L`):'—';
+    return`<tr class="${isVenue?'venue-today':''}">
+      <td>${x.date?.substring(5)||x.date}</td>
+      <td>${x.venue||'?'}${isVenue?` <span style="font-size:9px;color:#f59e0b">▶ today</span>`:''}</td>
+      <td style="color:#777">${x.going||'?'}</td>
+      <td style="color:#777">${x.dist||'?'}</td>
+      <td class="${posCls}">${posStr}</td>
+      <td style="color:#555">${beatStr}</td>
+      <td style="color:#666">${x.jockey||'?'}</td>
+      <td style="color:#555;font-size:10px">${x.race||''}</td>
+      <td style="color:#555">${x.sp||'?'}</td>
+    </tr>`;
+  }).join('');
+  return`<div class="hs-section active">
+    <div class="hs-stat-row">
+      <div class="hs-stat-card"><div class="hs-stat-val" style="color:#f59e0b">${formStr}</div><div class="hs-stat-lbl">Recent form</div></div>
+      <div class="hs-stat-card"><div class="hs-stat-val" style="color:#10b981">${recentWins}/3</div><div class="hs-stat-lbl">Wins last 3</div></div>
+      <div class="hs-stat-card"><div class="hs-stat-val" style="color:#3b82f6">${recentPlaced}/3</div><div class="hs-stat-lbl">Placed last 3</div></div>
+      <div class="hs-stat-card"><div class="hs-stat-val" style="color:#888">${hist.length}</div><div class="hs-stat-lbl">Total logged</div></div>
+    </div>
+    <div class="hs-h2">Run History</div>
+    <div style="overflow-x:auto">
+      <table class="hs-form-table">
+        <thead><tr><th>Date</th><th>Venue</th><th>Going</th><th>Dist</th><th>Pos</th><th>Beaten</th><th>Jockey</th><th>Race</th><th>SP</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
+    <div style="font-size:10px;color:#333;margin-top:6px">▶ today's venue highlighted · showing last 12 runs</div>
+  </div>`;
+}
+
+function _hsSectionVenue(r,race){
+  const vr=_hsHorseAtVenue(r.name,race.course);
+  if(!vr.total)return`<div class="hs-section active"><div class="hs-no-data">No previous runs at ${race.course}</div></div>`;
+  const runCards=vr.runs.map(x=>{
+    const posCls=_hsPosClass(x.pos);
+    const posStr=`${x.pos}${_hsSfx(x.pos)}`;
+    return`<div style="background:#141414;border:1px solid #222;border-radius:6px;padding:8px 12px;text-align:center;min-width:80px">
+      <div class="${posCls}" style="font-size:16px;font-weight:800;line-height:1;margin-bottom:2px">${posStr}</div>
+      <div style="font-size:10px;color:#555">${x.date?.substring(5)||x.date}</div>
+      <div style="font-size:9px;color:#444">${x.going||''}</div>
+      <div style="font-size:9px;color:#444">${x.race||''}</div>
+    </div>`;
+  }).join('');
+  const chartRides=vr.runs.map(x=>({date:x.date,pos:x.pos,horse:r.name,name:r.name}));
+  return`<div class="hs-section active">
+    <div class="hs-h2">Record at ${race.course}</div>
+    <div class="hs-stat-row">
+      <div class="hs-stat-card"><div class="hs-stat-val" style="color:#f59e0b">${vr.total}</div><div class="hs-stat-lbl">Runs here</div></div>
+      <div class="hs-stat-card"><div class="hs-stat-val" style="color:#10b981">${vr.winPct}%</div><div class="hs-stat-lbl">Win%</div></div>
+      <div class="hs-stat-card"><div class="hs-stat-val" style="color:#3b82f6">${vr.placePct}%</div><div class="hs-stat-lbl">Place%</div></div>
+      <div class="hs-stat-card"><div class="hs-stat-val" style="color:#a78bfa">${vr.wins}/${vr.total}</div><div class="hs-stat-lbl">W/R</div></div>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px">${runCards}</div>
+    <div style="font-size:11px;color:#444;margin-bottom:6px">Finish position history at ${race.course} — 1st = top</div>
+    ${_hsSvgFinish(chartRides,'#f59e0b')}
+  </div>`;
+}
+
+function _hsSectionJockey(r,race){
+  const overall=getConnectionStats(r.jockey,'jockey');
+  const atVenue=_hsJkyAtVenue(r.jockey,race.course);
+  const onHorse=_hsJkyOnHorse(r.jockey,r.name);
+  const recentRides=_hsJkyRecentRides(r.jockey,8);
+  const venueFin=_hsJkyAtVenue(r.jockey,race.course);
+  const initials=(r.jockey||'?').split(' ').map(w=>w[0]).join('').slice(0,2);
+  const col='#f59e0b';
+  const scl=v=>v>=20?'#10b981':v>=14?'#f59e0b':'#f87171';
+
+  const recentRows=recentRides.map(x=>{
+    const posCls=_hsPosClass(x.pos);
+    return`<tr><td>${x.date?.substring(5)||x.date}</td><td>${x.venue||'?'}</td>
+      <td class="${posCls}">${x.pos}${_hsSfx(x.pos)}</td>
+      <td style="color:#666">${x.horse||'?'}</td></tr>`;
+  }).join('');
+
+  return`<div class="hs-section active">
+    <div class="hs-person-card">
+      <div class="hs-avatar" style="border-color:${col}44;color:${col}">${initials}</div>
+      <div style="flex:1">
+        <div style="font-size:13px;font-weight:700;color:#e0e0e0;margin-bottom:1px">${r.jockey||'?'}</div>
+        <div style="font-size:11px;color:#555;margin-bottom:8px">Riding ${r.name} today</div>
+        <div class="hs-person-stats">
+          <div><div class="hs-pstat-val" style="color:${scl(overall.winPct)}">${overall.winPct}%</div><div class="hs-pstat-lbl">Overall Win%</div></div>
+          <div><div class="hs-pstat-val" style="color:#94a3b8">${overall.placePct}%</div><div class="hs-pstat-lbl">Place%</div></div>
+          <div><div class="hs-pstat-val" style="color:${col}">${overall.runs}</div><div class="hs-pstat-lbl">Total rides</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="hs-mini-grid">
+      <div class="hs-mini-box">
+        <div class="hs-mini-title">At ${race.course}</div>
+        <div class="hs-mini-stats">
+          <div><div class="hs-pstat-val" style="color:${scl(atVenue.winPct)}">${atVenue.winPct}%</div><div class="hs-pstat-lbl">Win%</div></div>
+          <div><div class="hs-pstat-val" style="color:#94a3b8">${atVenue.placePct}%</div><div class="hs-pstat-lbl">Place%</div></div>
+          <div><div class="hs-pstat-val" style="color:#666">${atVenue.runs}</div><div class="hs-pstat-lbl">Rides</div></div>
+        </div>
+      </div>
+      <div class="hs-mini-box">
+        <div class="hs-mini-title">On ${r.name}</div>
+        <div class="hs-mini-stats">
+          <div><div class="hs-pstat-val" style="color:${scl(onHorse.winPct)}">${onHorse.winPct}%</div><div class="hs-pstat-lbl">Win%</div></div>
+          <div><div class="hs-pstat-val" style="color:#94a3b8">${onHorse.placePct}%</div><div class="hs-pstat-lbl">Place%</div></div>
+          <div><div class="hs-pstat-val" style="color:#666">${onHorse.runs}</div><div class="hs-pstat-lbl">Rides</div></div>
+        </div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+      <div>
+        <div class="hs-h2">Recent Rides</div>
+        ${recentRides.length?`<table class="hs-form-table"><thead><tr><th>Date</th><th>Venue</th><th>Pos</th><th>Horse</th></tr></thead><tbody>${recentRows}</tbody></table>`:'<div class="hs-no-data">No recent ride data</div>'}
+      </div>
+      <div>
+        <div class="hs-h2">Finishes at ${race.course}</div>
+        <div style="font-size:10px;color:#444;margin-bottom:6px">1st = top</div>
+        ${_hsSvgFinish(venueFin.rides,col,280,130)}
+      </div>
+    </div>
+  </div>`;
+}
+
+function _hsSectionTrainer(r,race){
+  const overall=getConnectionStats(r.trainer,'trainer');
+  const atVenue=_hsTrnAtVenue(r.trainer,race.course);
+  const onGoing=_hsTrnOnGoing(r.trainer,race.going);
+  const initials=(r.trainer||'?').split(' ').filter(w=>/^[a-zA-Z]/.test(w)).map(w=>w[0]).join('').slice(0,2);
+  const col='#a78bfa';
+  const scl=v=>v>=20?'#10b981':v>=14?'#f59e0b':'#f87171';
+  const bar=(pct,c)=>`<div style="flex:1;height:6px;background:#1a1a1a;border-radius:2px;overflow:hidden"><div style="width:${Math.min(pct,100)}%;height:100%;background:${c};border-radius:2px"></div></div>`;
+  return`<div class="hs-section active">
+    <div class="hs-person-card">
+      <div class="hs-avatar" style="border-color:${col}44;color:${col}">${initials}</div>
+      <div style="flex:1">
+        <div style="font-size:13px;font-weight:700;color:#e0e0e0;margin-bottom:1px">${r.trainer||'?'}</div>
+        <div style="font-size:11px;color:#555;margin-bottom:8px">Trains ${r.name}</div>
+        <div class="hs-person-stats">
+          <div><div class="hs-pstat-val" style="color:${scl(overall.winPct)}">${overall.winPct}%</div><div class="hs-pstat-lbl">Overall Win%</div></div>
+          <div><div class="hs-pstat-val" style="color:#94a3b8">${overall.placePct}%</div><div class="hs-pstat-lbl">Place%</div></div>
+          <div><div class="hs-pstat-val" style="color:${col}">${overall.runs}</div><div class="hs-pstat-lbl">Total runs</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="hs-h2">Breakdown</div>
+    <div style="background:#111;border:1px solid #1e1e1e;border-radius:7px;padding:12px;display:flex;flex-direction:column;gap:8px">
+      <div style="display:flex;align-items:center;gap:8px">
+        <div style="font-size:10px;color:#555;width:100px">Overall</div>
+        ${bar(overall.winPct,scl(overall.winPct))}
+        <div style="font-size:10px;color:#888;width:80px">${overall.winPct}% (${overall.wins}/${overall.runs})</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <div style="font-size:10px;color:#555;width:100px">At ${race.course}</div>
+        ${bar(atVenue.winPct,scl(atVenue.winPct))}
+        <div style="font-size:10px;color:#888;width:80px">${atVenue.winPct}% (${atVenue.wins}/${atVenue.runs})</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <div style="font-size:10px;color:#555;width:100px">${race.going||'Today\'s going'}</div>
+        ${bar(onGoing.winPct,scl(onGoing.winPct))}
+        <div style="font-size:10px;color:#888;width:80px">${onGoing.winPct}% (${onGoing.wins}/${onGoing.runs})</div>
+      </div>
+    </div>
+    ${overall.runs===0?'<div class="hs-no-data" style="margin-top:10px">No trainer data in results history. Data populates as results are logged.</div>':''}
+  </div>`;
+}
+
+function _hsSectionField(r,race){
+  const sorted=[...race.runners].sort((a,b)=>(b.score||0)-(a.score||0));
+  const maxScore=sorted[0]?.score||1;
+  const myRank=sorted.findIndex(x=>x.name===r.name)+1;
+  const gap=myRank===1&&sorted[1]?r.score-(sorted[1].score||0):sorted[0]?(sorted[0].score||0)-r.score:0;
+  const rows=sorted.map((h,i)=>{
+    const isMe=h.name===r.name;
+    const pct=(h.score||0)/maxScore*100;
+    const col=isMe?'#f59e0b':i===0?'#10b981':pct>=60?'#3b82f6':'#555';
+    return`<div class="hs-field-row${isMe?' is-me':''}">
+      <div style="font-size:11px;color:${isMe?'#f59e0b':'#444'};width:18px;text-align:center">${i+1}</div>
+      <div style="font-size:12px;font-weight:${isMe?800:400};color:${isMe?'#e0e0e0':'#666'};flex:1">${h.name}${isMe?' <span style="font-size:9px;color:#f59e0b">◀</span>':''}</div>
+      <div style="width:90px;height:5px;background:#1a1a1a;border-radius:2px;overflow:hidden"><div style="width:${pct.toFixed(0)}%;height:100%;background:${col};border-radius:2px"></div></div>
+      <div style="font-size:11px;color:${col};width:28px;text-align:right">${h.score||0}</div>
+      <div style="font-size:10px;color:#444;width:38px;text-align:right">${h.sp||h.odds||'?'}</div>
+    </div>`;
+  }).join('');
+  const gapCol=gap>=18?'#10b981':gap>=10?'#f59e0b':'#888';
+  return`<div class="hs-section active">
+    <div class="hs-stat-row">
+      <div class="hs-stat-card"><div class="hs-stat-val" style="color:#f59e0b">#${myRank}</div><div class="hs-stat-lbl">Rank in field</div></div>
+      <div class="hs-stat-card"><div class="hs-stat-val" style="color:${gapCol}">${myRank===1?'+':'-'}${Math.abs(gap)}</div><div class="hs-stat-lbl">${myRank===1?'Gap over 2nd':'Behind leader'}</div></div>
+      <div class="hs-stat-card"><div class="hs-stat-val" style="color:#888">${race.runners.length}</div><div class="hs-stat-lbl">Runners</div></div>
+      <div class="hs-stat-card"><div class="hs-stat-val" style="color:#3b82f6">${r.score||0}</div><div class="hs-stat-lbl">Score</div></div>
+    </div>
+    <div class="hs-h2">All Runners — ranked by score</div>
+    ${rows}
+    <div style="font-size:10px;color:#333;margin-top:6px">◀ = this horse</div>
+  </div>`;
+}
+
 /* ==================== HORSE COMPARISON ==================== */
 const _HCMP_COLORS=['#f59e0b','#3b82f6','#10b981','#a78bfa'];
 const _HCMP_FACTORS=['form','rating','trainer','jockey','fitness','class','going','weight','age','course','distance','draw'];
@@ -4439,19 +4983,16 @@ const _HCMP_FACTORS=['form','rating','trainer','jockey','fitness','class','going
 function hcmpToggle(name){
   if(st.compareSelect.has(name))st.compareSelect.delete(name);
   else st.compareSelect.add(name);
-  const id='cmpsel_'+name.replace(/[^a-zA-Z0-9]/g,'_');
-  const btn=document.getElementById(id);
-  if(btn){const on=st.compareSelect.has(name);btn.classList.toggle('on',on);btn.textContent=on?'✓ SEL':'STATS';}
-  // update compare button in tabs
-  const hdr=document.querySelector('.detail-tabs .hcmp-open-btn');
+  const btn=document.getElementById('cmpsel_'+name.replace(/[^a-zA-Z0-9]/g,'_'));
+  if(btn){const on=st.compareSelect.has(name);btn.classList.toggle('on',on);btn.textContent=on?'✓':'+CMP';}
+  // update compare open button in detail tabs
   const n=st.compareSelect.size;
-  if(n>=2&&!hdr){
-    const tabs=document.querySelector('.detail-tabs');
-    if(tabs){const b=document.createElement('button');b.className='hcmp-open-btn';b.onclick=hcmpOpen;b.innerHTML=`⚖ Compare <span style="background:#000;color:#f59e0b;border-radius:50%;width:18px;height:18px;font-size:10px;font-weight:800;display:inline-flex;align-items:center;justify-content:center">${n}</span>`;tabs.appendChild(b);}
-  } else if(hdr){
-    if(n<2){hdr.remove();}
-    else{hdr.innerHTML=`⚖ Compare <span style="background:#000;color:#f59e0b;border-radius:50%;width:18px;height:18px;font-size:10px;font-weight:800;display:inline-flex;align-items:center;justify-content:center">${n}</span>`;hdr.onclick=hcmpOpen;}
-  }
+  const tabsDiv=document.querySelector('.detail-tabs');
+  let openBtn=tabsDiv?.querySelector('.hcmp-open-btn');
+  if(n>=2){
+    if(!openBtn&&tabsDiv){openBtn=document.createElement('button');openBtn.className='hcmp-open-btn';openBtn.style.cssText='font-size:11px;padding:5px 12px';openBtn.onclick=hcmpOpen;tabsDiv.querySelector('[data-hscmp]')?.appendChild(openBtn)||(tabsDiv.querySelector('.hs-tab-actions')?.appendChild(openBtn));}
+    if(openBtn)openBtn.innerHTML=`⚖ Compare <span style="background:#000;color:#f59e0b;border-radius:50%;width:16px;height:16px;font-size:9px;font-weight:800;display:inline-flex;align-items:center;justify-content:center">${n}</span>`;
+  } else if(openBtn){openBtn.remove();}
 }
 
 function _jkyHistoryAtVenue(jockeyName,venue){
@@ -6138,7 +6679,17 @@ async function renderDetail(){
   <div class="detail-tabs">
     <button class="dtab ${tab==='main'?'active':''}" onclick="switchDetailTab('main')">MAIN</button>
     <button class="dtab ${tab==='deepdive'?'active':''}" onclick="switchDetailTab('deepdive')">DEEP DIVE</button>
-    ${(()=>{const n=st.compareSelect.size;return n>=2?`<button class="hcmp-open-btn" onclick="hcmpOpen()">⚖ Compare <span style="background:#000;color:#f59e0b;border-radius:50%;width:18px;height:18px;font-size:10px;font-weight:800;display:inline-flex;align-items:center;justify-content:center">${n}</span></button>`:'';})()}
+    ${(()=>{
+      const expandedName=st.expanded;
+      if(!expandedName) return '';
+      const safeName=expandedName.replace(/'/g,"\\'");
+      const cmpN=st.compareSelect.size;
+      const cmpOpenBtn=cmpN>=2?`<button class="hcmp-open-btn" onclick="hcmpOpen()" style="font-size:11px;padding:5px 12px">⚖ Compare <span style="background:#000;color:#f59e0b;border-radius:50%;width:16px;height:16px;font-size:9px;font-weight:800;display:inline-flex;align-items:center;justify-content:center">${cmpN}</span></button>`:'';
+      return `<div style="margin-left:auto;display:flex;align-items:center;gap:6px">
+        <button class="hsp-btn" onclick="hsOpen('${safeName}','${vk}',${ri})">📊 STATS</button>
+        ${cmpOpenBtn}
+      </div>`;
+    })()}
   </div>`;
 
   if(tab==='main'){
@@ -6324,7 +6875,7 @@ function renderMainTab(runners,race,vk,ri){
     const isExp=st.expanded===r.name;
     let rows=`<tr class="${rowCl} expandable" onclick="toggleExp('${r.name.replace(/'/g,"\\'")}')">
       <td style="font-weight:700;color:var(--muted)">${r.number||'—'}</td>
-      <td><div style="font-weight:700;font-size:14px"><button class="wl-track-btn ${isWatched(r.name)?'tracked':''}" onclick="event.stopPropagation();toggleWatch('${r.name.replace(/'/g,"\\'")}','${(race.course||'').replace(/'/g,"\\'")}','${(race.name||'').replace(/'/g,"\\'")}')" title="${isWatched(r.name)?'Remove from watchlist':'Add to watchlist'}">${isWatched(r.name)?'TRACKING':'TRACK'}</button><button class="bet-btn ${isBetted(r.name,race.time||'',race.course||'')?'betting':''}" onclick="event.stopPropagation();toggleBet('${r.name.replace(/'/g,"\\'")}','${(race.time||'').replace(/'/g,"\\'")}','${(race.course||'').replace(/'/g,"\\'")}',${r.score||0})">${isBetted(r.name,race.time||'',race.course||'')?'BETTING':'BET'}</button><button class="cmpsel-btn${st.compareSelect.has(r.name)?' on':''}" id="cmpsel_${r.name.replace(/[^a-zA-Z0-9]/g,'_')}" onclick="event.stopPropagation();hcmpToggle('${r.name.replace(/'/g,"\\'")}')" title="Add to compare">${st.compareSelect.has(r.name)?'✓ SEL':'STATS'}</button>${r.name}${rankBadge(r.name)}${getRunnerComboBadges(r)}${getCourseSpecialistBadge(r,race)}</div><div style="font-size:11px;color:var(--muted)">${r.jockey||'?'} · ${r.trainer||'?'} ${getConnectionChangeBadge(r)}</div></td>
+      <td><div style="font-weight:700;font-size:14px"><button class="wl-track-btn ${isWatched(r.name)?'tracked':''}" onclick="event.stopPropagation();toggleWatch('${r.name.replace(/'/g,"\\'")}','${(race.course||'').replace(/'/g,"\\'")}','${(race.name||'').replace(/'/g,"\\'")}')" title="${isWatched(r.name)?'Remove from watchlist':'Add to watchlist'}">${isWatched(r.name)?'TRACKING':'TRACK'}</button><button class="bet-btn ${isBetted(r.name,race.time||'',race.course||'')?'betting':''}" onclick="event.stopPropagation();toggleBet('${r.name.replace(/'/g,"\\'")}','${(race.time||'').replace(/'/g,"\\'")}','${(race.course||'').replace(/'/g,"\\'")}',${r.score||0})">${isBetted(r.name,race.time||'',race.course||'')?'BETTING':'BET'}</button><button class="cmpsel-btn${st.compareSelect.has(r.name)?' on':''}" id="cmpsel_${r.name.replace(/[^a-zA-Z0-9]/g,'_')}" onclick="event.stopPropagation();hcmpToggle('${r.name.replace(/'/g,"\\'")}')" title="Add to compare">${st.compareSelect.has(r.name)?'✓':'+CMP'}</button>${r.name}${rankBadge(r.name)}${getRunnerComboBadges(r)}${getCourseSpecialistBadge(r,race)}</div><div style="font-size:11px;color:var(--muted)">${r.jockey||'?'} · ${r.trainer||'?'} ${getConnectionChangeBadge(r)}</div></td>
       <td>${formHtml(r.form)}${(()=>{const m=calcMomentum(r.form);return m.label!=='UNKNOWN'?` <span class="mom ${m.cls}" title="${m.tip}" style="padding:1px 4px;font-size:8px;vertical-align:middle">${m.icon}</span>`:'';})()}</td>
       <td style="font-weight:600">${r.age||'?'}</td>
       <td style="font-weight:600">${r.rpr||'—'}</td>
