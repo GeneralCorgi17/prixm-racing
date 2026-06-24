@@ -686,7 +686,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
   /* Toolbar */
   .vbtn{padding:6px 10px;font-size:11px}
   /* View padding */
-  #racesView,#perfView,#combosView,#trendsView,#goldenView,#tracksView,.landing,.detail-view{padding:12px!important}
+  #racesView,#perfView,#combosView,#trendsView,#goldenView,#tracksView,#topFinishView,.landing,.detail-view{padding:12px!important}
   #fieldSizeBar{padding:0 12px}
   /* Race cards gap */
   .race-cards{gap:8px}
@@ -712,7 +712,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 @media(max-width:480px){
   .tab-btn{padding:9px 10px;font-size:11px}
   .prixm-horse{font-size:13px}
-  #racesView,#perfView,#combosView,#trendsView,#goldenView,#tracksView,.landing{padding:8px!important}
+  #racesView,#perfView,#combosView,#trendsView,#goldenView,#tracksView,#topFinishView,.landing{padding:8px!important}
 }
 
 </style>
@@ -744,6 +744,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
   <button class="tab-btn" id="tabTrends" onclick="switchTab('trends')">Trends</button>
   <button class="tab-btn" id="tabGolden" onclick="switchTab('golden')">Golden</button>
   <button class="tab-btn" id="tabTracks" onclick="switchTab('tracks')">Tracks</button>
+  <button class="tab-btn" id="tabTopFinish" onclick="switchTab('topfinish')">Top Finish</button>
   <span id="dbStatusBadge" style="margin-left:auto;padding:0 12px;font-size:11px;color:var(--muted);align-self:center;display:none"></span>
 </div>
 
@@ -776,6 +777,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 <div id="goldenView" style="display:none;padding:20px 28px;max-width:1200px;margin:0 auto"><div id="goldenContent">Loading...</div></div>
 
 <div id="tracksView" style="display:none;padding:20px 28px;max-width:1200px;margin:0 auto"></div>
+<div id="topFinishView" style="display:none;padding:20px 28px;max-width:1100px;margin:0 auto"><div id="topFinishContent"></div></div>
 
 <div id="modalContainer"></div>
 <div class="hs-overlay" id="hsOverlay" onclick="if(event.target===this)hsClose()">
@@ -1394,6 +1396,7 @@ function switchTab(tab){
   document.getElementById('tabTrends').classList.toggle('active',tab==='trends');
   document.getElementById('tabGolden').classList.toggle('active',tab==='golden');
   document.getElementById('tabTracks').classList.toggle('active',tab==='tracks');
+  document.getElementById('tabTopFinish').classList.toggle('active',tab==='topfinish');
   document.getElementById('landingView').style.display=tab==='races'?'block':'none';
   document.getElementById('detailView').style.display='none';
   document.getElementById('perfView').style.display=tab==='performance'?'block':'none';
@@ -1401,11 +1404,13 @@ function switchTab(tab){
   document.getElementById('trendsView').style.display=tab==='trends'?'block':'none';
   document.getElementById('goldenView').style.display=tab==='golden'?'block':'none';
   document.getElementById('tracksView').style.display=tab==='tracks'?'block':'none';
+  document.getElementById('topFinishView').style.display=tab==='topfinish'?'block':'none';
   if(tab==='performance') renderPerformance();
   if(tab==='combos') renderCombos();
   if(tab==='trends') renderTrends();
   if(tab==='golden') renderGoldenDashboard();
   if(tab==='tracks') window.renderTracksTab&&window.renderTracksTab();
+  if(tab==='topfinish') window.renderTopFinishAnalysis&&window.renderTopFinishAnalysis();
 }
 
 /* ==================== GOLDEN DASHBOARD ==================== */
@@ -1947,6 +1952,327 @@ function switchTab(tab){
     }
   },60000);
 
+})();
+
+/* ==================== TOP FINISH ANALYSIS ENGINE ==================== */
+/* Read-only over window.D. No existing functions modified.            */
+(function(){
+  const _TN_EXCL=[
+    'happy valley','sha tin','meydan','abu dhabi','bahrain','hanshin','chukyo',
+    'fukushima','nakayama','tokyo','niigata','kyoto',
+    'rosehill','flemington','morphettville','eagle farm','doomben','hawkesbury',
+    'ascot aus','gold coast',
+    'turffontein','scottsville',
+    'oaklawn park','gulfstream park','keeneland','aqueduct','santa anita',
+    'belmont park','churchill downs','laurel park','woodbine',
+    'saint cloud','longchamp','deauville','chantilly','auteuil','compiegne',
+    'toulouse','bordeaux',
+    'san siro','munich','dusseldorf','krefeld','cologne','koln','randwick',
+    'free to air','scoop','worldwide stakes','world pool'
+  ];
+  const _TN_COLORS={ELITE:'#10b981',HIGH:'#3b82f6',MODERATE:'#f59e0b',LOW:'#6b7280'};
+
+  function _tnScore(runner,race,sorted){
+    const gap=sorted[0].score-(sorted[1]?.score||0);
+    const scorePct=runner.score/118;
+    const fs=race.field_size||sorted.length;
+    let s=0;
+    s+=Math.min(gap*2.0,35);
+    s+=(scorePct-0.4)*33;
+    const rtf=runner.trainer_rtf||0;
+    s+=rtf>=60?12:rtf>=45?8:rtf>=30?4:0;
+    const mom=((typeof calcMomentum==='function')&&calcMomentum(runner.form||''))||{label:'STEADY'};
+    s+=mom.label==='HOT'?15:mom.label==='IMPROVING'?10:mom.label==='STEADY'?5:
+       mom.label==='DECLINING'?-5:-10;
+    const _TN_TOP_JKY=['lordan','mcmonagle','marquand','moore','buick','dettori','coen','heffernan','doyle','murphy'];
+    if(_TN_TOP_JKY.some(j=>(runner.jockey||'').toLowerCase().includes(j)))s+=6;
+    if(typeof buildCDP==='function'){try{const cdp=buildCDP(runner,race);s+=cdp.proven*5;}catch(e){}}
+    if(runner.headgear_first)s+=8;
+    const rprs=sorted.map(r=>r.rpr||0).filter(r=>r>0);
+    if(rprs.length>1){const avg=rprs.reduce((a,b)=>a+b,0)/rprs.length;s+=Math.min((runner.rpr||0)-avg,15);}
+    s-=Math.max(0,(fs-8)*0.5);
+    return Math.max(0,Math.min(100,Math.round(s)));
+  }
+
+  function _tnTier(s){return s>=72?'ELITE':s>=50?'HIGH':s>=32?'MODERATE':'LOW';}
+
+  function _tnTopN(tier,fs){
+    if(fs<=6)  return tier==='ELITE'?'WIN':tier==='HIGH'?'TOP 2':'TOP 3';
+    if(fs<=10) return tier==='ELITE'?'TOP 2':tier==='HIGH'?'TOP 3':'TOP 4';
+    if(fs<=14) return tier==='ELITE'?'TOP 3':tier==='HIGH'?'TOP 4':'TOP 5';
+    if(fs<=18) return tier==='ELITE'?'TOP 4':tier==='HIGH'?'TOP 5':'TOP 6';
+    return tier==='ELITE'?'TOP 5':tier==='HIGH'?'TOP 6':'TOP 8';
+  }
+
+  function _tnExceptionalSecond(sorted){
+    if(sorted.length<2)return false;
+    const[a,b]=sorted;
+    const _J=['lordan','mcmonagle','marquand','moore','buick','dettori','coen','heffernan','doyle','murphy'];
+    const bJockeyTop=_J.some(j=>(b.jockey||'').toLowerCase().includes(j));
+    const bRTFStrong=(b.trainer_rtf||0)>=55;
+    const bHgFirst=b.headgear_first===true;
+    const bRPRHigher=(b.rpr||0)>(a.rpr||0);
+    const bRPRClose=Math.abs((b.rpr||0)-(a.rpr||0))<=5&&(b.rpr||0)>0;
+    return (bRTFStrong||bJockeyTop)&&(bJockeyTop||bHgFirst||bRPRHigher||bRPRClose);
+  }
+
+  function _tnFlags(runner,race,rank,sorted){
+    const flags=[];
+    const gap=sorted[0].score-(sorted[1]?.score||0);
+    const fs=race.field_size||sorted.length;
+    if(gap>=23)flags.push({t:`Gap ${gap} pts (elite)`,c:'pos'});
+    else if(gap>=18)flags.push({t:`Gap ${gap} pts (golden)`,c:'pos'});
+    else if(gap>=10)flags.push({t:`Gap ${gap} pts (strong)`,c:'pos'});
+    else if(gap>=5)flags.push({t:`Gap ${gap} pts`,c:'pos'});
+    if(runner.headgear_first)flags.push({t:'First-time headgear',c:'pos'});
+    const rtf=runner.trainer_rtf||0;
+    if(rtf>=60)flags.push({t:`Trainer ${rtf.toFixed(0)}% RTF`,c:'pos'});
+    const rprs=sorted.map(r=>r.rpr||0).filter(r=>r>0);
+    const maxRPR=rprs.length?Math.max(...rprs):0;
+    if((runner.rpr||0)>0&&runner.rpr===maxRPR&&rank===1)
+      flags.push({t:`RPR ${runner.rpr} (highest)`,c:'pos'});
+    else if(rank===2&&(runner.rpr||0)>(sorted[0].rpr||0))
+      flags.push({t:`RPR ${runner.rpr} beats leader`,c:'pos'});
+    if(typeof buildCDP==='function'){
+      try{
+        const cdp=buildCDP(runner,race);
+        if(cdp.proven>=3)flags.push({t:`CDP ${cdp.proven}/4 proven`,c:'pos'});
+        else if(cdp.proven===0&&cdp.total>0)flags.push({t:'CDP all unproven',c:'neg'});
+      }catch(e){}
+    }
+    if(typeof calcMomentum==='function'){
+      const mom=calcMomentum(runner.form||'')||{label:'STEADY'};
+      if(mom.label==='HOT'||mom.label==='IMPROVING')flags.push({t:`Form ${mom.label.toLowerCase()}`,c:'pos'});
+      else if(mom.label==='DECLINING'||mom.label==='COLD')flags.push({t:`Form ${mom.label.toLowerCase()}`,c:'neg'});
+    }
+    const drawRatio=(runner.draw||0)/fs;
+    if(drawRatio>0.85)flags.push({t:`Wide draw ${runner.draw}/${fs}`,c:'neg'});
+    const form=runner.form||'';
+    if(form.replace(/\D/g,'').length>=5&&!form.includes('1'))
+      flags.push({t:`${form.length}+ starts, 0 wins`,c:'neg'});
+    if(rank===2)flags.push({t:'#2 on engine (exceptional signals)',c:'neu'});
+    if(runner.last_run)flags.push({t:`${runner.last_run}d since last run`,c:'neu'});
+    return flags.slice(0,6);
+  }
+
+  function _tnSegment(runner,race,gap){
+    if(race.handicap)return null;
+    const going=(race.going||'').toLowerCase().replace(/[\s-]+/g,'');
+    const score=runner.score||0;
+    if(gap>=18&&score>=74)return'GOLDEN';
+    if(gap>=10&&gap<12&&score>=72&&going!=='standard'&&going!=='standardtoslow')return'SILVER';
+    if(gap>=8&&gap<10&&score>=74&&(going==='good'||going==='goodtofirm'))return'BRONZE';
+    return null;
+  }
+
+  function _tnProb(runner,topN){
+    if(topN==='WIN')return(runner.probs?.top_1||0)+'%';
+    const n=topN.replace('TOP ','');
+    return(runner.probs?.['top_'+n]||0)+'%';
+  }
+
+  function _tnBuildPicks(){
+    if(!window.D||!window.D.venues)return[];
+    const picks=[];
+    for(const[vk,vdata]of Object.entries(window.D.venues)){
+      for(const race of(vdata.races||[])){
+        try{
+          if(race.handicap)continue;
+          const vLow=(race.course||vk).toLowerCase();
+          if(_TN_EXCL.some(ex=>vLow.includes(ex)))continue;
+          const sorted=[...(race.runners||[])].sort((a,b)=>b.score-a.score);
+          if(sorted.length<2)continue;
+          const gap=Math.round((sorted[0].score-sorted[1].score)*10)/10;
+          if(gap>=12&&gap<18)continue;
+          const fs=race.field_size||sorted.length;
+          const cs=_tnScore(sorted[0],race,sorted);
+          const tier=_tnTier(cs);
+          if(cs>=32){
+            const seg=_tnSegment(sorted[0],race,gap);
+            const topN=_tnTopN(tier,fs);
+            picks.push({runner:sorted[0],race,vk,rank:1,gap,seg,cs,tier,topN,_sorted:sorted,
+              flags:_tnFlags(sorted[0],race,1,sorted),prob:_tnProb(sorted[0],topN)});
+          }
+          if(sorted[1]&&_tnExceptionalSecond(sorted)){
+            const cs2=_tnScore(sorted[1],race,sorted);
+            const tier2=_tnTier(cs2);
+            if(cs2>=32){
+              const topN2=_tnTopN(tier2,fs);
+              picks.push({runner:sorted[1],race,vk,rank:2,gap:-gap,seg:null,_sorted:sorted,
+                cs:cs2,tier:tier2,topN:topN2,
+                flags:_tnFlags(sorted[1],race,2,sorted),prob:_tnProb(sorted[1],topN2)});
+            }
+          }
+        }catch(e){/* skip broken race, continue */}
+      }
+    }
+    picks.sort((a,b)=>b.cs-a.cs);
+    return picks;
+  }
+
+  function _tnNarrative(p){
+    const r=p.runner,race=p.race;
+    const absGap=Math.abs(p.gap);
+    // ---- RANK-2: VALUE PLAY contrast framing ----
+    if(p.rank===2&&p._sorted){
+      const leader=p._sorted[0];
+      const rprDiff=(r.rpr||0)-(leader.rpr||0);
+      const rprLine=Math.abs(rprDiff)<=3
+        ?`RPR ${r.rpr} virtually matches the leader's ${leader.rpr}`
+        :rprDiff>0
+          ?`RPR ${r.rpr} actually edges the leader (${leader.rpr})`
+          :`RPR ${r.rpr} vs leader's ${leader.rpr}`;
+      const rtf=r.trainer_rtf||0;
+      const connLine=r.jockey
+        ?`${r.jockey}${rtf>=55?` (${r.trainer} firing at ${rtf.toFixed(0)}%)`:''} takes the ride`
+        :`${r.trainer||'connections'}${rtf>=55?` (firing at ${rtf.toFixed(0)}%)`:''}`;
+      const fsNote=race.field_size>=12
+        ?`In a wide-open ${race.field_size}-runner field`
+        :`In this ${race.field_size}-runner field`;
+      const hgNote=r.headgear_first?' First-time headgear is another plus.':'';
+      const topNNote=p.topN==='WIN'?'as a win bet':`if ${p.topN} is available, this is the value bet on the card`;
+      const fieldCtx=race.field_size>=12?`${race.field_size}-runner`:`${race.field_size}-runner`;
+      return`<div style="margin-top:10px;border-top:1px solid #f59e0b44;padding-top:10px">
+        <div style="font-size:10px;font-weight:700;color:#f59e0b;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">💎 Value Play</div>
+        <div style="font-size:11px;color:#c9d1d9;line-height:1.65">Engine scores ${leader.name} ${absGap}pt clear on Prixm, but the real story is ${r.name}. ${connLine} — ${rprLine}. ${fsNote}, the connections edge may outweigh the raw score gap.${hgNote} Consider ${r.name} ${topNNote}.</div>
+      </div>`;
+    }
+    // ---- RANK-1: Factual analysis ----
+    const lines=[];
+    if(absGap>=18)lines.push(`Prixm engine scores ${r.name} elite — ${absGap}pt gap over the field in ${race.field_size} runners, comfortably clear on all major factors.`);
+    else if(absGap>=10)lines.push(`${r.name} scores ${r.score}/118 with a solid ${absGap}pt advantage over the field of ${race.field_size}.`);
+    else lines.push(`${r.name} leads Prixm scoring by ${absGap}pt in a competitive ${race.field_size}-runner field — narrow edge but key signals align.`);
+    const rtf=r.trainer_rtf||0;
+    const connParts=[];
+    if(r.trainer)connParts.push(r.trainer+(rtf>=60?` (firing at ${rtf.toFixed(0)}%)`:(rtf>=45?` (${rtf.toFixed(0)}% RTF)`:'')));
+    if(r.jockey)connParts.push(r.jockey+' in the saddle');
+    if(connParts.length)lines.push(`Connections: ${connParts.join(', ')}.`);
+    const mom=((typeof calcMomentum==='function')&&calcMomentum(r.form||''))||{label:'STEADY'};
+    const formParts=[];
+    if(r.form)formParts.push(`recent form ${r.form}`);
+    formParts.push(`momentum ${mom.label}`);
+    if(r.headgear_first)formParts.push('first-time headgear today');
+    if(r.last_run!=null){const d=parseInt(r.last_run)||0;if(d>=30)formParts.push(`fresh after ${d} days off`);else if(d<=7)formParts.push(`quick ${d}-day turnaround`);}
+    lines.push(formParts.map((s,i)=>i===0?s.charAt(0).toUpperCase()+s.slice(1):s).join(', ')+'.');
+    const rprParts=[];
+    if(r.rpr&&p._sorted&&p._sorted.length>1){
+      const rprs=p._sorted.map(x=>x.rpr||0).filter(x=>x>0);
+      if(rprs.length>1){const avg=Math.round(rprs.reduce((a,b)=>a+b,0)/rprs.length);const edge=r.rpr-avg;if(edge>0)rprParts.push(`RPR ${r.rpr} leads field average by ${edge}pts`);else if(edge<-3)rprParts.push(`RPR ${r.rpr} (${Math.abs(edge)}pts below field avg)`);else rprParts.push(`RPR ${r.rpr}`);}
+    }
+    if(typeof buildCDP==='function'){try{const cdp=buildCDP(r,race);if(cdp.proven>=3)rprParts.push(`C&D proven — ${cdp.proven}/4 suitability factors confirmed`);else if(cdp.proven>=1)rprParts.push(`partial suitability (${cdp.proven}/4 C&D proven)`);else if(cdp.total>0)rprParts.push('C&D untested');}catch(e){}}
+    if(rprParts.length)lines.push(rprParts.join('. ')+'.');
+    return`<div style="margin-top:10px;border-top:1px solid var(--border);padding-top:10px">
+      <div style="font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px">Prixm Analysis</div>
+      <div style="font-size:11px;color:#c9d1d9;line-height:1.65">${lines.join(' ')}</div>
+    </div>`;
+  }
+
+  function _tnCard(p){
+    const r=p.runner,race=p.race;
+    const col=_TN_COLORS[p.tier]||'#888';
+    const segBadge=p.seg?`<span style="font-size:9px;font-weight:700;padding:2px 6px;border-radius:3px;border:1px solid #f59e0b;background:#1a1400;color:#f59e0b;margin-left:6px">${p.seg==='GOLDEN'?'⭐ GOLDEN':p.seg==='SILVER'?'🥈 SILVER':'🥉 BRONZE'}</span>`:'';
+    const tierPill=`<span style="font-size:9px;font-weight:800;padding:2px 7px;border-radius:3px;background:${col}22;border:1px solid ${col}44;color:${col};margin-left:6px">${p.tier}</span>`;
+    const betChip=`<span style="font-size:10px;font-weight:800;padding:4px 10px;border-radius:4px;background:${p.topN==='WIN'?col:'transparent'};border:2px solid ${col};color:${p.topN==='WIN'?'#000':col};white-space:nowrap">${p.topN}</span>`;
+    const flags=p.flags.map(f=>`<span style="font-size:9px;font-weight:700;padding:2px 6px;border-radius:3px;margin:2px;display:inline-block;background:${f.c==='pos'?'#052e16':f.c==='neg'?'#2d0a0a':'#111827'};color:${f.c==='pos'?'#4ade80':f.c==='neg'?'#f87171':'#9ca3af'}">${f.t}</span>`).join('');
+    const sb=r.score_breakdown||{};
+    const topF=Object.entries(sb).sort((a,b)=>b[1]-a[1]).slice(0,4);
+    const fChips=topF.map(([k,v])=>`<span style="font-size:9px;padding:2px 7px;border-radius:10px;background:${v===topF[0][1]?col+'22':'#1f2937'};border:1px solid ${v===topF[0][1]?col+'44':'#374151'};color:${v===topF[0][1]?col:'#9ca3af'}">${k} ${v}/${(typeof FM!=='undefined'&&FM[k]?.mx)||'?'}</span>`).join(' ');
+    const rank2note=p.rank===2?`<div style="font-size:9px;color:#f59e0b;margin-bottom:6px">⚡ Exceptional #2 — overrides engine leader on signals</div>`:'';
+    return`<div style="border:1px solid ${col}33;border-left:3px solid ${col};border-radius:6px;margin-bottom:10px;overflow:hidden;background:var(--card)">
+      <div style="display:flex;align-items:center;gap:8px;padding:8px 12px;background:${col}11;border-bottom:1px solid ${col}22;flex-wrap:wrap">
+        <span style="font-size:13px;font-weight:800;color:var(--text)">${r.name}</span>${segBadge}${tierPill}
+        <span style="flex:1"></span>${betChip}
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:12px;padding:7px 12px;border-bottom:1px solid var(--border);font-size:10px;color:var(--muted)">
+        <span>⏰ ${race.time} · ${race.course}</span>
+        <span>📏 ${race.distance||'—'}</span>
+        <span>🌿 ${race.going||'—'}</span>
+        <span>👥 ${race.field_size} runners</span>
+        <span style="color:${col}">Score ${r.score} · Gap ${Math.abs(p.gap)}</span>
+        ${r.rpr?`<span>RPR ${r.rpr}</span>`:''}
+        <span style="color:${col}">P(${p.topN}) ${p.prob}</span>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:10px;padding:6px 12px;border-bottom:1px solid var(--border);font-size:10px;color:var(--muted)">
+        <span>🎽 ${r.jockey||'—'}</span>
+        <span>🏋️ ${r.trainer||'—'}${r.trainer_rtf?' ('+r.trainer_rtf.toFixed(0)+'%)':''}</span>
+        <span>📋 Form: ${r.form||'—'}</span>
+      </div>
+      <div style="padding:8px 12px">${rank2note}<div style="margin-bottom:6px">${flags}</div><div>${fChips}</div>${_tnNarrative(p)}</div>
+    </div>`;
+  }
+
+  function _tnSummary(picks){
+    if(!picks.length)return'';
+    const rows=picks.map(p=>`<tr style="border-bottom:1px solid var(--border)">
+      <td style="padding:6px 10px;font-weight:700;color:var(--text)">${p.runner.name}</td>
+      <td style="padding:6px 10px;color:var(--muted)">${p.race.time} ${p.race.course}</td>
+      <td style="padding:6px 10px">${p.seg?`<span style="color:#f59e0b">${p.seg}</span>`:'—'}</td>
+      <td style="padding:6px 10px;color:${_TN_COLORS[p.tier]};font-weight:700">${p.topN}</td>
+      <td style="padding:6px 10px;color:${_TN_COLORS[p.tier]}">${p.tier}</td>
+      <td style="padding:6px 10px;color:var(--muted)">${p.race.field_size}</td>
+      <td style="padding:6px 10px;color:var(--muted)">${p.prob}</td>
+    </tr>`).join('');
+    return`<div style="margin-top:20px;border:1px solid var(--border);border-radius:6px;overflow:hidden">
+      <div style="background:var(--card2);padding:8px 14px;font-size:11px;font-weight:700;color:var(--text);letter-spacing:.5px;text-transform:uppercase">Summary</div>
+      <table style="width:100%;border-collapse:collapse;font-size:11px">
+        <thead><tr style="border-bottom:1px solid var(--border)">
+          <th style="padding:6px 10px;text-align:left;color:var(--muted)">Horse</th>
+          <th style="padding:6px 10px;text-align:left;color:var(--muted)">Race</th>
+          <th style="padding:6px 10px;text-align:left;color:var(--muted)">Seg</th>
+          <th style="padding:6px 10px;text-align:left;color:var(--muted)">Bet</th>
+          <th style="padding:6px 10px;text-align:left;color:var(--muted)">Conf</th>
+          <th style="padding:6px 10px;text-align:left;color:var(--muted)">Field</th>
+          <th style="padding:6px 10px;text-align:left;color:var(--muted)">Prob</th>
+        </tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>`;
+  }
+
+  window._tnPrint=function(){
+    const el=document.getElementById('topFinishContent');
+    if(!el)return;
+    const w=window.open('','_blank','width=900,height=700');
+    w.document.write(`<!DOCTYPE html><html><head><title>Top Finish — ${window.D?.date||''}</title>
+      <style>body{font-family:Segoe UI,sans-serif;background:#0a0f1a;color:#e5e7eb;padding:20px}
+      table{width:100%;border-collapse:collapse}td,th{padding:6px 10px;border-bottom:1px solid #374151}
+      @media print{body{background:#fff;color:#111}}</style></head>
+      <body>${el.innerHTML}</body></html>`);
+    w.document.close();
+    setTimeout(()=>w.print(),400);
+  };
+
+  window.renderTopFinishAnalysis=function(){
+    const el=document.getElementById('topFinishContent');
+    if(!el)return;
+    if(!window.D||!window.D.venues){
+      el.innerHTML=`<div style="color:var(--muted);padding:40px;text-align:center">No race data loaded. Load a racecard first.</div>`;
+      return;
+    }
+    const picks=_tnBuildPicks();
+    const dateStr=window.D.date||'';
+    if(!picks.length){
+      el.innerHTML=`<div style="color:var(--muted);padding:40px;text-align:center">No top finish picks found for ${dateStr}.</div>`;
+      return;
+    }
+    const header=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:8px">
+      <div>
+        <div style="font-size:16px;font-weight:800;color:var(--text)">Top Finish Picks</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:2px">${dateStr} · ${picks.length} pick${picks.length!==1?'s':''} ·
+          <span style="color:${_TN_COLORS.ELITE}">●</span> Elite
+          <span style="color:${_TN_COLORS.HIGH};margin-left:6px">●</span> High
+          <span style="color:${_TN_COLORS.MODERATE};margin-left:6px">●</span> Moderate
+        </div>
+      </div>
+      <button onclick="window._tnPrint()" style="font-size:11px;padding:6px 14px;border-radius:5px;background:transparent;border:1px solid var(--border);color:var(--muted);cursor:pointer">🖨 Print</button>
+    </div>`;
+    el.innerHTML=header+picks.map(_tnCard).join('')+_tnSummary(picks);
+  };
+
+  setInterval(function(){
+    const v=document.getElementById('topFinishView');
+    if(v&&v.style.display==='block')window.renderTopFinishAnalysis();
+  },60000);
 })();
 
 /* ==================== TRACK ANALYSIS ==================== */
@@ -5057,15 +5383,17 @@ function _hcmpBuildBody(runners,race){
 
   // factor table
   const thHtml=runners.map((r,idx)=>`<th style="color:${_HCMP_COLORS[idx%_HCMP_COLORS.length]};text-align:center;font-size:11px">${r.name.split(' ')[0]}</th>`).join('');
-  const fRows=_HCMP_FACTORS.map(k=>{
+  const fRows=_HCMP_FACTORS.map((k,fi)=>{
     const vals=runners.map(r=>(r.score_breakdown||{})[k]||0);
     const best=Math.max(...vals);
+    const rowBg=fi%2===0?'#0d1117':'#111820';
+    const bdB='border-bottom:1px solid #131313';
     const cells=runners.map((r,idx)=>{
       const v=(r.score_breakdown||{})[k]||0;
       const col=v===best&&best>0?_HCMP_COLORS[idx%_HCMP_COLORS.length]:'#555';
-      return `<td style="text-align:center;font-weight:${v===best&&best>0?800:400};color:${col};font-size:12px">${v}/${FM[k]?.mx||'?'}</td>`;
+      return `<td style="text-align:center;font-weight:${v===best&&best>0?800:400};color:${col};font-size:12px;padding:6px 8px;background:${rowBg};${bdB}">${v}/${FM[k]?.mx||'?'}</td>`;
     }).join('');
-    return `<tr><td style="font-size:11px;color:#666;text-transform:capitalize">${k}</td>${cells}</tr>`;
+    return `<tr><td style="font-size:11px;color:#888;text-transform:capitalize;padding:6px 8px 6px 10px;background:${rowBg};${bdB};border-left:2px solid #1e3050">${k}</td>${cells}</tr>`;
   }).join('');
 
   // jockey cards
