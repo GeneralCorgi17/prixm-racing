@@ -311,6 +311,20 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .wl-track-btn{background:#fff;border:1px solid #d1d5db;cursor:pointer;font-size:9px;font-weight:700;padding:2px 6px;border-radius:4px;color:#6b7280;line-height:1.2;vertical-align:middle;margin-right:5px;transition:all .15s}
 .wl-track-btn:hover{background:#f3f4f6;border-color:#9ca3af}
 .wl-track-btn.tracked{background:#a78bfa;border-color:#a78bfa;color:#fff}
+/* ===== BAN LIST ===== */
+.ban-jky-badge{display:inline-flex;align-items:center;background:rgba(239,68,68,.15);color:#f87171;font-size:9px;font-weight:800;padding:1px 5px;border-radius:3px;margin-left:4px;vertical-align:middle;letter-spacing:.3px}
+.ban-hrs-badge{display:inline-flex;align-items:center;background:rgba(239,68,68,.15);color:#f87171;font-size:9px;font-weight:800;padding:1px 5px;border-radius:3px;margin-left:4px;vertical-align:middle;letter-spacing:.3px}
+.ban-row-jky td{background:rgba(239,68,68,.07)!important}
+.ban-row-hrs td{background:rgba(239,68,68,.10)!important;border-left-color:#ef4444!important}
+.ban-row-both td{background:rgba(239,68,68,.14)!important;border-left-color:#ef4444!important}
+.ban-jky-name{color:#f87171;text-decoration:line-through}
+.ban-hrs-name{color:var(--muted)}
+.ban-action-btn{font-size:11px;padding:3px 9px;border-radius:5px;border:1px solid rgba(239,68,68,.3);background:rgba(239,68,68,.1);color:#f87171;cursor:pointer;font-weight:700;transition:transform .1s,background .15s,box-shadow .1s;user-select:none}
+.ban-action-btn:hover{background:rgba(239,68,68,.22)}
+.ban-action-btn:active{transform:scale(.93) translateY(1px);box-shadow:none;background:rgba(239,68,68,.32)}
+.unban-action-btn{font-size:11px;padding:3px 9px;border-radius:5px;border:1px solid rgba(16,185,129,.35);background:rgba(16,185,129,.1);color:#34d399;cursor:pointer;font-weight:700;transition:transform .1s,background .15s,box-shadow .1s;user-select:none}
+.unban-action-btn:hover{background:rgba(16,185,129,.22)}
+.unban-action-btn:active{transform:scale(.93) translateY(1px);box-shadow:none;background:rgba(16,185,129,.32)}
 /* ===== BET TRACKER PANEL ===== */
 .bet-btn{background:#fff;border:1px solid #d1d5db;cursor:pointer;font-size:9px;font-weight:800;padding:2px 7px;border-radius:4px;color:#6b7280;line-height:1.2;vertical-align:middle;margin-left:6px;transition:all .15s;letter-spacing:.3px}
 .bet-btn:hover{background:#f0fdf4;border-color:#10b981;color:#10b981}
@@ -879,7 +893,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 <button id="betFab" class="bp-toggle-fab" onclick="toggleBetPanel()">🎫<span class="fab-badge">0</span></button>
 
 <script>
-let D=null, st={venue:'all', fieldFilter:'all', comboFilter:false, raceTypeFilter:'all', confidenceFilter:'all', gapFilter:'all', openRace:null, sort:'score', sortDir:-1, expanded:null, detailTab:'main', riMode:'rank', h2hPair:null, compareSelect:new Set()};
+let D=null, st={venue:'all', fieldFilter:'all', comboFilter:false, raceTypeFilter:'all', confidenceFilter:'all', gapFilter:'all', hideBanned:false, openRace:null, sort:'score', sortDir:-1, expanded:null, detailTab:'main', riMode:'rank', h2hPair:null, compareSelect:new Set()};
 
 // ==================== PER-DAY DATA STATUS TRACKER ====================
 function getDayStatus(date){
@@ -6730,7 +6744,13 @@ function renderFieldSizeBar(){
       </button>`;
     }).join('')}
     ${st.gapFilter!=='all'?`<button class="vbtn" onclick="filterGap('all')" style="font-size:11px;padding:4px 10px;color:var(--muted)">✕ Clear</button>`:''}
-  </div>`;
+  </div>
+  ${(()=>{const bc=getBanCount();if(!bc)return'';const hiding=st.hideBanned;
+    return`<div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-top:6px">
+    <span style="font-size:10px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-right:2px">Banned:</span>
+    <button onclick="openBanModal()" style="font-size:11px;padding:4px 10px;border-radius:20px;border:1px solid rgba(239,68,68,.35);background:rgba(239,68,68,.10);color:#f87171;cursor:pointer;font-weight:600">🚫 Banned (${bc})</button>
+    <button onclick="toggleHideBanned()" style="font-size:11px;padding:4px 10px;border-radius:20px;font-weight:600;cursor:pointer;border:1px solid ${hiding?'#ef4444':'rgba(16,185,129,.4)'};background:${hiding?'rgba(239,68,68,.18)':'rgba(16,185,129,.15)'};color:${hiding?'#f87171':'#34d399'}">${hiding?'🙈 Hiding Banned':'👀 Show Banned'}</button>
+  </div>`;})()}`;
 }
 
 const IRE_TRACKS=new Set(['curragh','leopardstown','fairyhouse','punchestown','galway','naas','cork','tipperary','gowran park','killarney','listowel','dundalk','navan','tramore','sligo','roscommon','ballinrobe','clonmel','limerick','thurles','wexford','bellewstown','down royal','downpatrick','laytown']);
@@ -7199,11 +7219,16 @@ function renderMainTab(runners,race,vk,ri){
   </tr></thead><tbody>
   ${runners.map((r,i)=>{
     const conf=r.confidence||'MODERATE';
-    const rowCl=conf==='TOP PICK'?'top-pick-row':conf==='STRONG'?'strong-row':'';
+    const bjky=isBannedJockey(r.jockey),bhrs=isBannedHorse(r.name);
+    if(st.hideBanned&&(bjky||bhrs)) return '';
+    const banRowCl=bjky&&bhrs?'ban-row-both':bjky?'ban-row-jky':bhrs?'ban-row-hrs':'';
+    const rowCl=[conf==='TOP PICK'?'top-pick-row':conf==='STRONG'?'strong-row':'',banRowCl].filter(Boolean).join(' ');
     const isExp=st.expanded===r.name;
+    const jkyHtml=bjky?`<span class="ban-jky-name">${r.jockey||'?'}</span><span class="ban-jky-badge">🚫 JOCKEY</span>`:`${r.jockey||'?'}`;
+    const hrsBadge=bhrs?`<span class="ban-hrs-badge">🚫 HORSE</span>`:'';
     let rows=`<tr class="${rowCl} expandable" onclick="toggleExp('${r.name.replace(/'/g,"\\'")}')">
       <td style="font-weight:700;color:var(--muted)">${r.number||'—'}</td>
-      <td><div style="font-weight:700;font-size:14px"><button class="wl-track-btn ${isWatched(r.name)?'tracked':''}" onclick="event.stopPropagation();toggleWatch('${r.name.replace(/'/g,"\\'")}','${(race.course||'').replace(/'/g,"\\'")}','${(race.name||'').replace(/'/g,"\\'")}')" title="${isWatched(r.name)?'Remove from watchlist':'Add to watchlist'}">${isWatched(r.name)?'TRACKING':'TRACK'}</button><button class="bet-btn ${isBetted(r.name,race.time||'',race.course||'')?'betting':''}" onclick="event.stopPropagation();toggleBet('${r.name.replace(/'/g,"\\'")}','${(race.time||'').replace(/'/g,"\\'")}','${(race.course||'').replace(/'/g,"\\'")}',${r.score||0})">${isBetted(r.name,race.time||'',race.course||'')?'BETTING':'BET'}</button><button class="cmpsel-btn${st.compareSelect.has(r.name)?' on':''}" id="cmpsel_${r.name.replace(/[^a-zA-Z0-9]/g,'_')}" onclick="event.stopPropagation();hcmpToggle('${r.name.replace(/'/g,"\\'")}')" title="Add to compare">${st.compareSelect.has(r.name)?'✓':'+CMP'}</button>${r.name}${rankBadge(r.name)}${getRunnerComboBadges(r)}${getCourseSpecialistBadge(r,race)}</div><div style="font-size:11px;color:var(--muted)">${r.jockey||'?'} · ${r.trainer||'?'} ${getConnectionChangeBadge(r)}</div></td>
+      <td><div style="font-weight:700;font-size:14px"><button class="wl-track-btn ${isWatched(r.name)?'tracked':''}" onclick="event.stopPropagation();toggleWatch('${r.name.replace(/'/g,"\\'")}','${(race.course||'').replace(/'/g,"\\'")}','${(race.name||'').replace(/'/g,"\\'")}')" title="${isWatched(r.name)?'Remove from watchlist':'Add to watchlist'}">${isWatched(r.name)?'TRACKING':'TRACK'}</button><button class="bet-btn ${isBetted(r.name,race.time||'',race.course||'')?'betting':''}" onclick="event.stopPropagation();toggleBet('${r.name.replace(/'/g,"\\'")}','${(race.time||'').replace(/'/g,"\\'")}','${(race.course||'').replace(/'/g,"\\'")}',${r.score||0})">${isBetted(r.name,race.time||'',race.course||'')?'BETTING':'BET'}</button><button class="cmpsel-btn${st.compareSelect.has(r.name)?' on':''}" id="cmpsel_${r.name.replace(/[^a-zA-Z0-9]/g,'_')}" onclick="event.stopPropagation();hcmpToggle('${r.name.replace(/'/g,"\\'")}')" title="Add to compare">${st.compareSelect.has(r.name)?'✓':'+CMP'}</button>${r.name}${hrsBadge}${rankBadge(r.name)}${getRunnerComboBadges(r)}${getCourseSpecialistBadge(r,race)}</div><div style="font-size:11px;color:var(--muted)">${jkyHtml} · ${r.trainer||'?'} ${getConnectionChangeBadge(r)}</div></td>
       <td>${formHtml(r.form)}${(()=>{const m=calcMomentum(r.form);return m.label!=='UNKNOWN'?` <span class="mom ${m.cls}" title="${m.tip}" style="padding:1px 4px;font-size:8px;vertical-align:middle">${m.icon}</span>`:'';})()}</td>
       <td style="font-weight:600">${r.age||'?'}</td>
       <td style="font-weight:600">${r.rpr||'—'}</td>
@@ -7491,6 +7516,32 @@ function renderExpandedRow(r, fieldSize, race){
       })()}
     </div>
 
+    <!-- ── BAN ACTIONS ── -->
+    ${(()=>{
+      const bjky=isBannedJockey(r.jockey),bhrs=isBannedHorse(r.name);
+      const jesc=(r.jockey||'').replace(/'/g,"\\'"),nesc=r.name.replace(/'/g,"\\'");
+      return `<div style="grid-column:1/-1;background:rgba(239,68,68,.05);border:1px solid rgba(239,68,68,.2);border-radius:8px;padding:11px 14px">
+        <div style="font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#f87171;margin-bottom:9px">🚫 Ban List</div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+          ${r.jockey?`<div style="display:flex;align-items:center;gap:8px">
+            <span style="font-size:12px;color:var(--muted)">Jockey: <strong style="color:var(--text)">${r.jockey}</strong></span>
+            ${bjky
+              ?`<button onclick="event.stopPropagation();removeBan('jockey','${jesc}')" class="unban-action-btn">✓ Unban</button>`
+              :`<button onclick="event.stopPropagation();addBan('jockey','${jesc}')" class="ban-action-btn">🚫 Ban Jockey</button>`
+            }
+          </div>`:''}
+          <div style="width:1px;height:20px;background:var(--border)"></div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="font-size:12px;color:var(--muted)">Horse: <strong style="color:var(--text)">${r.name}</strong></span>
+            ${bhrs
+              ?`<button onclick="event.stopPropagation();removeBan('horse','${nesc}')" class="unban-action-btn">✓ Unban</button>`
+              :`<button onclick="event.stopPropagation();addBan('horse','${nesc}')" class="ban-action-btn">🚫 Ban Horse</button>`
+            }
+          </div>
+        </div>
+      </div>`;
+    })()}
+
   </div></td></tr>`;
 }
 
@@ -7728,6 +7779,88 @@ function openWatchlistModal(){
   container.innerHTML=h;
   document.body.appendChild(container.firstElementChild);
 }
+
+/* ==================== BAN LIST ==================== */
+function loadBanList(){try{return JSON.parse(localStorage.getItem('banList')||'{"jockeys":[],"horses":[]}');}catch(e){return{jockeys:[],horses:[]};}}
+function saveBanList(bl){try{localStorage.setItem('banList',JSON.stringify(bl));}catch(e){}}
+function isBannedJockey(name){if(!name)return false;const bl=loadBanList();const n=(name||'').trim().toLowerCase();return bl.jockeys.some(j=>j.name.toLowerCase()===n);}
+function isBannedHorse(name){if(!name)return false;const bl=loadBanList();const n=(name||'').trim().toLowerCase();return bl.horses.some(h=>h.name.toLowerCase()===n);}
+function addBan(type,name){
+  if(!name||!name.trim())return;
+  const bl=loadBanList();const n=name.trim();
+  const arr=type==='jockey'?bl.jockeys:bl.horses;
+  if(!arr.some(x=>x.name.toLowerCase()===n.toLowerCase()))arr.push({name:n,date:new Date().toISOString().slice(0,10)});
+  saveBanList(bl);renderFieldSizeBar();
+  if(st.openRace)renderDetail().catch(()=>{});else renderRaceCards();
+}
+function removeBan(type,name){
+  if(!name)return;const bl=loadBanList();const n=(name||'').trim().toLowerCase();
+  if(type==='jockey')bl.jockeys=bl.jockeys.filter(j=>j.name.toLowerCase()!==n);
+  else bl.horses=bl.horses.filter(h=>h.name.toLowerCase()!==n);
+  saveBanList(bl);renderFieldSizeBar();
+  if(st.openRace)renderDetail().catch(()=>{});else renderRaceCards();
+}
+function getBanCount(){const bl=loadBanList();return bl.jockeys.length+bl.horses.length;}
+function toggleHideBanned(){
+  st.hideBanned=!st.hideBanned;
+  renderRaceCards();renderFieldSizeBar();
+}
+function openBanModal(){
+  const bl=loadBanList();
+  const esc=s=>(s||'').replace(/'/g,"\\'").replace(/"/g,'&quot;');
+  let h=`<div id="banModalOverlay" style="position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:1000;display:flex;align-items:center;justify-content:center" onclick="if(event.target===this)closeBanModal()">
+  <div style="background:var(--card);border-radius:14px;padding:0;max-width:440px;width:92%;max-height:82vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.5)" onclick="event.stopPropagation()">
+    <div style="padding:18px 20px 14px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center">
+      <div>
+        <div style="font-size:16px;font-weight:800;color:#f87171">🚫 Ban List</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:2px">Flagged on all race cards today</div>
+      </div>
+      <button onclick="closeBanModal()" style="background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer;line-height:1">✕</button>
+    </div>
+    <div style="padding:16px 20px">
+      <div style="font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:8px">
+        Jockeys <span style="background:rgba(239,68,68,.15);color:#f87171;font-size:10px;padding:1px 7px;border-radius:10px">${bl.jockeys.length}</span>
+      </div>
+      ${bl.jockeys.length?bl.jockeys.map(j=>`
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:var(--card2);border:1px solid var(--border);border-radius:8px;margin-bottom:6px">
+          <div>
+            <div style="font-weight:700;font-size:13px">${j.name}</div>
+            <div style="font-size:11px;color:var(--muted)">Banned ${j.date||'today'}</div>
+          </div>
+          <button onclick="removeBan('jockey','${esc(j.name)}');openBanModal()" style="font-size:11px;padding:3px 9px;border-radius:5px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer" onmouseover="this.style.color='#f87171';this.style.borderColor='#f87171'" onmouseout="this.style.color='var(--muted)';this.style.borderColor='var(--border)'">✕ Unban</button>
+        </div>`).join(''):'<div style="font-size:12px;color:var(--muted);font-style:italic;padding:4px 12px">No banned jockeys.</div>'}
+
+      <div style="height:1px;background:var(--border);margin:14px 0"></div>
+
+      <div style="font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:8px">
+        Horses <span style="background:rgba(239,68,68,.15);color:#f87171;font-size:10px;padding:1px 7px;border-radius:10px">${bl.horses.length}</span>
+      </div>
+      ${bl.horses.length?bl.horses.map(h2=>`
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:var(--card2);border:1px solid var(--border);border-radius:8px;margin-bottom:6px">
+          <div>
+            <div style="font-weight:700;font-size:13px">${h2.name}</div>
+            <div style="font-size:11px;color:var(--muted)">Banned ${h2.date||'today'}</div>
+          </div>
+          <button onclick="removeBan('horse','${esc(h2.name)}');openBanModal()" style="font-size:11px;padding:3px 9px;border-radius:5px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer" onmouseover="this.style.color='#f87171';this.style.borderColor='#f87171'" onmouseout="this.style.color='var(--muted)';this.style.borderColor='var(--border)'">✕ Unban</button>
+        </div>`).join(''):'<div style="font-size:12px;color:var(--muted);font-style:italic;padding:4px 12px">No banned horses.</div>'}
+    </div>
+    <div style="padding:14px 20px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center">
+      <div onclick="toggleHideBanned();openBanModal()" style="display:flex;align-items:center;gap:8px;cursor:pointer">
+        <div style="width:36px;height:20px;border-radius:10px;background:${st.hideBanned?'#ef4444':'var(--card2)'};border:${st.hideBanned?'none':'1px solid var(--border)'};position:relative;flex-shrink:0;transition:background .2s">
+          <div style="position:absolute;top:2px;${st.hideBanned?'right:2px':'left:2px'};width:16px;height:16px;border-radius:50%;background:#fff;transition:left .2s,right .2s"></div>
+        </div>
+        <span style="font-size:12px;color:var(--muted)">${st.hideBanned?'Hiding banned runners':'Show all runners'}</span>
+      </div>
+      <button onclick="closeBanModal()" style="padding:6px 16px;border:1px solid var(--border);border-radius:7px;background:transparent;color:var(--muted);font-size:12px;cursor:pointer">Done</button>
+    </div>
+  </div></div>`;
+  const existing=document.getElementById('banModalOverlay');
+  if(existing)existing.remove();
+  const container=document.createElement('div');
+  container.innerHTML=h;
+  document.body.appendChild(container.firstElementChild);
+}
+function closeBanModal(){const el=document.getElementById('banModalOverlay');if(el)el.remove();}
 
 /* ==================== BET TRACKER ==================== */
 function getBetListKey(){return 'betList_'+(D&&D.date?D.date:'unknown')}
