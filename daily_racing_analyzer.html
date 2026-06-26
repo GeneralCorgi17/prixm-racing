@@ -502,6 +502,11 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .silver-flag .sf-label{color:#94a3b8;font-weight:700;letter-spacing:.05em;white-space:nowrap}
 .bronze-flag{display:flex;align-items:center;gap:6px;padding:4px 10px;background:rgba(180,83,9,0.07);border-left:3px solid #b45309;font-size:11px;flex-wrap:wrap;margin-top:6px;border-radius:0 4px 4px 0}
 .bronze-flag .bf-label{color:#d97706;font-weight:700;letter-spacing:.05em;white-space:nowrap}
+.ban-flag{display:flex;align-items:center;gap:6px;padding:4px 10px;background:rgba(239,68,68,0.08);border-left:3px solid #ef4444;font-size:11px;flex-wrap:wrap;margin-top:6px;border-radius:0 4px 4px 0}
+.ban-flag-label{color:#ef4444;font-weight:700;letter-spacing:.05em;margin-right:4px}
+.ban-chip{padding:1px 6px;border-radius:3px;font-size:10px;font-weight:600;white-space:nowrap}
+.ban-horse{background:rgba(239,68,68,0.15);color:#fca5a5}
+.ban-jockey{background:rgba(249,115,22,0.15);color:#fdba74}
 .spread-mid{background:rgba(245,158,11,.12);color:#fbbf24}
 .spread-low{background:rgba(239,68,68,.1);color:#f87171}
 
@@ -2094,6 +2099,7 @@ function switchTab(tab){
           if(race.handicap)continue;
           const vLow=(race.course||vk).toLowerCase();
           if(_TN_EXCL.some(ex=>vLow.includes(ex)))continue;
+          if(isIreland(race.course||vk))continue;
           const sorted=[...(race.runners||[])].sort((a,b)=>b.score-a.score);
           if(sorted.length<2)continue;
           const gap=Math.round((sorted[0].score-sorted[1].score)*10)/10;
@@ -4289,7 +4295,7 @@ function rejectUnifiedCalibration(){
 }
 
 /* ==================== VENUE EXCLUSION ==================== */
-const EXCLUDED_VENUES=['happy valley','sha tin','meydan','abu dhabi','bahrain','hanshin','chukyo','fukushima','nakayama','tokyo','niigata','kyoto','rosehill','flemington','morphettville','eagle farm','doomben','hawkesbury','ascot aus','gold coast','northam','scone','turffontein','scottsville','greyville','oaklawn park','gulfstream park','keeneland','aqueduct','santa anita','belmont park','belmont at the big a','churchill downs','laurel park','lone star park','percy warner','middleburg','great meadow','woodbine','saratoga','hipodromo','cidade jardim','monterrico','gavea','palermo','saint cloud','longchamp','deauville','chantilly','auteuil','compiegne','toulouse','bordeaux','les landes','nantes','vichy','le lion','san siro','munich','dusseldorf','krefeld','hoppegarten','dortmund','baden baden','cologne','koln','firenze','randwick','punchestown','leopardstown','curragh','naas','cork','killarney','gowran park','roscommon','navan','limerick','clonmel','wexford','tramore','kilbeggan','ballinrobe','sligo','down royal','bellewstown','downpatrick','dundalk','tipperary','fairyhouse','galway','laytown','free to air','scoop','worldwide stakes','world pool','bro park'];
+const EXCLUDED_VENUES=['happy valley','sha tin','meydan','abu dhabi','bahrain','hanshin','chukyo','fukushima','nakayama','tokyo','niigata','kyoto','rosehill','flemington','morphettville','eagle farm','doomben','hawkesbury','ascot aus','gold coast','northam','scone','turffontein','scottsville','greyville','oaklawn park','gulfstream park','keeneland','aqueduct','santa anita','belmont park','belmont at the big a','churchill downs','laurel park','lone star park','percy warner','middleburg','great meadow','woodbine','saratoga','hipodromo','cidade jardim','monterrico','gavea','palermo','saint cloud','longchamp','deauville','chantilly','auteuil','compiegne','toulouse','bordeaux','les landes','nantes','vichy','le lion','san siro','munich','dusseldorf','krefeld','hoppegarten','dortmund','baden baden','cologne','koln','firenze','randwick','free to air','scoop','worldwide stakes','world pool','bro park'];
 function filterExcludedVenues(data){
   if(!data||!data.venues) return data;
   const filtered={...data,venues:{}};
@@ -5683,6 +5689,7 @@ function getTop10Picks(data){
     // Double-check excluded venues (safety net in case data wasn't pre-filtered)
     const vName=(venue.course||vk).toLowerCase().replace(/-/g,' ');
     if(EXCLUDED_VENUES.some(ex=>vName.includes(ex))) return;
+    if(isIreland(venue.course||vk)) return; // display only — excluded from picks/analysis
     venue.races.forEach((race,ri)=>{
       if(!race.runners||!race.runners.length) return;
       const sorted=[...race.runners].sort((a,b)=>b.score-a.score);
@@ -5738,6 +5745,7 @@ function getPrixmPicks(picks){
     if(!venue) return;
     const race=venue.races[p.raceIdx];
     if(!race||!race.runners) return;
+    if(isIreland(race.course)) return;
     const sorted=[...race.runners].sort((a,b)=>b.score-a.score);
     const runner=race.runners.find(r=>r.name===p.horse);
     if(!runner) return;
@@ -6862,6 +6870,28 @@ function renderBronzeFlag(bf){
   return `<div class="bronze-flag"><span class="bf-label">🥉 BRONZE</span><span class="gf-sep">·</span><span class="gf-chip gf-ok">Gap ${bf.gapBand}</span><span class="${scoreCls}">Score ${bf.scoreBand}</span><span class="gf-reason">${reason}</span></div>`;
 }
 
+function getBanFlag(race){
+  if(!race.runners||!race.runners.length) return null;
+  const bl=loadBanList();
+  if(!bl.horses.length&&!bl.jockeys.length) return null;
+  const bannedHorses=[];
+  const bannedJockeys=[];
+  race.runners.forEach(r=>{
+    const hn=(r.name||'').trim().toLowerCase();
+    const jn=(r.jockey||'').trim().toLowerCase();
+    if(bl.horses.some(h=>h.name.toLowerCase()===hn)) bannedHorses.push(r.name);
+    if(bl.jockeys.some(j=>j.name.toLowerCase()===jn)) bannedJockeys.push(r.jockey);
+  });
+  if(!bannedHorses.length&&!bannedJockeys.length) return null;
+  return{horses:bannedHorses,jockeys:bannedJockeys};
+}
+function renderBanFlag(bf){
+  const parts=[];
+  bf.horses.forEach(h=>parts.push(`<span class="ban-chip ban-horse">🐴 ${h}</span>`));
+  bf.jockeys.forEach(j=>parts.push(`<span class="ban-chip ban-jockey">🧑 ${j}</span>`));
+  return `<div class="ban-flag">🚫 <span class="ban-flag-label">BAN IN FIELD</span>${parts.join('')}</div>`;
+}
+
 function renderRaceCards(){
   const el=document.getElementById('raceCards');
   let races=[];
@@ -6936,6 +6966,7 @@ function renderRaceCards(){
       ${(()=>{const _gf=getGoldenFlags(r);return _gf?renderGoldenFlag(_gf):'';})()}
       ${(()=>{const _sf=getSilverFlags(r);return _sf?renderSilverFlag(_sf):'';})()}
       ${(()=>{const _bf=getBronzeFlags(r);return _bf?renderBronzeFlag(_bf):'';})()}
+      ${(()=>{const _ban=getBanFlag(r);return _ban?renderBanFlag(_ban):'';})()}
       <div class="rmeta">
         <span>${r.distance}</span><span>${r.going}</span><span>${r.race_type}</span>
         <span>${r.field_size} runners</span>
