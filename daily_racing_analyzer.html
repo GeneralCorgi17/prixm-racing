@@ -110,8 +110,8 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .cb-av{background:rgba(127,29,29,.25);color:#fca5a5}
 
 /* Score bar */
-.sbar{width:70px;height:7px;background:var(--card2);border-radius:4px;overflow:hidden;display:inline-block;vertical-align:middle;margin-right:4px}
-.sfill{height:100%;border-radius:4px}
+.sbar{width:70px;height:9px;background:#c9c3bb;border-radius:4px;overflow:hidden;display:inline-block;vertical-align:middle;margin-right:4px}
+.sfill{display:block;height:100%;border-radius:4px}
 
 /* Form chars */
 .fc{display:inline-flex;gap:2px}
@@ -809,39 +809,52 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .d1-pl-val.up{color:#15803d}
 .d1-pl-val.down{color:#dc2626}
 /* race list rows */
-.landing .race-cards{display:flex;flex-direction:column;gap:3px}
-.landing .rc{background:#fff;border:1px solid #e5e0d8;border-radius:8px;padding:0;max-height:none;overflow:visible;cursor:pointer}
-.landing .rc:hover{border-color:#b7dfc9;box-shadow:0 2px 8px rgba(0,0,0,.06);transform:translateX(2px) translateY(0)}
-.landing .rc .rc-row-main{display:flex;align-items:center;padding:10px 14px;gap:2px}
-.landing .rc .rc-col-t{min-width:64px;flex-shrink:0}
-.landing .rc .r-time{font-size:22px;font-weight:900;color:#111827;letter-spacing:-1.5px;line-height:1;display:block}
-.landing .rc .r-code{font-size:9px;color:#9ca3af;font-weight:600;text-transform:uppercase;letter-spacing:.3px;margin-top:2px;display:block}
-.landing .rc .rc-col-v{min-width:96px;flex-shrink:0;padding-left:10px;border-left:1px solid #f0ede8;margin-left:4px}
-.landing .rc .r-venue{font-size:11px;font-weight:800;color:#374151;text-transform:uppercase;letter-spacing:.6px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:110px}
-.landing .rc .r-dist{font-size:9px;color:#9ca3af;margin-top:2px;display:block}
-.landing .rc .rc-col-info{flex:1;padding:0 10px;min-width:0}
-.landing .rc .r-going{font-size:11px;color:#6b7280;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.landing .rc .r-tags{display:flex;gap:3px;margin-top:3px;flex-wrap:wrap}
-.landing .rc .rc-rtag{font-size:9px;background:#f3f4f6;color:#9ca3af;padding:2px 5px;border-radius:3px;font-weight:600}
-.landing .rc .rc-col-seg{min-width:72px;flex-shrink:0;text-align:center}
-.landing .rc .rc-segbadge{font-size:9px;font-weight:700;padding:3px 7px;border-radius:20px;white-space:nowrap;display:inline-block}
+.landing .race-cards{display:grid!important;grid-template-columns:repeat(3,1fr);gap:10px;padding:2px}
+@media(max-width:1100px){.landing .race-cards{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:680px){.landing .race-cards{grid-template-columns:1fr}}
+.landing .rc{background:#fff;border:1px solid #e5e0d8;border-radius:10px;padding:0;max-height:none;overflow:visible;cursor:pointer;display:flex;flex-direction:column;box-shadow:0 1px 4px rgba(0,0,0,.07)}
+.landing .rc:hover{border-color:#b7dfc9;box-shadow:0 3px 12px rgba(0,0,0,.10);transform:translateY(-1px)}
+.landing .rc.rc-gold{background:#fef9f0;border-color:#f5d68a}
+.landing .rc.rc-silver{background:#f8f9ff;border-color:#c8d0e8}
+.landing .rc .rc-ch{display:flex;justify-content:space-between;align-items:flex-start;padding:10px 12px 7px}
+.landing .rc .rc-card-time{font-size:20px;font-weight:900;color:#111827;letter-spacing:-1px;line-height:1;display:block}
+.landing .rc .rc-card-venue{font-size:11px;font-weight:800;color:#374151;text-transform:uppercase;letter-spacing:.5px;display:block;margin-top:2px}
+.landing .rc .rc-cmeta{display:flex;gap:4px;flex-wrap:wrap;padding:0 12px 8px;border-bottom:1px solid #f0ede8}
+.landing .rc .rc-mtag{font-size:9px;background:#f3f4f6;color:#6b7280;padding:2px 6px;border-radius:4px;font-weight:600}
+.landing .rc .rc-mtag.mtag-hcp{background:#fff7ed;color:#b45309;border:1px solid #fed7aa}
+.landing .rc .rc-mtag.mtag-gold{background:#fef3c7;color:#b45309;border:1px solid #fde68a}
+.landing .rc .rc-cstats{display:flex;padding:8px 12px;gap:0;border-bottom:1px solid #f0ede8}
+.landing .rc .rc-cstat{flex:1;text-align:center;border-right:1px solid #f0ede8}
+.landing .rc .rc-cstat:last-child{border-right:none}
+.landing .rc .rc-cstat-n{font-size:17px;font-weight:900;letter-spacing:-1px;line-height:1}
+.landing .rc .rc-cstat-l{font-size:8px;color:#9ca3af;font-weight:700;text-transform:uppercase;letter-spacing:.4px;margin-top:2px}
+.landing .rc .gap-elite{color:#b45309}
+.landing .rc .gap-good{color:#1d4ed8}
+.landing .rc .gap-low{color:#9ca3af}
+.landing .rc .conf-top{color:#15803d}
+.landing .rc .conf-strong{color:#1d4ed8}
+.landing .rc .conf-solid{color:#6b7280}
+.landing .rc .conf-mod{color:#9ca3af}
+.landing .rc .rc-cpicks{padding:8px 12px;flex:1;display:flex;flex-direction:column;gap:4px}
+.landing .rc .rc-p1{display:flex;align-items:center;gap:6px}
+.landing .rc .rc-p1-star{font-size:10px;color:#d97706;flex-shrink:0}
+.landing .rc .rc-p1-name{font-size:12px;font-weight:800;color:#15803d;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.landing .rc .rc-p1-sc{font-size:10px;color:#6b7280;flex-shrink:0;font-weight:700}
+.landing .rc .rc-p1-bar{height:7px;background:#c9c3bb;border-radius:3px;overflow:hidden;margin-bottom:3px}
+.landing .rc .rc-p1-fill{display:block;height:100%;background:#15803d;border-radius:3px}
+.landing .rc .rc-p2{display:flex;align-items:center;gap:6px}
+.landing .rc .rc-p2-num{font-size:9px;color:#9ca3af;flex-shrink:0;width:12px}
+.landing .rc .rc-p2-name{font-size:11px;color:#6b7280;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.landing .rc .rc-p2-sc{font-size:9px;color:#9ca3af;flex-shrink:0;font-weight:700}
+.landing .rc .rc-p2-bar{height:4px;background:#c9c3bb;border-radius:2px;overflow:hidden;margin-bottom:4px}
+.landing .rc .rc-p2-fill{display:block;height:100%;background:#9ca3af;border-radius:2px}
+.landing .rc .rc-segbadge{font-size:9px;font-weight:700;padding:3px 8px;border-radius:20px;white-space:nowrap;display:inline-block}
 .landing .rc .rc-sg-gold{background:#fef3c7;color:#b45309;border:1px solid #fde68a}
 .landing .rc .rc-sg-silver{background:#f1f5f9;color:#475569;border:1px solid #cbd5e1}
 .landing .rc .rc-sg-bronze{background:#fff7ed;color:#92400e;border:1px solid #fed7aa}
-.landing .rc .rc-col-pick{flex:1;padding-left:10px;border-left:1px solid #f0ede8;min-width:0}
-.landing .rc .r-pname{font-size:12px;font-weight:700;color:#15803d;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
-.landing .rc .r-pform{font-size:9px;color:#9ca3af;margin-top:2px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.landing .rc .rc-col-score{min-width:52px;flex-shrink:0;text-align:right;padding-left:10px}
-.landing .rc .r-scoren{font-size:16px;font-weight:900;color:#111827;letter-spacing:-1px;display:block}
-.landing .rc .r-sbar{height:3px;background:#e5e7eb;border-radius:2px;margin-top:4px;overflow:hidden}
-.landing .rc .r-sfill{height:100%;border-radius:2px;background:#15803d;transition:width .3s}
-.landing .rc .rc-expand-arr{width:18px;height:18px;border-radius:50%;border:1px solid #e5e0d8;display:flex;align-items:center;justify-content:center;font-size:10px;color:#9ca3af;margin-left:8px;flex-shrink:0;line-height:1}
-/* logged indicator light version */
-.landing .rc .rc-logged{background:#dcfce7;color:#15803d;border:1px solid #bbf7d0;position:static;font-size:9px;padding:1px 6px;border-radius:8px;font-weight:700;margin-left:4px}
-/* combo + brief in light mode */
-.landing .rc .rc-combo-row{border-top:1px solid #f3f4f6;padding:5px 14px;display:flex;gap:5px;flex-wrap:wrap;background:#fafaf8}
+.landing .rc .rc-logged{background:#dcfce7;color:#15803d;border:1px solid #bbf7d0;position:static;font-size:9px;padding:1px 6px;border-radius:8px;font-weight:700;margin-left:4px;vertical-align:middle}
+.landing .rc .rc-combo-row{border-top:1px solid #f3f4f6;padding:5px 12px;display:flex;gap:5px;flex-wrap:wrap;background:#fafaf8;border-radius:0 0 10px 10px}
 .landing .rc .rc-combo-tag{font-size:9px;color:#059669;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:4px;padding:2px 7px;font-weight:600}
-/* hide old dark-theme card inner elements */
 .landing .rc .rc-head,.landing .rc .rmeta,.landing .rc .top-pick-preview,.landing .rc .rc-spread,.landing .rc .race-brief{display:none!important}
 .landing .rc .golden-flag,.landing .rc .silver-flag,.landing .rc .bronze-flag{display:none!important}
 /* filter bar wrapper in light theme */
@@ -5506,7 +5519,7 @@ function _hsSectionTrainer(r,race){
   const initials=(r.trainer||'?').split(' ').filter(w=>/^[a-zA-Z]/.test(w)).map(w=>w[0]).join('').slice(0,2);
   const col='#a78bfa';
   const scl=v=>v>=20?'#10b981':v>=14?'#f59e0b':'#f87171';
-  const bar=(pct,c)=>`<div style="flex:1;height:6px;background:#e5e7eb;border-radius:2px;overflow:hidden"><div style="width:${Math.min(pct,100)}%;height:100%;background:${c};border-radius:2px"></div></div>`;
+  const bar=(pct,c)=>`<div style="flex:1;height:9px;background:#c9c3bb;border-radius:3px;overflow:hidden"><div style="width:${Math.min(pct,100)}%;height:100%;background:${c};border-radius:3px"></div></div>`;
   return`<div class="hs-section active">
     <div class="hs-person-card">
       <div class="hs-avatar" style="border-color:${col}44;color:${col}">${initials}</div>
@@ -5882,13 +5895,25 @@ function renderD1Sidebar(){
   if(prixm.length){
     picksHtml=prixm.slice(0,6).map(p=>{
       const catCls=p.category==='NAP'?'d1-cb-nap':p.category==='WIN'?'d1-cb-win':p.category==='STRONG'?'d1-cb-strong':'d1-cb-place';
+      const edgeCol=p.category==='NAP'?'linear-gradient(90deg,#b45309,#d97706)':p.category==='WIN'?'#15803d':'#1d4ed8';
+      const edgeNumCol=p.category==='NAP'?'#d97706':p.category==='WIN'?'#15803d':'#1d4ed8';
+      const edgePct=Math.min(100,p.edge||0);
+      const tagsHtml=p.tags&&p.tags.length?`<div style="display:flex;gap:3px;flex-wrap:wrap;margin-top:3px">${p.tags.slice(0,3).map(t=>`<span style="font-size:9px;padding:1px 5px;border-radius:3px;font-weight:600;background:${t.c==='pos'?'#dcfce7':t.c==='neg'?'#fee2e2':'#f3f4f6'};color:${t.c==='pos'?'#15803d':t.c==='neg'?'#dc2626':'#6b7280'};border:1px solid ${t.c==='pos'?'#bbf7d0':t.c==='neg'?'#fecaca':'#e5e7eb'}">${t.t}</span>`).join('')}</div>`:'';
       return `<div class="d1-pick-card" onclick="openRace('${p.venueKey}',${p.raceIdx}).catch(e=>{})">
         <div style="display:flex;align-items:center;gap:5px;margin-bottom:3px">
           <span class="d1-cat-badge ${catCls}">${p.category}</span>
           <span style="font-size:9px;color:#9ca3af;margin-left:auto">${p.time||''}</span>
         </div>
         <div class="d1-pick-horse">${p.horse}</div>
-        <div class="d1-pick-race">${p.venue||''} · Edge ${p.edge||0}</div>
+        <div class="d1-pick-race">${p.venue||''}</div>
+        <div style="display:flex;align-items:center;gap:6px;margin-top:5px">
+          <span style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:#9ca3af;width:28px;flex-shrink:0">Edge</span>
+          <div style="flex:1;height:7px;background:#c9c3bb;border-radius:3px;overflow:hidden">
+            <div style="width:${edgePct}%;height:100%;background:${edgeCol};border-radius:3px"></div>
+          </div>
+          <span style="font-size:11px;font-weight:800;width:22px;text-align:right;color:${edgeNumCol}">${p.edge||0}</span>
+        </div>
+        ${tagsHtml}
       </div>`;
     }).join('');
   }
@@ -7281,34 +7306,53 @@ function renderRaceCards(){
     const sortedR=r.runners?[...r.runners].sort((a,b)=>b.score-a.score):[];
     const second=sortedR[1];
     const gap=second&&sortedR[0]?Math.round((sortedR[0].score-second.score)*10)/10:0;
-    return `<div class="rc" id="${cardId}" style="border-left:5px solid ${getRaceBorderColor(r)}" onclick="openRace('${r.venueKey}',${r.raceIdx}).catch(e=>console.error('openRace error:',e))">
-      <div class="rc-row-main">
-        <div class="rc-col-t">
-          <span class="r-time">${r.time}</span>
-          <span class="r-code">${r.race_type||'Race'}</span>
-        </div>
-        <div class="rc-col-v">
-          <span class="r-venue">${r.course}<button class="ta-track-btn" onclick="event.stopPropagation();openTrackAnalysis('${r.course.replace(/'/g,"\\'")}')" title="Track Analysis">📊</button></span>
-          <span class="r-dist">${r.distance} · ${r.field_size||r.runners.length} rnrs</span>
-        </div>
-        <div class="rc-col-info">
-          <span class="r-going">${r.going||''}</span>
-          <div class="r-tags">
-            ${r.race_class?`<span class="rc-rtag">Cls ${r.race_class}</span>`:''}
-            ${r.handicap||/handicap/i.test(r.race_name||'')?'<span class="rc-rtag">HCP</span>':''}
-            ${r.pattern?`<span class="rc-rtag">${r.pattern}</span>`:''}
-            ${gap>=18?`<span class="rc-rtag" style="color:#b45309">Gap ${gap}</span>`:gap>=10?`<span class="rc-rtag">Gap ${gap}</span>`:''}
-          </div>
-        </div>
-        <div class="rc-col-seg">${segBadge}</div>
-        <div class="rc-col-pick">${top?`<span class="r-pname">★ ${top.name}</span><span class="r-pform">${top.trainer||''}</span>`:`<span class="r-pname" style="color:#9ca3af">No data</span>`}</div>
-        <div class="rc-col-score">${top?`<span class="r-scoren">${topScore}</span><div class="r-sbar"><div class="r-sfill" style="width:${Math.min(100,Math.round(topScore/MAX_SCORE*100))}%"></div></div>`:''}</div>
-        ${logged?'<span class="rc-logged">✓</span>':''}
-        <div class="rc-expand-arr">›</div>
-      </div>
-      ${rCombos.length?`<div class="rc-combo-row">${rCombos.map(m=>`<span class="rc-combo-tag">⚡ ${m.runner.name} · ${m.combo.type.replace('+',' + ')} · ${Math.round(m.combo.placeRate)}% placed</span>`).join('')}</div>`:''}
-      ${_ban?renderBanFlag(_ban):''}
-    </div>`;
+    const topPct=Math.min(100,Math.round(topScore/MAX_SCORE*100));
+    const secondPct=second?Math.min(100,Math.round(second.score/MAX_SCORE*100)):0;
+    const confTier=topPct>=64?'TOP PICK':topPct>=55?'STRONG':topPct>=47?'SOLID':'MOD';
+    const confCls=confTier==='TOP PICK'?'conf-top':confTier==='STRONG'?'conf-strong':confTier==='SOLID'?'conf-solid':'conf-mod';
+    const gapCls=gap>=18?'gap-elite':gap>=10?'gap-good':'gap-low';
+    const cardExtraCls=_gf?'rc-gold':_sf?'rc-silver':'';
+    const dataSeg=_gf?'golden':_sf?'silver':_bf?'bronze':'';
+    return `<div class="rc ${cardExtraCls}" id="${cardId}" data-seg="${dataSeg}" style="border-left:5px solid ${getRaceBorderColor(r)}" onclick="openRace('${r.venueKey}',${r.raceIdx}).catch(e=>console.error('openRace error:',e))">
+  <div class="rc-ch">
+    <div>
+      <span class="rc-card-time">${r.time}</span>
+      <span class="rc-card-venue">${r.course}<button class="ta-track-btn" onclick="event.stopPropagation();openTrackAnalysis('${r.course.replace(/'/g,"\\'")}')" title="Track Analysis" style="margin-left:4px;font-size:9px;padding:0 3px;background:none;border:none;cursor:pointer;color:#9ca3af">📊</button></span>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px">
+      ${segBadge}
+      ${logged?'<span class="rc-logged">✓ Result</span>':''}
+    </div>
+  </div>
+  <div class="rc-cmeta">
+    ${r.distance?`<span class="rc-mtag">${r.distance}</span>`:''}
+    ${r.going?`<span class="rc-mtag">${r.going}</span>`:''}
+    <span class="rc-mtag">${r.field_size||r.runners.length}r</span>
+    ${r.race_type?`<span class="rc-mtag">${r.race_type}</span>`:''}
+    ${r.race_class?`<span class="rc-mtag">Cls ${r.race_class}</span>`:''}
+    ${r.handicap||/handicap/i.test(r.race_name||'')?'<span class="rc-mtag mtag-hcp">HCP</span>':''}
+  </div>
+  <div class="rc-cstats">
+    <div class="rc-cstat">
+      <div class="rc-cstat-n ${gapCls}">${gap||'—'}</div>
+      <div class="rc-cstat-l">Gap</div>
+    </div>
+    <div class="rc-cstat">
+      <div class="rc-cstat-n">${topScore}</div>
+      <div class="rc-cstat-l">Score</div>
+    </div>
+    <div class="rc-cstat">
+      <div class="rc-cstat-n ${confCls}" style="font-size:11px;letter-spacing:0">${confTier}</div>
+      <div class="rc-cstat-l">Conf</div>
+    </div>
+  </div>
+  <div class="rc-cpicks">
+    ${top?`<div class="rc-p1"><span class="rc-p1-star">★</span><span class="rc-p1-name">${top.name}</span><span class="rc-p1-sc">${topScore}/118</span></div><div class="rc-p1-bar"><div class="rc-p1-fill" style="width:${topPct}%"></div></div>`:`<span style="font-size:11px;color:#9ca3af">No data</span>`}
+    ${second?`<div class="rc-p2"><span class="rc-p2-num">2.</span><span class="rc-p2-name">${second.name}</span><span class="rc-p2-sc">${second.score}/118</span></div><div class="rc-p2-bar"><div class="rc-p2-fill" style="width:${secondPct}%"></div></div>`:''}
+  </div>
+  ${rCombos.length?`<div class="rc-combo-row">${rCombos.map(m=>`<span class="rc-combo-tag">⚡ ${m.runner.name} · ${m.combo.type.replace('+',' + ')} · ${Math.round(m.combo.placeRate)}% placed</span>`).join('')}</div>`:''}
+  ${_ban?renderBanFlag(_ban):''}
+</div>`;
   }).join('');
   // stagger-animate newly visible cards
   if(_prevIds.size>0){
@@ -7801,8 +7845,9 @@ function renderExpandedRow(r, fieldSize, race){
         <div class="exp-factors">
           ${Object.entries(FM).map(([k,m])=>{
             const v=bd[k]||0,pct=(v/m.mx)*100;
-            const col=pct>=70?'#10b981':pct>=50?'#f59e0b':'#ef4444';
-            return `<div class="ef"><div class="efl">${m.l}</div><div class="efv" style="color:${col}">${v}</div><div class="efm">/ ${m.mx}</div><div class="efbar"><div class="efbar-f" style="width:0;background:${col}" data-w="${pct}"></div></div></div>`;
+            const barCol=pct>=80?'#5D4A66':pct>=60?'#C1CEFE':pct>=40?'#B2BD7E':'#EC7357';
+            const numCol=pct>=80?'#5D4A66':pct>=60?'#0891b2':pct>=40?'#d97706':'#dc2626';
+            return `<div class="ef"><div class="efl">${m.l}</div><div class="efv" style="color:${numCol}">${v}</div><div class="efm">/ ${m.mx}</div><div class="efbar"><div class="efbar-f" style="width:0;background:${barCol}" data-w="${pct}"></div></div></div>`;
           }).join('')}
         </div>
       </div>
