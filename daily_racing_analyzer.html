@@ -6,12 +6,12 @@
 <title>Daily Horse Racing Analyzer</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#0a0f1a;--card:#111827;--card2:#1a2332;--accent:#10b981;--accent2:#3b82f6;--warn:#f59e0b;--danger:#ef4444;--text:#e5e7eb;--muted:#9ca3af;--border:#374151;--gold:#fbbf24}
+:root{--bg:#f0ede8;--card:#ffffff;--card2:#f5f3f0;--accent:#15803d;--accent2:#3b82f6;--warn:#d97706;--danger:#ef4444;--text:#111827;--muted:#6b7280;--border:#e5e0d8;--gold:#d97706}
 body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
 
 /* Header */
 .hdr{background:linear-gradient(135deg,#064e3b,#0f172a 50%,#312e81);padding:18px 28px;border-bottom:2px solid var(--accent);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
-.hdr h1{font-size:22px;font-weight:700;color:#fff}
+.hdr h1{font-size:22px;font-weight:700;color:var(--text)}
 .hdr-r{display:flex;gap:12px;align-items:center;font-size:13px}
 .date-b{background:rgba(16,185,129,.15);color:var(--accent);padding:5px 14px;border-radius:20px;font-weight:700;font-size:13px}
 
@@ -35,8 +35,37 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .vbtn.on{background:var(--accent);color:#fff;border-color:var(--accent)}
 #fieldSizeBar .vbtn.on{background:#331832;color:#fff;border-color:#331832}
 #fieldSizeBar .vbtn:hover{border-color:#331832;color:var(--text)}
+/* Filter pill bar */
+.fsb-bar{display:flex;gap:4px;align-items:center;flex-wrap:wrap}
+.fsb-pill{position:relative;display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:20px;cursor:pointer;font-size:12px;font-weight:600;background:var(--card2);color:var(--muted);border:1px solid var(--border);transition:all .15s;user-select:none;white-space:nowrap}
+.fsb-pill:hover{border-color:var(--accent);color:var(--text)}
+.fsb-pill.open{border-color:var(--accent);color:var(--text)}
+.fsb-pill.active{background:rgba(124,58,237,.12);border-color:var(--accent);color:var(--text)}
+.fsb-badge{background:var(--accent);color:#fff;font-size:9px;font-weight:800;border-radius:10px;padding:1px 5px;min-width:16px;text-align:center;line-height:14px}
+.fsb-arrow{font-size:9px;opacity:.45;transition:transform .15s}
+.fsb-pill.open .fsb-arrow{transform:rotate(180deg)}
+.fsb-drop{position:absolute;top:calc(100% + 6px);left:0;z-index:300;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px 14px;box-shadow:0 8px 28px rgba(0,0,0,.55);min-width:190px;animation:fsb-in .1s ease}
+.fsb-drop-right{left:auto;right:0}
+@keyframes fsb-in{from{opacity:0;transform:translateY(-3px)}to{opacity:1;transform:translateY(0)}}
+.fsb-drop-title{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;font-weight:700;margin-bottom:8px}
+.fsb-chips{display:flex;gap:5px;flex-wrap:wrap}
+.fsb-chip{padding:4px 11px;border-radius:14px;cursor:pointer;font-size:11px;font-weight:600;background:var(--card2);color:var(--muted);border:1px solid var(--border);white-space:nowrap;display:inline-block;position:relative;overflow:hidden;transition:color .2s,border-color .2s}
+.fsb-chip::before{content:'';position:absolute;inset:0;background:rgba(124,58,237,.18);transform:translateX(-105%);transition:transform .22s cubic-bezier(.4,0,.2,1);border-radius:inherit;pointer-events:none}
+.fsb-chip.on::before{transform:translateX(0)}
+.fsb-chip:hover{border-color:var(--accent);color:var(--text)}
+.fsb-chip.on{color:var(--text);border-color:var(--accent)}
+.fsb-chip.colored{border-left-width:3px}
+.fsb-chip-note{font-size:9px;color:var(--muted);margin-top:3px;padding-left:2px}
+.fsb-chip-note b{color:var(--accent)}
+.fsb-drop-sep{border:none;border-top:1px solid var(--border);margin:8px 0}
+.fsb-clear{font-size:11px;color:var(--muted);cursor:pointer;padding:5px 10px;border-radius:20px;border:1px solid transparent;background:none;font-weight:600;margin-left:4px;transition:color .15s}
+.fsb-clear:hover{color:#f87171}
 .race-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:12px}
-.rc{background:var(--card);border-radius:10px;padding:16px;border:1px solid var(--border);cursor:pointer;transition:all .2s;position:relative}
+.rc{background:var(--card);border-radius:10px;padding:16px;border:1px solid var(--border);cursor:pointer;transition:border-color .2s,transform .2s,box-shadow .2s;position:relative;max-height:700px;overflow:hidden}
+.rc.rc-collapsing{animation:rc-collapse .28s ease forwards;pointer-events:none}
+@keyframes rc-collapse{0%{opacity:1;max-height:700px}35%{opacity:0;max-height:700px}100%{opacity:0;max-height:0;padding-top:0;padding-bottom:0;border-top-width:0;border-bottom-width:0}}
+.rc.rc-expanding{animation:rc-expand .28s ease backwards}
+@keyframes rc-expand{from{opacity:0;max-height:0;padding-top:0;padding-bottom:0}to{opacity:1;max-height:700px;padding-top:16px;padding-bottom:16px}}
 .rc:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.3)}
 .rc .rc-head{display:flex;justify-content:space-between;align-items:center}
 .rc .time{font-size:18px;font-weight:700;color:var(--accent)}
@@ -665,7 +694,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .ta-hist-table td{padding:7px 10px;border-bottom:1px solid #1a1a1a;vertical-align:middle}
 .ta-hist-table tr:last-child td{border-bottom:none}
 .ta-hist-row:hover td{background:var(--card2)}
-.ta-filter-btn{background:var(--card2);border:1px solid #2a2a2a;color:var(--muted);padding:4px 10px;border-radius:5px;cursor:pointer;font-size:11px;font-weight:600;transition:all .15s}
+.ta-filter-btn{background:var(--card2);border:1px solid var(--border);color:var(--muted);padding:4px 10px;border-radius:5px;cursor:pointer;font-size:11px;font-weight:600;transition:all .15s}
 .ta-filter-btn.active,.ta-filter-btn:hover{background:#1e1e1e;color:var(--fg);border-color:#555}
 .ta-track-btn{background:none;border:none;color:#444;cursor:pointer;font-size:10px;padding:0 0 0 4px;transition:color .15s;vertical-align:middle;line-height:1}
 .ta-track-btn:hover{color:#f59e0b}
@@ -686,7 +715,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 /* Landing page */
 #prixm-landing{position:fixed;inset:0;z-index:1000;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .6s ease,transform .6s ease}
 #prixm-landing.out{opacity:0;transform:translateY(-18px);pointer-events:none}
-.pl-wordmark{font-size:clamp(52px,8vw,80px);font-weight:900;letter-spacing:.07em;color:#fff;display:flex;gap:1px;font-family:'Segoe UI',system-ui,sans-serif}
+.pl-wordmark{font-size:clamp(52px,8vw,80px);font-weight:900;letter-spacing:.07em;color:var(--text);display:flex;gap:1px;font-family:'Segoe UI',system-ui,sans-serif}
 .pl-wordmark span{opacity:0;transform:translateY(22px) scale(.85);transition:opacity .4s ease,transform .4s ease;display:inline-block}
 .pl-wordmark span.lv{opacity:1;transform:none}
 .pl-line{width:56px;height:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);opacity:0;transition:opacity .7s ease;margin:20px 0 4px}
@@ -695,7 +724,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .pl-sub.lv{opacity:.6}
 .pl-launch{margin-top:36px;padding:13px 44px;background:var(--accent);border:none;border-radius:8px;color:#0a0f1a;font-weight:800;font-size:14px;letter-spacing:.1em;cursor:pointer;opacity:0;transform:translateY(10px);transition:opacity .5s ease,transform .5s ease,box-shadow .25s,background .2s}
 .pl-launch.lv{opacity:1;transform:none}
-.pl-launch:hover{background:#34d399;box-shadow:0 0 28px rgba(16,185,129,.45)}
+.pl-launch:hover{background:#14532d;box-shadow:0 0 28px rgba(21,128,61,.35)}
 
 /* ===== MOBILE RESPONSIVE ===== */
 @media(max-width:768px){
@@ -733,7 +762,222 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
   .tab-btn{padding:9px 10px;font-size:11px}
   .prixm-horse{font-size:13px}
   #racesView,#perfView,#combosView,#trendsView,#goldenView,#tracksView,#topFinishView,.landing{padding:8px!important}
+  .d1-layout{grid-template-columns:1fr}
+  .d1-aside{display:none}
+  .d1-stats-strip{flex-wrap:wrap}
+  .d1-ss{min-width:50%}
 }
+
+/* ── DESIGN 1: EDITORIAL WHITE ─────────────────────────────── */
+.landing{background:#f0ede8;padding:16px 24px;max-width:none;margin:0;border-top:1px solid #e5e0d8}
+.landing .venues-bar{margin-bottom:10px;max-width:1200px;margin-left:auto;margin-right:auto}
+.landing .vbtn{background:#fff;border-color:#d1ccc4;color:#6b7280}
+.landing .vbtn:hover{border-color:#15803d;color:#15803d}
+.landing .vbtn.on{background:#15803d;color:#fff;border-color:#15803d}
+/* stats strip */
+.d1-stats-strip{display:flex;background:#fff;border:1px solid #e5e0d8;border-radius:10px;overflow:hidden;margin-bottom:12px;max-width:1200px;margin-left:auto;margin-right:auto}
+.d1-ss{flex:1;padding:11px 14px;border-right:1px solid #ece8e2}
+.d1-ss:last-child{border-right:none}
+.d1-ss-n{font-size:20px;font-weight:900;color:#111827;letter-spacing:-1px;line-height:1}
+.d1-ss-l{font-size:9px;color:#9ca3af;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-top:3px}
+.d1-ss.grn .d1-ss-n{color:#15803d}
+.d1-ss.red .d1-ss-n{color:#dc2626}
+.d1-ss.amb .d1-ss-n{color:#d97706}
+/* 2-col layout */
+.d1-layout{display:grid;grid-template-columns:1fr 280px;gap:16px;align-items:start;max-width:1200px;margin:0 auto}
+.d1-aside{position:sticky;top:10px;display:flex;flex-direction:column;gap:12px}
+.d1-panel{background:#fff;border:1px solid #e5e0d8;border-radius:10px;overflow:hidden}
+.d1-panel-hdr{padding:11px 14px;border-bottom:1px solid #e5e0d8;display:flex;align-items:center;justify-content:space-between}
+.d1-panel-title{font-size:10px;font-weight:800;color:#374151;text-transform:uppercase;letter-spacing:.8px}
+.d1-panel-date{font-size:9px;color:#9ca3af;font-weight:600}
+/* sidebar pick cards */
+.d1-pick-card{padding:10px 14px;border-bottom:1px solid #f3f4f6;transition:background .15s;cursor:pointer}
+.d1-pick-card:last-child{border-bottom:none}
+.d1-pick-card:hover{background:#fafaf8}
+.d1-cat-badge{font-size:9px;font-weight:800;padding:2px 7px;border-radius:20px;text-transform:uppercase;letter-spacing:.4px}
+.d1-cb-nap{background:#fef3c7;color:#b45309;border:1px solid #fde68a}
+.d1-cb-win{background:#dcfce7;color:#15803d;border:1px solid #bbf7d0}
+.d1-cb-strong{background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe}
+.d1-cb-place{background:#f8fafc;color:#64748b;border:1px solid #cbd5e1}
+.d1-pick-horse{font-size:13px;font-weight:800;color:#111827;margin-top:3px}
+.d1-pick-race{font-size:10px;color:#9ca3af;margin-top:1px}
+/* P&L rows */
+.d1-pl-row{padding:9px 14px;border-bottom:1px solid #f3f4f6;display:flex;justify-content:space-between;align-items:center;font-size:12px}
+.d1-pl-row:last-child{border-bottom:none}
+.d1-pl-label{color:#6b7280;font-weight:500}
+.d1-pl-val{font-weight:700;color:#111827}
+.d1-pl-val.up{color:#15803d}
+.d1-pl-val.down{color:#dc2626}
+/* race list rows */
+.landing .race-cards{display:flex;flex-direction:column;gap:3px}
+.landing .rc{background:#fff;border:1px solid #e5e0d8;border-radius:8px;padding:0;max-height:none;overflow:visible;cursor:pointer}
+.landing .rc:hover{border-color:#b7dfc9;box-shadow:0 2px 8px rgba(0,0,0,.06);transform:translateX(2px) translateY(0)}
+.landing .rc .rc-row-main{display:flex;align-items:center;padding:10px 14px;gap:2px}
+.landing .rc .rc-col-t{min-width:64px;flex-shrink:0}
+.landing .rc .r-time{font-size:22px;font-weight:900;color:#111827;letter-spacing:-1.5px;line-height:1;display:block}
+.landing .rc .r-code{font-size:9px;color:#9ca3af;font-weight:600;text-transform:uppercase;letter-spacing:.3px;margin-top:2px;display:block}
+.landing .rc .rc-col-v{min-width:96px;flex-shrink:0;padding-left:10px;border-left:1px solid #f0ede8;margin-left:4px}
+.landing .rc .r-venue{font-size:11px;font-weight:800;color:#374151;text-transform:uppercase;letter-spacing:.6px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:110px}
+.landing .rc .r-dist{font-size:9px;color:#9ca3af;margin-top:2px;display:block}
+.landing .rc .rc-col-info{flex:1;padding:0 10px;min-width:0}
+.landing .rc .r-going{font-size:11px;color:#6b7280;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.landing .rc .r-tags{display:flex;gap:3px;margin-top:3px;flex-wrap:wrap}
+.landing .rc .rc-rtag{font-size:9px;background:#f3f4f6;color:#9ca3af;padding:2px 5px;border-radius:3px;font-weight:600}
+.landing .rc .rc-col-seg{min-width:72px;flex-shrink:0;text-align:center}
+.landing .rc .rc-segbadge{font-size:9px;font-weight:700;padding:3px 7px;border-radius:20px;white-space:nowrap;display:inline-block}
+.landing .rc .rc-sg-gold{background:#fef3c7;color:#b45309;border:1px solid #fde68a}
+.landing .rc .rc-sg-silver{background:#f1f5f9;color:#475569;border:1px solid #cbd5e1}
+.landing .rc .rc-sg-bronze{background:#fff7ed;color:#92400e;border:1px solid #fed7aa}
+.landing .rc .rc-col-pick{flex:1;padding-left:10px;border-left:1px solid #f0ede8;min-width:0}
+.landing .rc .r-pname{font-size:12px;font-weight:700;color:#15803d;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
+.landing .rc .r-pform{font-size:9px;color:#9ca3af;margin-top:2px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.landing .rc .rc-col-score{min-width:52px;flex-shrink:0;text-align:right;padding-left:10px}
+.landing .rc .r-scoren{font-size:16px;font-weight:900;color:#111827;letter-spacing:-1px;display:block}
+.landing .rc .r-sbar{height:3px;background:#e5e7eb;border-radius:2px;margin-top:4px;overflow:hidden}
+.landing .rc .r-sfill{height:100%;border-radius:2px;background:#15803d;transition:width .3s}
+.landing .rc .rc-expand-arr{width:18px;height:18px;border-radius:50%;border:1px solid #e5e0d8;display:flex;align-items:center;justify-content:center;font-size:10px;color:#9ca3af;margin-left:8px;flex-shrink:0;line-height:1}
+/* logged indicator light version */
+.landing .rc .rc-logged{background:#dcfce7;color:#15803d;border:1px solid #bbf7d0;position:static;font-size:9px;padding:1px 6px;border-radius:8px;font-weight:700;margin-left:4px}
+/* combo + brief in light mode */
+.landing .rc .rc-combo-row{border-top:1px solid #f3f4f6;padding:5px 14px;display:flex;gap:5px;flex-wrap:wrap;background:#fafaf8}
+.landing .rc .rc-combo-tag{font-size:9px;color:#059669;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:4px;padding:2px 7px;font-weight:600}
+/* hide old dark-theme card inner elements */
+.landing .rc .rc-head,.landing .rc .rmeta,.landing .rc .top-pick-preview,.landing .rc .rc-spread,.landing .rc .race-brief{display:none!important}
+.landing .rc .golden-flag,.landing .rc .silver-flag,.landing .rc .bronze-flag{display:none!important}
+/* filter bar wrapper in light theme */
+.landing #fieldSizeBar .fsb-bar{background:#fff;border:1px solid #e5e0d8;border-radius:8px;padding:8px 12px}
+/* header light */
+.hdr{background:#fff!important;background-image:none!important;border-bottom:1px solid #e5e0d8!important;padding:12px 28px!important}
+.hdr h1{font-size:20px!important;font-weight:900!important;color:#15803d!important;letter-spacing:-.5px}
+.hdr h1::before{content:'P';display:inline-flex;width:22px;height:22px;background:#15803d;color:#fff;border-radius:5px;font-size:11px;font-weight:900;align-items:center;justify-content:center;margin-right:7px;vertical-align:middle}
+.hdr>div:first-child>div:last-child{color:#9ca3af!important}
+.date-b{background:#dcfce7!important;color:#15803d!important}
+.vbtn{background:#fff!important;color:#6b7280!important;border-color:#d1d5db!important}
+.vbtn:hover{border-color:#15803d!important;color:#15803d!important}
+/* tab bar light */
+.tab-bar{background:#fff!important;border-bottom:2px solid #e5e0d8!important;box-shadow:none!important;padding:0 28px!important}
+.tab-btn{background:none!important;border:none!important;border-bottom:3px solid transparent!important;border-radius:0!important;height:42px!important;padding:0 15px!important;font-size:12px!important;font-weight:600!important;color:#9ca3af!important;margin:0!important;transition:color .15s,border-color .15s!important}
+.tab-btn:hover{color:#374151!important;background:none!important}
+.tab-btn.active{color:#15803d!important;border-bottom-color:#15803d!important;background:none!important}
+#dbStatusBadge{color:#9ca3af!important}
+/* ── TEAL→GREEN: #34d399 has poor contrast on light bg, darken to readable green ── */
+.sb-badge-ok{color:#15803d!important}
+.sb-ok{color:#15803d!important}
+.cb-tp{background:rgba(21,128,61,.15)!important;color:#15803d!important}
+.cb-av{background:rgba(220,38,38,.1)!important;color:#dc2626!important}
+.f1{background:rgba(21,128,61,.15)!important;color:#15803d!important}
+.prixm-cat-text-win{color:#15803d!important}
+.prixm-chip-win{background:rgba(21,128,61,.1)!important;color:#15803d!important;border-color:rgba(21,128,61,.3)!important}
+.prixm-tag-pos{background:rgba(21,128,61,.1)!important;color:#15803d!important}
+.verif-confirmed{color:#15803d!important}
+.conn-upgrade{color:#15803d!important}
+.h2h-cell-win{background:rgba(21,128,61,.1)!important;color:#15803d!important}
+.h2h-factor-win{color:#15803d!important}
+.sd-pos{color:#15803d!important}
+.spread-high{background:rgba(21,128,61,.1)!important;color:#15803d!important}
+.cdp-status-text.cdp-proven{color:#15803d!important}
+.brief-edge{background:rgba(21,128,61,.08)!important;border-color:rgba(21,128,61,.2)!important;color:#15803d!important}
+.vh-green{background:rgba(21,128,61,.12)!important;color:#15803d!important}
+.mom-rise{background:rgba(21,128,61,.12)!important;color:#15803d!important}
+/* danger/red variants - slightly darken for contrast */
+.brief-danger{background:rgba(220,38,38,.07)!important;border-color:rgba(220,38,38,.2)!important;color:#dc2626!important}
+.ban-horse{color:#dc2626!important}
+/* positive/negative insight text */
+.tp-insight .positive{color:#15803d!important}
+.fp-won{background:rgba(21,128,61,.12)!important;color:#15803d!important}
+.tp-win{background:rgba(21,128,61,.2)!important;color:#15803d!important}
+.trb-won{background:rgba(21,128,61,.15)!important;color:#15803d!important}
+.tp-progress-counts .ct-won{color:#15803d!important}
+/* unban btn */
+.unban-action-btn{color:#15803d!important}
+/* bp-horse in bet panel stays teal (dark overlay) - skip */
+/* Prixm cat colors readable on light */
+.prixm-cat-text-nap{color:#b45309!important}
+.prixm-cat-text-strong{color:#1d4ed8!important}
+.prixm-cat-text-place{color:#7c3aed!important}
+/* ── TEAL #10b981 TEXT → forest green (visible on light bg) ── */
+.sig-win{color:#15803d!important}
+.cdp-status-text.cdp-proven{color:#15803d!important}
+.bet-btn:hover{border-color:#15803d!important;color:#15803d!important}
+.ta-chip-green .ta-chip-value{color:#15803d!important}
+/* ── BLUE/PURPLE/TEAL→DARKER: low contrast on light bg ── */
+.cb-st{background:rgba(15,118,110,.12)!important;color:#0f766e!important}
+.cb-so{background:rgba(29,78,216,.1)!important;color:#1d4ed8!important}
+.f2{background:rgba(29,78,216,.1)!important;color:#1d4ed8!important}
+.wl-title{color:#7c3aed!important}
+.wl-manage{color:#7c3aed!important}
+.prixm-chip-ew{background:rgba(29,78,216,.1)!important;color:#1d4ed8!important;border-color:rgba(29,78,216,.25)!important}
+.prixm-chip-top{background:rgba(124,58,237,.1)!important;color:#7c3aed!important;border-color:rgba(124,58,237,.25)!important}
+.ta-conf-SOLID{background:rgba(29,78,216,.1)!important;color:#1d4ed8!important}
+/* ── AMBER→DARK-AMBER: #fbbf24 near-invisible on light bg ── */
+.sb-badge-partial{color:#b45309!important}
+.sb-warn{color:#b45309!important}
+.cb-mo{background:rgba(180,83,9,.12)!important;color:#b45309!important}
+.f3{background:rgba(180,83,9,.12)!important;color:#b45309!important}
+.tp-place{background:rgba(180,83,9,.12)!important;color:#b45309!important}
+.mom-sfall{background:rgba(180,83,9,.1)!important;color:#b45309!important}
+.price-dec{background:rgba(180,83,9,.08)!important;border-color:rgba(180,83,9,.18)!important;color:#b45309!important}
+.verif-conditional{color:#b45309!important}
+.conn-lateral{color:#b45309!important}
+.vh-amber{background:rgba(180,83,9,.08)!important;color:#b45309!important}
+.h2h-cell-even{background:rgba(180,83,9,.08)!important;color:#b45309!important}
+.spread-mid{background:rgba(180,83,9,.08)!important;color:#b45309!important}
+.cdp-status-text.cdp-untested{color:#b45309!important}
+.ta-conf-TOP-PICK{background:rgba(180,83,9,.12)!important;color:#b45309!important}
+/* ── GLOBAL LIGHT FIXES: dark hardcoded values ── */
+/* runner row buttons */
+.cmpsel-btn{background:#f3f4f6!important;border-color:#d1d5db!important;color:#6b7280!important}
+.cmpsel-btn.on{background:#fef3c722!important;border-color:#d97706!important;color:#d97706!important}
+.hsp-btn{background:#eff6ff!important;border-color:#bfdbfe!important;color:#3b82f6!important}
+.hsp-btn:hover{background:#dbeafe!important;border-color:#3b82f6!important}
+/* runner info tiles */
+.ri-tile:hover{background:#f0fdf4!important;border-color:var(--accent)!important}
+.ri-tile.nr{background:#fef2f2!important;color:#ef4444!important;border-color:#fecaca!important}
+/* connection dropdown */
+.conn-dropdown{background:#fff!important;border-color:#e5e0d8!important;box-shadow:0 6px 20px rgba(0,0,0,.12)!important}
+/* filter ON pill (fieldSizeBar) */
+#fieldSizeBar .vbtn.on{background:#15803d!important;border-color:#15803d!important}
+/* Prixm edge bar track */
+.prixm-edge-bar{background:#e5e7eb!important}
+/* Golden flag chips (light bg variants) */
+.gf-chip.gf-best{background:#dcfce7!important;color:#15803d!important}
+.gf-chip.gf-strong{background:#d1fae5!important;color:#065f46!important}
+.gf-chip.gf-ok{background:#fef9c3!important;color:#854d0e!important}
+.gf-chip.gf-watch{background:#fff7ed!important;color:#9a3412!important}
+.gf-chip.gf-avoid{background:#fef2f2!important;color:#991b1b!important}
+.gf-chip.gf-going-use{background:#dcfce7!important;color:#15803d!important}
+.gf-chip.gf-going-watch{background:#fef9c3!important;color:#854d0e!important}
+.gf-chip.gf-going-avoid{background:#fef2f2!important;color:#991b1b!important}
+/* Golden dashboard SR bar track */
+.g-sr-bar{background:#e5e7eb!important}
+.g-warning-banner{background:#fff7ed!important;border-color:#d97706!important;color:#92400e!important}
+/* Track analysis */
+.ta-filter-btn{background:#fff!important;border-color:#d1d5db!important;color:#6b7280!important}
+.ta-filter-btn.active,.ta-filter-btn:hover{background:#f0fdf4!important;border-color:#15803d!important;color:#15803d!important}
+.ta-venue-row:hover{background:#f9fafb!important}
+/* bet panel (keep dark - it's a slide-out overlay, dark is fine) */
+/* horse comparison sheet (keep dark - it's a modal, dark is intentional) */
+/* bet type popup (keep dark - small popup, dark is fine) */
+/* tooltip (keep dark - dark tooltip on light is standard) */
+/* Launch button text fix */
+.pl-launch{color:#fff!important}
+/* Performance tab: card backgrounds via var(--card) auto-adapt, but check inline dark */
+/* view-only badge */
+[data-view-only] body::after,[data-view-only]::after{background:#f3f4f6!important;color:#6b7280!important;border-color:#d1d5db!important}
+/* fieldSizeBar venue pill ON state (ID specificity > .landing class) */
+#fieldSizeBar .vbtn.on{background:#15803d!important;color:#fff!important;border-color:#15803d!important}
+#fieldSizeBar .vbtn:hover{border-color:#15803d!important;color:#15803d!important}
+/* NR (non-runner) tile */
+.ri-tile.nr{background:#fef2f2!important;color:#dc2626!important;border-color:#fecaca!important}
+/* unban button text on light */
+.unban-action-btn{color:#15803d!important;border-color:rgba(21,128,61,.35)!important;background:rgba(21,128,61,.1)!important}
+/* BP count/export/fab use old teal - update to forest green */
+.bp-count{background:#15803d!important}
+.bp-export{background:#15803d!important}
+.bp-export:hover{background:#14532d!important}
+.bp-toggle-fab{background:#15803d!important;box-shadow:0 4px 16px rgba(21,128,61,.35)!important}
+/* sumstrip cards should auto-adapt via var(--card) but ensure border visible */
+.ss{border-color:var(--border)!important}
 
 </style>
 <script src="results_history.js" onerror=""></script>
@@ -770,11 +1014,17 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 
 
 <div class="landing" id="landingView">
-<div id="topPicksSection"></div>
+<div id="topPicksSection" style="display:none"></div>
 <div id="watchlistSection"></div>
+<div id="d1StatsStrip" class="d1-stats-strip"></div>
 <div class="venues-bar" id="venueBar"></div>
-<div id="fieldSizeBar" style="padding:0 28px;margin-bottom:8px"></div>
-<div class="race-cards" id="raceCards"></div>
+<div class="d1-layout">
+  <div>
+    <div id="fieldSizeBar" style="padding:0;margin-bottom:10px"></div>
+    <div class="race-cards" id="raceCards"></div>
+  </div>
+  <div class="d1-aside" id="d1Aside"></div>
+</div>
 </div>
 
 <div class="detail-view" id="detailView">
@@ -887,7 +1137,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
   <div class="hcmp-sheet">
     <div class="hcmp-topbar">
       <div>
-        <div style="font-size:15px;font-weight:700;color:#e0e0e0">⚖ Horse Comparison</div>
+        <div style="font-size:15px;font-weight:700;color:var(--text)">⚖ Horse Comparison</div>
         <div id="hcmpRaceLabel" style="font-size:12px;color:#666"></div>
       </div>
       <button onclick="hcmpClose()" style="margin-left:auto;background:none;border:1px solid #333;color:#666;padding:5px 12px;border-radius:6px;cursor:pointer;font-size:13px">× Close</button>
@@ -899,7 +1149,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 <button id="betFab" class="bp-toggle-fab" onclick="toggleBetPanel()">🎫<span class="fab-badge">0</span></button>
 
 <script>
-let D=null, st={venue:'all', fieldFilter:'all', comboFilter:false, raceTypeFilter:'all', confidenceFilter:'all', gapFilter:'all', hideBanned:false, openRace:null, sort:'score', sortDir:-1, expanded:null, detailTab:'main', riMode:'rank', h2hPair:null, compareSelect:new Set()};
+let D=null, st={venue:'all', fieldFilter:new Set(), comboFilter:false, raceTypeFilter:'all', raceCodeFilter:'all', confidenceFilter:'all', gapFilter:new Set(), hideBanned:false, openRace:null, sort:'score', sortDir:-1, expanded:null, detailTab:'main', riMode:'rank', h2hPair:null, compareSelect:new Set()};
 
 // ==================== PER-DAY DATA STATUS TRACKER ====================
 function getDayStatus(date){
@@ -1237,7 +1487,7 @@ function buildCDP(runner, race){
   const unknowns=cards.filter(c=>c.status==='untested').map(c=>c.label.toLowerCase());
   if(proven===4) summaryText='Fully proven across all criteria — no suitability concerns.';
   else if(concerns.length) summaryText=`<strong style="color:#f87171">${concerns.join(' & ')} ${concerns.length>1?'are':'is a'} concern${concerns.length>1?'s':''}</strong>${unknowns.length?' · '+unknowns.join(', ')+' untested':''}`;
-  else if(unknowns.length) summaryText=`Proven where tested. <strong style="color:#fbbf24">${unknowns.join(' & ')} untested</strong> — watch for first-time factors.`;
+  else if(unknowns.length) summaryText=`Proven where tested. <strong style="color:#b45309">${unknowns.join(' & ')} untested</strong> — watch for first-time factors.`;
   return {cards,proven,total:4,scoreCls,scoreCol,summaryText};
 }
 
@@ -1810,7 +2060,7 @@ function switchTab(tab){
     ];
     const silverCardsHtml=silverCards.map(c=>`
       <div class="g-metric-card">
-        <div class="g-val ${c.cls}" style="color:#94a3b8">${c.val}</div>
+        <div class="g-val ${c.cls}" style="color:var(--muted)">${c.val}</div>
         <div class="g-label">${c.label}</div>
         <div class="g-sub">${c.sub}</div>
       </div>`).join('');
@@ -1836,7 +2086,7 @@ function switchTab(tab){
     el.innerHTML=`
       <div style="margin-bottom:8px;display:flex;align-items:center;justify-content:space-between">
         <h2 style="font-size:18px;font-weight:700;margin:0">Golden Segment Dashboard</h2>
-        <button onclick="renderGoldenDashboard()" style="background:var(--card);border:1px solid #333;color:var(--muted);padding:4px 12px;border-radius:5px;cursor:pointer;font-size:12px">↻ Refresh</button>
+        <button onclick="renderGoldenDashboard()" style="background:var(--card);border:1px solid var(--border);color:var(--muted);padding:4px 12px;border-radius:5px;cursor:pointer;font-size:12px">↻ Refresh</button>
       </div>
       <p style="color:var(--muted);font-size:12px;margin:0 0 18px">UK non-handicap · gap ≥ 18 · score ≥74 · auto-updates every 60s</p>
 
@@ -1887,7 +2137,7 @@ function switchTab(tab){
       <hr style="border:none;border-top:1px solid #2a2a2a;margin:32px 0">
 
       <div style="margin-bottom:8px">
-        <h2 style="font-size:18px;font-weight:700;margin:0;color:#94a3b8">Silver Segment Dashboard</h2>
+        <h2 style="font-size:18px;font-weight:700;margin:0;color:var(--text)">Silver Segment Dashboard</h2>
       </div>
       <p style="color:var(--muted);font-size:12px;margin:0 0 18px">UK non-handicap · Turf · gap 10–12 · score ≥72 · price &gt;2.0 · auto-updates every 60s</p>
 
@@ -2154,8 +2404,8 @@ function switchTab(tab){
       const topNNote=p.topN==='WIN'?'as a win bet':`if ${p.topN} is available, this is the value bet on the card`;
       const fieldCtx=race.field_size>=12?`${race.field_size}-runner`:`${race.field_size}-runner`;
       return`<div style="margin-top:10px;border-top:1px solid #f59e0b44;padding-top:10px">
-        <div style="font-size:10px;font-weight:700;color:#f59e0b;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">💎 Value Play</div>
-        <div style="font-size:11px;color:#c9d1d9;line-height:1.65">Engine scores ${leader.name} ${absGap}pt clear on Prixm, but the real story is ${r.name}. ${connLine} — ${rprLine}. ${fsNote}, the connections edge may outweigh the raw score gap.${hgNote} Consider ${r.name} ${topNNote}.</div>
+        <div style="font-size:10px;font-weight:700;color:#b45309;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">💎 Value Play</div>
+        <div style="font-size:11px;color:var(--text);line-height:1.65">Engine scores ${leader.name} ${absGap}pt clear on Prixm, but the real story is ${r.name}. ${connLine} — ${rprLine}. ${fsNote}, the connections edge may outweigh the raw score gap.${hgNote} Consider ${r.name} ${topNNote}.</div>
       </div>`;
     }
     // ---- RANK-1: Factual analysis ----
@@ -2184,21 +2434,21 @@ function switchTab(tab){
     if(rprParts.length)lines.push(rprParts.join('. ')+'.');
     return`<div style="margin-top:10px;border-top:1px solid var(--border);padding-top:10px">
       <div style="font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px">Prixm Analysis</div>
-      <div style="font-size:11px;color:#c9d1d9;line-height:1.65">${lines.join(' ')}</div>
+      <div style="font-size:11px;color:var(--text);line-height:1.65">${lines.join(' ')}</div>
     </div>`;
   }
 
   function _tnCard(p){
     const r=p.runner,race=p.race;
     const col=_TN_COLORS[p.tier]||'#888';
-    const segBadge=p.seg?`<span style="font-size:9px;font-weight:700;padding:2px 6px;border-radius:3px;border:1px solid #f59e0b;background:#1a1400;color:#f59e0b;margin-left:6px">${p.seg==='GOLDEN'?'⭐ GOLDEN':p.seg==='SILVER'?'🥈 SILVER':'🥉 BRONZE'}</span>`:'';
+    const segBadge=p.seg?`<span style="font-size:9px;font-weight:700;padding:2px 6px;border-radius:3px;border:1px solid #d97706;background:#fef3c7;color:#b45309;margin-left:6px">${p.seg==='GOLDEN'?'⭐ GOLDEN':p.seg==='SILVER'?'🥈 SILVER':'🥉 BRONZE'}</span>`:'';
     const tierPill=`<span style="font-size:9px;font-weight:800;padding:2px 7px;border-radius:3px;background:${col}22;border:1px solid ${col}44;color:${col};margin-left:6px">${p.tier}</span>`;
-    const betChip=`<span style="font-size:10px;font-weight:800;padding:4px 10px;border-radius:4px;background:${p.topN==='WIN'?col:'transparent'};border:2px solid ${col};color:${p.topN==='WIN'?'#000':col};white-space:nowrap">${p.topN}</span>`;
-    const flags=p.flags.map(f=>`<span style="font-size:9px;font-weight:700;padding:2px 6px;border-radius:3px;margin:2px;display:inline-block;background:${f.c==='pos'?'#052e16':f.c==='neg'?'#2d0a0a':'#111827'};color:${f.c==='pos'?'#4ade80':f.c==='neg'?'#f87171':'#9ca3af'}">${f.t}</span>`).join('');
+    const betChip=`<span style="font-size:10px;font-weight:800;padding:4px 10px;border-radius:4px;background:${p.topN==='WIN'?col:'transparent'};border:2px solid ${col};color:${p.topN==='WIN'?'#fff':col};white-space:nowrap">${p.topN}</span>`;
+    const flags=p.flags.map(f=>`<span style="font-size:9px;font-weight:700;padding:2px 6px;border-radius:3px;margin:2px;display:inline-block;background:${f.c==='pos'?'#dcfce7':f.c==='neg'?'#fee2e2':'#f3f4f6'};color:${f.c==='pos'?'#15803d':f.c==='neg'?'#dc2626':'#6b7280'}">${f.t}</span>`).join('');
     const sb=r.score_breakdown||{};
     const topF=Object.entries(sb).sort((a,b)=>b[1]-a[1]).slice(0,4);
-    const fChips=topF.map(([k,v])=>`<span style="font-size:9px;padding:2px 7px;border-radius:10px;background:${v===topF[0][1]?col+'22':'#1f2937'};border:1px solid ${v===topF[0][1]?col+'44':'#374151'};color:${v===topF[0][1]?col:'#9ca3af'}">${k} ${v}/${(typeof FM!=='undefined'&&FM[k]?.mx)||'?'}</span>`).join(' ');
-    const rank2note=p.rank===2?`<div style="font-size:9px;color:#f59e0b;margin-bottom:6px">⚡ Exceptional #2 — overrides engine leader on signals</div>`:'';
+    const fChips=topF.map(([k,v])=>`<span style="font-size:9px;padding:2px 7px;border-radius:10px;background:${v===topF[0][1]?col+'22':'#f3f4f6'};border:1px solid ${v===topF[0][1]?col+'44':'#e5e7eb'};color:${v===topF[0][1]?col:'#6b7280'}">${k} ${v}/${(typeof FM!=='undefined'&&FM[k]?.mx)||'?'}</span>`).join(' ');
+    const rank2note=p.rank===2?`<div style="font-size:9px;color:#b45309;margin-bottom:6px">⚡ Exceptional #2 — overrides engine leader on signals</div>`:'';
     return`<div style="border:1px solid ${col}33;border-left:3px solid ${col};border-radius:6px;margin-bottom:10px;overflow:hidden;background:var(--card)">
       <div style="display:flex;align-items:center;gap:8px;padding:8px 12px;background:${col}11;border-bottom:1px solid ${col}22;flex-wrap:wrap">
         <span style="font-size:13px;font-weight:800;color:var(--text)">${r.name}</span>${segBadge}${tierPill}
@@ -2227,7 +2477,7 @@ function switchTab(tab){
     const rows=picks.map(p=>`<tr style="border-bottom:1px solid var(--border)">
       <td style="padding:6px 10px;font-weight:700;color:var(--text)">${p.runner.name}</td>
       <td style="padding:6px 10px;color:var(--muted)">${p.race.time} ${p.race.course}</td>
-      <td style="padding:6px 10px">${p.seg?`<span style="color:#f59e0b">${p.seg}</span>`:'—'}</td>
+      <td style="padding:6px 10px">${p.seg?`<span style="color:#b45309">${p.seg}</span>`:'—'}</td>
       <td style="padding:6px 10px;color:${_TN_COLORS[p.tier]};font-weight:700">${p.topN}</td>
       <td style="padding:6px 10px;color:${_TN_COLORS[p.tier]}">${p.tier}</td>
       <td style="padding:6px 10px;color:var(--muted)">${p.race.field_size}</td>
@@ -2255,8 +2505,8 @@ function switchTab(tab){
     if(!el)return;
     const w=window.open('','_blank','width=900,height=700');
     w.document.write(`<!DOCTYPE html><html><head><title>Top Finish — ${window.D?.date||''}</title>
-      <style>body{font-family:Segoe UI,sans-serif;background:#0a0f1a;color:#e5e7eb;padding:20px}
-      table{width:100%;border-collapse:collapse}td,th{padding:6px 10px;border-bottom:1px solid #374151}
+      <style>body{font-family:Segoe UI,sans-serif;background:#f0ede8;color:#111827;padding:20px}
+      table{width:100%;border-collapse:collapse}td,th{padding:6px 10px;border-bottom:1px solid #e5e0d8}
       @media print{body{background:#fff;color:#111}}</style></head>
       <body>${el.innerHTML}</body></html>`);
     w.document.close();
@@ -2321,7 +2571,7 @@ function gapBandLabel(k){return{elite:'Elite 23+',great:'Great 20–23',good:'Go
 function srColor(sr){return sr>=65?'#10b981':sr>=45?'#f59e0b':'#f87171';}
 function roi(wins,runs,spSum){return runs?((spSum-runs)/runs*100):0;}
 function fmt(v,d=0){return v==null?'—':v.toFixed(d);}
-function fmtROI(r){const s=r.toFixed(0);return`<span style="color:${r>=0?'#10b981':'#f87171'};font-weight:700">${r>=0?'+':''}${s}%</span>`;}
+function fmtROI(r){const s=r.toFixed(0);return`<span style="color:${r>=0?'#15803d':'#dc2626'};font-weight:700">${r>=0?'+':''}${s}%</span>`;}
 
 // ---- stat engine ----
 function computeTrackStats(venue){
@@ -2580,7 +2830,7 @@ function wireTips(){
   if(!tip){
     tip=document.createElement('div');
     tip.id='_taTip';
-    tip.style.cssText='position:fixed;background:#1e1e1e;border:1px solid #333;color:#e0e0e0;font-size:12px;padding:6px 10px;border-radius:6px;pointer-events:none;z-index:9999;display:none;max-width:240px;line-height:1.4;white-space:normal';
+    tip.style.cssText='position:fixed;background:var(--card);border:1px solid var(--border);color:var(--text);font-size:12px;padding:6px 10px;border-radius:6px;pointer-events:none;z-index:9999;display:none;max-width:240px;line-height:1.4;white-space:normal';
     document.body.appendChild(tip);
   }
   document.querySelectorAll('#tracksView [data-tip]').forEach(el=>{
@@ -2611,10 +2861,10 @@ function venueListHTML(list){
   const rows=list.map(v=>{
     const col=srColor(v.sr);
     return`<div class="ta-venue-row" onclick="window._taDetail('${v.venue.replace(/'/g,"\\'")}')" data-venue="${v.venue.toLowerCase()}">
-      <div style="font-size:13px;font-weight:600;color:#e0e0e0;flex:1">${v.venue}</div>
+      <div style="font-size:13px;font-weight:600;color:var(--text);flex:1">${v.venue}</div>
       <div style="font-size:12px;color:#555">${v.runs} races</div>
       <div style="display:flex;align-items:center;gap:6px">
-        <div style="width:56px;height:6px;background:#1e1e1e;border-radius:3px"><div style="width:${Math.round(v.sr)}%;height:6px;background:${col};border-radius:3px"></div></div>
+        <div style="width:56px;height:6px;background:#e5e7eb;border-radius:3px"><div style="width:${Math.round(v.sr)}%;height:6px;background:${col};border-radius:3px"></div></div>
         <span style="font-size:13px;font-weight:700;color:${col};min-width:34px">${v.sr.toFixed(0)}%</span>
       </div>
     </div>`;
@@ -2632,7 +2882,7 @@ window._taHome=function(){
   if(!hasData){
     view.innerHTML=`<div style="padding:60px 20px;text-align:center">
       <div style="font-size:40px;margin-bottom:16px">🏇</div>
-      <div style="font-size:16px;font-weight:700;color:#e0e0e0;margin-bottom:8px">No results data loaded</div>
+      <div style="font-size:16px;font-weight:700;color:var(--text);margin-bottom:8px">No results data loaded</div>
       <div style="font-size:13px;color:#888;margin-bottom:20px">Results history must be loaded before track analysis is available.</div>
       <button onclick="window._taHome()" style="background:#f59e0b;color:#000;border:none;padding:8px 20px;border-radius:7px;cursor:pointer;font-weight:700;font-size:13px">↻ Retry</button>
       <div style="font-size:11px;color:#555;margin-top:16px">Run Fetch Results.bat then refresh, or ensure the DB server is running on port 7432.</div>
@@ -2642,9 +2892,9 @@ window._taHome=function(){
   const all=allVenueStats();
   view.innerHTML=`
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap">
-      <div style="font-size:16px;font-weight:700;color:#e0e0e0">🏇 Track Records</div>
+      <div style="font-size:16px;font-weight:700;color:var(--text)">🏇 Track Records</div>
       <div style="font-size:12px;color:#888">${all.length} tracks with ≥5 races · click any to view full analysis</div>
-      <input id="taSearch" placeholder="Search track…" oninput="window._taSearch(this.value)" style="background:#1a1a1a;border:1px solid #2a2a2a;color:#e0e0e0;padding:7px 12px;border-radius:7px;font-size:13px;width:220px;margin-left:auto" autocomplete="off">
+      <input id="taSearch" placeholder="Search track…" oninput="window._taSearch(this.value)" style="background:var(--card);border:1px solid var(--border);color:var(--text);padding:7px 12px;border-radius:7px;font-size:13px;width:220px;margin-left:auto" autocomplete="off">
     </div>
     <div id="taVenueList">${venueListHTML(all)}</div>`;
 };
@@ -2680,10 +2930,10 @@ window._taDetail=function(venue){
     return`<tr><td><span class="ta-conf ta-conf-${c.label.replace(/\s+/g,'-')}">${c.label}</span></td>
       <td>${c.runs}</td><td>${c.wins}</td>
       <td><div style="display:flex;align-items:center;gap:5px;justify-content:flex-end">
-        <div style="width:44px;height:6px;background:#222;border-radius:3px"><div style="width:${pct}%;height:6px;background:${col};border-radius:3px"></div></div>
+        <div style="width:44px;height:6px;background:#e5e7eb;border-radius:3px"><div style="width:${pct}%;height:6px;background:${col};border-radius:3px"></div></div>
         <span style="font-weight:700;color:${col};min-width:30px">${pct}%</span></div></td>
       <td><div style="display:flex;align-items:center;gap:5px;justify-content:flex-end">
-        <div style="width:44px;height:6px;background:#222;border-radius:3px"><div style="width:${ppct}%;height:6px;background:${pcol};border-radius:3px;opacity:.7"></div></div>
+        <div style="width:44px;height:6px;background:#e5e7eb;border-radius:3px"><div style="width:${ppct}%;height:6px;background:${pcol};border-radius:3px;opacity:.7"></div></div>
         <span style="font-weight:700;color:${pcol};min-width:30px">${ppct}%</span></div></td>
       <td>${fmtROI(c.roi)}</td></tr>`;
   }).join('');
@@ -2694,10 +2944,10 @@ window._taDetail=function(venue){
     return`<tr><td style="font-size:12px">${g.label}</td>
       <td>${g.runs}</td><td>${g.wins}</td>
       <td><div style="display:flex;align-items:center;gap:5px;justify-content:flex-end">
-        <div style="width:44px;height:6px;background:#222;border-radius:3px"><div style="width:${pct}%;height:6px;background:${col};border-radius:3px"></div></div>
+        <div style="width:44px;height:6px;background:#e5e7eb;border-radius:3px"><div style="width:${pct}%;height:6px;background:${col};border-radius:3px"></div></div>
         <span style="font-weight:700;color:${col};min-width:30px">${pct}%</span></div></td>
       <td><div style="display:flex;align-items:center;gap:5px;justify-content:flex-end">
-        <div style="width:44px;height:6px;background:#222;border-radius:3px"><div style="width:${ppct}%;height:6px;background:${pcol};border-radius:3px;opacity:.7"></div></div>
+        <div style="width:44px;height:6px;background:#e5e7eb;border-radius:3px"><div style="width:${ppct}%;height:6px;background:${pcol};border-radius:3px;opacity:.7"></div></div>
         <span style="font-weight:700;color:${pcol};min-width:30px">${ppct}%</span></div></td>
       <td>${fmtROI(g.roi)}</td></tr>`;
   }).join('');
@@ -2720,7 +2970,7 @@ window._taDetail=function(venue){
       <div style="font-size:10px;font-weight:700;color:${col};text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px">${SEG_ICO[sg.label]||''} ${sg.label}</div>
       <div style="font-size:20px;font-weight:800;color:${col};line-height:1">${sg.sr.toFixed(0)}%</div>
       <div style="font-size:11px;color:#555;margin-top:2px">${sg.wins}/${sg.runs} win</div>
-      <div style="font-size:12px;font-weight:700;color:#94a3b8;margin-top:4px">${sg.pr.toFixed(0)}% place</div>
+      <div style="font-size:12px;font-weight:700;color:var(--muted);margin-top:4px">${sg.pr.toFixed(0)}% place</div>
       <div style="font-size:11px;margin-top:3px;color:${sg.roi>=0?'#10b981':'#f87171'};font-weight:700">${sg.roi>=0?'+':''}${sg.roi.toFixed(0)}% ROI</div>
     </div>`;
   }).join('');
@@ -2740,8 +2990,8 @@ window._taDetail=function(venue){
         <table class="ta-table">
           <thead><tr>
             <th>Jockey</th><th>Rides</th><th>Wins</th>
-            <th id="taJkyThSR" onclick="window._taJkySort('sr')" style="cursor:pointer;user-select:none;white-space:nowrap">Win% <span id="taJkyIconSR" style="color:#f59e0b;font-size:10px"></span></th>
-            <th id="taJkyThPR" onclick="window._taJkySort('pr')" style="cursor:pointer;user-select:none;white-space:nowrap">Place% <span id="taJkyIconPR" style="color:#f59e0b;font-size:10px"></span></th>
+            <th id="taJkyThSR" onclick="window._taJkySort('sr')" style="cursor:pointer;user-select:none;white-space:nowrap">Win% <span id="taJkyIconSR" style="color:#b45309;font-size:10px"></span></th>
+            <th id="taJkyThPR" onclick="window._taJkySort('pr')" style="cursor:pointer;user-select:none;white-space:nowrap">Place% <span id="taJkyIconPR" style="color:#b45309;font-size:10px"></span></th>
           </tr></thead>
           <tbody id="taJkyTbody"></tbody>
         </table>
@@ -2749,7 +2999,7 @@ window._taDetail=function(venue){
       <div>
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap">
           <span style="font-size:12px;color:#888">Finish positions:</span>
-          <select id="taJkySelect" onchange="window._taJockeyChart(this.value)" style="background:#1a1a1a;border:1px solid #333;color:#e0e0e0;padding:5px 10px;border-radius:6px;font-size:12px;flex:1;min-width:0">${jkSelect}</select>
+          <select id="taJkySelect" onchange="window._taJockeyChart(this.value)" style="background:var(--card);border:1px solid var(--border);color:var(--text);padding:5px 10px;border-radius:6px;font-size:12px;flex:1;min-width:0">${jkSelect}</select>
         </div>
         <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px;align-items:center">
           <span style="font-size:11px;color:#555">Year:</span>
@@ -2769,7 +3019,7 @@ window._taDetail=function(venue){
   const ins=generateInsights(s);
   const insHtml=ins.map(i=>`<div class="ta-insight ta-insight-${i.type}">
     <div style="font-size:15px;flex-shrink:0;margin-top:1px">${i.icon}</div>
-    <div style="font-size:13px;line-height:1.55;color:#e0e0e0">${i.text}</div>
+    <div style="font-size:13px;line-height:1.55;color:var(--text)">${i.text}</div>
   </div>`).join('');
 
   // history table
@@ -2800,7 +3050,7 @@ window._taDetail=function(venue){
   view.innerHTML=`
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;flex-wrap:wrap">
       <button onclick="window._taHome()" style="background:none;border:1px solid #2a2a2a;color:#666;padding:5px 12px;border-radius:6px;cursor:pointer;font-size:12px">← All Tracks</button>
-      <div style="font-size:20px;font-weight:800;color:#e0e0e0">🏇 ${venue}</div>
+      <div style="font-size:20px;font-weight:800;color:var(--text)">🏇 ${venue}</div>
       <div style="font-size:12px;color:#555">${s.totalRuns} races · ${oldest} → ${newest}</div>
       <button onclick="window._taShowExport(window._taCurrentStats)" style="margin-left:auto;background:#f59e0b;color:#000;border:none;padding:6px 14px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:700">⬇ Export PDF</button>
     </div>
@@ -2893,11 +3143,11 @@ window._taDetail=function(venue){
 function _jkyRowHtml(j){
   const col=srColor(j.sr);
   return`<tr class="ta-hist-row ta-jky-row" onclick="window._taJockeyChart('${j.name.replace(/'/g,"\\'").replace(/"/g,'&quot;')}',true)" style="cursor:pointer">
-    <td style="font-size:12px;font-weight:600;color:#e0e0e0;max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${j.name}</td>
+    <td style="font-size:12px;font-weight:600;color:var(--text);max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${j.name}</td>
     <td>${j.runs}</td>
     <td style="color:#10b981">${j.wins}</td>
     <td><span style="font-weight:700;color:${col}">${j.sr.toFixed(0)}%</span></td>
-    <td><span style="color:#94a3b8">${j.pr.toFixed(0)}%</span></td>
+    <td><span style="color:var(--muted)">${j.pr.toFixed(0)}%</span></td>
   </tr>`;
 }
 
@@ -2978,18 +3228,18 @@ window._taShowExport=function(stats){
 
       <h3 style="font-size:12px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">Sections to include</h3>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px">
-        <label style="display:flex;align-items:center;gap:7px;font-size:13px;color:#e0e0e0;cursor:pointer"><input type="checkbox" id="xConf" checked style="accent-color:#f59e0b"> Confidence breakdown</label>
-        <label style="display:flex;align-items:center;gap:7px;font-size:13px;color:#e0e0e0;cursor:pointer"><input type="checkbox" id="xGap" checked style="accent-color:#f59e0b"> Gap band analysis</label>
-        <label style="display:flex;align-items:center;gap:7px;font-size:13px;color:#e0e0e0;cursor:pointer"><input type="checkbox" id="xGoing" checked style="accent-color:#f59e0b"> Going breakdown</label>
-        <label style="display:flex;align-items:center;gap:7px;font-size:13px;color:#e0e0e0;cursor:pointer"><input type="checkbox" id="xSeg" checked style="accent-color:#f59e0b"> Segment performance</label>
-        <label style="display:flex;align-items:center;gap:7px;font-size:13px;color:#e0e0e0;cursor:pointer"><input type="checkbox" id="xIns" checked style="accent-color:#f59e0b"> Winning patterns</label>
-        <label style="display:flex;align-items:center;gap:7px;font-size:13px;color:#e0e0e0;cursor:pointer"><input type="checkbox" id="xHist" checked style="accent-color:#f59e0b"> Race history</label>
+        <label style="display:flex;align-items:center;gap:7px;font-size:13px;color:var(--text);cursor:pointer"><input type="checkbox" id="xConf" checked style="accent-color:#f59e0b"> Confidence breakdown</label>
+        <label style="display:flex;align-items:center;gap:7px;font-size:13px;color:var(--text);cursor:pointer"><input type="checkbox" id="xGap" checked style="accent-color:#f59e0b"> Gap band analysis</label>
+        <label style="display:flex;align-items:center;gap:7px;font-size:13px;color:var(--text);cursor:pointer"><input type="checkbox" id="xGoing" checked style="accent-color:#f59e0b"> Going breakdown</label>
+        <label style="display:flex;align-items:center;gap:7px;font-size:13px;color:var(--text);cursor:pointer"><input type="checkbox" id="xSeg" checked style="accent-color:#f59e0b"> Segment performance</label>
+        <label style="display:flex;align-items:center;gap:7px;font-size:13px;color:var(--text);cursor:pointer"><input type="checkbox" id="xIns" checked style="accent-color:#f59e0b"> Winning patterns</label>
+        <label style="display:flex;align-items:center;gap:7px;font-size:13px;color:var(--text);cursor:pointer"><input type="checkbox" id="xHist" checked style="accent-color:#f59e0b"> Race history</label>
       </div>
 
       <div style="display:flex;gap:14px;margin-bottom:18px;flex-wrap:wrap">
         <div>
           <div style="font-size:11px;color:#666;margin-bottom:4px">History rows</div>
-          <select id="xHistN" style="background:#1a1a1a;border:1px solid #333;color:#e0e0e0;padding:5px 10px;border-radius:6px;font-size:12px">
+          <select id="xHistN" style="background:var(--card);border:1px solid var(--border);color:var(--text);padding:5px 10px;border-radius:6px;font-size:12px">
             <option value="10">Last 10</option>
             <option value="20" selected>Last 20</option>
             <option value="50">Last 50</option>
@@ -2998,7 +3248,7 @@ window._taShowExport=function(stats){
         </div>
         <div>
           <div style="font-size:11px;color:#666;margin-bottom:4px">Report theme</div>
-          <select id="xTheme" style="background:#1a1a1a;border:1px solid #333;color:#e0e0e0;padding:5px 10px;border-radius:6px;font-size:12px">
+          <select id="xTheme" style="background:var(--card);border:1px solid var(--border);color:var(--text);padding:5px 10px;border-radius:6px;font-size:12px">
             <option value="light">Light (print-friendly)</option>
             <option value="dark">Dark</option>
           </select>
@@ -3011,7 +3261,7 @@ window._taShowExport=function(stats){
 
       <div style="display:flex;gap:10px">
         <button onclick="window._taRunExport()" style="background:#f59e0b;color:#000;border:none;padding:9px 20px;border-radius:7px;cursor:pointer;font-weight:700;font-size:13px">Generate PDF</button>
-        <button onclick="closeModal()" style="background:#1e1e1e;color:#888;border:1px solid #333;padding:9px 16px;border-radius:7px;cursor:pointer;font-size:13px">Cancel</button>
+        <button onclick="closeModal()" style="background:#f3f4f6;color:#6b7280;border:1px solid #d1d5db;padding:9px 16px;border-radius:7px;cursor:pointer;font-size:13px">Cancel</button>
       </div>
     </div>
   </div>`;
@@ -3230,7 +3480,7 @@ window.renderTracksTab=function(){
     else window._taHome();
   }catch(e){
     const v=document.getElementById('tracksView');
-    if(v)v.innerHTML=`<div style="padding:30px;color:#f87171;font-size:13px;background:#1a0a0a;border:1px solid #f87171;border-radius:8px;margin:20px 0"><strong>Track Analysis Error:</strong><br><code>${e.message}</code><br><pre style="color:#aaa;font-size:11px;margin-top:8px;white-space:pre-wrap">${e.stack||''}</pre></div>`;
+    if(v)v.innerHTML=`<div style="padding:30px;color:#dc2626;font-size:13px;background:#fef2f2;border:1px solid #fecaca;border-radius:8px;margin:20px 0"><strong>Track Analysis Error:</strong><br><code>${e.message}</code><br><pre style="color:#aaa;font-size:11px;margin-top:8px;white-space:pre-wrap">${e.stack||''}</pre></div>`;
     console.error('TrackAnalysis error:',e);
   }
 };
@@ -3277,8 +3527,8 @@ function renderResultsLogger(venueKey,raceIdx){
       </div>
       <div style="font-size:12px;color:var(--muted);line-height:1.8">
         ${ranked.map(r=>{const priceBadge=r.finish_pos===1&&r.sp?` <span style="font-size:10px;color:var(--accent);opacity:0.85">[${r.sp_raw||r.sp} SP]</span>`:'';return`<span style="display:inline-block;margin:2px 4px;padding:2px 8px;border-radius:4px;background:var(--card2)"><b style="color:var(--accent)">${r.finish_pos}.</b> ${r.name}${priceBadge}</span>`;}).join('')}
-        ${nrs.length?`<span style="display:inline-block;margin:2px 4px;padding:2px 8px;border-radius:4px;background:#2a1a1a;color:#ef4444;text-decoration:line-through">${nrs.map(r=>r.name).join(', ')} (NR)</span>`:''}
-        ${pus.length?`<span style="display:inline-block;margin:2px 4px;padding:2px 8px;border-radius:4px;background:#2a1a0a;color:#f59e0b;text-decoration:line-through">${pus.map(r=>r.name).join(', ')} (PU)</span>`:''}
+        ${nrs.length?`<span style="display:inline-block;margin:2px 4px;padding:2px 8px;border-radius:4px;background:#fef2f2;color:#dc2626;border:1px solid #fecaca;text-decoration:line-through">${nrs.map(r=>r.name).join(', ')} (NR)</span>`:''}
+        ${pus.length?`<span style="display:inline-block;margin:2px 4px;padding:2px 8px;border-radius:4px;background:#fff7ed;color:#d97706;border:1px solid #fed7aa;text-decoration:line-through">${pus.map(r=>r.name).join(', ')} (PU)</span>`:''}
       </div>
     </div>`;
   }
@@ -3289,7 +3539,7 @@ function renderResultsLogger(venueKey,raceIdx){
       <div class="ri-mode-toggle">
         <button class="ri-mode-btn ${mode==='rank'?'active-rank':''}" onclick="st.riMode='rank';renderDetail().catch(e=>console.error('renderDetail error:',e))">🏇 Rank</button>
         <button class="ri-mode-btn ${mode==='nr'?'active-nr':''}" onclick="st.riMode='nr';renderDetail().catch(e=>console.error('renderDetail error:',e))">🚫 NR</button>
-        <button class="ri-mode-btn ${mode==='pu'?'active-nr':''}" onclick="st.riMode='pu';renderDetail().catch(e=>console.error('renderDetail error:',e))" style="${mode==='pu'?'background:#f59e0b22;color:#f59e0b;border-color:#f59e0b':''}">⛔ PU</button>
+        <button class="ri-mode-btn ${mode==='pu'?'active-nr':''}" onclick="st.riMode='pu';renderDetail().catch(e=>console.error('renderDetail error:',e))" style="${mode==='pu'?'background:rgba(180,83,9,.12);color:#b45309;border-color:#b45309':''}">⛔ PU</button>
       </div>
     </div>
     <div class="ri-tiles">${race.runners.map(r=>{
@@ -3886,7 +4136,7 @@ async function renderPerformance(){
       h+=`<div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:16px"><h3 style="margin:0 0 4px;font-size:14px">Win Prediction Accuracy</h3><p style="font-size:11px;color:var(--muted);margin:0 0 10px">TOP PICK / STRONG / SOLID — should finish near the top</p><table style="width:100%;font-size:13px;border-collapse:collapse"><tr style="color:var(--muted);font-size:11px;text-align:left"><th style="padding:6px 8px">Tier</th><th>Count</th><th>Win %</th><th>Placed %</th><th>Expected %</th><th>Status</th></tr>${posTiers.map(t=>{
         const diff=parseFloat(t.place_rate)-parseFloat(t.exp);
         const st=diff>5?'✅ Beating baseline':diff<-5?'⚠️ Below baseline':'➖ Near baseline';
-        return `<tr style="border-top:1px solid var(--border)"><td style="padding:6px 8px;font-weight:600;color:var(--accent)">${t.tier}</td><td>${t.count}</td><td style="color:#34d399;font-weight:600">${t.win_rate}%</td><td style="color:#34d399">${t.place_rate}%</td><td style="color:var(--muted)">${t.exp}%</td><td>${st}</td></tr>`;
+        return `<tr style="border-top:1px solid var(--border)"><td style="padding:6px 8px;font-weight:600;color:var(--accent)">${t.tier}</td><td>${t.count}</td><td style="color:#15803d;font-weight:600">${t.win_rate}%</td><td style="color:#15803d">${t.place_rate}%</td><td style="color:var(--muted)">${t.exp}%</td><td>${st}</td></tr>`;
       }).join('')}</table></div>`;
     }
     if(negTiers.length){
@@ -4582,7 +4832,7 @@ function showGuide(){
           <div style="color:var(--muted)">Auto-adjusts scoring weights from your logged results daily</div>
         </div>
         <div style="background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:8px">
-          <div style="font-weight:700;color:#a78bfa">Engine 4: Form Momentum</div>
+          <div style="font-weight:700;color:#7c3aed">Engine 4: Form Momentum</div>
           <div style="color:var(--muted)">Linear regression on form → Rising/Steady/Falling trajectory</div>
         </div>
         <div style="background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:8px">
@@ -4640,12 +4890,12 @@ function showGuide(){
 
       <h3 style="margin-top:10px"><span class="gi">🏷️</span> Confidence Tiers</h3>
       <div class="guide-tier-grid">
-        <div class="gt" style="background:rgba(5,150,105,.25);color:#34d399">TOP PICK (75+)</div>
-        <div class="gt" style="background:rgba(13,148,136,.2);color:#2dd4bf">STRONG (65-74)</div>
-        <div class="gt" style="background:rgba(37,99,235,.2);color:#60a5fa">SOLID (55-64)</div>
-        <div class="gt" style="background:rgba(217,119,6,.2);color:#fbbf24">MODERATE (45-54)</div>
-        <div class="gt" style="background:rgba(220,38,38,.2);color:#f87171">WEAK (35-44)</div>
-        <div class="gt" style="background:rgba(127,29,29,.25);color:#fca5a5">AVOID (&lt;35)</div>
+        <div class="gt" style="background:rgba(21,128,61,.15);color:#15803d">TOP PICK (75+)</div>
+        <div class="gt" style="background:rgba(13,148,136,.15);color:#0f766e">STRONG (65-74)</div>
+        <div class="gt" style="background:rgba(37,99,235,.12);color:#1d4ed8">SOLID (55-64)</div>
+        <div class="gt" style="background:rgba(180,83,9,.12);color:#b45309">MODERATE (45-54)</div>
+        <div class="gt" style="background:rgba(220,38,38,.12);color:#dc2626">WEAK (35-44)</div>
+        <div class="gt" style="background:rgba(220,38,38,.08);color:#dc2626">AVOID (&lt;35)</div>
       </div>
     </div>
 
@@ -4796,11 +5046,11 @@ function showGuide(){
       <h3><span class="gi">✅</span> Per-Day Status Bar</h3>
       <p>Top-right corner shows 5 pipeline pills for the <b>currently selected date</b>:</p>
       <div style="display:flex;gap:4px;margin:8px 0;flex-wrap:wrap">
-        <span style="font-size:9px;font-weight:600;padding:2px 7px;border-radius:4px;background:rgba(5,150,105,.15);color:#34d399">✓ Results 8/8</span>
-        <span style="font-size:9px;font-weight:600;padding:2px 7px;border-radius:4px;background:rgba(5,150,105,.15);color:#34d399">✓ Picks</span>
-        <span style="font-size:9px;font-weight:600;padding:2px 7px;border-radius:4px;background:rgba(5,150,105,.15);color:#34d399">✓ Calibrated</span>
-        <span style="font-size:9px;font-weight:600;padding:2px 7px;border-radius:4px;background:rgba(5,150,105,.15);color:#34d399">✓ Threshold</span>
-        <span style="font-size:9px;font-weight:600;padding:2px 7px;border-radius:4px;background:rgba(5,150,105,.15);color:#34d399">✓ PDF</span>
+        <span style="font-size:9px;font-weight:600;padding:2px 7px;border-radius:4px;background:rgba(21,128,61,.12);color:#15803d">✓ Results 8/8</span>
+        <span style="font-size:9px;font-weight:600;padding:2px 7px;border-radius:4px;background:rgba(21,128,61,.12);color:#15803d">✓ Picks</span>
+        <span style="font-size:9px;font-weight:600;padding:2px 7px;border-radius:4px;background:rgba(21,128,61,.12);color:#15803d">✓ Calibrated</span>
+        <span style="font-size:9px;font-weight:600;padding:2px 7px;border-radius:4px;background:rgba(21,128,61,.12);color:#15803d">✓ Threshold</span>
+        <span style="font-size:9px;font-weight:600;padding:2px 7px;border-radius:4px;background:rgba(21,128,61,.12);color:#15803d">✓ PDF</span>
       </div>
       <p>All green = <b>"✓ Day Complete"</b> — tomorrow's predictions are informed by full data. Partial shows X/5 count.</p>
     </div>
@@ -5208,7 +5458,7 @@ function _hsSectionJockey(r,race){
     <div class="hs-person-card">
       <div class="hs-avatar" style="border-color:${col}44;color:${col}">${initials}</div>
       <div style="flex:1">
-        <div style="font-size:13px;font-weight:700;color:#e0e0e0;margin-bottom:1px">${r.jockey||'?'}</div>
+        <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:1px">${r.jockey||'?'}</div>
         <div style="font-size:11px;color:#555;margin-bottom:8px">Riding ${r.name} today</div>
         <div class="hs-person-stats">
           <div><div class="hs-pstat-val" style="color:${scl(overall.winPct)}">${overall.winPct}%</div><div class="hs-pstat-lbl">Overall Win%</div></div>
@@ -5256,12 +5506,12 @@ function _hsSectionTrainer(r,race){
   const initials=(r.trainer||'?').split(' ').filter(w=>/^[a-zA-Z]/.test(w)).map(w=>w[0]).join('').slice(0,2);
   const col='#a78bfa';
   const scl=v=>v>=20?'#10b981':v>=14?'#f59e0b':'#f87171';
-  const bar=(pct,c)=>`<div style="flex:1;height:6px;background:#1a1a1a;border-radius:2px;overflow:hidden"><div style="width:${Math.min(pct,100)}%;height:100%;background:${c};border-radius:2px"></div></div>`;
+  const bar=(pct,c)=>`<div style="flex:1;height:6px;background:#e5e7eb;border-radius:2px;overflow:hidden"><div style="width:${Math.min(pct,100)}%;height:100%;background:${c};border-radius:2px"></div></div>`;
   return`<div class="hs-section active">
     <div class="hs-person-card">
       <div class="hs-avatar" style="border-color:${col}44;color:${col}">${initials}</div>
       <div style="flex:1">
-        <div style="font-size:13px;font-weight:700;color:#e0e0e0;margin-bottom:1px">${r.trainer||'?'}</div>
+        <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:1px">${r.trainer||'?'}</div>
         <div style="font-size:11px;color:#555;margin-bottom:8px">Trains ${r.name}</div>
         <div class="hs-person-stats">
           <div><div class="hs-pstat-val" style="color:${scl(overall.winPct)}">${overall.winPct}%</div><div class="hs-pstat-lbl">Overall Win%</div></div>
@@ -5304,7 +5554,7 @@ function _hsSectionField(r,race){
     return`<div class="hs-field-row${isMe?' is-me':''}">
       <div style="font-size:11px;color:${isMe?'#f59e0b':'#444'};width:18px;text-align:center">${i+1}</div>
       <div style="font-size:12px;font-weight:${isMe?800:400};color:${isMe?'#e0e0e0':'#666'};flex:1">${h.name}${isMe?' <span style="font-size:9px;color:#f59e0b">◀</span>':''}</div>
-      <div style="width:90px;height:5px;background:#1a1a1a;border-radius:2px;overflow:hidden"><div style="width:${pct.toFixed(0)}%;height:100%;background:${col};border-radius:2px"></div></div>
+      <div style="width:90px;height:5px;background:#e5e7eb;border-radius:2px;overflow:hidden"><div style="width:${pct.toFixed(0)}%;height:100%;background:${col};border-radius:2px"></div></div>
       <div style="font-size:11px;color:${col};width:28px;text-align:right">${h.score||0}</div>
       <div style="font-size:10px;color:#444;width:38px;text-align:right">${h.sp||h.odds||'?'}</div>
     </div>`;
@@ -5386,12 +5636,12 @@ function _hcmpBuildBody(runners,race){
     const vWins=vRides.filter(x=>x.pos===1).length;
     const vPct=vRides.length?Math.round(vWins/vRides.length*100):0;
     return `<div class="hcmp-hcard" style="border-top:3px solid ${col}">
-      <div style="font-size:13px;font-weight:800;color:#e0e0e0;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${r.name}</div>
+      <div style="font-size:13px;font-weight:800;color:var(--text);margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${r.name}</div>
       <div style="font-size:11px;color:#666;margin-bottom:10px">${r.jockey||'?'} · ${r.trainer||'?'}</div>
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
         <span style="font-size:26px;font-weight:800;color:${col};line-height:1">${r.score}</span>
         <div><div style="font-size:10px;color:#666">${scorePct}% of max</div>
-        <div style="width:80px;height:5px;background:#1e1e1e;border-radius:2px;overflow:hidden;margin-top:3px"><div style="width:${scorePct}%;height:100%;background:${col};border-radius:2px"></div></div></div>
+        <div style="width:80px;height:5px;background:#e5e7eb;border-radius:2px;overflow:hidden;margin-top:3px"><div style="width:${scorePct}%;height:100%;background:${col};border-radius:2px"></div></div></div>
       </div>
       ${fBars}
       <div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:8px">${cdpHtml}</div>
@@ -5430,8 +5680,8 @@ function _hcmpBuildBody(runners,race){
     const initials=(r.jockey||'?').split(' ').map(w=>w[0]).join('').slice(0,2);
     return `<div class="hcmp-jcard" style="border-top:3px solid ${col}">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
-        <div style="width:34px;height:34px;border-radius:50%;background:#1a1a1a;border:2px solid ${col}40;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:${col};flex-shrink:0">${initials}</div>
-        <div><div style="font-size:13px;font-weight:700;color:#e0e0e0">${r.jockey||'?'}</div><div style="font-size:11px;color:${col}">on ${r.name}</div></div>
+        <div style="width:34px;height:34px;border-radius:50%;background:#f3f4f6;border:2px solid ${col}60;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:${col};flex-shrink:0">${initials}</div>
+        <div><div style="font-size:13px;font-weight:700;color:var(--text)">${r.jockey||'?'}</div><div style="font-size:11px;color:${col}">on ${r.name}</div></div>
       </div>
       <div style="display:flex;gap:8px;margin-bottom:10px">
         <div class="hcmp-stat"><div class="hcmp-stat-val" style="color:${col}">${hist.length}</div><div class="hcmp-stat-lbl">Rides</div></div>
@@ -5590,6 +5840,91 @@ function _hcmpFactorBars(runners){
   return`<svg width="100%" viewBox="0 0 ${W} ${H}" style="overflow:visible;display:block">${rows}<g transform="translate(${pL},${H-18})">${legEl}</g></svg>`;
 }
 
+function renderD1Stats(){
+  const el=document.getElementById('d1StatsStrip');
+  if(!el||!D||!D.venues) return;
+  const allRaces=Object.values(D.venues).flatMap(v=>v.races);
+  const total=allRaces.length;
+  const goldenCount=allRaces.filter(r=>getGoldenFlags(r)).length;
+  const silverCount=allRaces.filter(r=>getSilverFlags(r)).length;
+  const bronzeCount=allRaces.filter(r=>getBronzeFlags(r)).length;
+  const hist=window._resultsHistory;
+  const today=D.date;
+  let plHtml='<div class="d1-ss"><div class="d1-ss-n">—</div><div class="d1-ss-l">P&amp;L Today</div></div>';
+  let srHtml='';
+  if(hist&&hist.races&&today){
+    const todayR=hist.races.filter(h=>h.date===today&&h.result);
+    if(todayR.length){
+      const wins=todayR.filter(h=>h.result==='win'||h.result==='Won');
+      const pl=todayR.reduce((a,h)=>a+(h.profit||0),0);
+      const sr=todayR.length?Math.round(wins.length/todayR.length*100):0;
+      plHtml=`<div class="d1-ss ${pl>=0?'grn':'red'}"><div class="d1-ss-n">${pl>=0?'+':''}£${Math.abs(pl).toFixed(0)}</div><div class="d1-ss-l">P&amp;L Today</div></div>`;
+      srHtml=`<div class="d1-ss"><div class="d1-ss-n">${sr}%</div><div class="d1-ss-l">Strike Rate</div></div>`;
+    }
+  }
+  el.innerHTML=`
+    <div class="d1-ss"><div class="d1-ss-n">${total}</div><div class="d1-ss-l">Races</div></div>
+    <div class="d1-ss grn"><div class="d1-ss-n">${goldenCount}</div><div class="d1-ss-l">Golden</div></div>
+    <div class="d1-ss${silverCount>0?' amb':''}"><div class="d1-ss-n">${silverCount}</div><div class="d1-ss-l">Silver</div></div>
+    <div class="d1-ss"><div class="d1-ss-n">${bronzeCount}</div><div class="d1-ss-l">Bronze</div></div>
+    ${plHtml}${srHtml}
+  `;
+}
+
+function renderD1Sidebar(){
+  const el=document.getElementById('d1Aside');
+  if(!el||!D||!D.venues) return;
+  const date=D.date||'';
+  const savedPicks=loadTop10Picks(date);
+  const rawPicks=savedPicks&&savedPicks.picks&&savedPicks.picks.length?savedPicks.picks:getTop10Picks(D);
+  const prixm=getPrixmPicks(rawPicks);
+  let picksHtml='<div style="padding:12px 14px;font-size:12px;color:#9ca3af">No qualifying picks today</div>';
+  if(prixm.length){
+    picksHtml=prixm.slice(0,6).map(p=>{
+      const catCls=p.category==='NAP'?'d1-cb-nap':p.category==='WIN'?'d1-cb-win':p.category==='STRONG'?'d1-cb-strong':'d1-cb-place';
+      return `<div class="d1-pick-card" onclick="openRace('${p.venueKey}',${p.raceIdx}).catch(e=>{})">
+        <div style="display:flex;align-items:center;gap:5px;margin-bottom:3px">
+          <span class="d1-cat-badge ${catCls}">${p.category}</span>
+          <span style="font-size:9px;color:#9ca3af;margin-left:auto">${p.time||''}</span>
+        </div>
+        <div class="d1-pick-horse">${p.horse}</div>
+        <div class="d1-pick-race">${p.venue||''} · Edge ${p.edge||0}</div>
+      </div>`;
+    }).join('');
+  }
+  const hist=window._resultsHistory;
+  let plHtml='<div class="d1-pl-row"><span class="d1-pl-label">No results today</span></div>';
+  if(hist&&hist.races&&date){
+    const todayR=hist.races.filter(h=>h.date===date&&h.result);
+    if(todayR.length){
+      const wins=todayR.filter(h=>h.result==='win'||h.result==='Won');
+      const pl=todayR.reduce((a,h)=>a+(h.profit||0),0);
+      const sr=todayR.length?Math.round(wins.length/todayR.length*100):0;
+      plHtml=`
+        <div class="d1-pl-row"><span class="d1-pl-label">Settled</span><span class="d1-pl-val">${todayR.length}</span></div>
+        <div class="d1-pl-row"><span class="d1-pl-label">Wins</span><span class="d1-pl-val up">${wins.length}</span></div>
+        <div class="d1-pl-row"><span class="d1-pl-label">Strike Rate</span><span class="d1-pl-val">${sr}%</span></div>
+        <div class="d1-pl-row"><span class="d1-pl-label">P&amp;L</span><span class="d1-pl-val ${pl>=0?'up':'down'}">${pl>=0?'+':''}£${Math.abs(pl).toFixed(2)}</span></div>
+      `;
+    }
+  }
+  el.innerHTML=`
+    <div class="d1-panel">
+      <div class="d1-panel-hdr">
+        <span class="d1-panel-title">Prixm Picks</span>
+        <span class="d1-panel-date">${date}</span>
+      </div>
+      ${picksHtml}
+    </div>
+    <div class="d1-panel">
+      <div class="d1-panel-hdr">
+        <span class="d1-panel-title">Today's Results</span>
+      </div>
+      ${plHtml}
+    </div>
+  `;
+}
+
 async function render(){
   window.D=D;
   const dd=document.getElementById('dateDisp'),sd=document.getElementById('statusDisp');
@@ -5628,6 +5963,8 @@ async function render(){
     renderVenueBar();
     renderFieldSizeBar();
     renderRaceCards();
+    renderD1Stats();
+    renderD1Sidebar();
   }
   await renderStatusBar();
   renderPDFButton();
@@ -6091,10 +6428,10 @@ function renderVerificationReport(verif,pick,id){
   const casCol=cas<31?'#34d399':cas<51?'#fbbf24':cas<71?'#f97316':'#f87171';
   const confCol=confidence>=65?'#34d399':confidence>=45?'#fbbf24':'#f87171';
   let body='';
-  if(verifiedFactors.length) body+=`<div style="margin-bottom:4px;color:var(--muted)">Verified (${verifiedFactors.length}/${totalPositiveFactors}): <span style="color:#34d399">${verifiedFactors.join(', ')}</span></div>`;
+  if(verifiedFactors.length) body+=`<div style="margin-bottom:4px;color:var(--muted)">Verified (${verifiedFactors.length}/${totalPositiveFactors}): <span style="color:#15803d">${verifiedFactors.join(', ')}</span></div>`;
   if(unverifiedPositives.length){
-    body+=`<div style="margin-bottom:2px;color:var(--muted)">Unverified (${unverifiedPositives.length}): <span style="color:#fbbf24">${unverifiedPositives.map(u=>u.factor).join(', ')}</span></div>`;
-    unverifiedPositives.forEach(u=>{body+=`<div style="color:#fbbf24;padding-left:10px;margin-bottom:2px">⚠ ${u.reason}</div>`;});
+    body+=`<div style="margin-bottom:2px;color:var(--muted)">Unverified (${unverifiedPositives.length}): <span style="color:#b45309">${unverifiedPositives.map(u=>u.factor).join(', ')}</span></div>`;
+    unverifiedPositives.forEach(u=>{body+=`<div style="color:#b45309;padding-left:10px;margin-bottom:2px">⚠ ${u.reason}</div>`;});
   }
   if(casFlags.length){
     body+=`<div style="margin-top:4px;margin-bottom:2px;color:var(--muted);font-weight:600">Counter-arguments:</div>`;
@@ -6162,8 +6499,8 @@ function renderPrixmPicks(picks, hist){
     const catLabel=p.category==='NAP'?'NAP — best bet of the day':p.category;
     // Result tag
     let resultTag='';
-    if(st==='won') resultTag=`<span class="prixm-result-tag" style="color:#34d399;background:rgba(5,150,105,.2)">✓ WON ${res.pos?ordinal(res.pos):''}</span>`;
-    else if(st==='placed') resultTag=`<span class="prixm-result-tag" style="color:#60a5fa;background:rgba(59,130,246,.15)">PLACED ${ordinal(res.pos)}</span>`;
+    if(st==='won') resultTag=`<span class="prixm-result-tag" style="color:#15803d;background:rgba(21,128,61,.12)">✓ WON ${res.pos?ordinal(res.pos):''}</span>`;
+    else if(st==='placed') resultTag=`<span class="prixm-result-tag" style="color:#1d4ed8;background:rgba(37,99,235,.1)">PLACED ${ordinal(res.pos)}</span>`;
     else if(st==='lost') resultTag=`<span class="prixm-result-tag" style="color:#f87171;background:rgba(239,68,68,.1)">${ordinal(res.pos)}</span>`;
     else if(st==='nr'||st==='pu') resultTag=`<span class="prixm-result-tag" style="color:var(--muted);background:transparent">NR</span>`;
     // Reasoning tags
@@ -6560,7 +6897,7 @@ function renderVenueBar(){
 }
 
 function filterVenue(v){st.venue=v;renderVenueBar();renderRaceCards();renderFieldSizeBar()}
-function filterFieldSize(f){st.fieldFilter=f;renderRaceCards();renderFieldSizeBar()}
+function filterFieldSize(f){if(st.fieldFilter.has(f))st.fieldFilter.delete(f);else st.fieldFilter.add(f);renderRaceCards();renderFieldSizeBar()}
 function setComboFilter(v){st.comboFilter=st.comboFilter===v?false:v;renderRaceCards();renderFieldSizeBar()}
 function filterRaceType(t){st.raceTypeFilter=st.raceTypeFilter===t?'all':t;renderRaceCards();renderFieldSizeBar()}
 
@@ -6593,173 +6930,143 @@ const GAP_BRACKETS=[
 ];
 function getGapBracket(gap){if(gap<8)return'tight';if(gap<15)return'competitive';return'clear';}
 function filterConfidence(c){st.confidenceFilter=st.confidenceFilter===c?'all':c;renderRaceCards();renderFieldSizeBar();}
-function filterGap(g){st.gapFilter=st.gapFilter===g?'all':g;renderRaceCards();renderFieldSizeBar();}
+function filterGap(g){if(st.gapFilter.has(g))st.gapFilter.delete(g);else st.gapFilter.add(g);renderRaceCards();renderFieldSizeBar();}
+function filterRaceCode(c){st.raceCodeFilter=st.raceCodeFilter===c?'all':c;renderRaceCards();renderFieldSizeBar();}
+
+let _fsbPillOpen=null;
+function fsbToggle(key){_fsbPillOpen=_fsbPillOpen===key?null:key;renderFieldSizeBar();}
+function fsbClearAll(){_fsbPillOpen=null;st.fieldFilter.clear();st.gapFilter.clear();st.raceTypeFilter='all';st.raceCodeFilter='all';st.confidenceFilter='all';st.comboFilter=false;renderRaceCards();renderFieldSizeBar();}
+(function(){document.addEventListener('click',function(e){if(_fsbPillOpen&&!e.target.closest('#fieldSizeBar')){_fsbPillOpen=null;renderFieldSizeBar();}});})();
 
 function renderFieldSizeBar(){
   const el=document.getElementById('fieldSizeBar');
   if(!D||!D.venues){el.innerHTML='';return;}
-  // Count races per bracket in current venue filter
   const venues=st.venue==='all'?Object.keys(D.venues):[st.venue];
-  const counts={all:0,'2-5':0,'6-8':0,'9-12':0,'13+':0};
+  // ── Accumulate counts ──
+  const fsCounts={};FIELD_BRACKETS.filter(b=>b.key!=='all').forEach(b=>fsCounts[b.key]=0);
+  const rtCounts={eng_nh:0,eng_hcp:0,ire_nh:0,ire_hcp:0};
+  const confCounts={'TOP PICK':0,'STRONG':0,'SOLID':0,'MODERATE':0};
+  const gapCounts={tight:0,competitive:0,clear:0};
+  const rcCounts={};
+  let total=0;
   venues.forEach(vk=>{
     const v=D.venues[vk];if(!v)return;
     v.races.forEach(r=>{
-      const fs=r.field_size||r.runners.length;
-      counts.all++;
-      counts[getFieldBracket(fs)]++;
+      total++;
+      const fs=r.field_size||r.runners.length,fb=getFieldBracket(fs);
+      if(fsCounts[fb]!==undefined)fsCounts[fb]++;
+      const ire=isIreland(r.course),hcp=r.handicap||/handicap/i.test(r.race_name||'');
+      if(ire&&hcp)rtCounts.ire_hcp++;else if(ire)rtCounts.ire_nh++;else if(hcp)rtCounts.eng_hcp++;else rtCounts.eng_nh++;
+      const top=r.runners&&r.runners[0];
+      if(top&&confCounts[top.confidence]!==undefined)confCounts[top.confidence]++;
+      if(r.runners&&r.runners.length>=2){
+        const s=[...r.runners].sort((a,b)=>b.score-a.score);
+        gapCounts[getGapBracket(Math.round((s[0].score-s[1].score)*10)/10)]++;
+      }else gapCounts.tight++;
+      const rt=(r.race_type||'Unknown').trim();rcCounts[rt]=(rcCounts[rt]||0)+1;
     });
   });
-  // Historical stats per bracket from resultsHistory
-  const hist=window._resultsHistory;
-  const bracketStats={};
+  // ── Historical bracket stats ──
+  const hist=window._resultsHistory;const bst={};
   if(hist&&hist.races){
     const bk={};
     hist.races.forEach(race=>{
-      const fs=race.field_size||race.results.length;
-      const b=getFieldBracket(fs);
-      if(!bk[b]) bk[b]={total:0,wins:0,placed:0};
-      bk[b].total++;
-      const topRunner=race.results.find(r=>r.predicted_rank===1)||race.results.reduce((best,r)=>(!best||(r.predicted_score||0)>(best.predicted_score||0))?r:best,null);
-      if(topRunner&&topRunner.finish_pos&&!topRunner.non_runner&&!topRunner.pull_out){
-        const pl=getPlaceLimit(fs);
-        if(topRunner.finish_pos===1) bk[b].wins++;
-        if(topRunner.finish_pos<=pl) bk[b].placed++;
+      const fs=race.field_size||race.results.length,b=getFieldBracket(fs);
+      if(!bk[b])bk[b]={t:0,w:0,p:0};bk[b].t++;
+      const top=race.results.find(r=>r.predicted_rank===1)||race.results.reduce((best,r)=>(!best||(r.predicted_score||0)>(best.predicted_score||0))?r:best,null);
+      if(top&&top.finish_pos&&!top.non_runner&&!top.pull_out){
+        const pl=getPlaceLimit(fs);if(top.finish_pos===1)bk[b].w++;if(top.finish_pos<=pl)bk[b].p++;
       }
     });
-    Object.entries(bk).forEach(([k,v])=>{
-      if(v.total>=3) bracketStats[k]={winPct:Math.round(v.wins/v.total*100),placePct:Math.round(v.placed/v.total*100),total:v.total};
-    });
+    Object.entries(bk).forEach(([k,v])=>{if(v.t>=3)bst[k]={pPct:Math.round(v.p/v.t*100),total:v.t};});
   }
-  // Count combo races
-  const cd=loadCombos();
-  let comboRaceCount=0;
-  if(cd&&cd.combos){
-    const hotCombos=cd.combos.filter(c=>c.isHot);
+  // ── Combo count ──
+  const cd=loadCombos();let comboN=0;
+  if(cd?.combos){
+    const hot=cd.combos.filter(c=>c.isHot);
     venues.forEach(vk=>{
       const v=D.venues[vk];if(!v)return;
       v.races.forEach(r=>{
-        if(!r.runners) return;
-        const hasCombo=r.runners.some(runner=>{
-          const h=(runner.name||'').trim(),j=(runner.jockey||'').trim(),t=(runner.trainer||'').trim();
-          return hotCombos.some(c=>{
-            if(c.type==='Horse+Jockey+Trainer'&&c.horse===h&&c.jockey===j&&c.trainer===t) return true;
-            if(c.type==='Horse+Jockey'&&c.horse===h&&c.jockey===j) return true;
-            if(c.type==='Horse+Trainer'&&c.horse===h&&c.trainer===t) return true;
-            if(c.type==='Jockey+Trainer'&&c.jockey===j&&c.trainer===t) return true;
-            return false;
-          });
-        });
-        if(hasCombo) comboRaceCount++;
+        if(!r.runners)return;
+        if(r.runners.some(rn=>{
+          const h=(rn.name||'').trim(),j=(rn.jockey||'').trim(),t=(rn.trainer||'').trim();
+          return hot.some(c=>(c.type==='Horse+Jockey+Trainer'&&c.horse===h&&c.jockey===j&&c.trainer===t)||(c.type==='Horse+Jockey'&&c.horse===h&&c.jockey===j)||(c.type==='Horse+Trainer'&&c.horse===h&&c.trainer===t)||(c.type==='Jockey+Trainer'&&c.jockey===j&&c.trainer===t));
+        }))comboN++;
       });
     });
   }
-  // Count races per race type in current venue filter
-  const rtCounts={all:0,eng_nh:0,eng_hcp:0,ire_nh:0,ire_hcp:0};
-  venues.forEach(vk=>{
-    const v=D.venues[vk];if(!v)return;
-    v.races.forEach(r=>{
-      rtCounts.all++;
-      const ire=isIreland(r.course),hcp=r.handicap||/handicap/i.test(r.race_name||'');
-      if(ire&&hcp) rtCounts.ire_hcp++;
-      else if(ire) rtCounts.ire_nh++;
-      else if(hcp) rtCounts.eng_hcp++;
-      else rtCounts.eng_nh++;
-    });
-  });
-  const RT=[
-    {key:'eng_nh', label:'ENG Non-HCP', color:'#3b82f6'},
-    {key:'eng_hcp',label:'ENG Handicap', color:'#f59e0b'},
-    {key:'ire_nh', label:'IRE Non-HCP', color:'#10b981'},
-    {key:'ire_hcp',label:'IRE Handicap', color:'#f87171'},
-  ];
-  // Count races per confidence level and gap bracket
-  const confCounts={'all':0,'TOP PICK':0,'STRONG':0,'SOLID':0,'MODERATE':0};
-  const gapCounts={all:0,tight:0,competitive:0,clear:0};
-  venues.forEach(vk=>{
-    const v=D.venues[vk];if(!v)return;
-    v.races.forEach(r=>{
-      confCounts.all++;
-      gapCounts.all++;
-      const top=r.runners&&r.runners[0];
-      if(top&&confCounts[top.confidence]!==undefined) confCounts[top.confidence]++;
-      if(r.runners&&r.runners.length>=2){
-        const sorted=[...r.runners].sort((a,b)=>b.score-a.score);
-        const gap=Math.round((sorted[0].score-sorted[1].score)*10)/10;
-        gapCounts[getGapBracket(gap)]++;
-      } else {
-        gapCounts.tight++;
-      }
-    });
-  });
-  el.innerHTML=`<div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
-    <span style="font-size:10px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-right:2px">Field Size:</span>
-    ${FIELD_BRACKETS.map(b=>{
-      const active=st.fieldFilter===b.key;
-      const c=counts[b.key]||0;
-      if(b.key!=='all'&&c===0) return '';
-      const s=bracketStats[b.key];
-      const statStr=s?` · <span style="color:var(--accent);font-weight:700">${s.placePct}%P</span> <span style="color:var(--muted)">(${s.total}r)</span>`:'';
-      return `<button class="vbtn${active?' on':''}" onclick="filterFieldSize('${b.key}')" style="font-size:11px;padding:4px 10px">
-        ${b.key==='all'?'All':b.label+'r'} (${c})${statStr}
-      </button>`;
+  // ── Pill builder ──
+  function pill(key,label,active,badge,drop,right=false){
+    const open=_fsbPillOpen===key;
+    return`<div class="fsb-pill${open?' open':''}${active?' active':''}" onclick="event.stopPropagation();fsbToggle('${key}')">
+      <span>${label}</span>${badge?`<span class="fsb-badge">${badge}</span>`:''}
+      <span class="fsb-arrow">▾</span>
+      ${open?`<div class="fsb-drop${right?' fsb-drop-right':''}" onclick="event.stopPropagation()">${drop}</div>`:''}
+    </div>`;
+  }
+  function clearRow(fn){return`<hr class="fsb-drop-sep"><div class="fsb-chip" onclick="${fn}" style="color:var(--muted)">✕ Clear</div>`;}
+  // ── Dropdown: Field Size ──
+  const fsActive=st.fieldFilter.size>0;
+  const fsDrop=`<div class="fsb-drop-title">Field Size</div><div class="fsb-chips">
+    ${FIELD_BRACKETS.filter(b=>b.key!=='all').map(b=>{
+      const c=fsCounts[b.key]||0;if(!c)return'';
+      const s=bst[b.key];
+      return`<div style="display:flex;flex-direction:column;gap:2px">
+        <div class="fsb-chip${st.fieldFilter.has(b.key)?' on':''}" onclick="filterFieldSize('${b.key}')">${b.label}r (${c})</div>
+        ${s?`<div class="fsb-chip-note"><b>${s.pPct}%P</b> · ${s.total}r</div>`:''}
+      </div>`;
     }).join('')}
-    ${comboRaceCount>0?`<span style="margin-left:8px;font-size:10px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.5px">|</span>
-    <button class="vbtn${st.comboFilter==='combo'?' on':''}" onclick="setComboFilter('combo')" style="font-size:11px;padding:4px 10px">
-      🔥 Combo (${comboRaceCount})
-    </button>
-    <button class="vbtn${st.comboFilter==='nocombo'?' on':''}" onclick="setComboFilter('nocombo')" style="font-size:11px;padding:4px 10px">
-      No Combo (${counts.all-comboRaceCount})
-    </button>`:''}
-  </div>
-  <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-top:6px">
-    <span style="font-size:10px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-right:2px">Race Type:</span>
-    ${RT.map(t=>{
-      const active=st.raceTypeFilter===t.key;
-      const c=rtCounts[t.key]||0;
-      if(c===0) return '';
-      return `<button class="vbtn" onclick="filterRaceType('${t.key}')" style="font-size:11px;padding:4px 10px;border-left:4px solid ${t.color};${active?`background:${t.color}22;color:var(--text);border-color:${t.color}`:''}">
-        ${t.label} (${c})
-      </button>`;
+  </div>${fsActive?clearRow("st.fieldFilter.clear();renderRaceCards();renderFieldSizeBar()"):''}`;
+  // ── Dropdown: Gap ──
+  const GAP_D=[{key:'tight',label:'Tight <8',color:'#ef4444'},{key:'competitive',label:'Comp 8–14',color:'#f59e0b'},{key:'clear',label:'Clear 15+',color:'#10b981'}];
+  const gapActive=st.gapFilter.size>0;
+  const gapDrop=`<div class="fsb-drop-title">Score Gap</div><div class="fsb-chips">
+    ${GAP_D.map(g=>{
+      const c=gapCounts[g.key]||0;if(!c)return'';
+      return`<div class="fsb-chip colored${st.gapFilter.has(g.key)?' on':''}" style="border-left-color:${g.color}" onclick="filterGap('${g.key}')">${g.label} (${c})</div>`;
     }).join('')}
-    <span style="margin-left:8px;font-size:10px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.5px">|</span>
-    <span style="font-size:10px;color:var(--muted)">
-      <span style="color:#3b82f6;font-weight:700">■</span> ENG NH &nbsp;
-      <span style="color:#f59e0b;font-weight:700">■</span> ENG HCP &nbsp;
-      <span style="color:#10b981;font-weight:700">■</span> IRE NH &nbsp;
-      <span style="color:#f87171;font-weight:700">■</span> IRE HCP
-    </span>
-  </div>
-  <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-top:6px">
-    <span style="font-size:10px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-right:2px">Confidence:</span>
-    ${CONFIDENCE_LEVELS.map(lv=>{
-      if(lv.key==='all') return '';
-      const c=confCounts[lv.key]||0;
-      if(c===0) return '';
-      const active=st.confidenceFilter===lv.key;
-      return `<button class="vbtn" onclick="filterConfidence('${lv.key}')" style="font-size:11px;padding:4px 10px;border-left:4px solid ${lv.color};${active?`background:${lv.color}22;color:var(--text);border-color:${lv.color}`:''}">
-        ${lv.label} (${c})
-      </button>`;
-    }).join('')}
-    ${st.confidenceFilter!=='all'?`<button class="vbtn" onclick="filterConfidence('all')" style="font-size:11px;padding:4px 10px;color:var(--muted)">✕ Clear</button>`:''}
-  </div>
-  <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-top:6px">
-    <span style="font-size:10px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-right:2px">Gap:</span>
-    ${[{key:'tight',label:'Tight (<8)',color:'#ef4444'},{key:'competitive',label:'Competitive (8-14)',color:'#f59e0b'},{key:'clear',label:'Clear (15+)',color:'#10b981'}].map(gb=>{
-      const c=gapCounts[gb.key]||0;
-      if(c===0) return '';
-      const active=st.gapFilter===gb.key;
-      return `<button class="vbtn" onclick="filterGap('${gb.key}')" style="font-size:11px;padding:4px 10px;border-left:4px solid ${gb.color};${active?`background:${gb.color}22;color:var(--text);border-color:${gb.color}`:''}">
-        ${gb.label} (${c})
-      </button>`;
-    }).join('')}
-    ${st.gapFilter!=='all'?`<button class="vbtn" onclick="filterGap('all')" style="font-size:11px;padding:4px 10px;color:var(--muted)">✕ Clear</button>`:''}
-  </div>
-  ${(()=>{const bc=getBanCount();if(!bc)return'';const hiding=st.hideBanned;
-    return`<div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-top:6px">
-    <span style="font-size:10px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-right:2px">Banned:</span>
-    <button onclick="openBanModal()" style="font-size:11px;padding:4px 10px;border-radius:20px;border:1px solid rgba(239,68,68,.35);background:rgba(239,68,68,.10);color:#f87171;cursor:pointer;font-weight:600">🚫 Banned (${bc})</button>
-    <button onclick="toggleHideBanned()" style="font-size:11px;padding:4px 10px;border-radius:20px;font-weight:600;cursor:pointer;border:1px solid ${hiding?'#ef4444':'rgba(16,185,129,.4)'};background:${hiding?'rgba(239,68,68,.18)':'rgba(16,185,129,.15)'};color:${hiding?'#f87171':'#34d399'}">${hiding?'🙈 Hiding Banned':'👀 Show Banned'}</button>
-  </div>`;})()}`;
+  </div>${gapActive?clearRow("st.gapFilter.clear();renderRaceCards();renderFieldSizeBar()"):''}`;
+  // ── Dropdown: Race Type ──
+  const RT=[{key:'eng_nh',label:'ENG Non-HCP',short:'ENG NH',color:'#3b82f6'},{key:'eng_hcp',label:'ENG Handicap',short:'ENG HCP',color:'#f59e0b'},{key:'ire_nh',label:'IRE Non-HCP',short:'IRE NH',color:'#10b981'},{key:'ire_hcp',label:'IRE Handicap',short:'IRE HCP',color:'#f87171'}];
+  const rtActive=st.raceTypeFilter!=='all';const rtSel=RT.find(t=>t.key===st.raceTypeFilter);
+  const rtDrop=`<div class="fsb-drop-title">Race Type</div>
+    <div style="font-size:9px;color:var(--muted);margin-bottom:8px"><span style="color:#3b82f6">■</span> ENG NH &nbsp;<span style="color:#f59e0b">■</span> ENG HCP &nbsp;<span style="color:#10b981">■</span> IRE NH &nbsp;<span style="color:#f87171">■</span> IRE HCP</div>
+    <div class="fsb-chips">${RT.map(t=>{const c=rtCounts[t.key]||0;if(!c)return'';return`<div class="fsb-chip colored${st.raceTypeFilter===t.key?' on':''}" style="border-left-color:${t.color}" onclick="filterRaceType('${t.key}')">${t.label} (${c})</div>`;}).join('')}</div>
+    ${rtActive?clearRow("filterRaceType(st.raceTypeFilter)"):''}`;
+  // ── Dropdown: Code ──
+  const RC=[{key:'Flat',label:'Flat',color:'#6366f1'},{key:'Hurdle',label:'Hurdle',color:'#f97316'},{key:'Chase',label:'Chase',color:'#84cc16'}];
+  const codeActive=st.raceCodeFilter!=='all';
+  const showCode=RC.some(d=>(rcCounts[d.key]||0)>0&&d.key!=='Flat')||(rcCounts.Flat||0)<total;
+  const codeDrop=`<div class="fsb-drop-title">Race Code</div><div class="fsb-chips">
+    ${RC.map(d=>{const c=rcCounts[d.key]||0;if(!c)return'';return`<div class="fsb-chip colored${st.raceCodeFilter===d.key?' on':''}" style="border-left-color:${d.color}" onclick="filterRaceCode('${d.key}')">${d.label} (${c})</div>`;}).join('')}
+  </div>${codeActive?clearRow("filterRaceCode(st.raceCodeFilter)"):''}`;
+  // ── Dropdown: Confidence ──
+  const confActive=st.confidenceFilter!=='all';const confSel=CONFIDENCE_LEVELS.find(lv=>lv.key===st.confidenceFilter);
+  const confDrop=`<div class="fsb-drop-title">Confidence</div><div class="fsb-chips">
+    ${CONFIDENCE_LEVELS.filter(lv=>lv.key!=='all').map(lv=>{const c=confCounts[lv.key]||0;if(!c)return'';return`<div class="fsb-chip colored${st.confidenceFilter===lv.key?' on':''}" style="border-left-color:${lv.color}" onclick="filterConfidence('${lv.key}')">${lv.label} (${c})</div>`;}).join('')}
+  </div>${confActive?clearRow("filterConfidence(st.confidenceFilter)"):''}`;
+  // ── Dropdown: Combo ──
+  const comboDrop=comboN?`<div class="fsb-drop-title">Hot Combos</div><div class="fsb-chips">
+    <div class="fsb-chip${st.comboFilter==='combo'?' on':''}" onclick="setComboFilter('combo')">🔥 With Combo (${comboN})</div>
+    <div class="fsb-chip${st.comboFilter==='nocombo'?' on':''}" onclick="setComboFilter('nocombo')">No Combo (${total-comboN})</div>
+  </div>`:null;
+  // ── Dropdown: Banned ──
+  const bc=getBanCount(),hiding=st.hideBanned;
+  const bannedDrop=bc?`<div class="fsb-drop-title">Banned</div><div style="display:flex;flex-direction:column;gap:6px">
+    <div class="fsb-chip" onclick="openBanModal()" style="border-color:rgba(239,68,68,.4);color:#f87171">🚫 Manage Banned (${bc})</div>
+    <div class="fsb-chip" onclick="toggleHideBanned()" style="border-color:${hiding?'#ef4444':'rgba(16,185,129,.4)'};color:${hiding?'#f87171':'#34d399'}">${hiding?'🙈 Hiding Banned':'👀 Show Banned'}</div>
+  </div>`:null;
+  const anyActive=fsActive||gapActive||rtActive||codeActive||confActive||!!st.comboFilter;
+  el.innerHTML=`<div class="fsb-bar">
+    ${pill('field','Field Size',fsActive,fsActive?st.fieldFilter.size:0,fsDrop)}
+    ${pill('gap','Gap',gapActive,gapActive?st.gapFilter.size:0,gapDrop)}
+    ${pill('rtype',rtActive?(rtSel?.short||'Race Type'):'Race Type',rtActive,0,rtDrop)}
+    ${showCode?pill('code',codeActive?st.raceCodeFilter:'Code',codeActive,0,codeDrop):''}
+    ${pill('conf',confActive?(confSel?.label||'Confidence'):'Confidence',confActive,0,confDrop,true)}
+    ${comboN&&comboDrop?pill('combo','🔥 Combo',!!st.comboFilter,0,comboDrop,true):''}
+    ${bc&&bannedDrop?pill('banned','🚫 Banned',hiding,bc,bannedDrop,true):''}
+    ${anyActive?`<button class="fsb-clear" onclick="fsbClearAll()">✕ Clear all</button>`:''}
+  </div>`;
 }
 
 const IRE_TRACKS=new Set(['curragh','leopardstown','fairyhouse','punchestown','galway','naas','cork','tipperary','gowran park','killarney','listowel','dundalk','navan','tramore','sligo','roscommon','ballinrobe','clonmel','limerick','thurles','wexford','bellewstown','down royal','downpatrick','laytown']);
@@ -6901,12 +7208,12 @@ function renderRaceCards(){
     const v=D.venues[vk];if(!v)return;
     v.races.forEach((r,ri)=>{races.push({...r,venueKey:vk,raceIdx:ri})});
   });
-  // Apply field size filter
-  if(st.fieldFilter&&st.fieldFilter!=='all'){
-    const bracket=FIELD_BRACKETS.find(b=>b.key===st.fieldFilter);
-    if(bracket) races=races.filter(r=>{
+  // Apply field size filter (multi-select)
+  if(st.fieldFilter.size>0){
+    races=races.filter(r=>{
       const fs=r.field_size||r.runners.length;
-      return fs>=bracket.min&&fs<=bracket.max;
+      const bk=getFieldBracket(fs);
+      return st.fieldFilter.has(bk);
     });
   }
   // Apply race type filter
@@ -6920,6 +7227,10 @@ function renderRaceCards(){
       return true;
     });
   }
+  // Apply race code filter (Flat/Hurdle/Chase)
+  if(st.raceCodeFilter&&st.raceCodeFilter!=='all'){
+    races=races.filter(r=>(r.race_type||'').trim()===st.raceCodeFilter);
+  }
   // Apply combo filter
   const comboData=buildComboDatabase();
   const todayCombos=findTodayCombos(comboData);
@@ -6932,14 +7243,13 @@ function renderRaceCards(){
   if(st.confidenceFilter&&st.confidenceFilter!=='all'){
     races=races.filter(r=>{const top=r.runners&&r.runners[0];return top&&top.confidence===st.confidenceFilter;});
   }
-  // Apply gap filter (gap from 1st to 2nd horse)
-  if(st.gapFilter&&st.gapFilter!=='all'){
-    const gb=GAP_BRACKETS.find(b=>b.key===st.gapFilter);
-    if(gb) races=races.filter(r=>{
-      if(!r.runners||r.runners.length<2) return gb.min===0;
+  // Apply gap filter (multi-select)
+  if(st.gapFilter.size>0){
+    races=races.filter(r=>{
+      if(!r.runners||r.runners.length<2) return st.gapFilter.has('tight');
       const sorted=[...r.runners].sort((a,b)=>b.score-a.score);
       const gap=Math.round((sorted[0].score-sorted[1].score)*10)/10;
-      return gap>=gb.min&&gap<=gb.max;
+      return st.gapFilter.has(getGapBracket(gap));
     });
   }
   races.sort((a,b)=>a.time.localeCompare(b.time));
@@ -6953,6 +7263,11 @@ function renderRaceCards(){
     comboByRace[k].push(m);
   });
 
+  // ── Card collapse/expand animation ──
+  const _prevIds=new Set([...el.querySelectorAll('.rc[id]')].map(c=>c.id));
+  const _nextIds=new Set(races.map(r=>`raceCard_${r.venueKey}_${r.raceIdx}`));
+  const _toCollapse=[...el.querySelectorAll('.rc[id]')].filter(c=>!_nextIds.has(c.id)&&!c.classList.contains('rc-collapsing'));
+  function _doRender(){
   el.innerHTML=races.map(r=>{
     const top=r.runners&&r.runners[0];
     const topConf=top?top.confidence:'';
@@ -6961,55 +7276,53 @@ function renderRaceCards(){
     const dupKey=(D.date||'')+r.venueKey+r.time;
     const logged=hist&&hist.races&&hist.races.some(h=>(h.date+h.venue+h.time)===dupKey);
     const rCombos=comboByRace[r.venueKey+'_'+r.raceIdx]||[];
-    return `<div class="rc" id="${cardId}" style="border-left:9px solid ${getRaceBorderColor(r)}" onclick="openRace('${r.venueKey}',${r.raceIdx}).catch(e=>console.error('openRace error:',e))">
-      ${logged?'<span class="rc-logged">✓ LOGGED</span>':''}
-      <div class="rc-head"><span class="venue">${r.course}<button class="ta-track-btn" onclick="event.stopPropagation();openTrackAnalysis('${r.course.replace(/'/g,"\\'")}')" title="Track Analysis">📊</button></span><span class="time">${r.time}</span></div>
-      ${(()=>{const _gf=getGoldenFlags(r);return _gf?renderGoldenFlag(_gf):'';})()}
-      ${(()=>{const _sf=getSilverFlags(r);return _sf?renderSilverFlag(_sf):'';})()}
-      ${(()=>{const _bf=getBronzeFlags(r);return _bf?renderBronzeFlag(_bf):'';})()}
-      ${(()=>{const _ban=getBanFlag(r);return _ban?renderBanFlag(_ban):'';})()}
-      <div class="rmeta">
-        <span>${r.distance}</span><span>${r.going}</span><span>${r.race_type}</span>
-        <span>${r.field_size} runners</span>
-        ${r.race_class?`<span>Class ${r.race_class}</span>`:''}
-        ${r.pattern?`<span>${r.pattern}</span>`:''}
+    const _gf=getGoldenFlags(r),_sf=getSilverFlags(r),_bf=getBronzeFlags(r),_ban=getBanFlag(r);
+    const segBadge=_gf?`<span class="rc-segbadge rc-sg-gold">⭐ Golden</span>`:_sf?`<span class="rc-segbadge rc-sg-silver">🥈 Silver</span>`:_bf?`<span class="rc-segbadge rc-sg-bronze">🥉 Bronze</span>`:'';
+    const sortedR=r.runners?[...r.runners].sort((a,b)=>b.score-a.score):[];
+    const second=sortedR[1];
+    const gap=second&&sortedR[0]?Math.round((sortedR[0].score-second.score)*10)/10:0;
+    return `<div class="rc" id="${cardId}" style="border-left:5px solid ${getRaceBorderColor(r)}" onclick="openRace('${r.venueKey}',${r.raceIdx}).catch(e=>console.error('openRace error:',e))">
+      <div class="rc-row-main">
+        <div class="rc-col-t">
+          <span class="r-time">${r.time}</span>
+          <span class="r-code">${r.race_type||'Race'}</span>
+        </div>
+        <div class="rc-col-v">
+          <span class="r-venue">${r.course}<button class="ta-track-btn" onclick="event.stopPropagation();openTrackAnalysis('${r.course.replace(/'/g,"\\'")}')" title="Track Analysis">📊</button></span>
+          <span class="r-dist">${r.distance} · ${r.field_size||r.runners.length} rnrs</span>
+        </div>
+        <div class="rc-col-info">
+          <span class="r-going">${r.going||''}</span>
+          <div class="r-tags">
+            ${r.race_class?`<span class="rc-rtag">Cls ${r.race_class}</span>`:''}
+            ${r.handicap||/handicap/i.test(r.race_name||'')?'<span class="rc-rtag">HCP</span>':''}
+            ${r.pattern?`<span class="rc-rtag">${r.pattern}</span>`:''}
+            ${gap>=18?`<span class="rc-rtag" style="color:#b45309">Gap ${gap}</span>`:gap>=10?`<span class="rc-rtag">Gap ${gap}</span>`:''}
+          </div>
+        </div>
+        <div class="rc-col-seg">${segBadge}</div>
+        <div class="rc-col-pick">${top?`<span class="r-pname">★ ${top.name}</span><span class="r-pform">${top.trainer||''}</span>`:`<span class="r-pname" style="color:#9ca3af">No data</span>`}</div>
+        <div class="rc-col-score">${top?`<span class="r-scoren">${topScore}</span><div class="r-sbar"><div class="r-sfill" style="width:${Math.min(100,Math.round(topScore/MAX_SCORE*100))}%"></div></div>`:''}</div>
+        ${logged?'<span class="rc-logged">✓</span>':''}
+        <div class="rc-expand-arr">›</div>
       </div>
-      ${top?(()=>{
-        const sorted=[...r.runners].sort((a,b)=>b.score-a.score);
-        const second=sorted[1];
-        const gap=second?Math.round((top.score-second.score)*10)/10:0;
-        const avg=r.runners.length?Math.round(r.runners.reduce((a,x)=>a+x.score,0)/r.runners.length):0;
-        const spreadCls=gap>=15?'spread-high':gap>=8?'spread-mid':'spread-low';
-        const spreadLabel=gap>=15?'CLEAR':gap>=8?'COMPETITIVE':'TIGHT';
-        return `<div class="top-pick-preview">
-        <span><span class="tpp-name">★ ${top.name}</span> <span style="color:var(--muted);font-size:11px">${top.trainer}</span></span>
-        <span style="display:flex;align-items:center;gap:6px">
-          ${confBadge(topConf)}
-          <span style="font-weight:700;color:${sc(topScore)}">${topScore}/${MAX_SCORE}</span>
-        </span>
-      </div>
-      <div class="rc-spread">
-        <span class="rc-spread-label">Spread:</span><span class="rc-spread-val ${spreadCls}">${spreadLabel} (${gap>0?'+':''}${gap})</span>
-        <span class="rc-spread-label" style="margin-left:auto">Avg:</span><span style="font-weight:600;color:var(--muted)">${avg}</span>
-        ${second?`<span class="rc-spread-label">2nd:</span><span style="font-weight:600;color:${sc(second.score)}">${second.name.split(' ')[0]} ${second.score}</span>`:''}
-      </div>`;
-      })():'<div class="top-pick-preview" style="color:var(--muted)">Click to analyze runners</div>'}
-      ${rCombos.length?`<div style="border-top:1px solid var(--border);margin-top:6px;padding-top:6px;display:flex;flex-wrap:wrap;gap:4px">${rCombos.map(m=>{
-        const pr=Math.round(m.combo.placeRate);const wr=Math.round(m.combo.winRate);
-        const col=pr>=60?'#059669':pr>=40?'#f59e0b':'#6b7280';
-        return `<div style="display:inline-flex;align-items:center;gap:4px;background:${col}18;border:1px solid ${col}44;border-radius:5px;padding:2px 8px;font-size:10px">
-          <span style="color:${col};font-weight:700">⚡ COMBO</span>
-          <span style="color:var(--fg);font-weight:600">${m.runner.name}</span>
-          <span style="color:var(--muted)">·</span>
-          <span style="color:var(--muted)">${m.combo.type.replace('+',' + ')}</span>
-          <span style="color:var(--muted)">·</span>
-          <span style="color:${col};font-weight:600">${pr}% placed</span>
-          <span style="color:var(--muted)">(${m.combo.total} runs)</span>
-        </div>`;
-      }).join('')}</div>`:''}
-      ${buildRaceBrief(r, rCombos)}
+      ${rCombos.length?`<div class="rc-combo-row">${rCombos.map(m=>`<span class="rc-combo-tag">⚡ ${m.runner.name} · ${m.combo.type.replace('+',' + ')} · ${Math.round(m.combo.placeRate)}% placed</span>`).join('')}</div>`:''}
+      ${_ban?renderBanFlag(_ban):''}
     </div>`;
   }).join('');
+  // stagger-animate newly visible cards
+  if(_prevIds.size>0){
+    [...el.querySelectorAll('.rc[id]')].forEach((c,i)=>{
+      if(!_prevIds.has(c.id)){
+        c.style.animationDelay=i*28+'ms';
+        c.classList.add('rc-expanding');
+        c.addEventListener('animationend',()=>{c.classList.remove('rc-expanding');c.style.animationDelay='';},{once:true});
+      }
+    });
+  }
+  } // end _doRender
+  if(_toCollapse.length){_toCollapse.forEach(c=>c.classList.add('rc-collapsing'));setTimeout(_doRender,290);}
+  else _doRender();
 }
 
 async function openRace(vk,ri){st._scrollY=window.scrollY;st.openRace={vk,ri};st.expanded=null;st.detailTab='main';st.h2hPair=null;st.compareSelect=new Set();await render();window.scrollTo(0,0)}
@@ -7123,9 +7436,9 @@ function getCourseSpecialistBadge(r, race){
     });
   });
   if(wins>=1)
-    return `<span style="display:inline-block;font-size:8px;font-weight:700;padding:1px 5px;border-radius:3px;background:rgba(16,185,129,.15);border:1px solid rgba(16,185,129,.4);color:#34d399;margin-left:3px;vertical-align:middle" title="Won at ${race.course} (${wins} win${wins>1?'s':''}, ${places} place${places!==1?'s':''})">🏇 Course Winner</span>`;
+    return `<span style="display:inline-block;font-size:8px;font-weight:700;padding:1px 5px;border-radius:3px;background:rgba(21,128,61,.12);border:1px solid rgba(21,128,61,.3);color:#15803d;margin-left:3px;vertical-align:middle" title="Won at ${race.course} (${wins} win${wins>1?'s':''}, ${places} place${places!==1?'s':''})">🏇 Course Winner</span>`;
   if(places>=2)
-    return `<span style="display:inline-block;font-size:8px;font-weight:700;padding:1px 5px;border-radius:3px;background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.35);color:#fbbf24;margin-left:3px;vertical-align:middle" title="${places} place${places!==1?'s':''} at ${race.course}">🏇 Course Form</span>`;
+    return `<span style="display:inline-block;font-size:8px;font-weight:700;padding:1px 5px;border-radius:3px;background:rgba(180,83,9,.08);border:1px solid rgba(180,83,9,.25);color:#b45309;margin-left:3px;vertical-align:middle" title="${places} place${places!==1?'s':''} at ${race.course}">🏇 Course Form</span>`;
   return '';
 }
 
@@ -7458,7 +7771,7 @@ function renderExpandedRow(r, fieldSize, race){
     <div style="grid-column:1/-1;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:14px 16px">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
         <span style="font-size:13px;font-weight:800;color:var(--text)">Conditions Check</span>
-        <span style="font-size:10px;padding:2px 8px;border-radius:10px;font-weight:700;background:rgba(16,185,129,.12);color:#34d399;border:1px solid rgba(16,185,129,.2)">${posCount} suits</span>
+        <span style="font-size:10px;padding:2px 8px;border-radius:10px;font-weight:700;background:rgba(21,128,61,.1);color:#15803d;border:1px solid rgba(21,128,61,.2)">${posCount} suits</span>
         ${negCount?`<span style="font-size:10px;padding:2px 8px;border-radius:10px;font-weight:700;background:rgba(239,68,68,.1);color:#f87171;border:1px solid rgba(239,68,68,.2)">${negCount} concern${negCount>1?'s':''}</span>`:''}
       </div>
       <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px;margin-bottom:14px">
@@ -7663,7 +7976,7 @@ function renderRunnerFormHistory(runner, race){
 
   const posCol=p=>p===1?'#34d399':p<=3?'#60a5fa':p<=6?'var(--text)':'var(--muted)';
   const surfPill=s=>s==='AW'
-    ?'<span style="padding:1px 5px;border-radius:8px;font-size:9px;font-weight:700;background:rgba(16,185,129,.15);color:#34d399;border:1px solid rgba(16,185,129,.3)">AW</span>'
+    ?'<span style="padding:1px 5px;border-radius:8px;font-size:9px;font-weight:700;background:rgba(21,128,61,.1);color:#15803d;border:1px solid rgba(21,128,61,.25)">AW</span>'
     :s==='Turf'
     ?'<span style="padding:1px 5px;border-radius:8px;font-size:9px;font-weight:700;background:rgba(34,197,94,.12);color:#4ade80;border:1px solid rgba(34,197,94,.25)">Turf</span>'
     :(s?`<span style="font-size:9px;color:var(--muted)">${s}</span>`:'—');
@@ -7776,7 +8089,7 @@ function openWatchlistModal(){
   let h=`<div style="position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:1000;display:flex;align-items:center;justify-content:center" onclick="if(event.target===this)this.remove()">
     <div style="background:var(--card);border-radius:12px;padding:24px;max-width:500px;width:90%;max-height:80vh;overflow-y:auto" onclick="event.stopPropagation()">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
-        <div style="font-size:16px;font-weight:800;color:#a78bfa">👁 Manage Watchlist</div>
+        <div style="font-size:16px;font-weight:800;color:#7c3aed">👁 Manage Watchlist</div>
         <button onclick="this.closest('[style*=fixed]').remove()" style="background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer">✕</button>
       </div>`;
   if(!wl.length){
@@ -8612,9 +8925,9 @@ function showMainExportModal(){
       const el=document.getElementById(id);
       if(!el)return;
       const active=el.dataset.preset===p;
-      el.style.background=active?'#1e1510':'#1a1a1a';
-      el.style.color=active?'#f59e0b':'#bbb';
-      el.style.borderColor=active?'rgba(245,158,11,.35)':'#2a2a2a';
+      el.style.background=active?'#fef3c7':'#f3f4f6';
+      el.style.color=active?'#b45309':'#6b7280';
+      el.style.borderColor=active?'#fde68a':'#d1d5db';
     });
     const ch=id=>document.getElementById(id);
     if(p==='full'){
@@ -8635,9 +8948,9 @@ function showMainExportModal(){
       <div style="font-size:12px;color:#aaa;margin-bottom:18px">${dateLabel} &nbsp;·&nbsp; ${venueCount} venues &nbsp;·&nbsp; ${totalRaces} races &nbsp;·&nbsp; ${prixmPicks.length} picks</div>
       <div style="font-size:10px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Quick preset</div>
       <div style="display:flex;gap:6px;margin-bottom:18px">
-        <button id="xPresetFull" data-preset="full" onclick="window._setExportPreset('full')" style="background:#1e1510;color:#f59e0b;border:1px solid rgba(245,158,11,.35);font-size:11px;font-weight:600;padding:5px 12px;border-radius:5px;cursor:pointer">Full Report</button>
-        <button id="xPresetPicks" data-preset="picks" onclick="window._setExportPreset('picks')" style="background:#1a1a1a;color:#bbb;border:1px solid #2a2a2a;font-size:11px;font-weight:600;padding:5px 12px;border-radius:5px;cursor:pointer">Picks Only</button>
-        <button id="xPresetGolden" data-preset="golden" onclick="window._setExportPreset('golden')" style="background:#1a1a1a;color:#bbb;border:1px solid #2a2a2a;font-size:11px;font-weight:600;padding:5px 12px;border-radius:5px;cursor:pointer">⭐ Golden/Silver Only</button>
+        <button id="xPresetFull" data-preset="full" onclick="window._setExportPreset('full')" style="background:#fef3c7;color:#b45309;border:1px solid #fde68a;font-size:11px;font-weight:600;padding:5px 12px;border-radius:5px;cursor:pointer">Full Report</button>
+        <button id="xPresetPicks" data-preset="picks" onclick="window._setExportPreset('picks')" style="background:#f3f4f6;color:#6b7280;border:1px solid #d1d5db;font-size:11px;font-weight:600;padding:5px 12px;border-radius:5px;cursor:pointer">Picks Only</button>
+        <button id="xPresetGolden" data-preset="golden" onclick="window._setExportPreset('golden')" style="background:#f3f4f6;color:#6b7280;border:1px solid #d1d5db;font-size:11px;font-weight:600;padding:5px 12px;border-radius:5px;cursor:pointer">⭐ Golden/Silver Only</button>
       </div>
       <div style="font-size:10px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">Sections</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px">
@@ -8651,7 +8964,7 @@ function showMainExportModal(){
       <div style="display:flex;gap:12px;margin-bottom:18px;flex-wrap:wrap">
         <div style="flex:1;min-width:120px">
           <div style="font-size:11px;color:#aaa;margin-bottom:4px">Horses per race</div>
-          <select id="xHorsesN" style="background:#1a1a1a;border:1px solid #2a2a2a;color:#e0e0e0;padding:6px 10px;border-radius:6px;font-size:12px;width:100%">
+          <select id="xHorsesN" style="background:var(--card);border:1px solid var(--border);color:var(--text);padding:6px 10px;border-radius:6px;font-size:12px;width:100%">
             <option value="3">Top 3</option>
             <option value="5" selected>Top 5</option>
             <option value="all">All</option>
@@ -8659,7 +8972,7 @@ function showMainExportModal(){
         </div>
         <div style="flex:1;min-width:120px">
           <div style="font-size:11px;color:#aaa;margin-bottom:4px">Theme</div>
-          <select id="xTheme" style="background:#1a1a1a;border:1px solid #2a2a2a;color:#e0e0e0;padding:6px 10px;border-radius:6px;font-size:12px;width:100%">
+          <select id="xTheme" style="background:var(--card);border:1px solid var(--border);color:var(--text);padding:6px 10px;border-radius:6px;font-size:12px;width:100%">
             <option value="light" selected>Light (print-friendly)</option>
             <option value="dark">Dark</option>
           </select>
@@ -8670,7 +8983,7 @@ function showMainExportModal(){
       </div>
       <div style="display:flex;gap:10px">
         <button onclick="runMainExport()" style="background:#f59e0b;color:#000;border:none;padding:9px 22px;border-radius:7px;cursor:pointer;font-weight:700;font-size:13px">Generate PDF</button>
-        <button onclick="closeModal()" style="background:#1e1e1e;color:#888;border:1px solid #2a2a2a;padding:9px 16px;border-radius:7px;cursor:pointer;font-size:13px">Cancel</button>
+        <button onclick="closeModal()" style="background:#f3f4f6;color:#6b7280;border:1px solid #d1d5db;padding:9px 16px;border-radius:7px;cursor:pointer;font-size:13px">Cancel</button>
       </div>
     </div>
   </div>`;
@@ -8858,9 +9171,9 @@ function buildMainExportHTML(opts){
       const fs=race.field_size||race.runners.length;
       const gf=getGoldenFlags(race),sf=getSilverFlags(race),bf=getBronzeFlags(race);
       const segTag=gf?'<span style="font-size:9px;font-weight:700;padding:2px 6px;border-radius:3px;background:#fef3c7;color:#d97706">⭐ GOLDEN</span>':sf?'<span style="font-size:9px;font-weight:700;padding:2px 6px;border-radius:3px;background:#f1f5f9;color:#475569">🥈 SILVER</span>':bf?'<span style="font-size:9px;font-weight:700;padding:2px 6px;border-radius:3px;background:#ffedd5;color:#c2410c">🥉 BRONZE</span>':'';
-      h+='<div class="race-block"><div style="background:#0f172a;color:#fff;padding:7px 12px;border-radius:6px 6px 0 0;display:flex;justify-content:space-between;align-items:center">';
-      h+='<div style="display:flex;align-items:center;gap:10px"><span style="font-weight:800;font-size:13px;color:#10b981">'+race.time+'</span><span style="font-weight:700;font-size:12px;color:#e2e8f0">'+race.venueName+'</span>'+segTag+'</div>';
-      h+='<div style="font-size:10px;color:#cbd5e1;text-align:right">'+(race.distance||'')+' | '+(race.going||'')+' | '+(race.race_type||'')+' | Cl'+(race.race_class||'?')+' | '+fs+'r</div></div>';
+      h+='<div class="race-block"><div style="background:#f0ede8;border:1px solid #e5e0d8;color:#111827;padding:7px 12px;border-radius:6px 6px 0 0;display:flex;justify-content:space-between;align-items:center">';
+      h+='<div style="display:flex;align-items:center;gap:10px"><span style="font-weight:800;font-size:13px;color:#15803d">'+race.time+'</span><span style="font-weight:700;font-size:12px;color:#111827">'+race.venueName+'</span>'+segTag+'</div>';
+      h+='<div style="font-size:10px;color:#6b7280;text-align:right">'+(race.distance||'')+' | '+(race.going||'')+' | '+(race.race_type||'')+' | Cl'+(race.race_class||'?')+' | '+fs+'r</div></div>';
       h+='<table style="width:100%;border-collapse:collapse;font-size:11.5px;border:1px solid '+border+';border-top:none">';
       h+='<thead><tr style="background:'+card2+'"><th style="'+thStyle+'">#</th><th style="'+thStyle+'">Horse</th><th style="'+thStyle+'">J / T</th><th style="'+thStyle+'">Form</th><th style="'+thStyle+'">Score</th><th style="'+thStyle+'">Conf</th><th style="'+thStyle+'">Gap</th>'+(opts.condFlags?'<th style="'+thStyle+'">Flags</th>':'')+'</tr></thead><tbody>';
       showRows.forEach(function(r,i){
