@@ -33,6 +33,9 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .vbtn{padding:7px 16px;border-radius:6px;cursor:pointer;font-size:13px;font-weight:600;background:var(--card2);color:var(--muted);border:1px solid var(--border);transition:all .2s}
 .vbtn:hover{border-color:var(--accent);color:var(--text)}
 .vbtn.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.vbtn.venue-has-match{border-color:#22c55e!important;color:#22c55e!important}
+.vbtn.venue-no-match{border-color:#ef4444!important;color:#ef4444!important;opacity:.5}
+.vbtn.on.venue-has-match,.vbtn.on.venue-no-match{color:#fff!important;opacity:1}
 #fieldSizeBar .vbtn.on{background:#331832;color:#fff;border-color:#331832}
 #fieldSizeBar .vbtn:hover{border-color:#331832;color:var(--text)}
 /* Filter pill bar */
@@ -67,6 +70,12 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .rc.rc-expanding{animation:rc-expand .28s ease backwards}
 @keyframes rc-expand{from{opacity:0;max-height:0;padding-top:0;padding-bottom:0}to{opacity:1;max-height:700px;padding-top:16px;padding-bottom:16px}}
 .rc:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.3)}
+.rc .gap-elite{color:#f97316;text-shadow:0 0 10px rgba(249,115,22,.5)}
+.rc .gap-good{color:#facc15;text-shadow:0 0 10px rgba(250,204,21,.4)}
+.rc .gap-low{color:#6b7280}
+.rc .score-high{color:#34d399;text-shadow:0 0 10px rgba(52,211,153,.4)}
+.rc .score-mid{color:#60a5fa;text-shadow:0 0 10px rgba(96,165,250,.35)}
+.rc .score-low{color:#9ca3af}
 .rc .rc-head{display:flex;justify-content:space-between;align-items:center}
 .rc .time{font-size:18px;font-weight:700;color:var(--accent)}
 .rc .venue{font-size:16px;color:var(--accent);text-transform:uppercase;letter-spacing:1.5px;font-weight:700}
@@ -5895,8 +5904,8 @@ function renderD1Sidebar(){
   if(prixm.length){
     picksHtml=prixm.slice(0,6).map(p=>{
       const catCls=p.category==='NAP'?'d1-cb-nap':p.category==='WIN'?'d1-cb-win':p.category==='STRONG'?'d1-cb-strong':'d1-cb-place';
-      const edgeCol=p.category==='NAP'?'linear-gradient(90deg,#b45309,#d97706)':p.category==='WIN'?'#15803d':'#1d4ed8';
-      const edgeNumCol=p.category==='NAP'?'#d97706':p.category==='WIN'?'#15803d':'#1d4ed8';
+      const edgeCol=p.category==='NAP'?'#a855f7':p.category==='WIN'?'#15803d':p.category==='STRONG'?'#1d4ed8':'#f59e0b';
+      const edgeNumCol=edgeCol;
       const edgePct=Math.min(100,p.edge||0);
       const tagsHtml=p.tags&&p.tags.length?`<div style="display:flex;gap:3px;flex-wrap:wrap;margin-top:3px">${p.tags.slice(0,3).map(t=>`<span style="font-size:9px;padding:1px 5px;border-radius:3px;font-weight:600;background:${t.c==='pos'?'#dcfce7':t.c==='neg'?'#fee2e2':'#f3f4f6'};color:${t.c==='pos'?'#15803d':t.c==='neg'?'#dc2626':'#6b7280'};border:1px solid ${t.c==='pos'?'#bbf7d0':t.c==='neg'?'#fecaca':'#e5e7eb'}">${t.t}</span>`).join('')}</div>`:'';
       return `<div class="d1-pick-card" onclick="openRace('${p.venueKey}',${p.raceIdx}).catch(e=>{})">
@@ -6518,8 +6527,8 @@ function renderPrixmPicks(picks, hist){
     const st=hasRes?res.status:'';
     const cat=p.category.toLowerCase();
     const br=p.betRec||{type:'SKIP',chip:'prixm-chip-skip',tags:[]};
-    // Edge bar color
-    const edgeCol=p.edge>=60?'#10b981':p.edge>=45?'#f87171':'#f59e0b';
+    // Edge bar color — matches pick category
+    const edgeCol=p.category==='NAP'?'#a855f7':p.category==='WIN'?'#34d399':p.category==='STRONG'?'#60a5fa':'#fb923c';
     // Category label
     const catLabel=p.category==='NAP'?'NAP — best bet of the day':p.category;
     // Result tag
@@ -6916,9 +6925,18 @@ async function renderTopPicks(){
 
 function renderVenueBar(){
   const venues=Object.keys(D.venues);
+  const codeActive=st.raceCodeFilter&&st.raceCodeFilter!=='all';
   document.getElementById('venueBar').innerHTML=
     `<button class="vbtn ${st.venue==='all'?'on':''}" onclick="filterVenue('all')">All (${venues.length})</button>`+
-    venues.map(v=>`<button class="vbtn ${st.venue===v?'on':''}" onclick="filterVenue('${v}')">${D.venues[v].course} (${D.venues[v].race_count})</button>`).join('');
+    venues.map(v=>{
+      const vd=D.venues[v];
+      let matchCls='';
+      if(codeActive){
+        const hasMatch=(vd.races||[]).some(r=>(r.race_type||'').trim()===st.raceCodeFilter);
+        matchCls=hasMatch?' venue-has-match':' venue-no-match';
+      }
+      return `<button class="vbtn${st.venue===v?' on':''}${matchCls}" onclick="filterVenue('${v}')">${vd.course} (${vd.race_count})</button>`;
+    }).join('');
 }
 
 function filterVenue(v){st.venue=v;renderVenueBar();renderRaceCards();renderFieldSizeBar()}
@@ -6956,11 +6974,11 @@ const GAP_BRACKETS=[
 function getGapBracket(gap){if(gap<8)return'tight';if(gap<15)return'competitive';return'clear';}
 function filterConfidence(c){st.confidenceFilter=st.confidenceFilter===c?'all':c;renderRaceCards();renderFieldSizeBar();}
 function filterGap(g){if(st.gapFilter.has(g))st.gapFilter.delete(g);else st.gapFilter.add(g);renderRaceCards();renderFieldSizeBar();}
-function filterRaceCode(c){st.raceCodeFilter=st.raceCodeFilter===c?'all':c;renderRaceCards();renderFieldSizeBar();}
+function filterRaceCode(c){st.raceCodeFilter=st.raceCodeFilter===c?'all':c;renderVenueBar();renderRaceCards();renderFieldSizeBar();}
 
 let _fsbPillOpen=null;
 function fsbToggle(key){_fsbPillOpen=_fsbPillOpen===key?null:key;renderFieldSizeBar();}
-function fsbClearAll(){_fsbPillOpen=null;st.fieldFilter.clear();st.gapFilter.clear();st.raceTypeFilter='all';st.raceCodeFilter='all';st.confidenceFilter='all';st.comboFilter=false;renderRaceCards();renderFieldSizeBar();}
+function fsbClearAll(){_fsbPillOpen=null;st.fieldFilter.clear();st.gapFilter.clear();st.raceTypeFilter='all';st.raceCodeFilter='all';st.confidenceFilter='all';st.comboFilter=false;renderVenueBar();renderRaceCards();renderFieldSizeBar();}
 (function(){document.addEventListener('click',function(e){if(_fsbPillOpen&&!e.target.closest('#fieldSizeBar')){_fsbPillOpen=null;renderFieldSizeBar();}});})();
 
 function renderFieldSizeBar(){
@@ -7311,6 +7329,7 @@ function renderRaceCards(){
     const confTier=topPct>=64?'TOP PICK':topPct>=55?'STRONG':topPct>=47?'SOLID':'MOD';
     const confCls=confTier==='TOP PICK'?'conf-top':confTier==='STRONG'?'conf-strong':confTier==='SOLID'?'conf-solid':'conf-mod';
     const gapCls=gap>=18?'gap-elite':gap>=10?'gap-good':'gap-low';
+    const scoreTier=topScore>=80?'high':topScore>=65?'mid':'low';
     const cardExtraCls=_gf?'rc-gold':_sf?'rc-silver':'';
     const dataSeg=_gf?'golden':_sf?'silver':_bf?'bronze':'';
     return `<div class="rc ${cardExtraCls}" id="${cardId}" data-seg="${dataSeg}" style="border-left:5px solid ${getRaceBorderColor(r)}" onclick="openRace('${r.venueKey}',${r.raceIdx}).catch(e=>console.error('openRace error:',e))">
@@ -7338,7 +7357,7 @@ function renderRaceCards(){
       <div class="rc-cstat-l">Gap</div>
     </div>
     <div class="rc-cstat">
-      <div class="rc-cstat-n">${topScore}</div>
+      <div class="rc-cstat-n" data-st="${scoreTier}">${topScore}</div>
       <div class="rc-cstat-l">Score</div>
     </div>
     <div class="rc-cstat">
@@ -7354,6 +7373,15 @@ function renderRaceCards(){
   ${_ban?renderBanFlag(_ban):''}
 </div>`;
   }).join('');
+  el.querySelectorAll('.rc').forEach(card=>{
+    const scoreN=card.querySelector('.rc-cstats .rc-cstat:nth-child(2) .rc-cstat-n');
+    const bar=card.querySelector('.rc-p1-fill');
+    const v=scoreN?parseFloat(scoreN.textContent):NaN;
+    if(isNaN(v)) return;
+    const col=v>=80?'#059669':v>=65?'#1d4ed8':'#9ca3af';
+    if(scoreN) scoreN.style.setProperty('color',col,'important');
+    if(bar) bar.style.setProperty('background',col,'important');
+  });
   // stagger-animate newly visible cards
   if(_prevIds.size>0){
     [...el.querySelectorAll('.rc[id]')].forEach((c,i)=>{
