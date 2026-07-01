@@ -3636,7 +3636,8 @@ function buildGoingStats(venue){
 // ── venue analysis (with localStorage cache) ──────────────────
 function xaBuildVenueAnalysis(venue){
   const date=window.D?.date||'x';
-  const ck=`xaCache_${date}_${venue}`;
+  const ver=window._xaDataVersion||0;
+  const ck=`xaCache_${date}_v${ver}_${venue}`;
   try{const c=localStorage.getItem(ck);if(c)return JSON.parse(c);}catch(e){}
   const result={venue,trainer:buildTrainerStats(venue),draw:buildDrawStats(venue),horse:buildHorseHistory(venue),going:buildGoingStats(venue)};
   try{localStorage.setItem(ck,JSON.stringify(result));}catch(e){}
@@ -3814,11 +3815,15 @@ function xaRenderSidebarPanel(){
 }
 
 // ── cache clear ───────────────────────────────────────────────
+// Purges any xaCache_ entry not matching today's date + current data
+// version — catches both old-date caches and stale-within-today caches
+// left behind after a results backfill/reload bumped _xaDataVersion.
 function xaClearStaleCache(date){
   try{
+    const keep=`xaCache_${date}_v${window._xaDataVersion||0}_`;
     for(let i=localStorage.length-1;i>=0;i--){
       const k=localStorage.key(i);
-      if(k?.startsWith('xaCache_')&&!k.includes(`xaCache_${date}_`))localStorage.removeItem(k);
+      if(k?.startsWith('xaCache_')&&!k.startsWith(keep))localStorage.removeItem(k);
     }
   }catch(e){}
 }
@@ -5035,6 +5040,7 @@ async function load(){
   // When DB server is live, replace history entirely (it is the source of truth)
   if(window._resultsSource==='db'&&fileHist&&fileHist.races){
     window._resultsHistory=fileHist;
+    window._xaDataVersion=(window._xaDataVersion||0)+1; // fresh DB fetch — bust XA analysis cache
     try{localStorage.removeItem('resultsHistory');}catch(e){}
     const badge=document.getElementById('dbStatusBadge');
     if(badge){badge.textContent='🟢 DB '+fileHist.races.length+' races';badge.style.display='';}
@@ -5075,6 +5081,7 @@ async function load(){
     if(added>0){
       try{localStorage.setItem('resultsHistory',JSON.stringify(window._resultsHistory));}catch(e){}
       console.log(`Merged ${added} new results from file`);
+      window._xaDataVersion=(window._xaDataVersion||0)+1; // new races merged — bust XA analysis cache
     }
     if(fileHist.weight_profiles) Object.assign(window._resultsHistory.weight_profiles||{},fileHist.weight_profiles);
     if(fileHist.calibrations&&fileHist.calibrations.length){
