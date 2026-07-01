@@ -438,6 +438,54 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .prixm-tag-neg{background:rgba(239,68,68,.08);color:#f87171}
 .prixm-tag-neu{background:rgba(255,255,255,.06);color:var(--muted)}
 .prixm-result-tag{font-size:10px;font-weight:700;padding:2px 6px;border-radius:4px;margin-left:6px}
+.prixm-result-footer{display:flex;align-items:center;justify-content:space-between;padding:6px 14px;border-top:1px solid var(--border)}
+.prixm-result-footer-won{background:linear-gradient(90deg,rgba(16,185,129,.15),rgba(16,185,129,.04));border-top-color:rgba(16,185,129,.2)}
+.prixm-result-footer-placed{background:linear-gradient(90deg,rgba(59,130,246,.12),rgba(59,130,246,.03));border-top-color:rgba(59,130,246,.18)}
+.prixm-result-footer-lost{background:rgba(239,68,68,.05);border-top-color:rgba(239,68,68,.1)}
+.prixm-result-footer-nr{background:transparent}
+.prixm-rf-badge{font-size:11px;font-weight:800;letter-spacing:.4px;display:flex;align-items:center;gap:5px}
+.prixm-rf-badge-won{color:#10b981}
+.prixm-rf-badge-placed{color:#60a5fa}
+.prixm-rf-badge-lost{color:#f87171}
+.prixm-rf-badge-nr{color:var(--muted)}
+.prixm-rf-pos{font-size:10px;font-weight:600;opacity:.55}
+.prixm-rf-sp{font-size:10px;color:var(--muted)}
+/* Cross Analysis Engine */
+.xa-badge{font-size:9px;font-weight:700;padding:2px 6px;border-radius:3px;border-width:1px;border-style:solid;white-space:nowrap;cursor:default;letter-spacing:.1px;display:inline-block}
+.xa-badge-strong{background:rgba(21,128,61,.1);color:#15803d;border-color:rgba(21,128,61,.3)}
+.xa-badge-moderate{background:rgba(180,83,9,.08);color:#b45309;border-color:rgba(180,83,9,.2)}
+.xa-badge-negative{background:rgba(220,38,38,.07);color:#dc2626;border-color:rgba(220,38,38,.2)}
+.xa-badge-row{display:flex;gap:3px;flex-wrap:wrap;margin-top:3px}
+.xa-chip{font-size:9px;font-weight:700;padding:2px 7px;border-radius:10px;background:rgba(180,83,9,.1);color:#b45309;border:1px solid rgba(180,83,9,.2)}
+.xa-pc{border-bottom:1px solid #f3f4f6}
+.xa-pc-h{padding:8px 14px;display:flex;align-items:center;justify-content:space-between}
+.xa-pc-title{font-size:10px;font-weight:700;color:#374151;text-transform:uppercase;letter-spacing:.4px}
+.xa-pc-badge{font-size:9px;font-weight:700;padding:2px 6px;border-radius:8px}
+.xa-pc-body{padding:0 14px 10px}
+.xa-mini-tbl{width:100%;border-collapse:collapse;font-size:11px;margin-top:4px}
+.xa-mini-tbl th{font-size:9px;font-weight:700;color:#9ca3af;text-transform:uppercase;letter-spacing:.4px;padding:2px 3px;border-bottom:1px solid #f3f4f6;text-align:left}
+.xa-mini-tbl td{padding:3px 3px;border-bottom:1px solid #f9f9f9;vertical-align:middle}
+.xa-mini-tbl tr:last-child td{border-bottom:none}
+.xa-draw-bands{display:flex;gap:4px;margin-top:5px}
+.xa-draw-band{flex:1;padding:6px 4px;text-align:center;border-radius:5px;border:1px solid #f3f4f6}
+.xa-draw-sr{font-size:15px;font-weight:900;line-height:1;margin:2px 0 1px}
+.xa-draw-r{font-size:9px;color:#9ca3af}
+.xa-going-row{display:flex;align-items:center;gap:6px;padding:3px 0;border-bottom:1px solid #f9f9f9}
+.xa-going-row:last-child{border-bottom:none}
+.xa-going-lbl{font-size:10px;color:#374151;flex:1}
+.xa-going-bar-wrap{width:50px;height:4px;background:#f3f4f6;border-radius:2px;overflow:hidden;flex-shrink:0}
+.xa-going-bar-fill{height:100%;border-radius:2px}
+.xa-going-pct{font-size:10px;font-weight:700;width:26px;text-align:right}
+/* XA card glow + strip */
+.rc-xa-strong{border-color:rgba(21,128,61,.45)!important;box-shadow:0 0 0 2px rgba(21,128,61,.1),0 2px 10px rgba(21,128,61,.08)!important}
+.rc-xa-mod{border-color:rgba(180,83,9,.35)!important;box-shadow:0 0 0 2px rgba(180,83,9,.08)!important}
+.rc-xa-strip{display:flex;align-items:center;gap:5px;padding:5px 10px;flex-wrap:wrap}
+.rc-xa-strip-strong{border-top:1px solid rgba(21,128,61,.15);background:linear-gradient(90deg,rgba(21,128,61,.07),rgba(21,128,61,.02))}
+.rc-xa-strip-mod{border-top:1px solid rgba(180,83,9,.15);background:linear-gradient(90deg,rgba(180,83,9,.06),rgba(180,83,9,.02))}
+.rc-xa-strip-icon{font-size:10px}
+.rc-xa-chip{font-size:9px;font-weight:700;padding:1px 5px;border-radius:8px;white-space:nowrap}
+.rc-xa-chip-strong{background:rgba(21,128,61,.1);color:#15803d;border:1px solid rgba(21,128,61,.2)}
+.rc-xa-chip-mod{background:rgba(180,83,9,.08);color:#b45309;border:1px solid rgba(180,83,9,.18)}
 /* Verification Pass */
 .verif-confirmed{color:#34d399}.verif-conditional{color:#fbbf24}.verif-flagged{color:#f87171}
 .verif-toggle{font-size:10px;color:var(--muted);cursor:pointer;padding:5px 14px;border-top:1px solid var(--border);display:flex;align-items:center;gap:5px;user-select:none}
@@ -1000,6 +1048,10 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .bp-toggle-fab{background:#15803d!important;box-shadow:0 4px 16px rgba(21,128,61,.35)!important}
 /* sumstrip cards should auto-adapt via var(--card) but ensure border visible */
 .ss{border-color:var(--border)!important}
+/* Prixm result footer - light theme */
+.prixm-rf-badge-won{color:#15803d!important}
+.prixm-rf-badge-lost{color:#dc2626!important}
+.prixm-result-footer-lost{background:rgba(220,38,38,.05)!important;border-top-color:rgba(220,38,38,.12)!important}
 
 </style>
 <script src="results_history.js" onerror=""></script>
@@ -3514,6 +3566,271 @@ window.openTrackAnalysis=function(venue){
 
 })();
 
+/* ==================== CROSS ANALYSIS ENGINE ==================== */
+(function(){
+'use strict';
+
+const XA_MIN=5, XA_STRONG=45, XA_MOD=30, XA_NEG=20;
+
+// ── stat builders ──────────────────────────────────────────────
+function _races(venue){
+  const h=window._resultsHistory;if(!h?.races)return[];
+  const v=venue.toLowerCase();
+  return h.races.filter(r=>r.venue&&r.venue.toLowerCase()===v);
+}
+
+function buildTrainerStats(venue){
+  const map={};
+  _races(venue).forEach(race=>{
+    const fs=race.field_size||(race.results||[]).filter(r=>!r.non_runner).length||0;
+    const pt=fs>=16?4:fs>=8?3:fs>=5?2:1;
+    (race.results||[]).forEach(r=>{
+      if(!r.trainer||r.non_runner||r.pull_out||r.finish_pos==null)return;
+      if(!map[r.trainer])map[r.trainer]={runs:0,wins:0,placed:0};
+      map[r.trainer].runs++;
+      if(r.finish_pos===1)map[r.trainer].wins++;
+      if(r.finish_pos<=pt)map[r.trainer].placed++;
+    });
+  });
+  return map;
+}
+
+function buildDrawStats(venue){
+  const bands={'1-4':{runs:0,wins:0},'5-8':{runs:0,wins:0},'9+':{runs:0,wins:0}};
+  _races(venue).forEach(race=>{
+    (race.results||[]).forEach(r=>{
+      if(!r.draw||r.non_runner||r.pull_out||r.finish_pos==null)return;
+      const b=r.draw<=4?'1-4':r.draw<=8?'5-8':'9+';
+      bands[b].runs++;if(r.finish_pos===1)bands[b].wins++;
+    });
+  });
+  return bands;
+}
+
+function buildHorseHistory(venue){
+  const map={};
+  _races(venue).forEach(race=>{
+    (race.results||[]).forEach(r=>{
+      if(r.non_runner||r.pull_out||r.finish_pos==null)return;
+      if(!map[r.name])map[r.name]=[];
+      map[r.name].push({date:race.date,pos:r.finish_pos,going:race.going,won:r.finish_pos===1});
+    });
+  });
+  return map;
+}
+
+function buildGoingStats(venue){
+  const map={};
+  _races(venue).forEach(race=>{
+    const rs=(race.results||[]).filter(r=>!r.non_runner&&!r.pull_out&&r.predicted_score!=null);
+    if(!rs.length)return;
+    const top=rs.slice().sort((a,b)=>(b.predicted_score||0)-(a.predicted_score||0))[0];
+    if(!top||top.finish_pos==null)return;
+    const g=(race.going||'unknown').trim();
+    if(!map[g])map[g]={runs:0,wins:0};
+    map[g].runs++;if(top.finish_pos===1)map[g].wins++;
+  });
+  return map;
+}
+
+// ── venue analysis (with localStorage cache) ──────────────────
+function xaBuildVenueAnalysis(venue){
+  const date=window.D?.date||'x';
+  const ck=`xaCache_${date}_${venue}`;
+  try{const c=localStorage.getItem(ck);if(c)return JSON.parse(c);}catch(e){}
+  const result={venue,trainer:buildTrainerStats(venue),draw:buildDrawStats(venue),horse:buildHorseHistory(venue),going:buildGoingStats(venue)};
+  try{localStorage.setItem(ck,JSON.stringify(result));}catch(e){}
+  return result;
+}
+
+// ── signal generator ──────────────────────────────────────────
+function xaGetSignals(runner,race,analysis){
+  if(!analysis||!runner)return[];
+  const sigs=[];
+
+  // trainer
+  const td=analysis.trainer?.[runner.trainer];
+  if(td&&td.runs>=XA_MIN){
+    const sr=Math.round(td.wins/td.runs*100);
+    const strength=sr>=XA_STRONG?'strong':sr>=XA_MOD?'moderate':sr<=XA_NEG?'negative':null;
+    if(strength)sigs.push({type:'trainer',strength,label:`T:${(runner.trainer||'').split(' ').pop()} ${sr}%`,detail:`${td.wins}W/${td.runs}R at ${analysis.venue}`,sr,runs:td.runs});
+  }
+
+  // draw
+  if(runner.draw!=null&&analysis.draw){
+    const b=runner.draw<=4?'1-4':runner.draw<=8?'5-8':'9+';
+    const dd=analysis.draw[b];
+    const tot=Object.values(analysis.draw).reduce((a,x)=>({runs:a.runs+x.runs,wins:a.wins+x.wins}),{runs:0,wins:0});
+    if(dd&&dd.runs>=XA_MIN&&tot.runs>0){
+      const bsr=Math.round(dd.wins/dd.runs*100);
+      const base=Math.round(tot.wins/tot.runs*100);
+      const delta=bsr-base;
+      if(Math.abs(delta)>=8){
+        const strength=delta>=15?'strong':delta>=8?'moderate':delta<=-8?'negative':null;
+        if(strength)sigs.push({type:'draw',strength,label:`Draw ${b} ${delta>0?'↑':'↓'}${Math.abs(delta)}%`,detail:`${dd.wins}W/${dd.runs}R in stalls ${b} (base ${base}%)`,sr:bsr,runs:dd.runs});
+      }
+    }
+  }
+
+  // horse history
+  const hd=analysis.horse?.[runner.name];
+  if(hd&&hd.length>0){
+    const wins=hd.filter(h=>h.won).length,runs=hd.length;
+    const strength=wins>0?(wins>=2?'strong':'moderate'):runs>=3?'negative':null;
+    if(strength){
+      const latest=hd.slice().sort((a,b)=>b.date.localeCompare(a.date))[0];
+      sigs.push({type:'horse',strength,label:wins>0?`✓ ${wins}/${runs} here`:`✗ 0/${runs} here`,detail:`Last: ${latest.date} · ${latest.pos===1?'Won':`${latest.pos}th`} · ${latest.going||''}`,sr:Math.round(wins/runs*100),runs});
+    }
+  }
+
+  // going
+  const todayGoing=(race.going||'').trim();
+  const gd=analysis.going?.[todayGoing];
+  if(gd&&gd.runs>=XA_MIN){
+    const allG=Object.values(analysis.going).reduce((a,x)=>({runs:a.runs+x.runs,wins:a.wins+x.wins}),{runs:0,wins:0});
+    const gsr=Math.round(gd.wins/gd.runs*100);
+    const base=allG.runs>0?Math.round(allG.wins/allG.runs*100):33;
+    const delta=gsr-base;
+    if(delta>=10)sigs.push({type:'going',strength:delta>=20?'strong':'moderate',label:`Going ↑${gsr}% SR`,detail:`${todayGoing}: ${gd.wins}W/${gd.runs}R (base ${base}%)`,sr:gsr,runs:gd.runs});
+  }
+
+  return sigs;
+}
+
+// ── sidebar panel ─────────────────────────────────────────────
+function xaRenderSidebarPanel(){
+  if(!window.D?.venues||!window._resultsHistory)return'';
+
+  // Collect all signals across today's racecard
+  const all=[];
+  Object.entries(window.D.venues).forEach(([vk,venue])=>{
+    const an=xaBuildVenueAnalysis(vk);
+    venue.races.forEach(race=>{
+      (race.runners||[]).forEach(runner=>{
+        xaGetSignals(runner,race,an).forEach(s=>{
+          all.push({...s,horse:runner.name,venue:vk,time:race.time});
+        });
+      });
+    });
+  });
+  if(!all.length)return'';
+
+  const order={strong:0,moderate:1,negative:2};
+  all.sort((a,b)=>(order[a.strength]||1)-(order[b.strength]||1)||b.sr-a.sr);
+  const top=all.slice(0,6);
+
+  // Pattern cards for first venue (or selected)
+  const vk=window.st?.venue&&window.st.venue!=='all'?window.st.venue:Object.keys(window.D.venues)[0];
+  const an=xaBuildVenueAnalysis(vk);
+
+  // Trainer table
+  const today=new Set();
+  (window.D.venues[vk]?.races||[]).forEach(r=>(r.runners||[]).forEach(ru=>today.add(ru.trainer)));
+  const trainerRows=Object.entries(an.trainer||{})
+    .filter(([t,d])=>today.has(t)&&d.runs>=XA_MIN)
+    .map(([t,d])=>({name:t,sr:Math.round(d.wins/d.runs*100),runs:d.runs,wins:d.wins}))
+    .sort((a,b)=>b.sr-a.sr).slice(0,5);
+
+  const colT=sr=>sr>=XA_STRONG?'#15803d':sr>=XA_MOD?'#b45309':sr<=XA_NEG?'#dc2626':'#9ca3af';
+
+  const trHtml=trainerRows.length?`<table class="xa-mini-tbl">
+    <thead><tr><th>Trainer</th><th>R</th><th>SR%</th></tr></thead>
+    <tbody>${trainerRows.map(t=>`<tr>
+      <td style="font-weight:600;max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${t.name.split(' ').slice(-1)[0]}</td>
+      <td style="color:#9ca3af">${t.runs}</td>
+      <td><span style="font-weight:800;color:${colT(t.sr)}">${t.sr}%</span></td>
+    </tr>`).join('')}</tbody></table>`
+    :'<div style="font-size:10px;color:#9ca3af;padding:4px 0">No data (min 5 runs)</div>';
+
+  // Draw bands
+  const draw=an.draw||{};
+  const tot=Object.values(draw).reduce((a,x)=>({runs:a.runs+x.runs,wins:a.wins+x.wins}),{runs:0,wins:0});
+  const base=tot.runs>0?Math.round(tot.wins/tot.runs*100):0;
+  const drawHtml=Object.entries(draw).map(([b,d])=>{
+    const sr=d.runs>0?Math.round(d.wins/d.runs*100):0;
+    const delta=sr-base;
+    const col=delta>=10?'#15803d':delta<=-8?'#dc2626':'#9ca3af';
+    return `<div class="xa-draw-band" style="border-color:${col}30">
+      <div style="font-size:9px;font-weight:700;color:#6b7280">Stalls ${b}</div>
+      <div class="xa-draw-sr" style="color:${col}">${sr}%</div>
+      <div class="xa-draw-r">${d.runs}R</div>
+      <div style="font-size:9px;color:${col};font-weight:700;margin-top:3px">${delta>0?'+':''}${delta}%</div>
+    </div>`;
+  }).join('');
+
+  // Going
+  const going=an.going||{};
+  const todayGoing=(window.D.venues[vk]?.races||[]).map(r=>r.going).filter(Boolean);
+  const goingHtml=Object.entries(going)
+    .sort((a,b)=>b[1].runs-a[1].runs).slice(0,4)
+    .map(([g,d])=>{
+      const sr=d.runs>0?Math.round(d.wins/d.runs*100):0;
+      const col=sr>=40?'#15803d':sr>=28?'#b45309':'#dc2626';
+      const isToday=todayGoing.includes(g);
+      return `<div class="xa-going-row">
+        <div class="xa-going-lbl">${isToday?'<b>':''  }${g}${isToday?'</b>':''}</div>
+        <div class="xa-going-bar-wrap"><div class="xa-going-bar-fill" style="background:${col};width:${Math.min(100,sr*2)}%"></div></div>
+        <div class="xa-going-pct" style="color:${col}">${sr}%</div>
+      </div>`;
+    }).join('');
+
+  // Horse history — only horses in today's card
+  const todayHorses=new Set();
+  (window.D.venues[vk]?.races||[]).forEach(r=>(r.runners||[]).forEach(ru=>todayHorses.add(ru.name)));
+  const horseHtml=Object.entries(an.horse||{})
+    .filter(([n])=>todayHorses.has(n))
+    .map(([n,runs])=>{
+      const wins=runs.filter(r=>r.won).length;
+      const col=wins>0?'#15803d':'#dc2626';
+      const latest=runs.slice().sort((a,b)=>b.date.localeCompare(a.date))[0];
+      return `<div style="display:flex;align-items:center;gap:6px;padding:4px 0;border-bottom:1px solid #f9f9f9">
+        <div style="flex:1"><div style="font-size:10px;font-weight:700">${n}</div><div style="font-size:9px;color:#9ca3af">${latest.date}</div></div>
+        <div style="font-size:12px;font-weight:900;color:${col}">${wins}/${runs.length}</div>
+      </div>`;
+    }).join('');
+
+  return `<div class="d1-panel" style="margin-top:0">
+    <div class="d1-panel-hdr">
+      <span class="d1-panel-title">⚡ Cross Analysis</span>
+      <span class="d1-panel-date">${all.length} signal${all.length!==1?'s':''} · ${vk}</span>
+    </div>
+    <div class="xa-pc">
+      <div class="xa-pc-h"><div class="xa-pc-title">Trainer Hotspots</div></div>
+      <div class="xa-pc-body">${trHtml}</div>
+    </div>
+    <div class="xa-pc">
+      <div class="xa-pc-h"><div class="xa-pc-title">Draw Tendency</div><span style="font-size:9px;color:#9ca3af">Base ${base}%</span></div>
+      <div class="xa-pc-body"><div class="xa-draw-bands">${drawHtml}</div></div>
+    </div>
+    <div class="xa-pc">
+      <div class="xa-pc-h"><div class="xa-pc-title">Going Pattern</div></div>
+      <div class="xa-pc-body" style="padding-top:4px">${goingHtml||'<div style="font-size:10px;color:#9ca3af">No data</div>'}</div>
+    </div>
+    ${horseHtml?`<div class="xa-pc" style="border-bottom:none">
+      <div class="xa-pc-h"><div class="xa-pc-title">Horse History</div></div>
+      <div class="xa-pc-body" style="padding-top:4px">${horseHtml}</div>
+    </div>`:''}
+  </div>`;
+}
+
+// ── cache clear ───────────────────────────────────────────────
+function xaClearStaleCache(date){
+  try{
+    for(let i=localStorage.length-1;i>=0;i--){
+      const k=localStorage.key(i);
+      if(k?.startsWith('xaCache_')&&!k.includes(`xaCache_${date}_`))localStorage.removeItem(k);
+    }
+  }catch(e){}
+}
+
+// ── public API ────────────────────────────────────────────────
+window.xaBuildVenueAnalysis=xaBuildVenueAnalysis;
+window.xaGetSignals=xaGetSignals;
+window.xaRenderSidebarPanel=xaRenderSidebarPanel;
+window.xaClearStaleCache=xaClearStaleCache;
+
+})();
+
 /* ==================== PROFILE CLASSIFIER ==================== */
 function classifyProfile(surface,raceType){
   const rt=(raceType||'').toLowerCase(),s=(surface||'').toLowerCase();
@@ -5900,15 +6217,34 @@ function renderD1Sidebar(){
   const savedPicks=loadTop10Picks(date);
   const rawPicks=savedPicks&&savedPicks.picks&&savedPicks.picks.length?savedPicks.picks:getTop10Picks(D);
   const prixm=getPrixmPicks(rawPicks);
+  const hist=window._resultsHistory;
   let picksHtml='<div style="padding:12px 14px;font-size:12px;color:#9ca3af">No qualifying picks today</div>';
   if(prixm.length){
     picksHtml=prixm.slice(0,6).map(p=>{
       const catCls=p.category==='NAP'?'d1-cb-nap':p.category==='WIN'?'d1-cb-win':p.category==='STRONG'?'d1-cb-strong':'d1-cb-place';
       const edgeCol=p.category==='NAP'?'#a855f7':p.category==='WIN'?'#15803d':p.category==='STRONG'?'#1d4ed8':'#f59e0b';
-      const edgeNumCol=edgeCol;
       const edgePct=Math.min(100,p.edge||0);
       const tagsHtml=p.tags&&p.tags.length?`<div style="display:flex;gap:3px;flex-wrap:wrap;margin-top:3px">${p.tags.slice(0,3).map(t=>`<span style="font-size:9px;padding:1px 5px;border-radius:3px;font-weight:600;background:${t.c==='pos'?'#dcfce7':t.c==='neg'?'#fee2e2':'#f3f4f6'};color:${t.c==='pos'?'#15803d':t.c==='neg'?'#dc2626':'#6b7280'};border:1px solid ${t.c==='pos'?'#bbf7d0':t.c==='neg'?'#fecaca':'#e5e7eb'}">${t.t}</span>`).join('')}</div>`:'';
-      return `<div class="d1-pick-card" onclick="openRace('${p.venueKey}',${p.raceIdx}).catch(e=>{})">
+      // Result footer
+      const res=getPickResult(p,hist);
+      const st=res?res.status:'';
+      let resFtr='';
+      let cardStyle='';
+      if(st==='won'){
+        const spStr=res.sp?` · SP ${res.sp}`:'';
+        resFtr=`<div style="margin-top:8px;padding:5px 0 0;border-top:1px solid rgba(16,185,129,.2);display:flex;align-items:center;justify-content:space-between"><span style="font-size:10px;font-weight:800;color:#15803d;display:flex;align-items:center;gap:4px">🏆 WON <span style="font-weight:600;opacity:.6">${ordinal(res.pos)} of ${p.fieldSize||'?'}</span></span><span style="font-size:9px;color:#6b7280">${res.sp?'SP '+res.sp:''}</span></div>`;
+        cardStyle='border-color:rgba(16,185,129,.4);background:rgba(16,185,129,.04)';
+      } else if(st==='placed'){
+        const medal=res.pos===2?'🥈':res.pos===3?'🥉':'';
+        resFtr=`<div style="margin-top:8px;padding:5px 0 0;border-top:1px solid rgba(59,130,246,.18);display:flex;align-items:center;justify-content:space-between"><span style="font-size:10px;font-weight:800;color:#1d4ed8;display:flex;align-items:center;gap:4px">${medal} PLACED <span style="font-weight:600;opacity:.6">${ordinal(res.pos)} of ${p.fieldSize||'?'}</span></span><span style="font-size:9px;color:#6b7280">${res.sp?'SP '+res.sp:''}</span></div>`;
+        cardStyle='border-color:rgba(59,130,246,.3)';
+      } else if(st==='lost'){
+        resFtr=`<div style="margin-top:8px;padding:5px 0 0;border-top:1px solid rgba(220,38,38,.12);display:flex;align-items:center;justify-content:space-between"><span style="font-size:10px;font-weight:800;color:#dc2626;display:flex;align-items:center;gap:4px">✗ LOST <span style="font-weight:600;opacity:.6">${ordinal(res.pos)} of ${p.fieldSize||'?'}</span></span><span style="font-size:9px;color:#6b7280">${res.sp?'SP '+res.sp:''}</span></div>`;
+        cardStyle='opacity:.65';
+      } else if(st==='nr'||st==='pu'){
+        resFtr=`<div style="margin-top:8px;padding:5px 0 0;border-top:1px solid #e5e0d8"><span style="font-size:10px;font-weight:700;color:#9ca3af">${st.toUpperCase()}</span></div>`;
+      }
+      return `<div class="d1-pick-card" style="${cardStyle}" onclick="openRace('${p.venueKey}',${p.raceIdx}).catch(e=>{})">
         <div style="display:flex;align-items:center;gap:5px;margin-bottom:3px">
           <span class="d1-cat-badge ${catCls}">${p.category}</span>
           <span style="font-size:9px;color:#9ca3af;margin-left:auto">${p.time||''}</span>
@@ -5920,13 +6256,13 @@ function renderD1Sidebar(){
           <div style="flex:1;height:7px;background:#c9c3bb;border-radius:3px;overflow:hidden">
             <div style="width:${edgePct}%;height:100%;background:${edgeCol};border-radius:3px"></div>
           </div>
-          <span style="font-size:11px;font-weight:800;width:22px;text-align:right;color:${edgeNumCol}">${p.edge||0}</span>
+          <span style="font-size:11px;font-weight:800;width:22px;text-align:right;color:${edgeCol}">${p.edge||0}</span>
         </div>
         ${tagsHtml}
+        ${resFtr}
       </div>`;
     }).join('');
   }
-  const hist=window._resultsHistory;
   let plHtml='<div class="d1-pl-row"><span class="d1-pl-label">No results today</span></div>';
   if(hist&&hist.races&&date){
     const todayR=hist.races.filter(h=>h.date===date&&h.result);
@@ -5942,6 +6278,7 @@ function renderD1Sidebar(){
       `;
     }
   }
+  const xaPanel=window.xaRenderSidebarPanel?window.xaRenderSidebarPanel():'';
   el.innerHTML=`
     <div class="d1-panel">
       <div class="d1-panel-hdr">
@@ -5956,6 +6293,7 @@ function renderD1Sidebar(){
       </div>
       ${plHtml}
     </div>
+    ${xaPanel}
   `;
 }
 
@@ -5978,6 +6316,7 @@ async function render(){
     document.getElementById('venueBar').innerHTML='';
     return;
   }
+  if(window.xaClearStaleCache)window.xaClearStaleCache(D.date||'');
   const dt=new Date(D.date+'T12:00:00');
   dd.textContent=dt.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
   const tR=Object.values(D.venues).reduce((a,v)=>a+v.races.length,0);
@@ -6531,22 +6870,35 @@ function renderPrixmPicks(picks, hist){
     const edgeCol=p.category==='NAP'?'#a855f7':p.category==='WIN'?'#34d399':p.category==='STRONG'?'#60a5fa':'#fb923c';
     // Category label
     const catLabel=p.category==='NAP'?'NAP — best bet of the day':p.category;
-    // Result tag
-    let resultTag='';
-    if(st==='won') resultTag=`<span class="prixm-result-tag" style="color:#15803d;background:rgba(21,128,61,.12)">✓ WON ${res.pos?ordinal(res.pos):''}</span>`;
-    else if(st==='placed') resultTag=`<span class="prixm-result-tag" style="color:#1d4ed8;background:rgba(37,99,235,.1)">PLACED ${ordinal(res.pos)}</span>`;
-    else if(st==='lost') resultTag=`<span class="prixm-result-tag" style="color:#f87171;background:rgba(239,68,68,.1)">${ordinal(res.pos)}</span>`;
-    else if(st==='nr'||st==='pu') resultTag=`<span class="prixm-result-tag" style="color:var(--muted);background:transparent">NR</span>`;
+    // Result footer strip
+    let resultFooter='';
+    let cardBorder='';
+    if(st==='won'){
+      const spStr=res.sp?`SP ${res.sp}`:'';
+      resultFooter=`<div class="prixm-result-footer prixm-result-footer-won"><div class="prixm-rf-badge prixm-rf-badge-won">🏆 WON <span class="prixm-rf-pos">${ordinal(res.pos)} of ${p.fieldSize||'?'}</span></div><span class="prixm-rf-sp">${spStr}</span></div>`;
+      cardBorder='border-color:rgba(16,185,129,.3)';
+    } else if(st==='placed'){
+      const spStr=res.sp?`SP ${res.sp}`:'';
+      const medal=res.pos===2?'🥈':res.pos===3?'🥉':'';
+      resultFooter=`<div class="prixm-result-footer prixm-result-footer-placed"><div class="prixm-rf-badge prixm-rf-badge-placed">${medal} PLACED <span class="prixm-rf-pos">${ordinal(res.pos)} of ${p.fieldSize||'?'}</span></div><span class="prixm-rf-sp">${spStr}</span></div>`;
+      cardBorder='border-color:rgba(59,130,246,.25)';
+    } else if(st==='lost'){
+      const spStr=res.sp?`SP ${res.sp}`:'';
+      resultFooter=`<div class="prixm-result-footer prixm-result-footer-lost"><div class="prixm-rf-badge prixm-rf-badge-lost">✗ LOST <span class="prixm-rf-pos">${ordinal(res.pos)} of ${p.fieldSize||'?'}</span></div><span class="prixm-rf-sp">${spStr}</span></div>`;
+    } else if(st==='nr'||st==='pu'){
+      resultFooter=`<div class="prixm-result-footer prixm-result-footer-nr"><div class="prixm-rf-badge prixm-rf-badge-nr">${st.toUpperCase()}</div></div>`;
+    }
     // Reasoning tags
     const tagsHtml=(br.tags||[]).map(t=>`<span class="prixm-tag prixm-tag-${t.c}">${t.c==='pos'?'✓':t.c==='neg'?'✗':'—'} ${t.t}</span>`).join('');
 
-    h+=`<div class="prixm-pick" style="${hasRes&&st==='lost'?'opacity:.6':''}" onclick="openRace('${p.venueKey}',${p.raceIdx}).catch(e=>console.error(e))">
+    const pickStyle=`${hasRes&&st==='lost'?'opacity:.65;':''} ${cardBorder}`;
+    h+=`<div class="prixm-pick" style="${pickStyle}" onclick="openRace('${p.venueKey}',${p.raceIdx}).catch(e=>console.error(e))">
       <div class="prixm-accent prixm-accent-${cat}"></div>
       <div class="prixm-content">
         <div class="prixm-main">
           <div class="prixm-left">
             <div class="prixm-cat-row"><span class="prixm-cat-dot prixm-cat-dot-${cat}"></span><span class="prixm-cat-text prixm-cat-text-${cat}">${catLabel}</span></div>
-            <div class="prixm-horse">${p.horse}${resultTag}${getRunnerComboBadges({name:p.horse,jockey:p.jockey,trainer:p.trainer})}</div>
+            <div class="prixm-horse">${p.horse}${getRunnerComboBadges({name:p.horse,jockey:p.jockey,trainer:p.trainer})}</div>
             <div class="prixm-sub">${p.time} ${p.venue} · ${p.trainer} · ${p.fieldSize} runners ${getConnectionChangeBadge({name:p.horse,jockey:p.jockey,trainer:p.trainer})}</div>
           </div>
           <div class="prixm-right">
@@ -6561,6 +6913,7 @@ function renderPrixmPicks(picks, hist){
         <div class="prixm-tags">${tagsHtml}</div>
       </div>
       ${p.verifResult?renderVerificationReport(p.verifResult,p,'verif_'+pidx):''}
+      ${resultFooter}
     </div>`;
   });
   h+=`</div></div>`;
@@ -6629,9 +6982,10 @@ function getPickResult(pick,hist,dateOverride){
   if(!pos) return null;
   const fs=pick.fieldSize||raceResult.field_size||12;
   const placeLimit=getPlaceLimit(fs);
-  if(pos===1) return {status:'won',pos,label:'1st — WON'};
-  if(pos<=placeLimit) return {status:'placed',pos,label:ordinal(pos)+' — PLACED'};
-  return {status:'lost',pos,label:ordinal(pos)};
+  const sp=horseResult.sp||null;
+  if(pos===1) return {status:'won',pos,sp,label:'1st — WON'};
+  if(pos<=placeLimit) return {status:'placed',pos,sp,label:ordinal(pos)+' — PLACED'};
+  return {status:'lost',pos,sp,label:ordinal(pos)};
 }
 
 function ordinal(n){const s=['th','st','nd','rd'];const v=n%100;return n+(s[(v-20)%10]||s[v]||s[0])}
@@ -7297,6 +7651,25 @@ function renderRaceCards(){
   }
   races.sort((a,b)=>a.time.localeCompare(b.time));
 
+  // Pre-build XA signals per race {strength, labels[]}
+  const _xaByRace={};
+  if(window.xaBuildVenueAnalysis&&window.xaGetSignals&&window._resultsHistory){
+    const _xaVenueCache={};
+    races.forEach(r=>{
+      if(!_xaVenueCache[r.venueKey])_xaVenueCache[r.venueKey]=window.xaBuildVenueAnalysis(r.venueKey);
+      const an=_xaVenueCache[r.venueKey];
+      const allSigs=[];
+      (r.runners||[]).forEach(ru=>{allSigs.push(...window.xaGetSignals(ru,r,an));});
+      if(!allSigs.length) return;
+      allSigs.sort((a,b)=>(a.strength==='strong'?0:1)-(b.strength==='strong'?0:1));
+      const hasStrong=allSigs.some(s=>s.strength==='strong');
+      _xaByRace[r.venueKey+'_'+r.raceIdx]={
+        strength:hasStrong?'strong':'moderate',
+        labels:allSigs.slice(0,3).map(s=>s.label)
+      };
+    });
+  }
+
   const hist=window._resultsHistory;
   // Pre-compute today's combo matches keyed by venueKey+raceIdx for O(1) lookup
   const comboByRace={};
@@ -7332,7 +7705,9 @@ function renderRaceCards(){
     const scoreTier=topScore>=80?'high':topScore>=65?'mid':'low';
     const cardExtraCls=_gf?'rc-gold':_sf?'rc-silver':'';
     const dataSeg=_gf?'golden':_sf?'silver':_bf?'bronze':'';
-    return `<div class="rc ${cardExtraCls}" id="${cardId}" data-seg="${dataSeg}" style="border-left:5px solid ${getRaceBorderColor(r)}" onclick="openRace('${r.venueKey}',${r.raceIdx}).catch(e=>console.error('openRace error:',e))">
+    const _xaR=_xaByRace[r.venueKey+'_'+r.raceIdx];
+    const xaCls=_xaR?(_xaR.strength==='strong'?'rc-xa-strong':'rc-xa-mod'):'';
+    return `<div class="rc ${cardExtraCls} ${xaCls}" id="${cardId}" data-seg="${dataSeg}" style="border-left:5px solid ${getRaceBorderColor(r)}" onclick="openRace('${r.venueKey}',${r.raceIdx}).catch(e=>console.error('openRace error:',e))">
   <div class="rc-ch">
     <div>
       <span class="rc-card-time">${r.time}</span>
@@ -7371,6 +7746,7 @@ function renderRaceCards(){
   </div>
   ${rCombos.length?`<div class="rc-combo-row">${rCombos.map(m=>`<span class="rc-combo-tag">⚡ ${m.runner.name} · ${m.combo.type.replace('+',' + ')} · ${Math.round(m.combo.placeRate)}% placed</span>`).join('')}</div>`:''}
   ${_ban?renderBanFlag(_ban):''}
+  ${_xaR?`<div class="rc-xa-strip ${_xaR.strength==='strong'?'rc-xa-strip-strong':'rc-xa-strip-mod'}"><span class="rc-xa-strip-icon">⚡</span>${_xaR.labels.map(l=>`<span class="rc-xa-chip ${_xaR.strength==='strong'?'rc-xa-chip-strong':'rc-xa-chip-mod'}">${l}</span>`).join('')}</div>`:''}
 </div>`;
   }).join('');
   el.querySelectorAll('.rc').forEach(card=>{
@@ -7444,6 +7820,7 @@ async function renderDetail(){
   <div class="detail-tabs">
     <button class="dtab ${tab==='main'?'active':''}" onclick="switchDetailTab('main')">MAIN</button>
     <button class="dtab ${tab==='deepdive'?'active':''}" onclick="switchDetailTab('deepdive')">DEEP DIVE</button>
+    <button class="dtab ${tab==='cross'?'active':''}" onclick="switchDetailTab('cross')">⚡ CROSS</button>
     ${(()=>{
       const expandedName=st.expanded;
       if(!expandedName) return '';
@@ -7459,6 +7836,8 @@ async function renderDetail(){
 
   if(tab==='main'){
     html+=renderMainTab(runners,race,vk,ri);
+  }else if(tab==='cross'){
+    html+=renderCrossTab(runners,race,vk);
   }else{
     html+=renderDeepDiveTab(runners,race);
   }
@@ -7664,6 +8043,160 @@ function renderMainTab(runners,race,vk,ri){
   // Inline results logger
   h+=renderResultsLogger(vk,ri);
   return h;
+}
+
+/* ==================== CROSS ANALYSIS TAB ==================== */
+function renderCrossTab(runners,race,vk){
+  if(!window.xaBuildVenueAnalysis||!window.xaGetSignals||!window._resultsHistory){
+    return`<div style="padding:40px;text-align:center;color:var(--muted)">No historical data available.<br>Results DB must be connected.</div>`;
+  }
+  const an=window.xaBuildVenueAnalysis(vk);
+  const venue=vk;
+
+  // ── Signals table (per runner) ────────────────────────────────
+  const sorted=[...runners].sort((a,b)=>b.score-a.score);
+  const colStr=(s)=>s==='strong'?'#15803d':s==='moderate'?'#b45309':'#dc2626';
+  const bgStr=(s)=>s==='strong'?'rgba(21,128,61,.08)':s==='moderate'?'rgba(180,83,9,.07)':'rgba(220,38,38,.06)';
+
+  let sigRows='';
+  sorted.forEach(r=>{
+    const sigs=window.xaGetSignals(r,race,an);
+    if(!sigs.length) return;
+    sigs.forEach((s,i)=>{
+      sigRows+=`<tr>
+        ${i===0?`<td style="font-weight:700;font-size:12px;vertical-align:top;padding:6px 10px" rowspan="${sigs.length}">${r.name}</td>`:''}
+        <td style="padding:4px 10px;font-size:10px;text-transform:uppercase;letter-spacing:.3px;color:#9ca3af">${s.type}</td>
+        <td style="padding:4px 10px"><span class="xa-badge xa-badge-${s.strength}">${s.label}</span></td>
+        <td style="padding:4px 10px;font-size:10px;color:#6b7280">${s.detail}</td>
+      </tr>`;
+    });
+  });
+
+  const sigsTable=sigRows
+    ?`<table style="width:100%;border-collapse:collapse;font-size:11px">
+        <thead><tr style="border-bottom:2px solid var(--border)">
+          <th style="padding:6px 10px;text-align:left;color:var(--muted);font-size:10px">Horse</th>
+          <th style="padding:6px 10px;text-align:left;color:var(--muted);font-size:10px">Type</th>
+          <th style="padding:6px 10px;text-align:left;color:var(--muted);font-size:10px">Signal</th>
+          <th style="padding:6px 10px;text-align:left;color:var(--muted);font-size:10px">Evidence</th>
+        </tr></thead>
+        <tbody>${sigRows}</tbody>
+      </table>`
+    :`<div style="padding:20px;color:var(--muted);text-align:center;font-size:12px">No signals for today's runners at ${venue} (min 5 runs required)</div>`;
+
+  // ── Trainer panel ────────────────────────────────────────────
+  const todayTrainers=new Set(runners.map(r=>r.trainer).filter(Boolean));
+  const trRows=Object.entries(an.trainer||{})
+    .filter(([t,d])=>todayTrainers.has(t)&&d.runs>=5)
+    .map(([t,d])=>({name:t,sr:Math.round(d.wins/d.runs*100),runs:d.runs,wins:d.wins}))
+    .sort((a,b)=>b.sr-a.sr);
+
+  const trainerHtml=trRows.length?`<table style="width:100%;border-collapse:collapse;font-size:11px">
+    <thead><tr style="border-bottom:1px solid var(--border)">
+      <th style="padding:5px 10px;text-align:left;color:var(--muted);font-size:10px">Trainer</th>
+      <th style="padding:5px 10px;text-align:center;color:var(--muted);font-size:10px">Runs</th>
+      <th style="padding:5px 10px;text-align:center;color:var(--muted);font-size:10px">Wins</th>
+      <th style="padding:5px 10px;text-align:center;color:var(--muted);font-size:10px">SR%</th>
+    </tr></thead>
+    <tbody>${trRows.map(t=>{
+      const col=t.sr>=45?'#15803d':t.sr>=30?'#b45309':t.sr<=20?'#dc2626':'#6b7280';
+      return`<tr style="border-bottom:1px solid var(--border)">
+        <td style="padding:5px 10px;font-weight:700">${t.name}</td>
+        <td style="padding:5px 10px;text-align:center;color:#6b7280">${t.runs}</td>
+        <td style="padding:5px 10px;text-align:center;color:#6b7280">${t.wins}</td>
+        <td style="padding:5px 10px;text-align:center;font-weight:800;color:${col}">${t.sr}%</td>
+      </tr>`;
+    }).join('')}</tbody>
+  </table>`:`<div style="color:var(--muted);font-size:11px;padding:10px 0">No trainers with 5+ runs at ${venue}</div>`;
+
+  // ── Draw panel ────────────────────────────────────────────────
+  const draw=an.draw||{};
+  const tot=Object.values(draw).reduce((a,x)=>({runs:a.runs+x.runs,wins:a.wins+x.wins}),{runs:0,wins:0});
+  const base=tot.runs>0?Math.round(tot.wins/tot.runs*100):0;
+  const drawHtml=Object.entries(draw).map(([b,d])=>{
+    const sr=d.runs>0?Math.round(d.wins/d.runs*100):0;
+    const delta=sr-base;
+    const col=delta>=10?'#15803d':delta<=-8?'#dc2626':'#6b7280';
+    const todayInBand=runners.filter(r=>r.draw&&(b==='1-4'?r.draw<=4:b==='5-8'?r.draw>=5&&r.draw<=8:r.draw>=9)).map(r=>r.draw+' '+r.name).join(', ');
+    return`<div style="border:1px solid var(--border);border-radius:6px;padding:10px 14px;flex:1">
+      <div style="font-size:11px;font-weight:700;color:#374151;margin-bottom:4px">Stalls ${b}</div>
+      <div style="font-size:22px;font-weight:900;color:${col};line-height:1">${sr}%</div>
+      <div style="font-size:10px;color:#9ca3af;margin-top:2px">${d.runs}R · ${d.wins}W · <span style="color:${col};font-weight:700">${delta>0?'+':''}${delta}% vs base</span></div>
+      ${todayInBand?`<div style="font-size:9px;color:#6b7280;margin-top:6px;border-top:1px solid var(--border);padding-top:4px">Today: ${todayInBand}</div>`:''}
+    </div>`;
+  }).join('');
+
+  // ── Going panel ───────────────────────────────────────────────
+  const going=an.going||{};
+  const todayGoing=(race.going||'').trim();
+  const goingRows=Object.entries(going).sort((a,b)=>b[1].runs-a[1].runs).slice(0,8).map(([g,d])=>{
+    const sr=d.runs>0?Math.round(d.wins/d.runs*100):0;
+    const col=sr>=40?'#15803d':sr>=28?'#b45309':'#dc2626';
+    const isToday=g===todayGoing;
+    return`<tr style="border-bottom:1px solid var(--border)${isToday?';background:rgba(180,83,9,.06)':''}">
+      <td style="padding:5px 10px;font-size:11px${isToday?';font-weight:700;color:var(--text)':';color:#6b7280'}">${g}${isToday?' ← today':''}</td>
+      <td style="padding:5px 10px;text-align:center;color:#9ca3af;font-size:11px">${d.runs}</td>
+      <td style="padding:5px 10px;text-align:center;font-size:11px;font-weight:800;color:${col}">${sr}%</td>
+    </tr>`;
+  }).join('');
+
+  const goingHtml=goingRows?`<table style="width:100%;border-collapse:collapse">
+    <thead><tr style="border-bottom:2px solid var(--border)">
+      <th style="padding:5px 10px;text-align:left;color:var(--muted);font-size:10px">Going</th>
+      <th style="padding:5px 10px;text-align:center;color:var(--muted);font-size:10px">Races</th>
+      <th style="padding:5px 10px;text-align:center;color:var(--muted);font-size:10px">Top Pick SR</th>
+    </tr></thead>
+    <tbody>${goingRows}</tbody>
+  </table>`:`<div style="color:var(--muted);font-size:11px;padding:10px 0">No going data for ${venue}</div>`;
+
+  // ── Horse history ─────────────────────────────────────────────
+  const todayNames=new Set(runners.map(r=>r.name));
+  const hh=an.horse||{};
+  const horseRows=Object.entries(hh).filter(([n])=>todayNames.has(n))
+    .map(([n,runs])=>{
+      const wins=runs.filter(r=>r.won).length;
+      const col=wins>0?'#15803d':'#dc2626';
+      const latest=runs.slice().sort((a,b)=>b.date.localeCompare(a.date))[0];
+      return`<tr style="border-bottom:1px solid var(--border)">
+        <td style="padding:5px 10px;font-weight:700;font-size:12px">${n}</td>
+        <td style="padding:5px 10px;text-align:center;font-size:11px;font-weight:800;color:${col}">${wins}/${runs.length}</td>
+        <td style="padding:5px 10px;text-align:center;font-size:11px;font-weight:800;color:${col}">${Math.round(wins/runs.length*100)}%</td>
+        <td style="padding:5px 10px;font-size:10px;color:#6b7280">${latest.date} · ${latest.pos===1?'Won':`${latest.pos}th`} · ${latest.going||'—'}</td>
+      </tr>`;
+    });
+
+  const histHtml=horseRows.length?`<table style="width:100%;border-collapse:collapse">
+    <thead><tr style="border-bottom:2px solid var(--border)">
+      <th style="padding:5px 10px;text-align:left;color:var(--muted);font-size:10px">Horse</th>
+      <th style="padding:5px 10px;text-align:center;color:var(--muted);font-size:10px">W/R here</th>
+      <th style="padding:5px 10px;text-align:center;color:var(--muted);font-size:10px">SR%</th>
+      <th style="padding:5px 10px;text-align:left;color:var(--muted);font-size:10px">Last Run Here</th>
+    </tr></thead>
+    <tbody>${horseRows.join('')}</tbody>
+  </table>`:`<div style="color:var(--muted);font-size:11px;padding:10px 0">None of today's runners have run at ${venue} before</div>`;
+
+  function section(title,body){
+    return`<div style="margin-bottom:18px;border:1px solid var(--border);border-radius:8px;overflow:hidden">
+      <div style="padding:8px 14px;background:var(--card2);border-bottom:1px solid var(--border);font-size:11px;font-weight:700;color:var(--text);letter-spacing:.5px;text-transform:uppercase">${title}</div>
+      <div style="padding:8px 0">${body}</div>
+    </div>`;
+  }
+
+  return`<div style="padding:16px">
+    ${section('⚡ Signals for Today\'s Runners',sigsTable)}
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px">
+      <div style="border:1px solid var(--border);border-radius:8px;overflow:hidden">
+        <div style="padding:8px 14px;background:var(--card2);border-bottom:1px solid var(--border);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px">Trainer Hotspots at ${venue}</div>
+        <div style="padding:8px 0">${trainerHtml}</div>
+      </div>
+      <div style="border:1px solid var(--border);border-radius:8px;overflow:hidden">
+        <div style="padding:8px 14px;background:var(--card2);border-bottom:1px solid var(--border);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px">Going Pattern (top pick SR)</div>
+        <div style="padding:8px 0">${goingHtml}</div>
+      </div>
+    </div>
+    ${section('Draw Tendency at '+venue+` <span style="font-size:10px;font-weight:500;color:#9ca3af">(base ${base}% SR)</span>`,`<div style="display:flex;gap:10px;padding:10px 14px">${drawHtml}</div>`)}
+    ${horseRows.length?section('Horse Course History',histHtml):''}
+  </div>`;
 }
 
 /* ==================== DEEP DIVE TAB ==================== */
