@@ -1223,7 +1223,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 <button id="betFab" class="bp-toggle-fab" onclick="toggleBetPanel()">🎫<span class="fab-badge">0</span></button>
 
 <script>
-let D=null, st={venue:'all', fieldFilter:new Set(), comboFilter:false, raceTypeFilter:'all', raceCodeFilter:'all', confidenceFilter:'all', gapFilter:new Set(), hideBanned:false, openRace:null, sort:'score', sortDir:-1, expanded:null, detailTab:'main', riMode:'rank', h2hPair:null, compareSelect:new Set()};
+let D=null, st={venue:'all', fieldFilter:new Set(), comboFilter:false, raceTypeFilter:'all', raceCodeFilter:'all', confidenceFilter:'all', gapFilter:new Set(), hideBanned:false, openRace:null, sort:'score', sortDir:-1, expanded:null, detailTab:'main', riMode:'rank', h2hPair:null, compareSelect:new Set(), xaVenue:null};
 
 // ==================== PER-DAY DATA STATUS TRACKER ====================
 function getDayStatus(date){
@@ -3086,6 +3086,46 @@ window._taDetail=function(venue){
       </div>
     </div>`:`<div style="color:#555;font-size:13px">No jockey data — requires results with jockey fields (re-fetch results to populate).</div>`;
 
+  // draw stall + trainer hotspots (reuse Cross Analysis engine's venue dataset)
+  const xa=window.xaBuildVenueAnalysis?window.xaBuildVenueAnalysis(venue):null;
+  let drawPanel='',trainerPanel='';
+  if(xa){
+    const draw=xa.draw||{};
+    const totD=Object.values(draw).reduce((a,x)=>({runs:a.runs+x.runs,wins:a.wins+x.wins}),{runs:0,wins:0});
+    const baseD=totD.runs>0?Math.round(totD.wins/totD.runs*100):0;
+    const drawRows=Object.entries(draw).map(([b,d])=>{
+      const sr=d.runs>0?Math.round(d.wins/d.runs*100):0;
+      const delta=sr-baseD;
+      const dcol=delta>=8?'#10b981':delta<=-8?'#f87171':'#888';
+      return`<tr><td>Stalls ${b}</td><td>${d.runs}</td><td>${d.wins}</td>
+        <td><span style="font-weight:700;color:${srColor(sr)}">${sr}%</span></td>
+        <td style="color:${dcol};font-weight:700">${delta>0?'+':''}${delta}%</td></tr>`;
+    }).join('');
+    drawPanel=totD.runs>0?`
+      <div class="ta-panel">
+        <div class="ta-ptitle">Draw Stall Analysis <span>win% by starting stall vs course base ${baseD}%</span></div>
+        <table class="ta-table"><thead><tr><th>Stall Band</th><th>Runs</th><th>Wins</th><th>Win%</th><th>vs Base</th></tr></thead><tbody>${drawRows}</tbody></table>
+      </div>`:`
+      <div class="ta-panel">
+        <div class="ta-ptitle">Draw Stall Analysis</div>
+        <div style="color:#555;font-size:12px">No draw data at ${venue} — jump (NH) courses run without starting stalls, or draw wasn't recorded for this track.</div>
+      </div>`;
+
+    const trainerRows=Object.entries(xa.trainer||{})
+      .filter(([,d])=>d.runs>=5)
+      .map(([t,d])=>({name:t,runs:d.runs,wins:d.wins,sr:Math.round(d.wins/d.runs*100)}))
+      .sort((a,b)=>b.sr-a.sr).slice(0,10);
+    trainerPanel=trainerRows.length?`
+      <div class="ta-panel">
+        <div class="ta-ptitle">Trainer Hotspots at ${venue} <span>≥5 runs · sorted by win%</span></div>
+        <table class="ta-table"><thead><tr><th>Trainer</th><th>Runs</th><th>Wins</th><th>Win%</th></tr></thead><tbody>${trainerRows.map(t=>`<tr><td>${t.name}</td><td>${t.runs}</td><td>${t.wins}</td><td><span style="font-weight:700;color:${srColor(t.sr)}">${t.sr}%</span></td></tr>`).join('')}</tbody></table>
+      </div>`:`
+      <div class="ta-panel">
+        <div class="ta-ptitle">Trainer Hotspots at ${venue}</div>
+        <div style="color:#555;font-size:12px">No trainer with ≥5 runs at this course yet.</div>
+      </div>`;
+  }
+
   // trend chart
   const trendChart=svgLine(s.trend,s.overallSR);
 
@@ -3156,6 +3196,11 @@ window._taDetail=function(venue){
     <div class="ta-panel">
       <div class="ta-ptitle">Jockey Record at ${venue} <span>riders with ≥2 starts · click row to chart · 1st = best finish</span></div>
       ${jockeyPanel}
+    </div>
+
+    <div class="ta-grid2">
+      ${drawPanel}
+      ${trainerPanel}
     </div>
 
     <div class="ta-panel">
@@ -3610,10 +3655,33 @@ function buildDrawStats(venue){
 function buildHorseHistory(venue){
   const map={};
   _races(venue).forEach(race=>{
+    const fs=race.field_size||(race.results||[]).filter(r=>!r.non_runner).length||0;
+    const pt=fs>=16?4:fs>=8?3:fs>=5?2:1;
     (race.results||[]).forEach(r=>{
       if(r.non_runner||r.pull_out||r.finish_pos==null)return;
       if(!map[r.name])map[r.name]=[];
-      map[r.name].push({date:race.date,pos:r.finish_pos,going:race.going,won:r.finish_pos===1});
+      map[r.name].push({date:race.date,pos:r.finish_pos,going:race.going,won:r.finish_pos===1,draw:r.draw,placed:r.finish_pos<=pt});
+    });
+  });
+  return map;
+}
+
+// jockey performance from a specific stall band, at this course — compound pattern
+// (distinct from the solo trainer/jockey % already surfaced by the Combo Tracker)
+function buildJockeyDrawStats(venue){
+  const map={};
+  _races(venue).forEach(race=>{
+    const fs=race.field_size||(race.results||[]).filter(r=>!r.non_runner).length||0;
+    const pt=fs>=16?4:fs>=8?3:fs>=5?2:1;
+    (race.results||[]).forEach(r=>{
+      if(!r.jockey||r.draw==null||r.non_runner||r.pull_out||r.finish_pos==null)return;
+      const b=r.draw<=4?'1-4':r.draw<=8?'5-8':'9+';
+      if(!map[r.jockey])map[r.jockey]={};
+      if(!map[r.jockey][b])map[r.jockey][b]={runs:0,wins:0,placed:0};
+      const e=map[r.jockey][b];
+      e.runs++;
+      if(r.finish_pos===1)e.wins++;
+      if(r.finish_pos<=pt)e.placed++;
     });
   });
   return map;
@@ -3639,7 +3707,7 @@ function xaBuildVenueAnalysis(venue){
   const ver=window._xaDataVersion||0;
   const ck=`xaCache_${date}_v${ver}_${venue}`;
   try{const c=localStorage.getItem(ck);if(c)return JSON.parse(c);}catch(e){}
-  const result={venue,trainer:buildTrainerStats(venue),draw:buildDrawStats(venue),horse:buildHorseHistory(venue),going:buildGoingStats(venue)};
+  const result={venue,trainer:buildTrainerStats(venue),draw:buildDrawStats(venue),horse:buildHorseHistory(venue),going:buildGoingStats(venue),jockeyDraw:buildJockeyDrawStats(venue)};
   try{localStorage.setItem(ck,JSON.stringify(result));}catch(e){}
   return result;
 }
@@ -3684,6 +3752,33 @@ function xaGetSignals(runner,race,analysis){
     }
   }
 
+  // horse + draw combo — this horse's own record from this exact stall band at this course
+  if(hd&&hd.length>0&&runner.draw!=null){
+    const b=runner.draw<=4?'1-4':runner.draw<=8?'5-8':'9+';
+    const bandOf=d=>d<=4?'1-4':d<=8?'5-8':'9+';
+    const sameBand=hd.filter(h=>h.draw!=null&&bandOf(h.draw)===b);
+    if(sameBand.length>0){
+      const bw=sameBand.filter(h=>h.won).length,bp=sameBand.filter(h=>h.placed).length,br=sameBand.length;
+      const strength=bw>0?'strong':(bp===br?'moderate':null);
+      if(strength)sigs.push({type:'horse_draw',strength,label:`${bw>0?'✓':'📍'} Stalls ${b}: ${bw}W/${bp}P/${br}R here`,detail:`Ran from stalls ${b} at ${analysis.venue} before — ${bw}W ${bp}P from ${br}`,sr:Math.round((bw||bp)/br*100),runs:br});
+    }
+  }
+
+  // jockey + draw combo — this jockey's record riding from this exact stall band at this course
+  if(runner.jockey&&runner.draw!=null&&analysis.jockeyDraw){
+    const b=runner.draw<=4?'1-4':runner.draw<=8?'5-8':'9+';
+    const jd=analysis.jockeyDraw[runner.jockey]?.[b];
+    if(jd&&jd.runs>=4){
+      const sr=Math.round(jd.wins/jd.runs*100);
+      const pr=Math.round(jd.placed/jd.runs*100);
+      const strength=(sr>=XA_STRONG||pr>=65)?'strong':(sr>=XA_MOD||pr>=45)?'moderate':null;
+      if(strength){
+        const jName=(runner.jockey||'').split(' ').pop();
+        sigs.push({type:'jockey_draw',strength,label:`J:${jName} Stalls ${b} ${sr}%W/${pr}%P`,detail:`${jd.wins}W ${jd.placed}P / ${jd.runs}R — ${runner.jockey} from stalls ${b} at ${analysis.venue}`,sr,runs:jd.runs});
+      }
+    }
+  }
+
   // going
   const todayGoing=(race.going||'').trim();
   const gd=analysis.going?.[todayGoing];
@@ -3720,9 +3815,13 @@ function xaRenderSidebarPanel(){
   all.sort((a,b)=>(order[a.strength]||1)-(order[b.strength]||1)||b.sr-a.sr);
   const top=all.slice(0,6);
 
-  // Pattern cards for first venue (or selected)
-  const vk=window.st?.venue&&window.st.venue!=='all'?window.st.venue:Object.keys(window.D.venues)[0];
+  // Pattern cards for selected venue (dedicated XA toggle, defaults to first venue)
+  const vKeys=Object.keys(window.D.venues);
+  const vk=(typeof st!=='undefined'&&st.xaVenue&&window.D.venues[st.xaVenue])?st.xaVenue:vKeys[0];
   const an=xaBuildVenueAnalysis(vk);
+  const vSelectHtml=`<select class="xa-venue-select" onchange="st.xaVenue=this.value;renderD1Sidebar();" style="font-size:10px;font-weight:700;padding:2px 4px;border-radius:4px;border:1px solid var(--border);background:var(--card);color:var(--text)">
+    ${vKeys.map(k=>`<option value="${k}" ${k===vk?'selected':''}>${(window.D.venues[k].course||k)}</option>`).join('')}
+  </select>`;
 
   // Trainer table
   const today=new Set();
@@ -3793,7 +3892,7 @@ function xaRenderSidebarPanel(){
   return `<div class="d1-panel" style="margin-top:0">
     <div class="d1-panel-hdr">
       <span class="d1-panel-title">⚡ Cross Analysis</span>
-      <span class="d1-panel-date">${all.length} signal${all.length!==1?'s':''} · ${vk}</span>
+      <span class="d1-panel-date" style="display:flex;align-items:center;gap:6px">${all.length} signal${all.length!==1?'s':''} ${vSelectHtml}</span>
     </div>
     <div class="xa-pc">
       <div class="xa-pc-h"><div class="xa-pc-title">Trainer Hotspots</div></div>
@@ -7658,21 +7757,26 @@ function renderRaceCards(){
   }
   races.sort((a,b)=>a.time.localeCompare(b.time));
 
-  // Pre-build XA signals per race {strength, labels[]}
+  // Pre-build XA signals per race — scan every runner, surface only strong
+  // positive cross-analysis backing (any horse, not just the top pick).
+  // No strip when nothing to point out.
   const _xaByRace={};
   if(window.xaBuildVenueAnalysis&&window.xaGetSignals&&window._resultsHistory){
     const _xaVenueCache={};
     races.forEach(r=>{
+      if(!r.runners||!r.runners.length)return;
       if(!_xaVenueCache[r.venueKey])_xaVenueCache[r.venueKey]=window.xaBuildVenueAnalysis(r.venueKey);
       const an=_xaVenueCache[r.venueKey];
-      const allSigs=[];
-      (r.runners||[]).forEach(ru=>{allSigs.push(...window.xaGetSignals(ru,r,an));});
-      if(!allSigs.length) return;
-      allSigs.sort((a,b)=>(a.strength==='strong'?0:1)-(b.strength==='strong'?0:1));
-      const hasStrong=allSigs.some(s=>s.strength==='strong');
+      const strongSigs=[];
+      r.runners.forEach(ru=>{
+        window.xaGetSignals(ru,r,an).filter(s=>s.strength==='strong').forEach(s=>{
+          strongSigs.push({...s,horse:ru.name});
+        });
+      });
+      if(!strongSigs.length) return;
       _xaByRace[r.venueKey+'_'+r.raceIdx]={
-        strength:hasStrong?'strong':'moderate',
-        labels:allSigs.slice(0,3).map(s=>s.label)
+        strength:strongSigs.length>=2?'strong':'moderate',
+        labels:strongSigs.slice(0,3).map(s=>`${s.horse}: ${s.label}`)
       };
     });
   }
