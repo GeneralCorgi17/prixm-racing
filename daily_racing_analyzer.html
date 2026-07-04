@@ -477,8 +477,8 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .xa-going-bar-fill{height:100%;border-radius:2px}
 .xa-going-pct{font-size:10px;font-weight:700;width:26px;text-align:right}
 /* XA card glow + strip */
-.rc-xa-strong{border-color:rgba(21,128,61,.45)!important;box-shadow:0 0 0 2px rgba(21,128,61,.1),0 2px 10px rgba(21,128,61,.08)!important}
-.rc-xa-mod{border-color:rgba(180,83,9,.35)!important;box-shadow:0 0 0 2px rgba(180,83,9,.08)!important}
+.rc-xa-strong{box-shadow:0 0 0 2px rgba(21,128,61,.1),0 2px 10px rgba(21,128,61,.08)!important}
+.rc-xa-mod{box-shadow:0 0 0 2px rgba(180,83,9,.08)!important}
 .rc-xa-strip{display:flex;align-items:center;gap:5px;padding:5px 10px;flex-wrap:wrap}
 .rc-xa-strip-strong{border-top:1px solid rgba(21,128,61,.15);background:linear-gradient(90deg,rgba(21,128,61,.07),rgba(21,128,61,.02))}
 .rc-xa-strip-mod{border-top:1px solid rgba(180,83,9,.15);background:linear-gradient(90deg,rgba(180,83,9,.06),rgba(180,83,9,.02))}
@@ -4989,7 +4989,7 @@ function rejectUnifiedCalibration(){
 }
 
 /* ==================== VENUE EXCLUSION ==================== */
-const EXCLUDED_VENUES=['happy valley','sha tin','meydan','abu dhabi','bahrain','hanshin','chukyo','fukushima','nakayama','tokyo','niigata','kyoto','rosehill','flemington','morphettville','eagle farm','doomben','hawkesbury','ascot aus','gold coast','northam','scone','turffontein','scottsville','greyville','oaklawn park','gulfstream park','keeneland','aqueduct','santa anita','belmont park','belmont at the big a','churchill downs','laurel park','lone star park','percy warner','middleburg','great meadow','woodbine','saratoga','hipodromo','ciudad jardim','monterrico','gavea','palermo','san isidro','saint cloud','longchamp','deauville','chantilly','auteuil','compiegne','toulouse','bordeaux','les landes','nantes','vichy','le lion','san siro','munich','dusseldorf','krefeld','hoppegarten','dortmund','baden baden','cologne','koln','firenze','randwick','free to air','scoop','worldwide stakes','world pool','bro park'];
+const EXCLUDED_VENUES=['happy valley','sha tin','meydan','abu dhabi','bahrain','hanshin','chukyo','fukushima','nakayama','tokyo','niigata','kyoto','rosehill','flemington','morphettville','eagle farm','doomben','hawkesbury','ascot aus','gold coast','northam','scone','sunshine coast','turffontein','scottsville','greyville','oaklawn park','gulfstream park','keeneland','aqueduct','santa anita','belmont park','belmont at the big a','churchill downs','laurel park','lone star park','percy warner','middleburg','great meadow','woodbine','saratoga','hipodromo','ciudad jardim','monterrico','gavea','palermo','san isidro','saint cloud','longchamp','deauville','chantilly','auteuil','compiegne','toulouse','bordeaux','les landes','nantes','vichy','le lion','san siro','munich','dusseldorf','krefeld','hoppegarten','dortmund','baden baden','cologne','koln','firenze','randwick','free to air','scoop','worldwide stakes','world pool','bro park'];
 function filterExcludedVenues(data){
   if(!data||!data.venues) return data;
   const filtered={...data,venues:{}};
