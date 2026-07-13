@@ -357,13 +357,15 @@ Current list (results_fetcher + HTML):
 - **Australasia**: rosehill, flemington, morphettville, eagle farm, doomben, hawkesbury, ascot aus, gold coast
 - **South Africa**: turffontein, scottsville
 - **USA/Canada**: oaklawn park, gulfstream park, keeneland, aqueduct, santa anita, belmont park, churchill downs, laurel park, woodbine
-- **France**: saint cloud, longchamp, deauville, chantilly, auteuil, compiegne, toulouse, bordeaux
+- **France**: saint cloud, deauville, chantilly, auteuil, compiegne, toulouse, bordeaux
 - **Germany/Italy**: san siro, munich, dusseldorf, krefeld, cologne, koln, randwick
 - **Ireland**: punchestown, leopardstown, curragh, naas, cork, killarney, gowran park, roscommon, navan, limerick, clonmel, wexford, tramore, kilbeggan, ballinrobe, sligo, down royal, bellewstown, downpatrick, dundalk, tipperary, fairyhouse, galway, laytown
 - **Meta**: free to air, scoop, worldwide stakes, world pool
 
 Venue matching uses lowercase substring. Hyphens normalized to spaces in `results_fetcher.py` (`normalize_venue()`).
 Irish venues also caught by `(IRE)` suffix check before list lookup.
+
+**Longchamp exception (2026-07-13)**: unhidden from race card display only. Removed from `EXCLUDED_VENUES` JS array in `daily_racing_analyzer.html`; new `isLongchamp(course)` helper explicitly re-excludes it from `getTop10Picks`, `getGoldenFlags`/`getSilverFlags`/`getBronzeFlags`, and `isExcludedVenue` (used by results/pick-performance analysis). `results_fetcher.py` and `qualifying_exporter.py` lists untouched — Longchamp results/stats still fully excluded from results_history, stats, and analysis. Same pattern as Ireland (`isIreland()`) — display without counting toward any analysis.
 
 ## Data Flow
 

@@ -4989,7 +4989,8 @@ function rejectUnifiedCalibration(){
 }
 
 /* ==================== VENUE EXCLUSION ==================== */
-const EXCLUDED_VENUES=['happy valley','sha tin','meydan','abu dhabi','bahrain','hanshin','chukyo','fukushima','nakayama','tokyo','niigata','kyoto','rosehill','flemington','morphettville','eagle farm','doomben','hawkesbury','ascot aus','gold coast','northam','scone','sunshine coast','turffontein','scottsville','greyville','oaklawn park','gulfstream park','keeneland','aqueduct','santa anita','belmont park','belmont at the big a','churchill downs','laurel park','lone star park','percy warner','middleburg','great meadow','woodbine','saratoga','hipodromo','ciudad jardim','monterrico','gavea','palermo','san isidro','saint cloud','longchamp','deauville','chantilly','auteuil','compiegne','toulouse','bordeaux','les landes','nantes','vichy','le lion','san siro','munich','dusseldorf','krefeld','hoppegarten','dortmund','baden baden','cologne','koln','firenze','randwick','free to air','scoop','worldwide stakes','world pool','bro park'];
+const EXCLUDED_VENUES=['happy valley','sha tin','meydan','abu dhabi','bahrain','hanshin','chukyo','fukushima','nakayama','tokyo','niigata','kyoto','rosehill','flemington','morphettville','eagle farm','doomben','hawkesbury','ascot aus','gold coast','northam','scone','sunshine coast','turffontein','scottsville','greyville','oaklawn park','gulfstream park','keeneland','aqueduct','santa anita','belmont park','belmont at the big a','churchill downs','laurel park','lone star park','percy warner','middleburg','great meadow','woodbine','saratoga','hipodromo','ciudad jardim','monterrico','gavea','palermo','san isidro','saint cloud','deauville','chantilly','auteuil','compiegne','toulouse','bordeaux','les landes','nantes','vichy','le lion','san siro','munich','dusseldorf','krefeld','hoppegarten','dortmund','baden baden','cologne','koln','firenze','randwick','free to air','scoop','worldwide stakes','world pool','bro park'];
+// Longchamp unhidden from display (2026-07-13) — but still excluded from all picks/flags/analysis via isLongchamp() below.
 function filterExcludedVenues(data){
   if(!data||!data.venues) return data;
   const filtered={...data,venues:{}};
@@ -6507,6 +6508,7 @@ function getTop10Picks(data){
     const vName=(venue.course||vk).toLowerCase().replace(/-/g,' ');
     if(EXCLUDED_VENUES.some(ex=>vName.includes(ex))) return;
     if(isIreland(venue.course||vk)) return; // display only — excluded from picks/analysis
+    if(isLongchamp(venue.course||vk)) return; // display only — excluded from picks/analysis
     venue.races.forEach((race,ri)=>{
       if(!race.runners||!race.runners.length) return;
       const sorted=[...race.runners].sort((a,b)=>b.score-a.score);
@@ -7099,7 +7101,7 @@ function ordinal(n){const s=['th','st','nd','rd'];const v=n%100;return n+(s[(v-2
 function isExcludedVenue(venue){
   if(!venue) return false;
   const v=(venue+'').toLowerCase().replace(/-/g,' ');
-  return EXCLUDED_VENUES.some(ex=>v.includes(ex));
+  return EXCLUDED_VENUES.some(ex=>v.includes(ex))||v.includes('longchamp');
 }
 function analyzePicksPerformance(picks,hist,dateOverride){
   // Analyze how picks performed: wins, places, factor patterns
@@ -7574,10 +7576,12 @@ function renderFieldSizeBar(){
 
 const IRE_TRACKS=new Set(['curragh','leopardstown','fairyhouse','punchestown','galway','naas','cork','tipperary','gowran park','killarney','listowel','dundalk','navan','tramore','sligo','roscommon','ballinrobe','clonmel','limerick','thurles','wexford','bellewstown','down royal','downpatrick','laytown']);
 function isIreland(course){const v=(course||'').toLowerCase().replace(/\s*\([a-z]{2,3}\)\s*$/,'').trim();return v.includes('(ire)')||IRE_TRACKS.has(v);}
+function isLongchamp(course){return(course||'').toLowerCase().replace(/-/g,' ').includes('longchamp');}
 function getRaceBorderColor(r){const ire=isIreland(r.course),hcp=r.handicap||/handicap/i.test(r.race_name||'');if(ire&&hcp)return'#f87171';if(ire)return'#10b981';if(hcp)return'#f59e0b';return'#3b82f6';}
 
 function getGoldenFlags(race){
   if(isIreland(race.course)) return null;
+  if(isLongchamp(race.course)) return null;
   if(race.handicap===true||/handicap/i.test(race.race_name||'')) return null;
   if(!race.runners||race.runners.length<2) return null;
   const sorted=[...race.runners].sort((a,b)=>b.score-a.score);
@@ -7624,6 +7628,7 @@ function renderGoldenFlag(gf){
 
 function getSilverFlags(race){
   if(isIreland(race.course)) return null;
+  if(isLongchamp(race.course)) return null;
   if(race.handicap===true||/handicap/i.test(race.race_name||'')) return null;
   if(!race.runners||race.runners.length<2) return null;
   if(/^standard/i.test(race.going||'')) return null; // AW excluded
@@ -7653,6 +7658,7 @@ function renderSilverFlag(sf){
 
 function getBronzeFlags(race){
   if(isIreland(race.course)) return null;
+  if(isLongchamp(race.course)) return null;
   if(race.handicap===true||/handicap/i.test(race.race_name||'')) return null;
   if(!race.runners||race.runners.length<2) return null;
   const going=(race.going||'').toLowerCase().replace(/[\s-]+/g,'');
