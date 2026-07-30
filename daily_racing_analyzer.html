@@ -300,28 +300,6 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .guide-tier-grid .gt{border-radius:6px;padding:6px 8px;text-align:center;font-size:11px;font-weight:600}
 @media(max-width:700px){.race-cards{grid-template-columns:1fr}.exp-inner{grid-template-columns:1fr}}
 
-/* Results Input Panel — inline in race detail */
-.ri-panel{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;margin-top:16px}
-.ri-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
-.ri-header-title{font-weight:700;font-size:13px}
-.ri-mode-toggle{display:flex;gap:0;border:1px solid var(--border);border-radius:6px;overflow:hidden}
-.ri-mode-btn{padding:5px 12px;font-size:11px;font-weight:600;border:none;cursor:pointer;transition:all .15s}
-.ri-mode-btn.active-rank{background:var(--accent);color:#fff}
-.ri-mode-btn.active-nr{background:#ef4444;color:#fff}
-.ri-mode-btn:not(.active-rank):not(.active-nr){background:var(--card2);color:var(--muted)}
-.ri-tiles{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
-.ri-tile{padding:8px 14px;border-radius:8px;border:1px solid var(--border);cursor:pointer;font-size:13px;transition:all .15s;background:var(--bg);position:relative;user-select:none}
-.ri-tile:hover{border-color:var(--accent);background:#1a1a2e}
-.ri-tile.ranked{background:var(--accent);color:#fff;border-color:var(--accent)}
-.ri-tile.nr{background:#2a1a1a;color:#ef4444;text-decoration:line-through;border-color:#3a2020}
-.ri-badge{display:inline-block;min-width:20px;height:20px;line-height:20px;text-align:center;border-radius:50%;background:#fff;color:var(--accent);font-size:11px;font-weight:700;margin-right:6px}
-.ri-actions{display:flex;gap:8px;margin-top:12px;align-items:center}
-.ri-actions button{padding:6px 14px;border-radius:6px;border:none;cursor:pointer;font-size:12px;font-weight:600}
-.ri-save{background:var(--accent);color:#fff}
-.ri-save:disabled{opacity:0.4;cursor:not-allowed}
-.ri-undo{background:var(--card);color:var(--fg);border:1px solid var(--border)!important}
-.ri-status{font-size:11px;color:var(--muted);margin-left:auto}
-
 /* Tab Bar (top-level Races/Performance) */
 .tab-bar{display:flex;gap:0;border-bottom:1px solid var(--border);padding:0 28px}
 .tab-btn{padding:10px 20px;background:none;border:none;color:var(--muted);cursor:pointer;font-size:13px;font-weight:600;border-bottom:2px solid transparent;transition:all .15s}
@@ -1000,9 +978,6 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .cmpsel-btn.on{background:#fef3c722!important;border-color:#d97706!important;color:#d97706!important}
 .hsp-btn{background:#eff6ff!important;border-color:#bfdbfe!important;color:#3b82f6!important}
 .hsp-btn:hover{background:#dbeafe!important;border-color:#3b82f6!important}
-/* runner info tiles */
-.ri-tile:hover{background:#f0fdf4!important;border-color:var(--accent)!important}
-.ri-tile.nr{background:#fef2f2!important;color:#ef4444!important;border-color:#fecaca!important}
 /* connection dropdown */
 .conn-dropdown{background:#fff!important;border-color:#e5e0d8!important;box-shadow:0 6px 20px rgba(0,0,0,.12)!important}
 /* filter ON pill (fieldSizeBar) */
@@ -1037,8 +1012,6 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 /* fieldSizeBar venue pill ON state (ID specificity > .landing class) */
 #fieldSizeBar .vbtn.on{background:#15803d!important;color:#fff!important;border-color:#15803d!important}
 #fieldSizeBar .vbtn:hover{border-color:#15803d!important;color:#15803d!important}
-/* NR (non-runner) tile */
-.ri-tile.nr{background:#fef2f2!important;color:#dc2626!important;border-color:#fecaca!important}
 /* unban button text on light */
 .unban-action-btn{color:#15803d!important;border-color:rgba(21,128,61,.35)!important;background:rgba(21,128,61,.1)!important}
 /* BP count/export/fab use old teal - update to forest green */
@@ -1223,7 +1196,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 <button id="betFab" class="bp-toggle-fab" onclick="toggleBetPanel()">🎫<span class="fab-badge">0</span></button>
 
 <script>
-let D=null, st={venue:'all', fieldFilter:new Set(), comboFilter:false, raceTypeFilter:'all', raceCodeFilter:'all', confidenceFilter:'all', gapFilter:new Set(), hideBanned:false, openRace:null, sort:'score', sortDir:-1, expanded:null, detailTab:'main', riMode:'rank', h2hPair:null, compareSelect:new Set(), xaVenue:null};
+let D=null, st={venue:'all', fieldFilter:new Set(), comboFilter:false, raceTypeFilter:'all', raceCodeFilter:'all', confidenceFilter:'all', gapFilter:new Set(), hideBanned:false, openRace:null, sort:'score', sortDir:-1, expanded:null, detailTab:'main', h2hPair:null, compareSelect:new Set(), xaVenue:null};
 
 // ==================== PER-DAY DATA STATUS TRACKER ====================
 function getDayStatus(date){
@@ -3943,181 +3916,6 @@ function classifyProfile(surface,raceType){
   return 'turf_flat';
 }
 
-/* ==================== RESULTS INPUT STATE & FUNCTIONS ==================== */
-let resultState={};
-
-function renderResultsLogger(venueKey,raceIdx){
-  const key=venueKey+'_'+raceIdx;
-  if(!resultState[key]) resultState[key]={ranked:[],nrs:[],pus:[],editing:false};
-  const race=D.venues[venueKey].races[raceIdx];
-  const rs=resultState[key];
-  if(!rs.pus) rs.pus=[];
-  const mode=st.riMode||'rank';
-  // Check if already logged
-  const hist=window._resultsHistory;
-  const dupKey=(D.date||'')+venueKey+race.time;
-  const loggedEntry=hist&&hist.races&&hist.races.find(r=>(r.date+r.venue+r.time)===dupKey);
-
-  // Show saved state if logged and NOT in edit mode
-  if(loggedEntry&&!rs.editing){
-    const ranked=loggedEntry.results.filter(r=>!r.non_runner&&!r.pull_out&&r.finish_pos).sort((a,b)=>a.finish_pos-b.finish_pos);
-    const nrs=loggedEntry.results.filter(r=>r.non_runner);
-    const pus=loggedEntry.results.filter(r=>r.pull_out);
-    return `<div class="ri-panel">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-        <div style="color:var(--accent);font-weight:700;font-size:13px">✓ Results Saved</div>
-        <button class="ri-undo" onclick="editLoggedResults('${venueKey}',${raceIdx})" style="font-size:11px">✏️ Edit</button>
-      </div>
-      <div style="font-size:12px;color:var(--muted);line-height:1.8">
-        ${ranked.map(r=>{const priceBadge=r.finish_pos===1&&r.sp?` <span style="font-size:10px;color:var(--accent);opacity:0.85">[${r.sp_raw||r.sp} SP]</span>`:'';return`<span style="display:inline-block;margin:2px 4px;padding:2px 8px;border-radius:4px;background:var(--card2)"><b style="color:var(--accent)">${r.finish_pos}.</b> ${r.name}${priceBadge}</span>`;}).join('')}
-        ${nrs.length?`<span style="display:inline-block;margin:2px 4px;padding:2px 8px;border-radius:4px;background:#fef2f2;color:#dc2626;border:1px solid #fecaca;text-decoration:line-through">${nrs.map(r=>r.name).join(', ')} (NR)</span>`:''}
-        ${pus.length?`<span style="display:inline-block;margin:2px 4px;padding:2px 8px;border-radius:4px;background:#fff7ed;color:#d97706;border:1px solid #fed7aa;text-decoration:line-through">${pus.map(r=>r.name).join(', ')} (PU)</span>`:''}
-      </div>
-    </div>`;
-  }
-
-  return `<div class="ri-panel" id="resultsPanel_${key}">
-    <div class="ri-header">
-      <div class="ri-header-title">${mode==='rank'?'Click horses in finishing order':mode==='nr'?'Click to mark non-runners':'Click to mark pulled out'}${rs.editing?' (editing)':''}</div>
-      <div class="ri-mode-toggle">
-        <button class="ri-mode-btn ${mode==='rank'?'active-rank':''}" onclick="st.riMode='rank';renderDetail().catch(e=>console.error('renderDetail error:',e))">🏇 Rank</button>
-        <button class="ri-mode-btn ${mode==='nr'?'active-nr':''}" onclick="st.riMode='nr';renderDetail().catch(e=>console.error('renderDetail error:',e))">🚫 NR</button>
-        <button class="ri-mode-btn ${mode==='pu'?'active-nr':''}" onclick="st.riMode='pu';renderDetail().catch(e=>console.error('renderDetail error:',e))" style="${mode==='pu'?'background:rgba(180,83,9,.12);color:#b45309;border-color:#b45309':''}">⛔ PU</button>
-      </div>
-    </div>
-    <div class="ri-tiles">${race.runners.map(r=>{
-      const ranked=rs.ranked.find(x=>x.name===r.name);
-      const isNR=rs.nrs.includes(r.name);
-      const isPU=rs.pus.includes(r.name);
-      const cls=ranked?'ranked':(isNR?'nr':(isPU?'nr':''));
-      const badge=ranked?`<span class="ri-badge">${ranked.pos}</span>`:(isNR?'<span style="font-size:10px;margin-right:4px">🚫</span>':(isPU?'<span style="font-size:10px;margin-right:4px;color:#f59e0b">⛔</span>':''));
-      const esc=r.name.replace(/'/g,"\\'");
-      return `<div class="ri-tile ${cls}" onclick="tileTap('${key}','${esc}')"${isPU?' style="border-color:#f59e0b;background:#f59e0b11"':''}>${badge}${r.name}</div>`;
-    }).join('')}</div>
-    <div class="ri-actions">
-      <button class="ri-save" onclick="saveResults('${venueKey}',${raceIdx})" ${rs.ranked.length<1?'disabled':''}>Save (${rs.ranked.length} ranked${rs.nrs.length?', '+rs.nrs.length+' NR':''}${rs.pus.length?', '+rs.pus.length+' PU':''})</button>
-      <button class="ri-undo" onclick="undoLast('${key}')">Undo</button>
-      ${rs.editing?`<button class="ri-undo" onclick="cancelEdit('${key}')" style="color:var(--warn)">Cancel</button>`:`<button class="ri-undo" onclick="resetResults('${key}')" style="color:var(--danger)">Reset</button>`}
-      <span class="ri-status">${race.runners.length - rs.ranked.length - rs.nrs.length - rs.pus.length} remaining</span>
-    </div>
-  </div>`;
-}
-
-function tileTap(key,name){
-  const rs=resultState[key]||(resultState[key]={ranked:[],nrs:[],pus:[]});
-  if(!rs.pus) rs.pus=[];
-  if(rs.ranked.find(x=>x.name===name)||rs.nrs.includes(name)||rs.pus.includes(name)) return;
-  if(st.riMode==='nr'){
-    rs.nrs.push(name);
-  }else if(st.riMode==='pu'){
-    rs.pus.push(name);
-  }else{
-    rs.ranked.push({name,pos:rs.ranked.length+1});
-  }
-  renderDetail();
-}
-
-function undoLast(key){
-  const rs=resultState[key];if(!rs) return;
-  if(st.riMode==='pu'&&rs.pus&&rs.pus.length){rs.pus.pop();}
-  else if(st.riMode==='nr'&&rs.nrs.length){rs.nrs.pop();}
-  else if(rs.ranked.length){rs.ranked.pop();}
-  renderDetail();
-}
-
-function resetResults(key){
-  resultState[key]={ranked:[],nrs:[],pus:[],editing:false};
-  renderDetail();
-}
-
-function editLoggedResults(venueKey,raceIdx){
-  const key=venueKey+'_'+raceIdx;
-  // Pre-fill from logged data so user can see and modify
-  const hist=window._resultsHistory;
-  const race=D.venues[venueKey].races[raceIdx];
-  const dupKey=(D.date||'')+venueKey+race.time;
-  const entry=hist&&hist.races&&hist.races.find(r=>(r.date+r.venue+r.time)===dupKey);
-  if(entry){
-    const ranked=entry.results.filter(r=>!r.non_runner&&!r.pull_out&&r.finish_pos).sort((a,b)=>a.finish_pos-b.finish_pos).map(r=>({name:r.name,pos:r.finish_pos}));
-    const nrs=entry.results.filter(r=>r.non_runner).map(r=>r.name);
-    const pus=entry.results.filter(r=>r.pull_out).map(r=>r.name);
-    resultState[key]={ranked,nrs,pus,editing:true};
-  }else{
-    resultState[key]={ranked:[],nrs:[],pus:[],editing:true};
-  }
-  renderDetail();
-}
-
-function cancelEdit(key){
-  resultState[key]={ranked:[],nrs:[],pus:[],editing:false};
-  renderDetail();
-}
-
-// Legacy compat — redirect old calls
-async function showResultsInput(venueKey,raceIdx){
-  st.openRace={vk:venueKey,ri:raceIdx};st.detailTab='main';await render();
-}
-
-async function saveResults(venueKey,raceIdx){
-  const key=venueKey+'_'+raceIdx;
-  const rs=resultState[key];
-  if(!rs||rs.ranked.length<1) return;
-  const race=D.venues[venueKey].races[raceIdx];
-  const profile=classifyProfile(race.surface,race.race_type);
-
-  // Priority: 1) in-memory, 2) localStorage, 3) fetch file, 4) fresh default
-  let history=window._resultsHistory;
-  if(!history){
-    const stored=localStorage.getItem('resultsHistory');
-    if(stored){try{history=JSON.parse(stored);}catch(e){}}
-  }
-  if(!history){
-    try{const r=await fetch('results_history.json?t='+Date.now());if(r.ok)history=await r.json();}catch(e){}
-  }
-  if(!history) history={version:1,races:[],calibrations:[],weight_profiles:{
-    aw:{form:20,rating:15,trainer:12,jockey:10,fitness:8,class:8,going:8,course:6,distance:6,age:7,weight:8,draw:5,headgear:3,spotlight:2},
-    turf_flat:{form:20,rating:15,trainer:12,jockey:10,fitness:8,class:8,going:8,course:6,distance:6,age:7,weight:8,draw:5,headgear:3,spotlight:2},
-    nh:{form:20,rating:15,trainer:12,jockey:10,fitness:8,class:8,going:8,course:6,distance:6,age:7,weight:8,draw:5,headgear:3,spotlight:2}
-  }};
-
-  const entry={
-    date:D.date,venue:venueKey,time:race.time,race_name:race.name,
-    field_size:race.field_size,going:race.going,surface:race.surface||'',
-    race_type:race.race_type||'',profile:profile,
-    results:rs.ranked.map(r=>{
-      const pred=race.runners.find(x=>x.name===r.name)||{};
-      return {name:r.name,finish_pos:r.pos,non_runner:false,
-        jockey:pred.jockey||'',trainer:pred.trainer||'',
-        predicted_score:pred.score||0,predicted_confidence:pred.confidence||'',
-        score_breakdown:pred.score_breakdown||{}};
-    })
-  };
-
-  rs.nrs.forEach(name=>{
-    const pred=race.runners.find(x=>x.name===name)||{};
-    entry.results.push({name,finish_pos:null,non_runner:true,pull_out:false,jockey:pred.jockey||'',trainer:pred.trainer||'',predicted_score:0,predicted_confidence:'',score_breakdown:{}});
-  });
-  (rs.pus||[]).forEach(name=>{
-    const pred=race.runners.find(x=>x.name===name)||{};
-    entry.results.push({name,finish_pos:null,non_runner:false,pull_out:true,jockey:pred.jockey||'',trainer:pred.trainer||'',predicted_score:0,predicted_confidence:'',score_breakdown:{}});
-  });
-
-  const dupKey=entry.date+entry.venue+entry.time;
-  history.races=history.races.filter(r=>(r.date+r.venue+r.time)!==dupKey);
-  history.races.push(entry);
-  window._resultsHistory=history;
-  try{localStorage.setItem('resultsHistory',JSON.stringify(history));}catch(e){}
-
-  // Clear resultState so it shows the saved confirmation view
-  resultState[key]={ranked:[],nrs:[],editing:false};
-  updateStatus();
-  // Auto-refresh Top 10 picks with latest results
-  await renderTopPicks().catch(e=>console.error('renderTopPicks error:',e));
-  // Check if daily picks auto-calibration should run
-  checkDailyPicksCalibration();
-  renderDetail();
-}
-
 /* ==================== DAILY TOP PICKS AUTO-CALIBRATION ==================== */
 function checkDailyPicksCalibration(){
   if(!D||!D.date) return;
@@ -4353,7 +4151,7 @@ async function renderPerformance(){
   if(!history){const stored=localStorage.getItem('resultsHistory');if(stored){try{history=JSON.parse(stored);}catch(e){}}}
   if(!history){try{const r=await fetch('results_history.json?t='+Date.now());if(r.ok)history=await r.json();}catch(e){}}
   if(!history||!history.races||!history.races.length){
-    el.innerHTML='<div class="nodata"><h2>No Results Logged Yet</h2><p>Log finishing positions using the "📝 Log Results" button on each race card.</p><p style="color:var(--muted);margin-top:8px">After logging 50+ races per surface type, weight calibration becomes available.</p></div>';
+    el.innerHTML='<div class="nodata"><h2>No Results Logged Yet</h2><p>Run "Fetch Results.bat" to pull and log race results.</p><p style="color:var(--muted);margin-top:8px">After logging 50+ races per surface type, weight calibration becomes available.</p></div>';
     return;
   }
   window._resultsHistory=history;
@@ -5389,16 +5187,10 @@ function showGuide(){
     <!-- LOGGING RESULTS -->
     <div class="guide-section">
       <h3><span class="gi">📝</span> Logging Race Results</h3>
-      <p>Open any race → scroll to the result logger at bottom. Three input modes:</p>
-      <div style="display:flex;gap:6px;margin:8px 0">
-        <span style="background:rgba(5,150,105,.2);color:var(--accent);padding:4px 10px;border-radius:6px;font-size:11px;font-weight:700">🏇 Rank</span>
-        <span style="background:rgba(239,68,68,.15);color:#f87171;padding:4px 10px;border-radius:6px;font-size:11px;font-weight:700">🚫 NR</span>
-        <span style="background:rgba(245,158,11,.15);color:#f59e0b;padding:4px 10px;border-radius:6px;font-size:11px;font-weight:700">⛔ PU</span>
-      </div>
+      <p>Run <b>Fetch Results.bat</b> — scrapes results, matches predictions, dual-writes to <code>race_data.db</code> + <code>results_history.json</code>. Date menu: today / yesterday / day before / specific date.</p>
       <ul>
-        <li><b>Rank mode</b> — tap horses in finishing order (1st, 2nd, 3rd...)</li>
-        <li><b>NR mode</b> — mark non-runners · <b>PU mode</b> — mark pulled up</li>
-        <li><b>Undo</b> / <b>Reset</b> to correct mistakes · <b>✏️ Edit</b> after saving</li>
+        <li>Ranked finish, non-runners and pulled-up all detected automatically</li>
+        <li>Re-run anytime to correct or backfill — upserts, safe to repeat</li>
       </ul>
     </div>
 
@@ -8157,8 +7949,6 @@ function renderMainTab(runners,race,vk,ri){
     return rows;
   }).join('')}
   </tbody></table>`;
-  // Inline results logger
-  h+=renderResultsLogger(vk,ri);
   return h;
 }
 
