@@ -454,6 +454,25 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .xa-going-bar-wrap{width:50px;height:4px;background:#f3f4f6;border-radius:2px;overflow:hidden;flex-shrink:0}
 .xa-going-bar-fill{height:100%;border-radius:2px}
 .xa-going-pct{font-size:10px;font-weight:700;width:26px;text-align:right}
+/* Gap % Tab */
+.gapt-pillrow{display:flex;gap:6px;flex-wrap:wrap}
+.gapt-pill{padding:6px 12px;border-radius:20px;border:1px solid var(--border);background:var(--card2);font-size:11px;font-weight:700;color:var(--muted);cursor:pointer;transition:all .15s}
+.gapt-pill.active{background:var(--accent);border-color:var(--accent);color:#fff}
+.gapt-pill:hover:not(.active){color:var(--text)}
+.gapt-hstat{flex:1;background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:14px 16px;text-align:center}
+.gapt-hstat .gapt-n{font-size:26px;font-weight:900}
+.gapt-hstat .gapt-l{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-top:2px}
+.gapt-hstat.win .gapt-n{color:var(--accent)}
+.gapt-tbl{width:100%;border-collapse:collapse;font-size:12px}
+.gapt-tbl th{text-align:left;padding:8px 10px;font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);border-bottom:1px solid var(--border)}
+.gapt-tbl td{padding:8px 10px;border-bottom:1px solid var(--border)}
+.gapt-tbl tr.lowN td{opacity:.55}
+.gapt-barwrap{width:100px;height:8px;background:var(--border);border-radius:4px;overflow:hidden;display:inline-block;vertical-align:middle}
+.gapt-barfill{display:block;height:100%;border-radius:4px;transition:width .2s,background .2s}
+.gapt-pctcell{display:flex;align-items:center;gap:8px}
+.gapt-pctval{font-weight:800;width:42px}
+.gapt-note{font-size:10px;color:var(--muted);margin-top:10px}
+.gapt-nodata{background:var(--card2);border:1px dashed var(--border);border-radius:10px;padding:28px 16px;text-align:center;font-size:13px;font-weight:600;color:var(--muted)}
 /* XA card glow + strip */
 .rc-xa-strong{box-shadow:0 0 0 2px rgba(21,128,61,.1),0 2px 10px rgba(21,128,61,.08)!important}
 .rc-xa-mod{box-shadow:0 0 0 2px rgba(180,83,9,.08)!important}
@@ -7730,6 +7749,7 @@ async function renderDetail(){
     <button class="dtab ${tab==='main'?'active':''}" onclick="switchDetailTab('main')">MAIN</button>
     <button class="dtab ${tab==='deepdive'?'active':''}" onclick="switchDetailTab('deepdive')">DEEP DIVE</button>
     <button class="dtab ${tab==='cross'?'active':''}" onclick="switchDetailTab('cross')">⚡ CROSS</button>
+    <button class="dtab ${tab==='gap'?'active':''}" onclick="switchDetailTab('gap')">📐 GAP %</button>
     ${(()=>{
       const expandedName=st.expanded;
       if(!expandedName) return '';
@@ -7747,10 +7767,13 @@ async function renderDetail(){
     html+=renderMainTab(runners,race,vk,ri);
   }else if(tab==='cross'){
     html+=renderCrossTab(runners,race,vk);
+  }else if(tab==='gap'){
+    html+=renderGapTab();
   }else{
     html+=renderDeepDiveTab(runners,race);
   }
   el.innerHTML=html;
+  if(tab==='gap')gaptUpdate();
 }
 
 function getRunnerComboBadges(runner){
@@ -8104,6 +8127,142 @@ function renderCrossTab(runners,race,vk){
     ${section('Draw Tendency at '+venue+` <span style="font-size:10px;font-weight:500;color:#9ca3af">(base ${base}% SR)</span>`,`<div style="display:flex;gap:10px;padding:10px 14px">${drawHtml}</div>`)}
     ${horseRows.length?section('Horse Course History',histHtml):''}
   </div>`;
+}
+
+/* ==================== GAP % TAB ==================== */
+// gap = top-pick predicted_score minus 2nd-pick predicted_score, per historical race
+function buildGapDataset(){
+  const hist=window._resultsHistory;
+  const out=[];
+  if(!hist||!hist.races) return out;
+  hist.races.forEach(r=>{
+    const rs=(r.results||[]).filter(x=>!x.non_runner&&typeof x.predicted_score==='number'&&x.predicted_score>0)
+      .sort((a,b)=>b.predicted_score-a.predicted_score);
+    if(rs.length<2) return;
+    const gap=+(rs[0].predicted_score-rs[1].predicted_score).toFixed(1);
+    const score=+rs[0].predicted_score.toFixed(1);
+    const rt=r.race_type||'';
+    const code=['Hurdle','Chase','NH Flat'].includes(rt)?'NH':(rt==='Flat'?'Flat':'');
+    out.push({gap,score,hcap:r.handicap?1:0,code,won:rs[0].finish_pos===1?1:0});
+  });
+  return out;
+}
+
+const GAP_BANDS=[[0,5],[5,8],[8,10],[10,12],[12,15],[15,18],[18,21],[21,24],[24,999]];
+
+function gaptColor(pct){
+  if(pct>=45)return'#15803d';
+  if(pct>=30)return'#d97706';
+  return'#ef4444';
+}
+
+function renderGapTab(){
+  const hist=window._resultsHistory;
+  if(!hist||!hist.races||!hist.races.length){
+    return`<div style="padding:40px;text-align:center;color:var(--muted)">No historical data available.<br>Results DB must be connected.</div>`;
+  }
+  const inp=(id,val,ph)=>`<input type="number" id="${id}" value="${val}" ${ph?`placeholder="${ph}"`:''} step="0.5" oninput="gaptUpdate()" style="width:64px;padding:6px 8px;border:1px solid var(--border);border-radius:6px;font-size:13px;background:var(--card2);color:var(--text)">`;
+  const label=t=>`<span style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--muted)">${t}</span>`;
+  return`<div style="padding:4px 0 0">
+    <div style="display:flex;flex-wrap:wrap;gap:22px;align-items:flex-end;margin-bottom:16px">
+      <div style="display:flex;flex-direction:column;gap:6px">
+        ${label('Score Point')}
+        <div style="display:flex;align-items:center;gap:6px">${inp('gaptScoreMin',74)}<span style="font-size:11px;color:var(--muted);font-weight:700">to</span>${inp('gaptScoreMax','','max')}</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        ${label('Gap Range')}
+        <div style="display:flex;align-items:center;gap:6px">${inp('gaptGapMin',0)}<span style="font-size:11px;color:var(--muted);font-weight:700">to</span>${inp('gaptGapMax','','max')}</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        ${label('Code')}
+        <div class="gapt-pillrow" data-role="code">
+          <button class="gapt-pill active" data-v="all" onclick="gaptSetPill(this)">All</button>
+          <button class="gapt-pill" data-v="Flat" onclick="gaptSetPill(this)">Flat</button>
+          <button class="gapt-pill" data-v="NH" onclick="gaptSetPill(this)">NH</button>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        ${label('Type')}
+        <div class="gapt-pillrow" data-role="hcap">
+          <button class="gapt-pill active" data-v="all" onclick="gaptSetPill(this)">All</button>
+          <button class="gapt-pill" data-v="hcap" onclick="gaptSetPill(this)">Handicap</button>
+          <button class="gapt-pill" data-v="nonhcap" onclick="gaptSetPill(this)">Non-Hcp</button>
+        </div>
+      </div>
+    </div>
+    <div id="gaptNoData" class="gapt-nodata" style="display:none">No races match this filter. Widen Gap Range or Score Point.</div>
+    <div id="gaptResults">
+      <div style="display:flex;gap:12px;margin-bottom:20px">
+        <div class="gapt-hstat"><div class="gapt-n" id="gaptN">–</div><div class="gapt-l">Races</div></div>
+        <div class="gapt-hstat"><div class="gapt-n" id="gaptW">–</div><div class="gapt-l">Wins</div></div>
+        <div class="gapt-hstat win"><div class="gapt-n" id="gaptPct">–</div><div class="gapt-l">Win %</div></div>
+      </div>
+      <table class="gapt-tbl">
+        <thead><tr><th>Gap Band</th><th>N</th><th>Wins</th><th>Win %</th></tr></thead>
+        <tbody id="gaptRows"></tbody>
+      </table>
+      <div id="gaptNote" class="gapt-note">Rows dimmed = sample size &lt; 8, treat as noise.</div>
+    </div>
+  </div>`;
+}
+
+function gaptSetPill(btn){
+  btn.parentElement.querySelectorAll('.gapt-pill').forEach(x=>x.classList.remove('active'));
+  btn.classList.add('active');
+  gaptUpdate();
+}
+
+function gaptUpdate(){
+  const scoreMinEl=document.getElementById('gaptScoreMin');
+  if(!scoreMinEl)return; // tab no longer mounted
+  const sMin=parseFloat(scoreMinEl.value)||0;
+  const sMaxRaw=document.getElementById('gaptScoreMax').value;
+  const sMax=sMaxRaw===''?999:parseFloat(sMaxRaw);
+  const gMin=parseFloat(document.getElementById('gaptGapMin').value)||0;
+  const gMaxRaw=document.getElementById('gaptGapMax').value;
+  const gMax=gMaxRaw===''?999:parseFloat(gMaxRaw);
+  const code=document.querySelector('.gapt-pillrow[data-role="code"] .gapt-pill.active').dataset.v;
+  const hcap=document.querySelector('.gapt-pillrow[data-role="hcap"] .gapt-pill.active').dataset.v;
+
+  const data=buildGapDataset();
+  const scoreFiltered=data.filter(r=>r.score>=sMin&&r.score<=sMax
+    &&(code==='all'||r.code===code)
+    &&(hcap==='all'||(hcap==='hcap'?r.hcap===1:r.hcap===0)));
+  const sel=scoreFiltered.filter(r=>r.gap>=gMin&&r.gap<=gMax);
+
+  const noDataEl=document.getElementById('gaptNoData');
+  const resultsEl=document.getElementById('gaptResults');
+  if(!sel.length){
+    noDataEl.style.display='block';
+    resultsEl.style.display='none';
+    return;
+  }
+  noDataEl.style.display='none';
+  resultsEl.style.display='block';
+
+  const wins=sel.filter(r=>r.won===1).length;
+  document.getElementById('gaptN').textContent=sel.length;
+  document.getElementById('gaptW').textContent=wins;
+  document.getElementById('gaptPct').textContent=Math.round(wins/sel.length*1000)/10+'%';
+
+  const activeBands=GAP_BANDS.filter(([lo,hi])=>gMin<hi&&gMax>=lo);
+  const rows=activeBands.map(([lo,hi])=>{
+    const sub=scoreFiltered.filter(r=>r.gap>=Math.max(lo,gMin)&&r.gap<Math.min(hi,gMax+0.0001)&&r.gap<hi);
+    const w=sub.filter(r=>r.won===1).length;
+    const pct=sub.length?Math.round(w/sub.length*1000)/10:0;
+    const bandLabel=hi>=999?`${lo}+`:`${lo}–${hi}`;
+    const lowN=sub.length<8;
+    return`<tr class="${lowN?'lowN':''}">
+      <td>${bandLabel}</td>
+      <td>${sub.length}</td>
+      <td>${w}</td>
+      <td>${sub.length?`<div class="gapt-pctcell"><span class="gapt-pctval" style="color:${gaptColor(pct)}">${pct}%</span><span class="gapt-barwrap"><span class="gapt-barfill" style="width:${Math.min(100,pct)}%;background:${gaptColor(pct)}"></span></span></div>`:'<span style="font-size:10px;color:var(--muted)">no data</span>'}</td>
+    </tr>`;
+  }).join('');
+  document.getElementById('gaptRows').innerHTML=rows||'<tr><td colspan="4" style="padding:14px 10px;font-size:10px;color:var(--muted)">No bands fall inside this Gap Range.</td></tr>';
+  document.getElementById('gaptNote').textContent=activeBands.length>1
+    ?'Table scoped to your Gap Range. Rows dimmed = sample size < 8, treat as noise.'
+    :'Rows dimmed = sample size < 8, treat as noise.';
 }
 
 /* ==================== DEEP DIVE TAB ==================== */
