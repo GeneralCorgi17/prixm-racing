@@ -463,14 +463,6 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .gapt-hstat .gapt-n{font-size:26px;font-weight:900}
 .gapt-hstat .gapt-l{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-top:2px}
 .gapt-hstat.win .gapt-n{color:var(--accent)}
-.gapt-tbl{width:100%;border-collapse:collapse;font-size:12px}
-.gapt-tbl th{text-align:left;padding:8px 10px;font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);border-bottom:1px solid var(--border)}
-.gapt-tbl td{padding:8px 10px;border-bottom:1px solid var(--border)}
-.gapt-tbl tr.lowN td{opacity:.55}
-.gapt-barwrap{width:100px;height:8px;background:var(--border);border-radius:4px;overflow:hidden;display:inline-block;vertical-align:middle}
-.gapt-barfill{display:block;height:100%;border-radius:4px;transition:width .2s,background .2s}
-.gapt-pctcell{display:flex;align-items:center;gap:8px}
-.gapt-pctval{font-weight:800;width:42px}
 .gapt-note{font-size:10px;color:var(--muted);margin-top:10px}
 .gapt-nodata{background:var(--card2);border:1px dashed var(--border);border-radius:10px;padding:28px 16px;text-align:center;font-size:13px;font-weight:600;color:var(--muted)}
 /* XA card glow + strip */
@@ -8148,8 +8140,6 @@ function buildGapDataset(){
   return out;
 }
 
-const GAP_BANDS=[[0,5],[5,8],[8,10],[10,12],[12,15],[15,18],[18,21],[21,24],[24,999]];
-
 function gaptColor(pct){
   if(pct>=45)return'#15803d';
   if(pct>=30)return'#d97706';
@@ -8170,8 +8160,8 @@ function renderGapTab(){
         <div style="display:flex;align-items:center;gap:6px">${inp('gaptScoreMin',74)}<span style="font-size:11px;color:var(--muted);font-weight:700">to</span>${inp('gaptScoreMax','','max')}</div>
       </div>
       <div style="display:flex;flex-direction:column;gap:6px">
-        ${label('Gap Range')}
-        <div style="display:flex;align-items:center;gap:6px">${inp('gaptGapMin',0)}<span style="font-size:11px;color:var(--muted);font-weight:700">to</span>${inp('gaptGapMax','','max')}</div>
+        ${label('Gap =')}
+        <div style="display:flex;align-items:center;gap:6px">${inp('gaptGapExact',18)}</div>
       </div>
       <div style="display:flex;flex-direction:column;gap:6px">
         ${label('Code')}
@@ -8190,19 +8180,13 @@ function renderGapTab(){
         </div>
       </div>
     </div>
-    <div id="gaptNoData" class="gapt-nodata" style="display:none">No races match this filter. Widen Gap Range or Score Point.</div>
-    <div id="gaptResults">
-      <div style="display:flex;gap:12px;margin-bottom:20px">
-        <div class="gapt-hstat"><div class="gapt-n" id="gaptN">–</div><div class="gapt-l">Races</div></div>
-        <div class="gapt-hstat"><div class="gapt-n" id="gaptW">–</div><div class="gapt-l">Wins</div></div>
-        <div class="gapt-hstat win"><div class="gapt-n" id="gaptPct">–</div><div class="gapt-l">Win %</div></div>
-      </div>
-      <table class="gapt-tbl">
-        <thead><tr><th>Gap Band</th><th>N</th><th>Wins</th><th>Win %</th></tr></thead>
-        <tbody id="gaptRows"></tbody>
-      </table>
-      <div id="gaptNote" class="gapt-note">Rows dimmed = sample size &lt; 8, treat as noise.</div>
+    <div id="gaptNoData" class="gapt-nodata" style="display:none">No races match this exact Gap + Score Point + Code + Type combo. Try a nearby Gap or widen Score Point.</div>
+    <div id="gaptResults" style="display:flex;gap:12px;margin-bottom:6px">
+      <div class="gapt-hstat"><div class="gapt-n" id="gaptN">–</div><div class="gapt-l">Races</div></div>
+      <div class="gapt-hstat"><div class="gapt-n" id="gaptW">–</div><div class="gapt-l">Wins</div></div>
+      <div class="gapt-hstat win"><div class="gapt-n" id="gaptPct">–</div><div class="gapt-l">Win %</div></div>
     </div>
+    <div id="gaptLowN" class="gapt-note" style="display:none">Sample size under 8 — treat as noise.</div>
   </div>`;
 }
 
@@ -8218,9 +8202,8 @@ function gaptUpdate(){
   const sMin=parseFloat(scoreMinEl.value)||0;
   const sMaxRaw=document.getElementById('gaptScoreMax').value;
   const sMax=sMaxRaw===''?999:parseFloat(sMaxRaw);
-  const gMin=parseFloat(document.getElementById('gaptGapMin').value)||0;
-  const gMaxRaw=document.getElementById('gaptGapMax').value;
-  const gMax=gMaxRaw===''?999:parseFloat(gMaxRaw);
+  const gExactRaw=document.getElementById('gaptGapExact').value;
+  const gExact=gExactRaw===''?null:Math.round(parseFloat(gExactRaw)*10)/10;
   const code=document.querySelector('.gapt-pillrow[data-role="code"] .gapt-pill.active').dataset.v;
   const hcap=document.querySelector('.gapt-pillrow[data-role="hcap"] .gapt-pill.active').dataset.v;
 
@@ -8228,41 +8211,26 @@ function gaptUpdate(){
   const scoreFiltered=data.filter(r=>r.score>=sMin&&r.score<=sMax
     &&(code==='all'||r.code===code)
     &&(hcap==='all'||(hcap==='hcap'?r.hcap===1:r.hcap===0)));
-  const sel=scoreFiltered.filter(r=>r.gap>=gMin&&r.gap<=gMax);
+  const sel=gExact===null?[]:scoreFiltered.filter(r=>r.gap===gExact);
 
   const noDataEl=document.getElementById('gaptNoData');
   const resultsEl=document.getElementById('gaptResults');
   if(!sel.length){
     noDataEl.style.display='block';
     resultsEl.style.display='none';
-    return;
+  }else{
+    noDataEl.style.display='none';
+    resultsEl.style.display='flex';
+    const wins=sel.filter(r=>r.won===1).length;
+    const pct=Math.round(wins/sel.length*1000)/10;
+    document.getElementById('gaptN').textContent=sel.length;
+    document.getElementById('gaptW').textContent=wins;
+    const pctEl=document.getElementById('gaptPct');
+    pctEl.textContent=pct+'%';
+    pctEl.style.color=gaptColor(pct);
+    const lowNEl=document.getElementById('gaptLowN');
+    lowNEl.style.display=sel.length<8?'block':'none';
   }
-  noDataEl.style.display='none';
-  resultsEl.style.display='block';
-
-  const wins=sel.filter(r=>r.won===1).length;
-  document.getElementById('gaptN').textContent=sel.length;
-  document.getElementById('gaptW').textContent=wins;
-  document.getElementById('gaptPct').textContent=Math.round(wins/sel.length*1000)/10+'%';
-
-  const activeBands=GAP_BANDS.filter(([lo,hi])=>gMin<hi&&gMax>=lo);
-  const rows=activeBands.map(([lo,hi])=>{
-    const sub=scoreFiltered.filter(r=>r.gap>=Math.max(lo,gMin)&&r.gap<Math.min(hi,gMax+0.0001)&&r.gap<hi);
-    const w=sub.filter(r=>r.won===1).length;
-    const pct=sub.length?Math.round(w/sub.length*1000)/10:0;
-    const bandLabel=hi>=999?`${lo}+`:`${lo}–${hi}`;
-    const lowN=sub.length<8;
-    return`<tr class="${lowN?'lowN':''}">
-      <td>${bandLabel}</td>
-      <td>${sub.length}</td>
-      <td>${w}</td>
-      <td>${sub.length?`<div class="gapt-pctcell"><span class="gapt-pctval" style="color:${gaptColor(pct)}">${pct}%</span><span class="gapt-barwrap"><span class="gapt-barfill" style="width:${Math.min(100,pct)}%;background:${gaptColor(pct)}"></span></span></div>`:'<span style="font-size:10px;color:var(--muted)">no data</span>'}</td>
-    </tr>`;
-  }).join('');
-  document.getElementById('gaptRows').innerHTML=rows||'<tr><td colspan="4" style="padding:14px 10px;font-size:10px;color:var(--muted)">No bands fall inside this Gap Range.</td></tr>';
-  document.getElementById('gaptNote').textContent=activeBands.length>1
-    ?'Table scoped to your Gap Range. Rows dimmed = sample size < 8, treat as noise.'
-    :'Rows dimmed = sample size < 8, treat as noise.';
 }
 
 /* ==================== DEEP DIVE TAB ==================== */
