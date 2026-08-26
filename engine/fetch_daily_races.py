@@ -219,30 +219,37 @@ def score_trainer(trainer_name):
     return 4  # default for unknown trainer
 
 
-def score_trainer_rtf(rtf_string):
-    """Parse trainer recent-to-form string like '2-15 (13.3%)' and score it"""
-    if not rtf_string:
+def score_trainer_rtf(rtf_value):
+    """Score trainer recent-to-form (RTF).
+
+    Racing Post now serves this as a plain percentage number (e.g. 57);
+    still accepts the older '2-15 (13.3%)' string format if it ever shows up.
+    """
+    if rtf_value is None or rtf_value == '':
         return 0
 
-    # Ensure we only run regex on strings
-    if not isinstance(rtf_string, str):
-        rtf_string = str(rtf_string)
+    pct = None
+    if isinstance(rtf_value, (int, float)):
+        pct = float(rtf_value)
+    else:
+        match = re.search(r'(\d+)-(\d+)\s*\((\d+\.?\d*)%\)', str(rtf_value))
+        if match:
+            pct = float(match.group(3))
+        else:
+            try:
+                pct = float(rtf_value)
+            except (TypeError, ValueError):
+                return 0
 
-    match = re.search(r'(\d+)-(\d+)\s*\((\d+\.?\d*)%\)', rtf_string)
-    if match:
-        wins = int(match.group(1))
-        runs = int(match.group(2))
-        pct = float(match.group(3))
-        if pct >= 25:
-            return 5
-        elif pct >= 18:
-            return 4
-        elif pct >= 12:
-            return 3
-        elif pct >= 8:
-            return 2
-        return 1
-    return 0
+    if pct >= 25:
+        return 5
+    elif pct >= 18:
+        return 4
+    elif pct >= 12:
+        return 3
+    elif pct >= 8:
+        return 2
+    return 1
 
 def score_jockey(jockey_name):
     """Score jockey quality (0-10 points)"""
