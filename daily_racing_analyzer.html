@@ -1040,6 +1040,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 </style>
 <script src="results_history.js" onerror=""></script>
 <script src="daily_race_data.js" onerror=""></script>
+<script src="weather_signal.js" onerror=""></script>
 </head>
 <body>
 <div class="hdr">
@@ -1067,6 +1068,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
   <button class="tab-btn" id="tabGolden" onclick="switchTab('golden')">Golden</button>
   <button class="tab-btn" id="tabTracks" onclick="switchTab('tracks')">Tracks</button>
   <button class="tab-btn" id="tabTopFinish" onclick="switchTab('topfinish')">Top Finish</button>
+  <button class="tab-btn" id="tabWatchback" onclick="switchTab('watchback')">Watchback</button>
   <span id="dbStatusBadge" style="margin-left:auto;padding:0 12px;font-size:11px;color:var(--muted);align-self:center;display:none"></span>
 </div>
 
@@ -1106,6 +1108,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 
 <div id="tracksView" style="display:none;padding:20px 28px;max-width:1200px;margin:0 auto"></div>
 <div id="topFinishView" style="display:none;padding:20px 28px;max-width:1100px;margin:0 auto"><div id="topFinishContent"></div></div>
+<div id="watchbackView" style="display:none;padding:20px 28px;max-width:1200px;margin:0 auto"><div id="watchbackContent">Loading...</div></div>
 
 <div id="modalContainer"></div>
 <div class="hs-overlay" id="hsOverlay" onclick="if(event.target===this)hsClose()">
@@ -1495,6 +1498,20 @@ function calcMomentum(formStr){
   else{label='COLD';icon='🧊';cls='mom-fall';tip='Cold form — positions getting worse fast (slope: '+slope.toFixed(1)+')';}
   return {slope:Math.round(slope*100)/100,label,icon,cls,tip,positions,avgRecent:Math.round(avgRecent*10)/10};
 }
+/* ==================== RPR vs OR DIVERGENCE (improvement.md Feature 5) ==================== */
+// diff>=10 → horse running below Timeform-rated ability (handicapper hasn't caught up).
+// diff<=-10 → handicapper may have horse rated too high vs Timeform's view.
+function rprDivergenceFlag(orVal, rprVal){
+  const or_=Number(orVal), rpr_=Number(rprVal);
+  if(!orVal || !rprVal || isNaN(or_) || isNaN(rpr_)) return null;
+  const diff=rpr_-or_;
+  if(diff>=10) return {flag:'UNDERRATED', diff, icon:'⬆️', label:'Underrated', type:'pos',
+    tooltip:`RPR ${rpr_} vs OR ${or_} — running ${diff}lb below Timeform-rated ability.`};
+  if(diff<=-10) return {flag:'OVERRATED', diff, icon:'⬇️', label:'Overrated', type:'warn',
+    tooltip:`OR ${or_} vs RPR ${rpr_} — handicapper may have this horse rated ${Math.abs(diff)}lb too high.`};
+  return null;
+}
+
 /* ==================== CDP: CLASS · DISTANCE · GOING · COURSE PROVEN ==================== */
 function buildCDP(runner, race){
   const bd=runner.score_breakdown||{};
@@ -1725,6 +1742,7 @@ function switchTab(tab){
   document.getElementById('tabGolden').classList.toggle('active',tab==='golden');
   document.getElementById('tabTracks').classList.toggle('active',tab==='tracks');
   document.getElementById('tabTopFinish').classList.toggle('active',tab==='topfinish');
+  document.getElementById('tabWatchback').classList.toggle('active',tab==='watchback');
   document.getElementById('landingView').style.display=tab==='races'?'block':'none';
   document.getElementById('detailView').style.display='none';
   document.getElementById('perfView').style.display=tab==='performance'?'block':'none';
@@ -1733,12 +1751,14 @@ function switchTab(tab){
   document.getElementById('goldenView').style.display=tab==='golden'?'block':'none';
   document.getElementById('tracksView').style.display=tab==='tracks'?'block':'none';
   document.getElementById('topFinishView').style.display=tab==='topfinish'?'block':'none';
+  document.getElementById('watchbackView').style.display=tab==='watchback'?'block':'none';
   if(tab==='performance') renderPerformance();
   if(tab==='combos') renderCombos();
   if(tab==='trends') renderTrends();
   if(tab==='golden') renderGoldenDashboard();
   if(tab==='tracks') window.renderTracksTab&&window.renderTracksTab();
   if(tab==='topfinish') window.renderTopFinishAnalysis&&window.renderTopFinishAnalysis();
+  if(tab==='watchback') window.renderWatchbackDashboard&&window.renderWatchbackDashboard();
 }
 
 /* ==================== GOLDEN DASHBOARD ==================== */
@@ -3595,6 +3615,138 @@ window.openTrackAnalysis=function(venue){
 
 })();
 
+/* ==================== WATCHBACK DASHBOARD (improvement.md Feature 3) ====================
+   "Picks" population = TOP PICK + STRONG confidence-tier runners from results_history —
+   Prixm's own NAP/WIN/STRONG/PLACE edge categories aren't persisted historically (they're
+   derived live from a full field comparison), so this is the closest available proxy.
+   Informational only — see disclaimer rendered in the panel. Never touches P&L/segment. */
+(function(){
+'use strict';
+
+function gatherWatchbackPicks(){
+  const hist=window._resultsHistory;
+  const out=[];
+  if(!hist||!hist.races) return out;
+  hist.races.forEach(race=>{
+    if(typeof isExcludedVenue==='function'&&isExcludedVenue(race.venue)) return;
+    (race.results||[]).forEach(r=>{
+      if(r.non_runner||r.pull_out||!r.finish_pos) return;
+      if(r.predicted_confidence!=='TOP PICK'&&r.predicted_confidence!=='STRONG') return;
+      out.push({
+        date:race.date, venue:race.venue, time:race.time, name:r.name,
+        finish_pos:r.finish_pos, field_size:race.field_size,
+        beaten_distance:r.distance_beaten, winner_sp:r.winner_sp, winner_name:r.winner_name,
+        interference:r.interference, interference_type:r.interference_type,
+        finishing_trend:r.finishing_trend, position_in_race:r.position_in_race,
+        quality:classifyRun({finish_pos:r.finish_pos, beaten_distance:r.distance_beaten,
+          winner_sp:r.winner_sp, interference:r.interference, finishing_trend:r.finishing_trend})
+      });
+    });
+  });
+  return out;
+}
+
+function summarize(picks){
+  const cats=['WIN','NEAR_MISS','UNLUCKY','COMPETITIVE','BEATEN_FAIRLY','WELL_BEATEN'];
+  const counts={}; cats.forEach(c=>counts[c]=0);
+  let unclassified=0;
+  picks.forEach(p=>{ if(p.quality&&counts[p.quality]!=null) counts[p.quality]++; else unclassified++; });
+  const classified=picks.length-unclassified;
+  const adjusted=classified?Math.round((counts.WIN+counts.NEAR_MISS+counts.UNLUCKY)/classified*100):0;
+  return {counts, classified, unclassified, total:picks.length, adjusted};
+}
+
+function trendOptions(current){
+  const opts=['','stayed_on','weakened','never_travelled','ran_on_strongly'];
+  return opts.map(o=>`<option value="${o}" ${o===current?'selected':''}>${o?o.replace(/_/g,' '):'—'}</option>`).join('');
+}
+
+window.renderWatchbackDashboard=function(){
+  const el=document.getElementById('watchbackContent');
+  if(!el) return;
+  const hist=window._resultsHistory;
+  if(!hist||!hist.races||!hist.races.length){
+    el.innerHTML='<div class="nodata"><h2>No Results Logged Yet</h2><p>Run "Fetch Results.bat" to pull and log race results.</p></div>';
+    return;
+  }
+  const picks=gatherWatchbackPicks();
+  const s=summarize(picks);
+  const W=WATCHBACK_LABELS;
+  const pct=n=>s.classified?Math.round(n/s.classified*100):0;
+
+  const rows=['WIN','NEAR_MISS','UNLUCKY','COMPETITIVE','BEATEN_FAIRLY','WELL_BEATEN'].map(c=>{
+    const n=s.counts[c],p=pct(n);
+    return `<tr><td style="font-weight:700;color:${W[c].col}">${W[c].label}</td><td>${n}</td>
+      <td><div style="display:flex;align-items:center;gap:8px"><div style="flex:1;height:6px;background:var(--card2);border-radius:3px;overflow:hidden;max-width:160px"><div style="height:100%;width:${p}%;background:${W[c].col}"></div></div><span style="font-size:11px;color:var(--muted)">${p}%</span></div></td></tr>`;
+  }).join('');
+
+  // Manual-input queue: BEATEN_FAIRLY/WELL_BEATEN picks with no finishing_trend/interference set yet
+  const needsTagging=picks.filter(p=>(p.quality==='BEATEN_FAIRLY'||p.quality==='WELL_BEATEN')&&!p.finishing_trend&&!p.interference)
+    .sort((a,b)=>b.date.localeCompare(a.date)).slice(0,20);
+  const tagRows=needsTagging.map(p=>{
+    const uid=(p.date+p.venue+p.time+p.name).replace(/[^a-z0-9]/gi,'_');
+    return `<tr id="wb_row_${uid}">
+      <td style="color:var(--muted);font-size:11px">${p.date}</td>
+      <td style="font-weight:600">${p.name}</td>
+      <td style="font-size:11px;color:var(--muted)">${p.venue}</td>
+      <td style="font-size:11px">${ordinal(p.finish_pos)} ${p.beaten_distance?`(${p.beaten_distance}L)`:''}</td>
+      <td><select id="wb_trend_${uid}" style="font-size:11px;background:var(--bg);border:1px solid var(--border);border-radius:4px;color:var(--text);padding:2px 4px">${trendOptions(p.finishing_trend)}</select></td>
+      <td><label style="font-size:11px;display:flex;align-items:center;gap:4px"><input type="checkbox" id="wb_interf_${uid}"> interference</label></td>
+      <td><button onclick="window._wbSave('${p.date}','${p.venue.replace(/'/g,"\\'")}','${p.time}','${p.name.replace(/'/g,"\\'")}','${uid}')" style="font-size:10px;padding:3px 8px;border-radius:5px;border:1px solid var(--accent);background:transparent;color:var(--accent);cursor:pointer">Save</button></td>
+    </tr>`;
+  }).join('');
+
+  el.innerHTML=`
+    <div style="background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.25);border-radius:8px;padding:12px 16px;margin-bottom:18px;font-size:12px;color:var(--text)">
+      ⚠️ <strong>Near miss and unlucky flags are informational only.</strong> They do not change segment classification or betting decisions. A loss is a loss for P&L purposes.
+    </div>
+    <div style="font-size:11px;color:var(--muted);margin-bottom:14px">
+      "Picks" here = TOP PICK + STRONG confidence-tier runners (Prixm's NAP/WIN/STRONG/PLACE edge categories aren't stored historically, so this is the closest available proxy). ${s.total} picks found, ${s.classified} classified (${s.unclassified} missing a logged beaten-distance).
+    </div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px 18px;margin-bottom:20px">
+      <div style="font-size:13px;font-weight:800;margin-bottom:12px">Watchback Summary — ${s.classified} picks analysed</div>
+      <table style="width:100%;border-collapse:collapse;font-size:12px">
+        <thead><tr style="border-bottom:1px solid var(--border)"><th style="text-align:left;padding:4px 8px">Class</th><th style="text-align:left;padding:4px 8px">Count</th><th style="text-align:left;padding:4px 8px">Share</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+      <div style="margin-top:14px;font-size:12px;color:var(--muted)">
+        "Adjusted" competitive rate (WIN + NEAR MISS + UNLUCKY): <strong style="color:var(--text)">${s.adjusted}%</strong>
+      </div>
+    </div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px 18px">
+      <div style="font-size:13px;font-weight:800;margin-bottom:4px">Needs Manual Tagging</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:12px">Beaten-fairly/well-beaten picks with no finishing trend or interference logged yet. Tagging is optional and manual — nothing here is scraped automatically. Requires the local DB server (port 7432) to save.</div>
+      ${needsTagging.length?`<table style="width:100%;border-collapse:collapse;font-size:11px">
+        <thead><tr style="border-bottom:1px solid var(--border)">${['Date','Horse','Venue','Result','Finishing Trend','',''].map(h=>`<th style="text-align:left;padding:4px 6px;color:var(--muted)">${h}</th>`).join('')}</tr></thead>
+        <tbody>${tagRows}</tbody>
+      </table>`:'<div style="font-size:11px;color:var(--muted);font-style:italic">Nothing pending.</div>'}
+    </div>
+  `;
+};
+
+window._wbSave=function(date,venue,time,name,uid){
+  const trend=document.getElementById('wb_trend_'+uid).value;
+  const interf=document.getElementById('wb_interf_'+uid).checked;
+  patchRunnerWatchback(date,venue,time,name,{
+    finishing_trend:trend||null,
+    interference:interf,
+    interference_type:interf?'hampered':null
+  }).then(res=>{
+    if(res&&res.ok){
+      const row=document.getElementById('wb_row_'+uid);
+      if(row) row.style.opacity='.4';
+      // Refresh window._resultsHistory copy isn't automatic (SQLite is source of truth) —
+      // re-render on next tab visit will pick it up. Just confirm inline for now.
+      const btn=row&&row.querySelector('button');
+      if(btn){btn.textContent='Saved ✓';btn.disabled=true;}
+    }else{
+      alert('Could not save — is the local DB server running (Start App.bat)?');
+    }
+  });
+};
+
+})();
+
 /* ==================== CROSS ANALYSIS ENGINE ==================== */
 (function(){
 'use strict';
@@ -4974,6 +5126,19 @@ async function load(){
     // Force re-render Performance tab if already open (race condition: opened before calibrations loaded)
     try{const pv=document.getElementById('perfView');if(pv&&pv.style.display==='block')renderPerformance();}catch(e){}
   }
+  // Weather / Going Signal (improvement.md Feature 2) — best-effort, optional. Written by
+  // scripts/weather_fetcher.py (needs an OpenWeatherMap key — see that file's docstring).
+  // Priority: 1) weather_signal.js global (file:// — fetch() doesn't support the file:
+  // scheme, same reason daily_race_data.js/results_history.js exist) 2) fetch (works when
+  // served over http). Missing file/fetch failure is silent — nothing breaks.
+  if(window._weatherSignalFile&&window._weatherSignalFile.venues){
+    window._weatherSignal=window._weatherSignalFile;
+  }else{
+    try{
+      const wr=await fetch('weather_signal.json?t='+Date.now(),{signal:AbortSignal.timeout(2000)});
+      if(wr.ok) window._weatherSignal=await wr.json();
+    }catch(e){}
+  }
   if(fileHist&&fileHist.races&&fileHist.races.length){
     if(!window._resultsHistory) window._resultsHistory={version:1,races:[],calibrations:[],weight_profiles:fileHist.weight_profiles||{}};
     const existingKeys=new Set(window._resultsHistory.races.map(r=>r.date+r.venue+r.time));
@@ -6147,10 +6312,10 @@ function renderD1Sidebar(){
         cardStyle='border-color:rgba(16,185,129,.4);background:rgba(16,185,129,.04)';
       } else if(st==='placed'){
         const medal=res.pos===2?'🥈':res.pos===3?'🥉':'';
-        resFtr=`<div style="margin-top:8px;padding:5px 0 0;border-top:1px solid rgba(59,130,246,.18);display:flex;align-items:center;justify-content:space-between"><span style="font-size:10px;font-weight:800;color:#1d4ed8;display:flex;align-items:center;gap:4px">${medal} PLACED <span style="font-weight:600;opacity:.6">${ordinal(res.pos)} of ${p.fieldSize||'?'}</span></span><span style="font-size:9px;color:#6b7280">${res.sp?'SP '+res.sp:''}</span></div>`;
+        resFtr=`<div style="margin-top:8px;padding:5px 0 0;border-top:1px solid rgba(59,130,246,.18);display:flex;align-items:center;justify-content:space-between"><span style="font-size:10px;font-weight:800;color:#1d4ed8;display:flex;align-items:center;gap:4px">${medal} PLACED <span style="font-weight:600;opacity:.6">${ordinal(res.pos)} of ${p.fieldSize||'?'}</span></span><span style="font-size:9px;color:#6b7280">${res.sp?'SP '+res.sp:''}</span></div>${watchbackLine(res.watchback)}`;
         cardStyle='border-color:rgba(59,130,246,.3)';
       } else if(st==='lost'){
-        resFtr=`<div style="margin-top:8px;padding:5px 0 0;border-top:1px solid rgba(220,38,38,.12);display:flex;align-items:center;justify-content:space-between"><span style="font-size:10px;font-weight:800;color:#dc2626;display:flex;align-items:center;gap:4px">✗ LOST <span style="font-weight:600;opacity:.6">${ordinal(res.pos)} of ${p.fieldSize||'?'}</span></span><span style="font-size:9px;color:#6b7280">${res.sp?'SP '+res.sp:''}</span></div>`;
+        resFtr=`<div style="margin-top:8px;padding:5px 0 0;border-top:1px solid rgba(220,38,38,.12);display:flex;align-items:center;justify-content:space-between"><span style="font-size:10px;font-weight:800;color:#dc2626;display:flex;align-items:center;gap:4px">✗ LOST <span style="font-weight:600;opacity:.6">${ordinal(res.pos)} of ${p.fieldSize||'?'}</span></span><span style="font-size:9px;color:#6b7280">${res.sp?'SP '+res.sp:''}</span></div>${watchbackLine(res.watchback)}`;
         cardStyle='opacity:.65';
       } else if(st==='nr'||st==='pu'){
         resFtr=`<div style="margin-top:8px;padding:5px 0 0;border-top:1px solid #e5e0d8"><span style="font-size:10px;font-weight:700;color:#9ca3af">${st.toUpperCase()}</span></div>`;
@@ -6878,6 +7043,117 @@ function getPlaceLimit(fs){
   return 4;
 }
 
+/* ==================== WATCHBACK — QUALITY OF LOSS (improvement.md Feature 3) ====================
+   Informational only. NEVER changes segment classification or P&L — a loss is a loss.
+   beaten_distance/winner_sp are auto-derived at fetch time (results_fetcher.py).
+   interference/finishing_trend/position_in_race are manual-input only (see
+   patchRunnerWatchback below) — going_changed from the spec is intentionally NOT
+   implemented (schema only stores one going value per race, no declared-vs-final
+   distinction — see plan). */
+function parseBeatenDistance(v){
+  if(v==null||v==='') return null;
+  const s=String(v).trim().toLowerCase();
+  if(s==='shd'||s==='hd'||s==='head') return 0.2;
+  if(s==='nk'||s==='neck') return 0.3;
+  if(s==='sh'||s==='shthd') return 0.05;
+  if(s==='dist'||s==='distance') return 30;
+  const n=parseFloat(s.replace(/[^0-9.]/g,''));
+  return isNaN(n)?null:n;
+}
+function classifyRun(pick){
+  if(pick.finish_pos===1) return 'WIN';
+  const beaten=parseBeatenDistance(pick.beaten_distance);
+  if(pick.interference && beaten!=null && beaten<2.0) return 'UNLUCKY';
+  if(beaten!=null && beaten<0.5) return 'NEAR_MISS';
+  if(beaten!=null && beaten<2.0 && pick.finishing_trend==='stayed_on') return 'COMPETITIVE';
+  if(pick.winner_sp!=null && pick.winner_sp<1.5 && beaten!=null && beaten<3.0) return 'COMPETITIVE';
+  if(beaten!=null && beaten<3.0) return 'BEATEN_FAIRLY';
+  if(beaten!=null && beaten>=5.0) return 'WELL_BEATEN';
+  return beaten!=null?'BEATEN_FAIRLY':null; // null = not enough data to classify (no beaten distance logged)
+}
+const WATCHBACK_LABELS={WIN:{label:'WIN',col:'#34d399'},NEAR_MISS:{label:'NEAR MISS',col:'#60a5fa'},
+  UNLUCKY:{label:'UNLUCKY',col:'#a78bfa'},COMPETITIVE:{label:'COMPETITIVE',col:'#fbbf24'},
+  BEATEN_FAIRLY:{label:'BEATEN FAIRLY',col:'#94a3b8'},WELL_BEATEN:{label:'WELL BEATEN',col:'#f87171'}};
+function watchbackLine(wb){
+  if(!wb||!wb.quality) return '';
+  const w=WATCHBACK_LABELS[wb.quality];
+  if(!w) return '';
+  const beaten=parseBeatenDistance(wb.beaten_distance);
+  const beatenStr=beaten!=null?`beaten ${beaten}L`:'';
+  const winnerStr=wb.winner_sp!=null?`winner SP ${wb.winner_sp}`:'';
+  const trendStr=wb.finishing_trend?wb.finishing_trend.replace(/_/g,' '):'';
+  const detail=[beatenStr,trendStr,winnerStr].filter(Boolean).join(' · ');
+  return `<div style="margin-top:3px;font-size:9px;color:var(--muted)"><span style="font-weight:800;color:${w.col}">[${w.label}]</span>${detail?' '+detail:''}</div>`;
+}
+function patchRunnerWatchback(date,venue,time,name,fields){
+  return fetch('http://localhost:7432/api/runner',{
+    method:'PATCH',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({date,venue,time,name,...fields})
+  }).then(r=>r.json()).catch(e=>{console.warn('Watchback patch failed (DB server offline?)',e);return{ok:false};});
+}
+
+/* ==================== WATCHBACK — FORWARD SIGNAL (Prixm_Watchback_Spec.md) ====================
+   Display context only on the UPCOMING race card — pulls the horse's most recent resulted run's
+   watchback classification. Per spec's absolute rule: NEVER touches predicted_score, gap, or
+   segment classification (Golden/Silver/Bronze). 60-day staleness cutoff — no data or a stale
+   last run both mean "show nothing", not a fallback badge. Step 3 (scoring boost) is explicitly
+   NOT implemented — spec requires 50+ validated NEAR_MISS/UNLUCKY cases first. Do not add it here. */
+function getWatchbackContext(horseName){
+  const hist=window._resultsHistory;
+  if(!hist||!hist.races) return null;
+  const n=(horseName||'').trim().toLowerCase();
+  if(!n) return null;
+  let best=null;
+  hist.races.forEach(race=>{
+    const res=(race.results||[]).find(r=>(r.name||'').trim().toLowerCase()===n);
+    if(res&&!res.non_runner&&!res.pull_out&&res.finish_pos){
+      if(!best||race.date>best.race.date) best={race,res};
+    }
+  });
+  if(!best) return null;
+  const {race,res}=best;
+  const classification=classifyRun({finish_pos:res.finish_pos,beaten_distance:res.distance_beaten,
+    winner_sp:res.winner_sp,interference:res.interference,finishing_trend:res.finishing_trend});
+  if(!classification) return null; // no beaten_distance logged — spec: show nothing, no fallback
+  const daysAgo=Math.floor((Date.now()-new Date(race.date).getTime())/86400000);
+  if(!(daysAgo>=0)||daysAgo>60) return null; // spec: staleness cutoff, stale = show nothing
+  return {classification, beaten_distance:res.distance_beaten, finishing_trend:res.finishing_trend,
+    winner_sp:res.winner_sp, winner_name:res.winner_name, race_date:race.date, days_ago:daysAgo,
+    venue:race.venue, finish_pos:res.finish_pos, field_size:race.field_size};
+}
+const WATCHBACK_CONTEXT_ICON={WIN:'🟢',NEAR_MISS:'🟡',UNLUCKY:'🟡',COMPETITIVE:'⚪',BEATEN_FAIRLY:'⚪',WELL_BEATEN:'🔴'};
+function watchbackContextText(ctx){
+  const X=parseBeatenDistance(ctx.beaten_distance);
+  const N=ctx.days_ago;
+  switch(ctx.classification){
+    case 'WIN':          return `Last run: WON (${N} days ago)`;
+    case 'NEAR_MISS':    return `Last run: beaten ${X}L — ran on well, narrow defeat (${N} days ago)`;
+    case 'UNLUCKY':      return `Last run: hampered, beaten ${X}L — interference recorded (${N} days ago)`;
+    case 'COMPETITIVE':  return `Last run: ran on, beaten ${X}L (${N} days ago)`;
+    case 'WELL_BEATEN':  return `Last run: beaten ${X}L, weakened — previous run concern (${N} days ago)`;
+    case 'BEATEN_FAIRLY':return `Last run: beaten ${X}L (${N} days ago)`; // not in spec's template list — neutral default
+    default: return '';
+  }
+}
+function getWatchbackBadge(runner, race){
+  const ctx=getWatchbackContext(runner.name);
+  if(!ctx) return '';
+  const icon=WATCHBACK_CONTEXT_ICON[ctx.classification]||'⚪';
+  const text=watchbackContextText(ctx)+' — informational only, does not affect score/segment.';
+  return ` <span title="${text.replace(/"/g,'&quot;')}" style="font-size:11px;cursor:help">${icon}</span>`;
+}
+function renderWatchbackContextBanner(runner, race){
+  const ctx=getWatchbackContext(runner.name);
+  if(!ctx) return '';
+  const icon=WATCHBACK_CONTEXT_ICON[ctx.classification]||'⚪';
+  const col={WIN:'#34d399',NEAR_MISS:'#fbbf24',UNLUCKY:'#fbbf24',COMPETITIVE:'#94a3b8',BEATEN_FAIRLY:'#94a3b8',WELL_BEATEN:'#f87171'}[ctx.classification]||'#94a3b8';
+  return `<div style="grid-column:1/-1;background:rgba(100,116,139,.06);border:1px solid rgba(100,116,139,.15);border-radius:8px;padding:8px 12px;display:flex;align-items:center;gap:8px;margin-bottom:2px" title="Informational only — does not affect predicted_score, gap, or segment classification.">
+    <span style="font-size:14px">${icon}</span>
+    <span style="font-size:10px;font-weight:800;color:${col};letter-spacing:.3px">WATCHBACK <span style="font-weight:400;opacity:.6">(context only)</span></span>
+    <span style="font-size:11px;color:var(--muted)">${watchbackContextText(ctx)}</span>
+  </div>`;
+}
+
 function getPickResult(pick,hist,dateOverride){
   // Skip excluded venues
   if(isExcludedVenue(pick.venue)||isExcludedVenue(pick.venueKey)) return null;
@@ -6896,9 +7172,19 @@ function getPickResult(pick,hist,dateOverride){
   const fs=pick.fieldSize||raceResult.field_size||12;
   const placeLimit=getPlaceLimit(fs);
   const sp=horseResult.sp||null;
-  if(pos===1) return {status:'won',pos,sp,label:'1st — WON'};
-  if(pos<=placeLimit) return {status:'placed',pos,sp,label:ordinal(pos)+' — PLACED'};
-  return {status:'lost',pos,sp,label:ordinal(pos)};
+  // Watchback (improvement.md Feature 3) — informational only, never affects status/P&L above.
+  const runQuality=classifyRun({
+    finish_pos:pos, beaten_distance:horseResult.distance_beaten,
+    winner_sp:horseResult.winner_sp, winner_name:horseResult.winner_name,
+    interference:horseResult.interference, finishing_trend:horseResult.finishing_trend
+  });
+  const watchback={quality:runQuality, beaten_distance:horseResult.distance_beaten,
+    winner_sp:horseResult.winner_sp, winner_name:horseResult.winner_name,
+    interference:horseResult.interference, interference_type:horseResult.interference_type,
+    finishing_trend:horseResult.finishing_trend, position_in_race:horseResult.position_in_race};
+  if(pos===1) return {status:'won',pos,sp,label:'1st — WON',watchback};
+  if(pos<=placeLimit) return {status:'placed',pos,sp,label:ordinal(pos)+' — PLACED',watchback};
+  return {status:'lost',pos,sp,label:ordinal(pos),watchback};
 }
 
 function ordinal(n){const s=['th','st','nd','rd'];const v=n%100;return n+(s[(v-20)%10]||s[v]||s[0])}
@@ -7384,6 +7670,127 @@ function isIreland(course){const v=(course||'').toLowerCase().replace(/\s*\([a-z
 function isLongchamp(course){return(course||'').toLowerCase().replace(/-/g,' ').includes('longchamp');}
 function isDeauville(course){return(course||'').toLowerCase().replace(/-/g,' ').includes('deauville');}
 function getRaceBorderColor(r){const ire=isIreland(r.course),hcp=r.handicap||/handicap/i.test(r.race_name||'');if(ire&&hcp)return'#f87171';if(ire)return'#10b981';if(hcp)return'#f59e0b';return'#3b82f6';}
+
+/* ==================== TRACK PROFILE DATABASE (improvement.md Feature 4) ====================
+   Static lookup, ~20 major UK tracks. Display-only soft signal — NEVER modifies predicted_score.
+   Expand this object as more tracks are needed; unseeded tracks simply show no Track Profile card. */
+const TRACK_PROFILES={
+  'Chester':{shape:'tight_oval',circumference_furlongs:10,turns:5,
+    significant_features:['Extremely sharp left-hand turns throughout','Draw critical at sprint distances — low numbers heavily favoured','Front-runners dominate due to tight bends','Big-striding galloping types disadvantaged','Stamina less important than agility and balance'],
+    draw_bias:{'5f':'low_draw_strong','6f':'low_draw_moderate','7f':'low_draw_slight','1m2f+':'negligible'},
+    running_styles:['front_runner','prominent'],caution_flags:['large_striding_horse','hold_up_horse','high_draw_sprint']},
+  'Epsom':{shape:'horseshoe',circumference_furlongs:12,turns:3,
+    significant_features:['Significant downhill gradient to Tattenham Corner','Camber on left-hand bend — horses must balance','Straight 5f course has significant camber','Quirky track — some horses never handle it','Stiff uphill finish from 2f out'],
+    draw_bias:{'5f':'low_draw_significant_camber','6f':'mixed','1m':'stalls_position_matters','1m4f':'wide_draw_disadvantage_tattenham'},
+    running_styles:['balanced','adaptable'],caution_flags:['high_strung','unbalanced_mover','first_time_here']},
+  'Goodwood':{shape:'undulating_horseshoe',circumference_furlongs:14,turns:3,
+    significant_features:['Undulating with significant uphill finish','Stiff 2f uphill run-in tests stamina','Suits genuine stayers and horses with a high cruising speed','Draw less significant at longer distances','Very different from flat galloping tracks'],
+    draw_bias:{'5f':'slight_low_draw','6f':'mixed','1m+':'negligible'},
+    running_styles:['hold_up','strong_finisher'],caution_flags:['one_paced_horse','flat_track_specialist']},
+  'Cheltenham':{shape:'oval_undulating',circumference_furlongs:16,turns:4,
+    significant_features:['Uphill finish — significant stamina test','Old Course: tighter turns, suits handier horses','New Course: more galloping, suits long-striding types','Famous hill on back straight — saps pace','Right-handed — suits right-handed horses'],
+    draw_bias:{'all':'negligible'},
+    running_styles:['prominent','economical_jumper'],caution_flags:['flat_track_only_specialist','poor_jumper_on_hurdles']},
+  'Newmarket':{shape:'straight_or_sweeping',circumference_furlongs:18,turns:1,
+    significant_features:['Long straight Rowley Mile course — no tight turns','Dip at the bushes and rise to the finish','Suits long-striding galloping types','Draw can matter in large fields over sprint distances','July Course used in summer — similar straight-course principles'],
+    draw_bias:{'5f':'high_draw_slight_advantage','6f':'mixed','1m+':'negligible'},
+    running_styles:['galloper','long_strider'],caution_flags:['sharp_track_specialist','small_horse_on_soft']},
+  'Ascot':{shape:'round_with_home_turn',circumference_furlongs:14,turns:'undulating right-handed, spur for straight mile',
+    significant_features:['Stiff finish with uphill approach to the winning post','Round course has a spur for straight-mile races','Testing track — stamina and class both examined','High-class fields typical, draw rarely decisive'],
+    draw_bias:{'5f':'high_draw_slight_stands_side','6f':'slight','1m+':'negligible'},
+    running_styles:['galloper','strong_traveller'],caution_flags:[]},
+  'York':{shape:'flat_galloping',circumference_furlongs:14,turns:2,
+    significant_features:['Very fair, galloping track — few surprises','Long home straight allows a true test','Draw bias minimal except in big round-course fields','Suits genuine gallopers slightly over extreme hold-up types'],
+    draw_bias:{'5f':'high_draw_slight_stands_side','6f':'mixed','1m+':'negligible'},
+    running_styles:['galloper'],caution_flags:['extreme_hold_up_style_big_fields']},
+  'Doncaster':{shape:'flat_galloping',circumference_furlongs:16,turns:2,
+    significant_features:['Wide, galloping, fair track','Long straight examines stamina late','Draw negligible at most distances','Home of the St Leger — a true stamina test at 1m6f+'],
+    draw_bias:{'5f':'low_draw_slight_stands_side','6f':'mixed','1m+':'negligible'},
+    running_styles:['galloper'],caution_flags:[]},
+  'Newbury':{shape:'flat_galloping',circumference_furlongs:14,turns:2,
+    significant_features:['Wide, galloping park course','Long home straight, stiff test','Draw has occasionally mattered in big sprint fields — low draw favoured','Fair, true test of stamina'],
+    draw_bias:{'5f':'low_draw_slight','6f':'slight','1m+':'negligible'},
+    running_styles:['galloper'],caution_flags:[]},
+  'Sandown':{shape:'undulating',circumference_furlongs:12,turns:3,
+    significant_features:['Stiff uphill finish (the Railway Straight)','Undulating course tests balance','Suits genuine, tough stayers','Downhill run before the home turn can unbalance novices'],
+    draw_bias:{'all':'negligible'},
+    running_styles:['tough_traveller','strong_finisher'],caution_flags:['inexperienced_horse_first_time_here']},
+  'Haydock':{shape:'flat_galloping',circumference_furlongs:12.5,turns:2,
+    significant_features:['Flat, fair, galloping track','Sweeping bends, no tight turns','Genuine stamina test, minimal draw bias','Often holds ground — a good test in testing conditions'],
+    draw_bias:{'all':'negligible'},
+    running_styles:['galloper'],caution_flags:[]},
+  'Aintree':{shape:'flat_sweeping',circumference_furlongs:16,turns:'left-handed, National fences on the National course; tighter Mildmay course',
+    significant_features:['Flat, galloping — deceptively stiff run-in','National fences unique — jumping experience matters hugely','Mildmay course tighter, more like a conventional jumps track','Good jumping and stamina rewarded over the National fences'],
+    draw_bias:{'all':'negligible'},
+    running_styles:['bold_jumper','stayer'],caution_flags:['inexperienced_over_national_fences']},
+  'Kempton':{shape:'tight_flat',circumference_furlongs:10,turns:'right-handed on turf; separate sharper AW oval',
+    significant_features:['Sharp, flat, tight turns on the turf course','Speed and handiness favoured over big stamina','AW (Polytrack) is a separate, sharper oval — treat as a different track'],
+    draw_bias:{'5f':'low_draw_slight_turf','6f':'slight'},
+    running_styles:['handy','sharp_traveller'],caution_flags:['big_striding_galloper_turf']},
+  'Lingfield':{shape:'undulating_plus_flat_aw',circumference_furlongs:12,turns:'left-handed, two distinct courses',
+    significant_features:['Turf course undulating with a stiffish uphill finish','AW (Polytrack) course flatter, fairer, more of a speed test','Two distinct tracks under one name — always check surface'],
+    draw_bias:{'5f_aw':'low_draw_slight'},
+    running_styles:['adaptable'],caution_flags:['turf_form_not_transferable_to_aw']},
+  'Wolverhampton':{shape:'tight_aw_only',circumference_furlongs:8.75,turns:'left-handed, sharp',
+    significant_features:['Tight, sharp track — handiness key','Tapeta surface, different characteristics to Polytrack tracks','Draw can matter over sprint trips in big fields'],
+    draw_bias:{'5f':'high_draw_slight','6f':'mixed'},
+    running_styles:['handy','sharp_traveller'],caution_flags:['big_striding_galloper']},
+  'Nottingham':{shape:'flat_galloping',circumference_furlongs:12,turns:2,
+    significant_features:['Fair, flat, galloping track','Long home straight','Draw rarely a major factor'],
+    draw_bias:{'all':'negligible'},
+    running_styles:['galloper'],caution_flags:[]},
+  'Leicester':{shape:'flat_galloping',circumference_furlongs:12,turns:2,
+    significant_features:['Fair, flat, galloping course','Sweeping turns, no tight bends','Draw rarely decisive'],
+    draw_bias:{'all':'negligible'},
+    running_styles:['galloper'],caution_flags:[]},
+  'Salisbury':{shape:'straight_plus_round',circumference_furlongs:12,turns:'right-handed round course',
+    significant_features:['Testing, undulating track','Uphill in the closing stages','Draw can matter fractionally on the straight course'],
+    draw_bias:{'straight_course':'slight'},
+    running_styles:['stayer'],caution_flags:[]},
+  'Windsor':{shape:'figure_of_eight',circumference_furlongs:14,turns:'figure-of-eight, right- then left-handed',
+    significant_features:['Unusual figure-of-eight layout — crosses over itself via a bridge','Flat, sharp turns require balance and handiness','Not a course for long-striding gallopers'],
+    draw_bias:{'all':'negligible'},
+    running_styles:['handy','balanced'],caution_flags:['long_striding_galloper','inexperienced_horse_first_time_here']},
+  'Beverley':{shape:'tight_undulating',circumference_furlongs:12,turns:'left-handed, tricky home turn',
+    significant_features:['Tight, undulating track with a tricky home turn','Draw can matter — low draw often favoured on the round course','Sharp track suits handy, experienced types'],
+    draw_bias:{'5f':'low_draw_slight','6f':'low_draw_slight'},
+    running_styles:['handy'],caution_flags:['big_striding_galloper','inexperienced_horse_first_time_here']}
+};
+function normalizeTrackKey(course){return(course||'').replace(/\s*\([a-z]{2,3}\)\s*$/i,'').replace(/-/g,' ').trim();}
+function getTrackProfile(course){
+  const key=normalizeTrackKey(course);
+  if(TRACK_PROFILES[key]) return TRACK_PROFILES[key];
+  // loose match: "Newmarket (Rowley Mile)" / "Newmarket July" etc. → base Newmarket entry
+  const lower=key.toLowerCase();
+  const found=Object.keys(TRACK_PROFILES).find(k=>lower.startsWith(k.toLowerCase()));
+  return found?TRACK_PROFILES[found]:null;
+}
+function isTrackProfiled(course){return !!getTrackProfile(course);}
+function renderTrackProfileSection(runner, race){
+  const tp=getTrackProfile(race&&race.course);
+  if(!tp) return '<div style="font-size:11px;color:var(--muted);font-style:italic;padding:4px 0">No track profile on file for this course yet.</div>';
+  const spotlight=((runner.spotlight||'')+' '+(runner.comment||'')).toLowerCase();
+  const notes=[];
+  // Draw check against today's approx distance band
+  const distF=race.distance_f||0;
+  const band=distF<=5?'5f':distF<=6?'6f':distF<=7?'7f':distF<=8?'1m':'1m2f+';
+  const bias=tp.draw_bias[band]||tp.draw_bias['all'];
+  if(runner.draw!=null && bias && /low_draw/.test(bias) && runner.draw>=Math.ceil((race.field_size||10)*0.6))
+    notes.push({icon:'⚠️',text:`Draw critical here — drawn ${runner.draw} (${bias.replace(/_/g,' ')})`, type:'warn'});
+  else if(runner.draw!=null && bias && /high_draw/.test(bias) && runner.draw<=Math.max(2,Math.floor((race.field_size||10)*0.3)))
+    notes.push({icon:'⚠️',text:`Draw ${runner.draw} — high draw favoured here (${bias.replace(/_/g,' ')})`, type:'warn'});
+  // Caution flag keyword cross-ref against spotlight/comment text
+  const cautionKeywords={large_striding_horse:['long stride','big striding','long-striding','galloping type'],hold_up_horse:['hold up','held up','holds up'],high_strung:['keen','free-going','headstrong'],one_paced_horse:['one-paced','one paced'],flat_track_specialist:['flat track'],big_striding_galloper:['long stride','big striding','long-striding'],long_striding_galloper:['long stride','long-striding']};
+  (tp.caution_flags||[]).forEach(cf=>{
+    const kws=cautionKeywords[cf];
+    if(kws && kws.some(k=>spotlight.includes(k)))
+      notes.push({icon:'⚠️',text:`${cf.replace(/_/g,' ')} flagged — track suits opposite profile`, type:'warn'});
+  });
+  const notesHtml=notes.length?notes.map(n=>`<div style="font-size:11px;color:#fbbf24;margin-bottom:4px">${n.icon} ${n.text}</div>`).join(''):'<div style="font-size:11px;color:var(--muted)">No specific caution flags triggered for this runner.</div>';
+  return `<div style="font-size:12px;font-weight:800;color:var(--text);margin-bottom:6px">📍 ${(race.course||'').toUpperCase()} — ${tp.shape.replace(/_/g,' ')}</div>
+    ${notesHtml}
+    <div style="font-size:11px;color:var(--muted);margin-top:8px;line-height:1.5">${(tp.significant_features||[]).map(f=>'· '+f).join('<br>')}</div>`;
+}
 
 function getGoldenFlags(race){
   if(isIreland(race.course)) return null;
@@ -7900,6 +8307,164 @@ function getConnectionChangeBadge(runner){
   return `<span class="conn-flag" onclick="event.stopPropagation();toggleConnDropdown('${id}')">🔄${label}<div class="conn-dropdown" id="${id}">${dd}</div></span>`;
 }
 
+/* ==================== STAT+ PANEL (improvement.md Feature 1) ====================
+   Per-horse conditions SR, built from OUR logged results_history (horse-name match) —
+   NOT a full Racing Post running history, only covers races we've scanned/scored
+   ourselves. Distance and Class bands need races.distance_f/race_class (not yet in
+   the SQLite schema — see plan Phase 2); until then those rows are omitted and a
+   note is shown instead of faking data. */
+function getHorseHistRuns(name){
+  const hist=window._resultsHistory;
+  const out=[];
+  if(!hist||!hist.races) return out;
+  const n=(name||'').trim().toLowerCase();
+  if(!n) return out;
+  hist.races.forEach(race=>{
+    const res=(race.results||[]).find(r=>(r.name||'').trim().toLowerCase()===n);
+    if(res && !res.non_runner && !res.pull_out && res.finish_pos)
+      out.push({finish_pos:res.finish_pos, going:race.going||'', venue:race.venue||'', date:race.date||'',
+                distance_f:race.distance_f, race_class:race.race_class});
+  });
+  return out;
+}
+// improvement.md spec bands: ≤5f, 6f, 7f, 1m, 1m1f-1m3f, 1m4f+, 2m+ (NH)
+function distanceBand(f){
+  if(f==null) return null;
+  if(f<=5) return '≤5f';
+  if(f===6) return '6f';
+  if(f===7) return '7f';
+  if(f===8) return '1m';
+  if(f>8 && f<=11) return '1m1f-1m3f';
+  if(f>11 && f<16) return '1m4f+';
+  return '2m+';
+}
+function srIcon(pct){return pct>=50?'✅':pct>=25?'⚠️':'❌';}
+function srCell(wins,runs){
+  if(runs<3) return {text:'-',pct:null,runs,wins};
+  const pct=Math.round(wins/runs*100);
+  return {text:`${wins}/${runs} (${pct}%) ${srIcon(pct)}`,pct,runs,wins};
+}
+function buildStatPlus(runner, race){
+  const runs=getHorseHistRuns(runner.name);
+  const goingGroups={};
+  runs.forEach(r=>{
+    const g=(typeof normalizeGoing==='function')?normalizeGoing(r.going):(r.going||'').trim();
+    if(!g) return;
+    goingGroups[g]=goingGroups[g]||{wins:0,runs:0};
+    goingGroups[g].runs++;
+    if(r.finish_pos===1) goingGroups[g].wins++;
+  });
+  const courseKey=v=>(v||'').replace(/\s*\(aw\)\s*$/i,'').trim().toLowerCase();
+  const todayCourseKey=courseKey(race&&race.course);
+  let hereWins=0,hereRuns=0,otherWins=0,otherRuns=0;
+  runs.forEach(r=>{
+    if(courseKey(r.venue)===todayCourseKey){hereRuns++;if(r.finish_pos===1)hereWins++;}
+    else{otherRuns++;if(r.finish_pos===1)otherWins++;}
+  });
+  const trainerS=getConnectionStats(runner.trainer,'trainer');
+  const jockeyS=getConnectionStats(runner.jockey,'jockey');
+  // Phase 2c — Distance + Class bands (needs races.distance_f/race_class,
+  // backfilled 2026-09-01 via scripts/backfill_distance_class.py; go-forward
+  // captured by results_fetcher.py. Coverage isn't 100% — older/NH races with
+  // fractional-furlong distances can be missing distance_f at source).
+  const distGroups={};
+  runs.forEach(r=>{
+    const band=distanceBand(r.distance_f);
+    if(!band) return;
+    distGroups[band]=distGroups[band]||{wins:0,runs:0};
+    distGroups[band].runs++;
+    if(r.finish_pos===1) distGroups[band].wins++;
+  });
+  const classGroups={};
+  runs.forEach(r=>{
+    if(r.race_class==null || r.race_class==='') return;
+    const cls='Cl'+r.race_class;
+    classGroups[cls]=classGroups[cls]||{wins:0,runs:0};
+    classGroups[cls].runs++;
+    if(r.finish_pos===1) classGroups[cls].wins++;
+  });
+  const distOrder=['≤5f','6f','7f','1m','1m1f-1m3f','1m4f+','2m+'];
+  return {
+    totalRuns:runs.length,
+    going:Object.entries(goingGroups).map(([g,v])=>({going:g,...srCell(v.wins,v.runs)})),
+    course:{here:srCell(hereWins,hereRuns),other:srCell(otherWins,otherRuns)},
+    distance:Object.entries(distGroups).sort((a,b)=>distOrder.indexOf(a[0])-distOrder.indexOf(b[0])).map(([d,v])=>({band:d,...srCell(v.wins,v.runs)})),
+    class:Object.entries(classGroups).sort((a,b)=>a[0].localeCompare(b[0])).map(([c,v])=>({cls:c,...srCell(v.wins,v.runs)})),
+    trainer:srCell(trainerS.wins,trainerS.runs),
+    jockey:srCell(jockeyS.wins,jockeyS.runs),
+    rprFlag:rprDivergenceFlag(runner.ofr,runner.rpr)
+  };
+}
+
+/* ==================== WEATHER / GOING SIGNAL (improvement.md Feature 2) ====================
+   Soft signal only — never changes segment classification or auto-excludes a pick (Critical
+   Rule 2). Data comes from window._weatherSignal, written by scripts/weather_fetcher.py
+   (requires an OpenWeatherMap key the user configures — see that script's docstring). Absent
+   file/key → buildWeatherFlag returns null everywhere and nothing renders. The Python side
+   only computes the venue-level physical going shift; IMPROVING/DETERIORATING/NEUTRAL/UNPROVEN
+   needs each horse's own going SR, which only exists here (via buildStatPlus). */
+function buildWeatherFlag(runner, race){
+  const sig=window._weatherSignal;
+  if(!sig||!sig.venues||!race) return null;
+  const entry=sig.venues[race.venueKey]||sig.venues[race.course];
+  if(!entry) return null;
+  if(entry.drainage==='aw')
+    return {flag:'AW', icon:'⚫', label:'All-Weather', tooltip:'All-Weather — going unaffected by weather.', fetchedAt:entry.fetched_at};
+  const norm=g=>(typeof normalizeGoing==='function')?normalizeGoing(g):(g||'').trim();
+  const currentG=norm(entry.going), predG=norm(entry.predicted_going);
+  if(!predG||predG===currentG) return null; // no category shift predicted — nothing to flag
+  if(entry.pop==null||entry.pop<=0.4) return null; // spec: only show if precipitation prob > 40%
+  const rainStr=entry.rain_mm!=null?`Forecast ${entry.rain_mm}mm rain.`:'Rain forecast.';
+  const shiftStr=`Going likely to ease ${entry.going}→${entry.predicted_going}.`;
+  const sp=buildStatPlus(runner,race);
+  const predRow=sp.going.find(g=>g.going===predG);
+  const curRow=sp.going.find(g=>g.going===currentG);
+  if(!predRow||predRow.runs<3)
+    return {flag:'UNPROVEN', icon:'⚠️', label:'Unproven', tooltip:`${rainStr} ${shiftStr} No runs recorded on predicted ground type.`, fetchedAt:entry.fetched_at};
+  const predPct=predRow.pct||0, curPct=curRow?(curRow.pct||0):predPct;
+  if(predPct-curPct>=15)
+    return {flag:'IMPROVING', icon:'🟢', label:'Improving', tooltip:`${rainStr} ${shiftStr} Horse wins ${predPct}% on ${entry.predicted_going} (${predRow.wins}/${predRow.runs}).`, fetchedAt:entry.fetched_at};
+  if(curPct-predPct>=15)
+    return {flag:'DETERIORATING', icon:'🔴', label:'Deteriorating', tooltip:`${rainStr} ${shiftStr} Horse only ${predRow.wins}/${predRow.runs} (${predPct}%) on ${entry.predicted_going}.`, fetchedAt:entry.fetched_at};
+  return {flag:'NEUTRAL', icon:'🟡', label:'Neutral', tooltip:`${rainStr} ${shiftStr} Horse performs similarly on both going types.`, fetchedAt:entry.fetched_at};
+}
+function renderWeatherBanner(runner, race){
+  const wf=buildWeatherFlag(runner,race);
+  if(!wf) return '';
+  const bg={AW:'rgba(100,116,139,.08)',UNPROVEN:'rgba(245,158,11,.08)',IMPROVING:'rgba(16,185,129,.08)',DETERIORATING:'rgba(239,68,68,.07)',NEUTRAL:'rgba(100,116,139,.06)'}[wf.flag];
+  const border={AW:'rgba(100,116,139,.2)',UNPROVEN:'rgba(245,158,11,.2)',IMPROVING:'rgba(16,185,129,.2)',DETERIORATING:'rgba(239,68,68,.18)',NEUTRAL:'rgba(100,116,139,.15)'}[wf.flag];
+  const col={AW:'#94a3b8',UNPROVEN:'#fbbf24',IMPROVING:'#34d399',DETERIORATING:'#f87171',NEUTRAL:'#94a3b8'}[wf.flag];
+  const fetchedStr=wf.fetchedAt?new Date(wf.fetchedAt).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}):'';
+  return `<div style="grid-column:1/-1;background:${bg};border:1px solid ${border};border-radius:8px;padding:8px 12px;display:flex;align-items:center;gap:8px;margin-bottom:2px" title="${wf.tooltip.replace(/"/g,'&quot;')}${fetchedStr?' (forecast fetched '+fetchedStr+')':''}">
+    <span style="font-size:15px">${wf.icon}</span>
+    <span style="font-size:11px;font-weight:800;color:${col}">WEATHER: ${wf.label.toUpperCase()}</span>
+    <span style="font-size:10px;color:var(--muted)">${wf.tooltip}</span>
+  </div>`;
+}
+
+function renderStatPlusSection(runner, race){
+  const sp=buildStatPlus(runner,race);
+  if(!sp.totalRuns) return '<div style="font-size:11px;color:var(--muted);font-style:italic;padding:4px 0">No logged history for this horse in our results yet.</div>';
+  const todayGoing=(typeof normalizeGoing==='function')?normalizeGoing(race&&race.going):(race&&race.going||'');
+  const row=(label,cells)=>`<div style="display:flex;gap:10px;margin-bottom:6px;font-size:11px;flex-wrap:wrap"><span style="width:64px;flex-shrink:0;font-weight:700;color:var(--muted)">${label}</span><span style="color:var(--text)">${cells}</span></div>`;
+  const goingCells=sp.going.length
+    ? sp.going.map(g=>`<span style="${g.going===todayGoing?'font-weight:800;text-decoration:underline':''}">${g.going} ${g.text}</span>`).join(' &nbsp;|&nbsp; ')
+    : '-';
+  const courseCells=`Here (${(race&&race.course)||'?'}) ${sp.course.here.text} &nbsp;|&nbsp; Other ${sp.course.other.text}`;
+  const todayDistBand=distanceBand(race&&race.distance_f);
+  const distCells=sp.distance.length
+    ? sp.distance.map(d=>`<span style="${d.band===todayDistBand?'font-weight:800;text-decoration:underline':''}">${d.band} ${d.text}</span>`).join(' &nbsp;|&nbsp; ')
+    : '-';
+  const todayClass=race&&race.race_class!=null?('Cl'+race.race_class):null;
+  const classCells=sp.class.length
+    ? sp.class.map(c=>`<span style="${c.cls===todayClass?'font-weight:800;text-decoration:underline':''}">${c.cls} ${c.text}</span>`).join(' &nbsp;|&nbsp; ')
+    : '-';
+  const rprLine=sp.rprFlag?`<div style="margin-top:8px;font-size:11px;color:${sp.rprFlag.flag==='UNDERRATED'?'#34d399':'#fbbf24'}">${sp.rprFlag.icon} ${sp.rprFlag.tooltip}</div>`:'';
+  return `${row('Going:',goingCells)}${row('Distance:',distCells)}${row('Course:',courseCells)}${row('Class:',classCells)}${row('Trainer:',sp.trainer.text)}${row('Jockey:',sp.jockey.text)}
+    <div style="font-size:9px;color:var(--muted);margin-top:6px;font-style:italic">Based on ${sp.totalRuns} logged run${sp.totalRuns>1?'s':''} in our results history (not full Racing Post record — coverage limited to races we've scanned). Needs 3+ runs at a condition to show a %.</div>
+    ${rprLine}`;
+}
+
 function toggleConnDropdown(id){
   const el=document.getElementById(id);
   if(!el) return;
@@ -7954,10 +8519,10 @@ function renderMainTab(runners,race,vk,ri){
     const hrsBadge=bhrs?`<span class="ban-hrs-badge">🚫 HORSE</span>`:'';
     let rows=`<tr class="${rowCl} expandable" onclick="toggleExp('${r.name.replace(/'/g,"\\'")}')">
       <td style="font-weight:700;color:var(--muted)">${r.number||'—'}</td>
-      <td><div style="font-weight:700;font-size:14px"><button class="wl-track-btn ${isWatched(r.name)?'tracked':''}" onclick="event.stopPropagation();toggleWatch('${r.name.replace(/'/g,"\\'")}','${(race.course||'').replace(/'/g,"\\'")}','${(race.name||'').replace(/'/g,"\\'")}')" title="${isWatched(r.name)?'Remove from watchlist':'Add to watchlist'}">${isWatched(r.name)?'TRACKING':'TRACK'}</button><button class="bet-btn ${isBetted(r.name,race.time||'',race.course||'')?'betting':''}" onclick="event.stopPropagation();toggleBet('${r.name.replace(/'/g,"\\'")}','${(race.time||'').replace(/'/g,"\\'")}','${(race.course||'').replace(/'/g,"\\'")}',${r.score||0})">${isBetted(r.name,race.time||'',race.course||'')?'BETTING':'BET'}</button><button class="cmpsel-btn${st.compareSelect.has(r.name)?' on':''}" id="cmpsel_${r.name.replace(/[^a-zA-Z0-9]/g,'_')}" onclick="event.stopPropagation();hcmpToggle('${r.name.replace(/'/g,"\\'")}')" title="Add to compare">${st.compareSelect.has(r.name)?'✓':'+CMP'}</button>${r.name}${hrsBadge}${rankBadge(r.name)}${getRunnerComboBadges(r)}${getCourseSpecialistBadge(r,race)}${r.price?`<span class="price-dec">${parseFloat(r.price).toFixed(2)}</span>`:''}</div><div style="font-size:11px;color:var(--muted)">${jkyHtml} · ${r.trainer||'?'} ${getConnectionChangeBadge(r)}</div></td>
+      <td><div style="font-weight:700;font-size:14px"><button class="wl-track-btn ${isWatched(r.name)?'tracked':''}" onclick="event.stopPropagation();toggleWatch('${r.name.replace(/'/g,"\\'")}','${(race.course||'').replace(/'/g,"\\'")}','${(race.name||'').replace(/'/g,"\\'")}')" title="${isWatched(r.name)?'Remove from watchlist':'Add to watchlist'}">${isWatched(r.name)?'TRACKING':'TRACK'}</button><button class="bet-btn ${isBetted(r.name,race.time||'',race.course||'')?'betting':''}" onclick="event.stopPropagation();toggleBet('${r.name.replace(/'/g,"\\'")}','${(race.time||'').replace(/'/g,"\\'")}','${(race.course||'').replace(/'/g,"\\'")}',${r.score||0})">${isBetted(r.name,race.time||'',race.course||'')?'BETTING':'BET'}</button><button class="cmpsel-btn${st.compareSelect.has(r.name)?' on':''}" id="cmpsel_${r.name.replace(/[^a-zA-Z0-9]/g,'_')}" onclick="event.stopPropagation();hcmpToggle('${r.name.replace(/'/g,"\\'")}')" title="Add to compare">${st.compareSelect.has(r.name)?'✓':'+CMP'}</button>${r.name}${hrsBadge}${rankBadge(r.name)}${getRunnerComboBadges(r)}${getCourseSpecialistBadge(r,race)}${getWatchbackBadge(r,race)}${r.price?`<span class="price-dec">${parseFloat(r.price).toFixed(2)}</span>`:''}</div><div style="font-size:11px;color:var(--muted)">${jkyHtml} · ${r.trainer||'?'} ${getConnectionChangeBadge(r)}</div></td>
       <td>${formHtml(r.form)}${(()=>{const m=calcMomentum(r.form);return m.label!=='UNKNOWN'?` <span class="mom ${m.cls}" title="${m.tip}" style="padding:1px 4px;font-size:8px;vertical-align:middle">${m.icon}</span>`:'';})()}</td>
       <td style="font-weight:600">${r.age||'?'}</td>
-      <td style="font-weight:600">${r.rpr||'—'}</td>
+      <td style="font-weight:600">${r.rpr||'—'}${(()=>{const d=rprDivergenceFlag(r.ofr,r.rpr);return d?` <span title="${d.tooltip.replace(/"/g,'&quot;')}" style="cursor:help">${d.icon}</span>`:'';})()}</td>
       <td>${wtStr(r.lbs)}</td>
       <td>${r.draw||'—'}</td>
       <td>${r.last_run!=null?r.last_run+'d':'—'}</td>
@@ -8463,6 +9028,30 @@ function renderExpandedRow(r, fieldSize, race){
       <div id="cdp_${uid}" style="display:none;margin-top:6px">${renderCDPSection(r,race)}</div>
     </div>`:''}
 
+    <!-- ── WATCHBACK FORWARD SIGNAL BANNER (display-only context — Prixm_Watchback_Spec.md) ── -->
+    ${race?renderWatchbackContextBanner(r,race):''}
+
+    <!-- ── WEATHER / GOING SIGNAL BANNER (soft signal, only renders if a shift is flagged) ── -->
+    ${race?renderWeatherBanner(r,race):''}
+
+    <!-- ── COLLAPSIBLE: STAT+ ── -->
+    ${race?`<div style="grid-column:1/-1">
+      <button onclick="toggleSection('sp_${uid}')" style="width:100%;display:flex;align-items:center;justify-content:space-between;background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:8px 12px;cursor:pointer;color:var(--muted);font-size:11px;font-weight:700">
+        <span>STAT+ — Conditions SR</span>
+        <span id="arr_sp_${uid}">▼</span>
+      </button>
+      <div id="sp_${uid}" style="display:none;margin-top:6px;padding:10px 12px;background:var(--bg);border:1px solid var(--border);border-radius:8px">${renderStatPlusSection(r,race)}</div>
+    </div>`:''}
+
+    <!-- ── COLLAPSIBLE: TRACK PROFILE ── -->
+    ${race&&isTrackProfiled(race.course)?`<div style="grid-column:1/-1">
+      <button onclick="toggleSection('tp_${uid}')" style="width:100%;display:flex;align-items:center;justify-content:space-between;background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:8px 12px;cursor:pointer;color:var(--muted);font-size:11px;font-weight:700">
+        <span>📍 Track Profile — ${race.course}</span>
+        <span id="arr_tp_${uid}">▼</span>
+      </button>
+      <div id="tp_${uid}" style="display:none;margin-top:6px;padding:10px 12px;background:var(--bg);border:1px solid var(--border);border-radius:8px">${renderTrackProfileSection(r,race)}</div>
+    </div>`:''}
+
     <!-- ── Race Edge ── -->
     ${ctx?`<div>
       <div style="font-size:12px;font-weight:700;margin-bottom:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px">Race Edge</div>
@@ -8495,6 +9084,10 @@ function renderExpandedRow(r, fieldSize, race){
       </div>
       <div style="margin-top:10px;font-size:11px;color:var(--muted)">
         <b>Owner:</b> ${r.owner||'?'} · <b>Headgear:</b> ${r.headgear||'None'}${r.headgear_first?' <span style="color:#f59e0b">(FIRST TIME)</span>':''} · <b>Claim:</b> ${r.jockey_allowance?r.jockey_allowance+'lb':'None'}
+      </div>
+      <div style="margin-top:6px;font-size:11px;color:var(--muted)">
+        <b>OR:</b> ${r.ofr||'—'} &nbsp; <b>RPR:</b> ${r.rpr||'—'}
+        ${(()=>{const d=rprDivergenceFlag(r.ofr,r.rpr);if(!d)return'';const col=d.flag==='UNDERRATED'?'#34d399':'#fbbf24';return ` <span style="color:${col};font-weight:700" title="${d.tooltip.replace(/"/g,'&quot;')}">[${d.diff>0?'+':''}${d.diff} — ${d.label} ${d.icon}]</span>`;})()}
       </div>
       ${(()=>{
         const mom=calcMomentum(r.form);

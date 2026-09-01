@@ -13,15 +13,20 @@ Horse racing analysis tool. Scores runners across 14 weighted factors, generates
 ├── Fetch Racecard (API).bat     # Run racecard_fetcher_api.py
 ├── Export Qualifying.bat        # Run qualifying_exporter.py → rebuilds output/qualifying_picks.xlsx
 ├── Backfill SP Prices.bat       # Backfill SP prices for past qualifying picks
+├── Fetch Weather Signal.bat     # Manual re-run of weather_fetcher.py — normally runs automatically from Fetch Racecard(.bat/(API).bat)
 ├── race_data.db                 # SQLite database — PRIMARY store for all results (WAL mode)
 ├── daily_race_data.json         # Current day's race data (loaded by UI)
 ├── daily_race_data.js           # Same data wrapped in JS var for HTML <script> loading (file:// fallback)
 ├── results_history.json         # JSON export of race_data.db — kept in sync, used as fallback
 ├── results_history.js           # Same data wrapped in JS var for HTML <script> loading
+├── weather_signal.json          # Venue-level going-shift forecast (improvement.md Feature 2), gitignored
+├── weather_signal.js            # Same, wrapped in window._weatherSignalFile for file:// loading, gitignored
 ├── ozzy_memory.json             # Ozzy's conviction library, stats, reflections, lessons (synced to localStorage)
 ├── scripts/
 │   ├── db_server.py             # SQLite HTTP server — port 7432, stdlib only, no pip needed
 │   ├── migrate_to_sqlite.py     # One-time migration: results_history.json → race_data.db
+│   ├── backfill_distance_class.py # One-off: backfill races.distance_f/race_class from race_data/ archives
+│   ├── weather_fetcher.py       # Fetches OpenWeatherMap forecast per venue, writes weather_signal.json/.js
 │   ├── results_fetcher.py       # Scrapes race results, matches to predictions, dual-writes JSON + SQLite
 │   ├── racecard_fetcher.py      # Scrapes racecards from Racing Post (HTML parsing)
 │   ├── racecard_fetcher_api.py  # Fetches racecards via API
@@ -64,7 +69,10 @@ Horse racing analysis tool. Scores runners across 14 weighted factors, generates
 - `GET  /api/health` → `{"status":"ok","races":N}`
 - `GET  /api/results` → full `results_history` format JSON
 - `POST /api/results` → upsert one race record
+- `PATCH /api/runner` → set Watchback manual-input fields on one runner (body: `date,venue,time,name` + any of `interference,interference_type,position_in_race,finishing_trend`). SQLite only, not dual-written to JSON. See Watchback System below.
 - `DELETE /api/results/{date}/{venue}/{time}` → remove race
+
+**Schema additions (2026-09-01, improvement.md):** `races.distance_f` (REAL), `races.race_class` (TEXT) — backfilled for existing rows via `scripts/backfill_distance_class.py`, captured go-forward by `results_fetcher.py`. `runners.winner_sp`/`winner_name` (auto-derived at fetch time), `runners.interference`/`interference_type`/`position_in_race`/`finishing_trend` (manual-input only, never scraped — see Watchback System below).
 
 **HTML loading priority:** localhost:7432 → `_resultsHistoryFile` JS global → `results_history.json` fetch → localStorage.
 Tab bar shows `🟢 DB N races` (server live) or `🟡 JSON` (fallback).
@@ -232,6 +240,57 @@ Runs after scoring on NAP (edge ≥70) and WIN (edge ≥60) picks. Issues a verd
 | 🚫 FLAGGED | CAS > 70 or 3+ unverified positives |
 
 `runVerificationPass(runner, race, resultsHistory)` in `daily_racing_analyzer.html`. Verdict and CAS score passed to Ozzy's context.
+
+---
+
+## STAT+ Panel
+
+Per-horse conditions SR (Going/Distance/Course/Class/Trainer/Jockey), added 2026-09-01 (`improvement.md` Feature 1). **Not** a full Racing Post running history — built entirely from horses we've already logged in `results_history` (horse-name match), the same pattern as the Connection Change Detector. A horse with no prior logged runs shows "No logged history".
+
+- `buildStatPlus(runner, race)` / `renderStatPlusSection(runner, race)` in `daily_racing_analyzer.html` (near `getConnectionStats`).
+- Needs ≥3 runs at a condition to show a % (else `-`), thresholds ✅≥50% / ⚠️25–49% / ❌<25% — matches spec.
+- Going/Course bands work off existing `results_history` fields (`going`, `venue`). Distance bands (≤5f/6f/7f/1m/1m1f-1m3f/1m4f+/2m+) and Class bands need `races.distance_f`/`race_class` — added to the SQLite schema 2026-09-01, backfilled via `scripts/backfill_distance_class.py` (~68% of historical races have both fields; older/NH races with fractional-furlong distances can be missing `distance_f` at source — a pre-existing `racecard_fetcher.py` parsing gap, not fixed).
+- Rendered as a collapsible panel in `renderExpandedRow` (`toggleSection('sp_${uid}')`), same idiom as Factor Breakdown/CDP.
+
+## Weather / Going Signal
+
+Soft signal flagging when forecast rain is likely to change the going before a race, cross-referenced against each horse's STAT+ going SR. `improvement.md` Feature 2. **Never changes segment classification or auto-excludes a pick** — display only.
+
+- `scripts/weather_fetcher.py` — fetches OpenWeatherMap's free "5 day / 3 hour forecast" per unique UK venue on today's card, applies a static `TRACK_DRAINAGE` (fast/average/slow/aw) + `GOING_TRANSITIONS` lookup, writes the venue-level physical prediction to `weather_signal.json` + `weather_signal.js` (file:// fallback, same pattern as `daily_race_data.js`). Cached 30 min per venue/hour in `weather_cache.json`.
+- **Runs automatically** as the last step of `Fetch Racecard.bat` and `Fetch Racecard (API).bat` (every option — today/tomorrow/day after/specific — calls `weather_fetcher.py` with the matching date right after the racecard fetch). No separate step needed day to day. `Fetch Weather Signal.bat` still exists for a manual re-run later (e.g. to refresh closer to race time, or the first run after adding an API key). CLI: `--date YYYY-MM-DD` / `--tomorrow` / `--day-after` (mirrors `racecard_fetcher.py`'s flags), defaults to today.
+- Never fails the racecard fetch — no API key just prints setup instructions and exits 0 (no `sys.exit`), so the `.bat` continues normally either way.
+- **Requires an OpenWeatherMap API key** — not bundled. Set env var `OPENWEATHERMAP_API_KEY` or create `scripts/weather_api_key.txt` (gitignored). Without a key the script prints setup instructions and exits cleanly; the UI feature simply doesn't activate (no error).
+- `buildWeatherFlag(runner, race)` / `renderWeatherBanner(runner, race)` in `daily_racing_analyzer.html` combine the venue-level Python signal with the horse's own STAT+ going SR to produce the per-horse flag: 🟢 IMPROVING / 🔴 DETERIORATING / 🟡 NEUTRAL / ⚫ AW / ⚠️ UNPROVEN. Only shown if precipitation probability > 40% and a real going-category shift is predicted (spec's display rule).
+- `going_changed` from the original spec (declared-vs-actual going drift) is **not implemented** — schema only stores one going value per race.
+
+## Watchback System
+
+Quality-of-loss tracking — distinguishes horses beaten by a better one on the day from genuinely wrong selections. `improvement.md` Feature 3. **Informational only — never changes segment classification or P&L. A loss is a loss.**
+
+- `classifyRun(pick)` in `daily_racing_analyzer.html` → `WIN | NEAR_MISS | UNLUCKY | COMPETITIVE | BEATEN_FAIRLY | WELL_BEATEN` (or `null` if no beaten-distance logged), exact thresholds from spec.
+- Auto-derived fields: `distance_beaten` (existing), `winner_sp`/`winner_name` (added to every runner's own result row at fetch time by `results_fetcher.py`).
+- Manual-input-only fields (never scraped): `interference`, `interference_type`, `position_in_race`, `finishing_trend` — set via the `PATCH /api/runner` endpoint (`scripts/db_server.py`), driven from the Watchback tab's "Needs Manual Tagging" table (`window._wbSave`, `patchRunnerWatchback()`). `going_changed` is intentionally not implemented (see Weather / Going Signal above).
+- `getPickResult()` attaches `res.watchback` to every sidebar pick result; the classification badge renders in the pick-card footer (`watchbackLine()`).
+- **Watchback tab** (`window.renderWatchbackDashboard`, own top-level tab) — aggregate summary + "Adjusted competitive rate" (WIN+NEAR_MISS+UNLUCKY ÷ classified). "Picks" population = TOP PICK + STRONG confidence-tier runners from `results_history` — Prixm's NAP/WIN/STRONG/PLACE edge categories aren't persisted historically, so this is the closest available proxy (flagged in the panel's own UI copy).
+
+**Forward signal** (added 2026-09-01, `Prixm_Watchback_Spec.md`) — on an *upcoming* race, each horse's most recent resulted run's watchback classification is surfaced as context, display-only:
+- `getWatchbackContext(horseName)` — most recent resulted run for that horse across `results_history`; returns `null` if that run has no `beaten_distance` (nothing to classify) or is >60 days old (staleness cutoff — spec is explicit that stale means show nothing, not a fallback).
+- `getWatchbackBadge(runner, race)` — small 🟢/🟡/⚪/🔴 icon appended to the horse name in the runner row (next to `getCourseSpecialistBadge`), tooltip has the full context line.
+- `renderWatchbackContextBanner(runner, race)` — fuller one-line banner in `renderExpandedRow`, same visual language as the Weather banner, above it.
+- **Absolute rule (spec's own wording): must never change `predicted_score`, gap, or segment qualification.** Nothing in either function writes to a runner or race object — both are pure reads returning display strings.
+- Step 3 from the spec (small score boost for horses coming off NEAR_MISS/UNLUCKY) is **explicitly not implemented** — spec requires 50+ validated cases first, same gate as the Phase 5 engine changes below.
+
+## Track Profile Database
+
+Static lookup of UK track characteristics (shape, draw bias, running styles, caution flags) — display/soft-signal only, **never modifies `predicted_score`**. `improvement.md` Feature 4.
+
+- `TRACK_PROFILES` object in `daily_racing_analyzer.html`, seeded with ~20 major UK tracks (Chester, Epsom, Goodwood, Cheltenham, Newmarket, Ascot, York, Doncaster, Newbury, Sandown, Haydock, Aintree, Kempton, Lingfield, Wolverhampton, Nottingham, Leicester, Salisbury, Windsor, Beverley). Extend the object to add more.
+- `getTrackProfile(course)` / `isTrackProfiled(course)` / `renderTrackProfileSection(runner, race)` — same "soft display-only exception" idiom as `isIreland`/`isLongchamp`, sits right next to them.
+- Rendered as a collapsible panel in `renderExpandedRow`, only when the race's course has a seeded profile.
+
+## RPR Divergence Flag
+
+`rprDivergenceFlag(orVal, rprVal)` in `daily_racing_analyzer.html` (`improvement.md` Feature 5). RPR (`rpr`) was already scraped and displayed; OR (`ofr`) was scraped but never shown — now displayed alongside RPR in the expanded row's meta line, plus a small icon in the RPR table column. `diff≥10` → UNDERRATED (⬆️), `diff≤-10` → OVERRATED (⬇️).
 
 ---
 
@@ -464,6 +523,14 @@ Irish venues also caught by `(IRE)` suffix check before list lookup.
 
 **Modify segment logic**: Edit `classify_segment()` in `scripts/results_fetcher.py`. Backfill existing records by running the inline backfill snippet (see migrate_to_sqlite.py for the pattern).
 
+**Add a track to Track Profile**: Add an entry to `TRACK_PROFILES` in `daily_racing_analyzer.html` (search `TRACK PROFILE DATABASE`), same shape as the existing ~20.
+
+**Add a venue to Weather Signal coverage**: Add coordinates to `VENUE_COORDS` (and a drainage rating to `TRACK_DRAINAGE`) in `scripts/weather_fetcher.py`.
+
+**Modify STAT+ bands/thresholds**: Edit `buildStatPlus()`/`distanceBand()` in `daily_racing_analyzer.html` (search `STAT+ PANEL`).
+
+**Set up Weather Signal**: Get a free OpenWeatherMap key, set `OPENWEATHERMAP_API_KEY` env var (or `scripts/weather_api_key.txt`). Once set, it fetches automatically every time you run `Fetch Racecard.bat`/`Fetch Racecard (API).bat` — no separate step. Use `Fetch Weather Signal.bat` only to force a manual re-run.
+
 ## Python Dependencies
 
 - `requests`, `beautifulsoup4`, `lxml` — for scraping
@@ -483,6 +550,7 @@ All `.bat` files use `@echo off`, `cd /d "%~dp0"`, and call Python scripts in `s
 | `Fetch Racecard (API).bat` | `scripts/racecard_fetcher_api.py` | API-based fetch |
 | `Export Qualifying.bat` | `scripts/qualifying_exporter.py` | Rebuilds `output/qualifying_picks.xlsx` |
 | `Backfill SP Prices.bat` | backfill script | Fills missing SP prices in past qualifying rows |
+| `Fetch Weather Signal.bat` | `scripts/weather_fetcher.py` | Manual-only — runs automatically from Fetch Racecard(.bat/(API).bat) already. Needs `OPENWEATHERMAP_API_KEY` — see Weather / Going Signal above |
 
 ## Qualifying Excel Thresholds
 
