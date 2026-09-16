@@ -8155,6 +8155,7 @@ async function renderDetail(){
     <button class="dtab ${tab==='deepdive'?'active':''}" onclick="switchDetailTab('deepdive')">DEEP DIVE</button>
     <button class="dtab ${tab==='cross'?'active':''}" onclick="switchDetailTab('cross')">⚡ CROSS</button>
     <button class="dtab ${tab==='gap'?'active':''}" onclick="switchDetailTab('gap')">📐 GAP %</button>
+    <button class="dtab ${tab==='predict'?'active':''}" onclick="switchDetailTab('predict')">🔮 PREDICT</button>
     ${(()=>{
       const expandedName=st.expanded;
       if(!expandedName) return '';
@@ -8174,6 +8175,8 @@ async function renderDetail(){
     html+=renderCrossTab(runners,race,vk);
   }else if(tab==='gap'){
     html+=renderGapTab();
+  }else if(tab==='predict'){
+    html+=renderPredictTab(runners,race,vk);
   }else{
     html+=renderDeepDiveTab(runners,race);
   }
@@ -8690,6 +8693,276 @@ function renderCrossTab(runners,race,vk){
     ${section('Draw Tendency at '+venue+` <span style="font-size:10px;font-weight:500;color:#9ca3af">(base ${base}% SR)</span>`,`<div style="display:flex;gap:10px;padding:10px 14px">${drawHtml}</div>`)}
     ${horseRows.length?section('Horse Course History',histHtml):''}
   </div>`;
+}
+
+/* ==================== PREDICT TAB ====================
+   Race Predictor — full predicted finishing order with narrative reasoning, RacingPost-verdict
+   style, distinct from MAIN's score table. Validated as a standalone mockup (race_predictor_mockup.html)
+   before folding in here; this version reuses the app's real analyzeRaceContext/buildCDP/calcMomentum/
+   buildWeatherFlag/getTrackProfile instead of the mockup's duplicated standalone copies.
+   Soft/display-only, same as Weather/Track Profile/Watchback — never touches predicted_score or segment. */
+const RP_MOM_SCORE={HOT:2,IMPROVING:1,STEADY:0,DECLINING:-1,COLD:-2,UNKNOWN:0};
+
+// Field-size -> how many finishing positions to narrate (small fields get a full order,
+// big fields get a shortlist rather than a forced, low-confidence full ranking)
+function rpGetPredictN(fs){
+  if(fs<=3) return fs;
+  if(fs<=6) return 3;
+  if(fs<=10) return 4;
+  if(fs<=15) return 5;
+  return 6;
+}
+
+// Race-level going advisory — cheap, only needs window._weatherSignal (no per-horse lookup)
+function rpBuildWeatherAdvisory(race){
+  const sig=window._weatherSignal;
+  if(!sig||!sig.venues) return null;
+  const entry=sig.venues[race.venueKey]||sig.venues[race.course];
+  if(!entry||entry.drainage==='aw') return null;
+  if((entry.pop||0)<=0.4) return null;
+  const norm=g=>(typeof normalizeGoing==='function')?normalizeGoing(g):(g||'').trim();
+  if(!entry.predicted_going||norm(entry.predicted_going)===norm(entry.going)) return null;
+  return `Rain forecast pre-race (${Math.round(entry.pop*100)}% chance, ~${entry.rain_mm}mm) may ease the going from ${entry.going} to ${entry.predicted_going} — factored into the reasoning below.`;
+}
+
+// Score-sorted skeleton + at most one bounded "tossup zone" promotion (gap<5, composite edge>=3
+// from momentum+CDP+weather — signals not already baked into score). Reuses the app's own
+// analyzeRaceContext/buildCDP/calcMomentum/buildWeatherFlag rather than reimplementing them.
+function rpBuildPredictedOrder(runners, race){
+  const ctx=analyzeRaceContext(runners);
+  const order=ctx.map(c=>({...c}));
+  const cdpOf={}, momOf={}, wxOf={};
+  order.forEach(o=>{
+    cdpOf[o.runner.name]=buildCDP(o.runner,race).proven;
+    momOf[o.runner.name]=calcMomentum(o.runner.form);
+    wxOf[o.runner.name]=(typeof buildWeatherFlag==='function')?buildWeatherFlag(o.runner,race):null;
+  });
+  const composite=name=>{
+    const w=wxOf[name];
+    const wDelta=w&&w.flag==='IMPROVING'?1:w&&w.flag==='DETERIORATING'?-1:0;
+    return RP_MOM_SCORE[momOf[name].label||'UNKNOWN']+cdpOf[name]+wDelta;
+  };
+  let swapInfo=null;
+  for(let i=1;i<order.length;i++){
+    const gap=(order[i-1].runner.score||0)-(order[i].runner.score||0);
+    if(gap>=5) continue;
+    const upperName=order[i-1].runner.name, lowerName=order[i].runner.name;
+    const diff=composite(lowerName)-composite(upperName);
+    if(diff>=3){
+      const tmp=order[i-1]; order[i-1]=order[i]; order[i]=tmp;
+      swapInfo={promoted:lowerName,demoted:upperName};
+      break;
+    }
+  }
+  return {order,cdpOf,momOf,wxOf,swapInfo};
+}
+
+function rpHoldPhrase(gap){
+  if(gap>=6) return 'comfortably holds off';
+  if(gap>=3) return 'holds off';
+  return 'just holds off';
+}
+
+function rpPickClause(cdpProven,momentum,wxFlag){
+  if(wxFlag&&wxFlag.flag==='IMPROVING') return 'with the easing ground playing to its strengths';
+  if(wxFlag&&wxFlag.flag==='DETERIORATING') return 'though the predicted shift in ground is a slight concern';
+  if(momentum.label==='HOT') return 'racing in red-hot form';
+  if(momentum.label==='COLD') return 'though the recent form has cooled off';
+  if(cdpProven<=1) return 'with some conditions questions still unanswered';
+  if(cdpProven===4) return "fully proven across today's conditions";
+  if(momentum.label==='IMPROVING') return 'and on an improving curve';
+  if(momentum.label==='DECLINING') return 'albeit with form tailing off slightly';
+  return 'on solid enough current form';
+}
+
+function rpBuildNarrative(pred, N){
+  const {order,cdpOf,momOf,wxOf}=pred;
+  const fs=order.length;
+  const rows=[];
+  const top=order[0].runner, second=order[1]?order[1].runner:null;
+  let opener;
+  const topGap=second?(top.score||0)-(second.score||0):0;
+  if(!second) opener=`<strong>${top.name}</strong> is the only runner under consideration.`;
+  else if(topGap>=12) opener=`<strong>${top.name}</strong> looks the one to beat — clear of this field on the balance of form.`;
+  else if(topGap>=6) opener=`<strong>${top.name}</strong> is preferred, holding a clear edge over ${second.name}.`;
+  else if(topGap>=3) opener=`<strong>${top.name}</strong> edges it from ${second.name}, but there's not much between the pair.`;
+  else opener=`<strong>${top.name}</strong> and ${second.name} look closely matched up top — this could easily go either way.`;
+  rows.push({pos:1,runner:top,sentence:opener});
+  for(let i=1;i<N;i++){
+    const o=order[i];
+    if(!o) break;
+    const isLast=i===N-1;
+    const next=!isLast?order[i+1]:null;
+    const clause=rpPickClause(cdpOf[o.runner.name],momOf[o.runner.name],wxOf[o.runner.name]);
+    let sent;
+    if(next){
+      const gapDown=(o.runner.score||0)-(next.runner.score||0);
+      sent=`<strong>${o.runner.name}</strong> ${rpHoldPhrase(gapDown)} ${next.runner.name} for the ${ordinal(i+1)}, ${clause}.`;
+    }else{
+      const closer=N<fs?'closes the shortlist':'completes the field';
+      sent=`<strong>${o.runner.name}</strong> ${closer} in the ${ordinal(i+1)}, ${clause}.`;
+    }
+    rows.push({pos:i+1,runner:o.runner,sentence:sent});
+  }
+  return rows;
+}
+
+// Race-level structural confidence flag, separate from per-horse reasoning — big competitive
+// handicaps with a bunched-up top are inherently harder to call than small clear-cut fields.
+// Heuristic (field size + handicap flag + top-2 gap), not a fitted model.
+function rpComputeVolatility(race, order){
+  const fs=order.length;
+  const topGap=order.length>1?(order[0].runner.score||0)-(order[1].runner.score||0):99;
+  const isHcap=!!race.handicap;
+  if(isHcap&&fs>=10&&topGap<6){
+    return {level:'VOLATILE',reason:`big handicap field (${fs} runners) with a tight gap at the top (${topGap.toFixed(1)} pts) — form is unusually bunched here, treat this verdict with lower confidence.`};
+  }
+  if((isHcap&&topGap<6)||(!isHcap&&topGap<3)||fs>=14){
+    return {level:'MODERATE',reason:`${isHcap?'competitive handicap':'tightly-bunched field'}${fs>=14?`, large field (${fs} runners)`:''} — some uncertainty at the top, worth a second look before backing with confidence.`};
+  }
+  return {level:'STABLE',reason:''};
+}
+
+// Model win% (Bradley-Terry) vs market-implied win% (from price, overround-adjusted) — flags
+// when the crowd disagrees with the model by enough to be signal, not noise (|diff|>=8pp).
+function rpComputeMarketEdge(runner, allScores, allRunners){
+  if(!runner.price||runner.price<=1) return null;
+  const impliedRaw=allRunners.map(r=>r.price&&r.price>1?1/r.price:0);
+  const sumImplied=impliedRaw.reduce((a,b)=>a+b,0);
+  if(sumImplied<=0) return null;
+  const marketPct=(1/runner.price)/sumImplied*100;
+  const modelPct=calcCompetitiveProb(runner.score||0,allScores,1);
+  const diff=modelPct-marketPct;
+  if(diff>=8) return {type:'value',diff,modelPct,marketPct};
+  if(diff<=-8) return {type:'market',diff,modelPct,marketPct};
+  return {type:'neutral',diff,modelPct,marketPct};
+}
+
+function rpJsonProbForN(runner,N){
+  if(!runner.probs) return null;
+  const keys=[1,2,3,4,5,6,8,10];
+  const k=keys.find(k=>k>=N)||keys[keys.length-1];
+  const v=runner.probs['top_'+k];
+  return v==null?null:v;
+}
+
+function renderPredictTab(runners, race, vk){
+  if(!runners||!runners.length) return `<div style="padding:40px;text-align:center;color:var(--muted)">No runners on this race.</div>`;
+  const pred=rpBuildPredictedOrder(runners,race);
+  const N=rpGetPredictN(runners.length);
+  const rows=rpBuildNarrative(pred,N);
+  const advisory=rpBuildWeatherAdvisory(race);
+  const trackProfile=(typeof getTrackProfile==='function')?getTrackProfile(race.course):null;
+  const volatility=rpComputeVolatility(race,pred.order);
+  const allScores=runners.map(r=>r.score||0);
+
+  function section(title,body){
+    return`<div style="margin-bottom:18px;border:1px solid var(--border);border-radius:8px;overflow:hidden">
+      <div style="padding:8px 14px;background:var(--card2);border-bottom:1px solid var(--border);font-size:11px;font-weight:700;color:var(--text);letter-spacing:.5px;text-transform:uppercase">${title}</div>
+      <div style="padding:12px 14px">${body}</div>
+    </div>`;
+  }
+
+  let notes='';
+  if(volatility.level!=='STABLE'){
+    const isVol=volatility.level==='VOLATILE';
+    notes+=`<div style="background:${isVol?'rgba(239,68,68,.08)':'rgba(217,119,6,.08)'};border:1px solid ${isVol?'rgba(239,68,68,.3)':'rgba(217,119,6,.3)'};border-radius:6px;padding:8px 12px;font-size:12px;color:${isVol?'#dc2626':'#b45309'};margin-bottom:10px">${isVol?'⚠️':'🔶'} <strong>${isVol?'Volatile race':'Some uncertainty'}</strong> — ${volatility.reason}</div>`;
+  }
+  if(advisory) notes+=`<div style="background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.3);border-radius:6px;padding:8px 12px;font-size:12px;color:#2563eb;margin-bottom:10px">🌧️ ${advisory}</div>`;
+  if(trackProfile) notes+=`<div style="background:rgba(139,92,246,.08);border:1px solid rgba(139,92,246,.3);border-radius:6px;padding:8px 12px;font-size:12px;color:#7c3aed;margin-bottom:10px">📍 <strong>${normalizeTrackKey(race.course)}</strong> (${trackProfile.shape||''}) — ${(trackProfile.significant_features||[])[0]||''}</div>`;
+  if(pred.swapInfo) notes+=`<div style="background:rgba(139,92,246,.08);border:1px solid rgba(139,92,246,.3);border-radius:6px;padding:8px 12px;font-size:12px;color:#7c3aed;margin-bottom:10px">🔁 Tossup swap: <strong>${pred.swapInfo.promoted}</strong> promoted over <strong>${pred.swapInfo.demoted}</strong> — score gap was tight and momentum/CDP/weather signals favoured the swap.</div>`;
+
+  let posRows='';
+  rows.forEach(row=>{
+    const cdp=pred.cdpOf[row.runner.name];
+    const mom=pred.momOf[row.runner.name];
+    const wx=pred.wxOf[row.runner.name];
+    const mkt=rpComputeMarketEdge(row.runner,allScores,runners);
+    const jsonN=rpJsonProbForN(row.runner,N);
+    const posCol=row.pos===1?'#d97706':row.pos===2?'#9ca3af':row.pos===3?'#b45309':'#6b7280';
+    const momCol=mom.label==='HOT'?'#dc2626':mom.label==='COLD'?'#2563eb':'#6b7280';
+    posRows+=`<div style="display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--border)">
+      <div style="flex:0 0 28px;height:28px;border-radius:50%;background:${posCol};color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px">${row.pos}</div>
+      <div style="flex:1">
+        <div style="font-size:13px;line-height:1.5">${row.sentence}</div>
+        <div style="margin-top:6px;display:flex;gap:6px;flex-wrap:wrap">
+          <span style="background:var(--card2);border:1px solid var(--border);border-radius:20px;padding:2px 9px;font-size:10px;color:var(--muted)">Score ${row.runner.score??'?'}</span>
+          <span style="background:var(--card2);border:1px solid var(--border);border-radius:20px;padding:2px 9px;font-size:10px;color:${cdp>=3?'#15803d':cdp<=1?'#dc2626':'var(--muted)'}">CDP ${cdp}/4</span>
+          <span style="background:var(--card2);border:1px solid var(--border);border-radius:20px;padding:2px 9px;font-size:10px;color:${momCol}">${mom.icon||''} ${mom.label}</span>
+          ${wx?`<span style="background:var(--card2);border:1px solid var(--border);border-radius:20px;padding:2px 9px;font-size:10px;color:var(--muted)">🌦️ ${wx.flag}</span>`:''}
+          ${mkt&&mkt.type==='value'?`<span title="Model ${mkt.modelPct}% vs market-implied ${mkt.marketPct.toFixed(1)}%" style="background:rgba(21,128,61,.08);border:1px solid rgba(21,128,61,.3);border-radius:20px;padding:2px 9px;font-size:10px;color:#15803d">💰 VALUE +${mkt.diff.toFixed(0)}pp</span>`:''}
+          ${mkt&&mkt.type==='market'?`<span title="Model ${mkt.modelPct}% vs market-implied ${mkt.marketPct.toFixed(1)}%" style="background:var(--card2);border:1px solid var(--border);border-radius:20px;padding:2px 9px;font-size:10px;color:var(--muted)">📉 Market keener ${mkt.diff.toFixed(0)}pp</span>`:''}
+        </div>
+        <div style="margin-top:5px;font-size:10px;color:var(--muted)">
+          Win (Bradley-Terry): ${calcCompetitiveProb(row.runner.score||0,allScores,1)}% ·
+          Top ${N}: ${calcCompetitiveProb(row.runner.score||0,allScores,N)}%${jsonN!=null?` · Engine probs.json top ${N}: ${jsonN}%`:''}${mkt?` · Market-implied win: ${mkt.marketPct.toFixed(1)}%`:''}
+        </div>
+      </div>
+    </div>`;
+  });
+
+  // Race track animation — spacing driven by the same predicted order above, not a separate calc
+  const leaderScore=rows[0].runner.score||0;
+  const gaps=rows.map(r=>leaderScore-(r.runner.score||0));
+  const maxGap=Math.max(...gaps,1);
+  let prevPct=null;
+  const track=rows.map((r,i)=>{
+    let pct=90-(gaps[i]/maxGap)*65;
+    if(prevPct!=null) pct=Math.min(pct,prevPct-4);
+    pct=Math.max(pct,8);
+    prevPct=pct;
+    return{...r,finishPct:pct};
+  });
+  const laneHtml=track.map(r=>`
+    <div style="display:flex;align-items:center;gap:8px" class="rp-lane${r.pos===1?' rp-lane-leader':''}">
+      <div style="flex:0 0 150px;font-size:11px;color:${r.pos===1?'#d97706':'var(--muted)'};font-weight:${r.pos===1?'700':'400'};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${r.pos===1?'👑 ':''}${r.runner.name}</div>
+      <div style="position:relative;flex:1;height:26px;background:var(--card2);border-radius:4px;overflow:hidden;${r.pos===1?'outline:1px solid rgba(217,119,6,.35)':''}">
+        <div style="position:absolute;right:6%;top:0;bottom:0;width:2px;background:repeating-linear-gradient(180deg,var(--muted),var(--muted) 4px,transparent 4px,transparent 8px)"></div>
+        <div class="rp-horse-icon${r.pos===1?' rp-leader-icon':''}" data-finish="${r.finishPct}" style="position:absolute;left:0%;top:50%;transform:translateY(-50%);font-size:16px;transition-property:left;transition-duration:${(2.2+Math.random()*0.8).toFixed(2)}s;transition-timing-function:cubic-bezier(.25,.7,.4,1)">🐎</div>
+      </div>
+    </div>`).join('');
+
+  const trackSection=`<div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <span style="font-size:11px;color:var(--muted)">Illustrative — lane spacing reflects the predicted score gaps above, not real finishing margins.</span>
+      <button onclick="rpRunRace()" style="background:var(--accent2);color:#fff;border:none;border-radius:6px;padding:6px 14px;font-size:12px;cursor:pointer">▶ Run it</button>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:6px" id="rpTrackWrap">${laneHtml}</div>
+  </div>`;
+
+  return `<div style="padding:16px">
+    <div style="font-size:12px;color:var(--muted);margin-bottom:12px">${race.handicap?'Handicap':'Non-Handicap'} · predicting top ${N} of ${runners.length} runners</div>
+    ${notes}
+    ${section('🔮 Predicted Order',posRows)}
+    ${section('🏁 Predicted Race Animation',trackSection)}
+  </div>`;
+}
+
+function rpRunRace(){
+  const wrap=document.getElementById('rpTrackWrap');
+  if(!wrap) return;
+  const icons=wrap.querySelectorAll('.rp-horse-icon');
+  const lanes=wrap.querySelectorAll('.rp-lane');
+  icons.forEach(el=>{ el.style.left='0%'; });
+  lanes.forEach(l=>{ l.style.boxShadow=''; });
+  wrap.querySelectorAll('.rp-winner-badge').forEach(b=>b.remove());
+  void wrap.offsetWidth; // force reflow so the reset takes before re-animating
+  setTimeout(()=>{
+    icons.forEach(el=>{ el.style.left=el.dataset.finish+'%'; });
+    const leader=wrap.querySelector('.rp-leader-icon');
+    if(leader){
+      leader.addEventListener('transitionend',function onDone(){
+        leader.removeEventListener('transitionend',onDone);
+        const lane=leader.closest('.rp-lane');
+        lane.style.boxShadow='0 0 14px 2px rgba(217,119,6,.5)';
+        const badge=document.createElement('span');
+        badge.className='rp-winner-badge';
+        badge.textContent='🏆 WINNER';
+        badge.style.cssText='font-size:11px;font-weight:bold;color:#d97706;margin-left:8px';
+        lane.appendChild(badge);
+      },{once:true});
+    }
+  },30);
 }
 
 /* ==================== GAP % TAB ==================== */
