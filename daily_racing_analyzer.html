@@ -108,6 +108,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .rtbl tr.top-pick-row{background:rgba(5,150,105,.08)}
 .rtbl tr.strong-row{background:rgba(13,148,136,.05)}
 .rtbl tr.expandable{cursor:pointer}
+.rtbl tr.attr-dim{opacity:.32;transition:opacity .2s}
 
 /* Confidence badge */
 .cb{display:inline-block;padding:3px 8px;border-radius:4px;font-size:10px;font-weight:700;letter-spacing:.3px}
@@ -1210,7 +1211,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 <button id="betFab" class="bp-toggle-fab" onclick="toggleBetPanel()">🎫<span class="fab-badge">0</span></button>
 
 <script>
-let D=null, st={venue:'all', fieldFilter:new Set(), comboFilter:false, raceTypeFilter:'all', raceCodeFilter:'all', confidenceFilter:'all', gapFilter:new Set(), hideBanned:false, openRace:null, sort:'score', sortDir:-1, expanded:null, detailTab:'main', h2hPair:null, compareSelect:new Set(), xaVenue:null};
+let D=null, st={venue:'all', fieldFilter:new Set(), comboFilter:false, raceTypeFilter:'all', raceCodeFilter:'all', confidenceFilter:'all', gapFilter:new Set(), hideBanned:false, openRace:null, sort:'score', sortDir:-1, expanded:null, detailTab:'main', h2hPair:null, compareSelect:new Set(), xaVenue:null, attrFilter:{active:new Set(), logic:'OR'}};
 
 // ==================== PER-DAY DATA STATUS TRACKER ====================
 function getDayStatus(date){
@@ -2550,9 +2551,37 @@ function switchTab(tab){
     </div>`;
   }
 
+  let _tnSort={k:null,dir:1};
+  function _tnTimeKey(t){
+    const m=String(t||'').match(/(\d+):(\d+)/);
+    if(!m)return 0;
+    let h=+m[1];if(h<10)h+=12;
+    return h*60+(+m[2]);
+  }
+  function _tnSortVal(p,k){
+    switch(k){
+      case 'horse':return String(p.runner.name||'').toLowerCase();
+      case 'race':return _tnTimeKey(p.race.time)*1000+0;
+      case 'seg':return String(p.seg||'zzz').toLowerCase();
+      case 'bet':return String(p.topN||'').toLowerCase();
+      case 'conf':return ({ELITE:0,HIGH:1,MODERATE:2})[p.tier]??3;
+      case 'field':return +p.race.field_size||0;
+      case 'prob':return parseFloat(p.prob)||0;
+    }
+    return 0;
+  }
   function _tnSummary(picks){
     if(!picks.length)return'';
-    const rows=picks.map(p=>`<tr style="border-bottom:1px solid var(--border)">
+    let list=picks.slice();
+    if(_tnSort.k){
+      const k=_tnSort.k,d=_tnSort.dir;
+      list=list.map((p,i)=>({p,i})).sort((x,y)=>{
+        const a=_tnSortVal(x.p,k),b=_tnSortVal(y.p,k);
+        if(a<b)return -d;if(a>b)return d;
+        return x.i-y.i;
+      }).map(o=>o.p);
+    }
+    const rows=list.map(p=>`<tr style="border-bottom:1px solid var(--border)">
       <td style="padding:6px 10px;font-weight:700;color:var(--text)">${p.runner.name}</td>
       <td style="padding:6px 10px;color:var(--muted)">${p.race.time} ${p.race.course}</td>
       <td style="padding:6px 10px">${p.seg?`<span style="color:#b45309">${p.seg}</span>`:'—'}</td>
@@ -2561,22 +2590,29 @@ function switchTab(tab){
       <td style="padding:6px 10px;color:var(--muted)">${p.race.field_size}</td>
       <td style="padding:6px 10px;color:var(--muted)">${p.prob}</td>
     </tr>`).join('');
-    return`<div style="margin-top:20px;border:1px solid var(--border);border-radius:6px;overflow:hidden">
+    const th=(k,l)=>{
+      const on=_tnSort.k===k;
+      const arrow=on?(_tnSort.dir===1?' ▲':' ▼'):'';
+      return `<th onclick="window._tnSortBy('${k}')" style="padding:6px 10px;text-align:left;color:${on?'var(--text)':'var(--muted)'};cursor:pointer;user-select:none">${l}${arrow}</th>`;
+    };
+    return`<div id="tnSummaryWrap" style="margin-top:20px;border:1px solid var(--border);border-radius:6px;overflow:hidden">
       <div style="background:var(--card2);padding:8px 14px;font-size:11px;font-weight:700;color:var(--text);letter-spacing:.5px;text-transform:uppercase">Summary</div>
       <table style="width:100%;border-collapse:collapse;font-size:11px">
         <thead><tr style="border-bottom:1px solid var(--border)">
-          <th style="padding:6px 10px;text-align:left;color:var(--muted)">Horse</th>
-          <th style="padding:6px 10px;text-align:left;color:var(--muted)">Race</th>
-          <th style="padding:6px 10px;text-align:left;color:var(--muted)">Seg</th>
-          <th style="padding:6px 10px;text-align:left;color:var(--muted)">Bet</th>
-          <th style="padding:6px 10px;text-align:left;color:var(--muted)">Conf</th>
-          <th style="padding:6px 10px;text-align:left;color:var(--muted)">Field</th>
-          <th style="padding:6px 10px;text-align:left;color:var(--muted)">Prob</th>
+          ${th('horse','Horse')}${th('race','Race')}${th('seg','Seg')}${th('bet','Bet')}${th('conf','Conf')}${th('field','Field')}${th('prob','Prob')}
         </tr></thead>
         <tbody>${rows}</tbody>
       </table>
     </div>`;
   }
+
+  window._tnSortBy=function(k){
+    if(_tnSort.k===k)_tnSort.dir=-_tnSort.dir;
+    else{_tnSort.k=k;_tnSort.dir=1;}
+    const w=document.getElementById('tnSummaryWrap');
+    if(!w)return;
+    w.outerHTML=_tnSummary(_tnBuildPicks());
+  };
 
   window._tnPrint=function(){
     const el=document.getElementById('topFinishContent');
@@ -8478,11 +8514,177 @@ function toggleConnDropdown(id){
 // Close dropdowns on outside click
 document.addEventListener('click',e=>{if(!e.target.closest('.conn-flag'))document.querySelectorAll('.conn-dropdown.open').forEach(d=>d.classList.remove('open'));});
 
+/* ==================== ATTRIBUTE HIGHLIGHT FILTER ====================
+   Validated via standalone mockup (attribute_filter_mockup.html). Race-level chip filter —
+   click an attribute to highlight runners in THIS race that carry it. Every attribute reuses
+   an existing engine signal (CDP, RPR divergence, track profile draw bias, watchback, momentum,
+   connection change) — no new score/data model. Display + highlight only: never touches
+   predicted_score, gap, or segment classification. */
+const ATTR_META=[
+  {id:'going_proven',    tag:'Going: Specialist', label:'Soft/Heavy Specialist', color:'#2563eb'},
+  {id:'going_concern',   tag:'Going: Doubt',      label:'Soft/Heavy Doubt',      color:'#dc2626'},
+  {id:'course_proven',   tag:'Course Proven',     label:'Course Proven',         color:'#0d9488'},
+  {id:'distance_proven', tag:'Distance Proven',   label:'Distance Proven',       color:'#6366f1'},
+  {id:'class_proven',    tag:'Class Proven',      label:'Class Proven',          color:'#7c3aed'},
+  {id:'class_drop',      tag:'Class Drop',        label:'Class Drop',            color:'#ea580c'},
+  {id:'underrated',      tag:'Underrated',        label:'Underrated (RPR>OR)',   color:'#d97706'},
+  {id:'first_time_hg',   tag:'1st-Time Hood',     label:'First-Time Headgear',   color:'#db2777'},
+  {id:'fav_draw',        tag:'Fav Draw',          label:'Favourable Draw',       color:'#0891b2'},
+  {id:'fresh_fit',       tag:'Fresh & Fit',       label:'Fresh & Fit',           color:'#16a34a'},
+  {id:'weight_advantage',tag:'Weight Edge',       label:'Weight Advantage',      color:'#c026d3'},
+  {id:'improving_form',  tag:'Improving',         label:'Improving Form',        color:'#0284c7'},
+  {id:'unlucky_lto',     tag:'Unlucky LTO',       label:'Unlucky Last Time',     color:'#e11d48'},
+  {id:'connection_upgrade',tag:'Conn. Upgrade',   label:'Connection Upgrade',    color:'#92400e'},
+];
+const ATTR_META_BY_ID=Object.fromEntries(ATTR_META.map(a=>[a.id,a]));
+
+function attrBlendColor(hexes){
+  if(!hexes.length) return null;
+  const rgbs=hexes.map(h=>{const v=parseInt(h.slice(1),16);return [(v>>16)&255,(v>>8)&255,v&255];});
+  return [0,1,2].map(i=>Math.round(rgbs.reduce((s,c)=>s+c[i],0)/rgbs.length));
+}
+
+function detectClassDrop(runner, race){
+  if(race.race_class==null) return null;
+  const runs=getHorseHistRuns(runner.name).filter(r=>r.race_class!=null).sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+  const recent=runs.slice(0,3);
+  const todayClass=Number(race.race_class);
+  const higher=recent.filter(r=>Number(r.race_class)<todayClass); // lower class number = tougher grade
+  if(higher.length<2) return null;
+  const poor=higher.filter(r=>r.finish_pos>3).length;
+  if(poor<2) return null;
+  const classesStr=[...new Set(higher.map(r=>'Class '+r.race_class))].join(', ');
+  return `Dropping from ${classesStr} today (Class ${race.race_class}) after ${poor} below-par run${poor>1?'s':''} (outside top 3) at the higher grade.`;
+}
+
+function detectWeightAdvantage(runner, race){
+  const withLbs=(race.runners||[]).filter(r=>r.lbs);
+  if(withLbs.length<3||!runner.lbs) return null;
+  const min=Math.min(...withLbs.map(r=>r.lbs));
+  if(runner.lbs>min) return null;
+  const higherVals=withLbs.filter(r=>r.lbs>min).map(r=>r.lbs);
+  if(!higherVals.length) return null;
+  const delta=Math.min(...higherVals)-min;
+  if(delta<3) return null;
+  return `Carries ${wtStr(runner.lbs)} — ${delta}lb less than the next-lightest in this field.`;
+}
+
+function detectFreshFit(runner){
+  const d=runner.last_run;
+  if(d==null||d<14||d>60) return null;
+  return `${d} days since last run — within the typical fitness sweet spot (14–60 days).`;
+}
+
+function detectFavDraw(runner, race){
+  const tp=getTrackProfile(race&&race.course);
+  if(!tp||runner.draw==null) return null;
+  const distF=race.distance_f||0;
+  const band=distF<=5?'5f':distF<=6?'6f':distF<=7?'7f':distF<=8?'1m':'1m2f+';
+  const bias=tp.draw_bias[band]||tp.draw_bias['all'];
+  if(!bias) return null;
+  const fs=race.field_size||(race.runners||[]).length||10;
+  if(/low_draw/.test(bias)&&runner.draw<=Math.max(2,Math.floor(fs*0.3)))
+    return `Drawn ${runner.draw} — low draws hold the edge at ${race.course} over this trip (${bias.replace(/_/g,' ')}).`;
+  if(/high_draw/.test(bias)&&runner.draw>=Math.ceil(fs*0.7))
+    return `Drawn ${runner.draw} — high draws hold the edge at ${race.course} over this trip (${bias.replace(/_/g,' ')}).`;
+  return null;
+}
+
+function detectConnectionUpgrade(runner){
+  const cc=detectConnectionChange(runner);
+  if(!cc) return null;
+  const parts=[];
+  if(cc.jockey){
+    const o=getConnectionStats(cc.jockey.from,'jockey'), n=getConnectionStats(cc.jockey.to,'jockey');
+    if(n.winPct>o.winPct) parts.push(`Jockey upgrade: ${cc.jockey.from} (${o.winPct}% W) → ${cc.jockey.to} (${n.winPct}% W).`);
+  }
+  if(cc.trainer){
+    const o=getConnectionStats(cc.trainer.from,'trainer'), n=getConnectionStats(cc.trainer.to,'trainer');
+    if(n.winPct>o.winPct) parts.push(`Trainer upgrade: ${cc.trainer.from} (${o.winPct}% W) → ${cc.trainer.to} (${n.winPct}% W).`);
+  }
+  return parts.length?parts.join(' '):null;
+}
+
+function getRunnerAttributes(runner, race){
+  const out=[];
+  const cdp=buildCDP(runner, race);
+  const cardByLabel=Object.fromEntries(cdp.cards.map(c=>[c.label,c]));
+  if(cardByLabel.Going){
+    if(cardByLabel.Going.status==='proven') out.push({id:'going_proven', reason:cardByLabel.Going.note});
+    else if(cardByLabel.Going.status==='failed') out.push({id:'going_concern', reason:cardByLabel.Going.note});
+  }
+  if(cardByLabel.Course && cardByLabel.Course.status==='proven') out.push({id:'course_proven', reason:cardByLabel.Course.note});
+  if(cardByLabel.Distance && cardByLabel.Distance.status==='proven') out.push({id:'distance_proven', reason:cardByLabel.Distance.note});
+  if(cardByLabel.Class && cardByLabel.Class.status==='proven') out.push({id:'class_proven', reason:cardByLabel.Class.note});
+
+  const classDrop=detectClassDrop(runner, race);
+  if(classDrop) out.push({id:'class_drop', reason:classDrop});
+
+  const rd=rprDivergenceFlag(runner.ofr, runner.rpr);
+  if(rd && rd.flag==='UNDERRATED') out.push({id:'underrated', reason:rd.tooltip});
+
+  if(runner.headgear_first) out.push({id:'first_time_hg', reason:`First-time ${runner.headgear||'headgear'} today.`});
+
+  const favDraw=detectFavDraw(runner, race);
+  if(favDraw) out.push({id:'fav_draw', reason:favDraw});
+
+  const freshFit=detectFreshFit(runner);
+  if(freshFit) out.push({id:'fresh_fit', reason:freshFit});
+
+  const wtAdv=detectWeightAdvantage(runner, race);
+  if(wtAdv) out.push({id:'weight_advantage', reason:wtAdv});
+
+  const mom=calcMomentum(runner.form);
+  if(mom.label==='HOT'||mom.label==='IMPROVING') out.push({id:'improving_form', reason:mom.tip});
+
+  const wctx=getWatchbackContext(runner.name);
+  if(wctx && (wctx.classification==='UNLUCKY'||wctx.classification==='NEAR_MISS')) out.push({id:'unlucky_lto', reason:watchbackContextText(wctx)});
+
+  const connUp=detectConnectionUpgrade(runner);
+  if(connUp) out.push({id:'connection_upgrade', reason:connUp});
+
+  return out;
+}
+
+function toggleAttrChip(id){
+  if(st.attrFilter.active.has(id)) st.attrFilter.active.delete(id); else st.attrFilter.active.add(id);
+  renderDetail().catch(e=>console.error('renderDetail error:',e));
+}
+function setAttrLogic(mode){ st.attrFilter.logic=mode; renderDetail().catch(e=>console.error('renderDetail error:',e)); }
+function clearAttrFilter(){ st.attrFilter.active.clear(); renderDetail().catch(e=>console.error('renderDetail error:',e)); }
+
+function renderAttrFilterBar(runners, attrMap){
+  const counts={};
+  ATTR_META.forEach(a=>{counts[a.id]=runners.filter(r=>(attrMap.get(r.name)||[]).some(x=>x.id===a.id)).length;});
+  const chips=ATTR_META.map(a=>{
+    const on=st.attrFilter.active.has(a.id);
+    return `<span onclick="toggleAttrChip('${a.id}')" style="display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:14px;cursor:pointer;font-size:11.5px;font-weight:600;background:${on?a.color:'var(--card2)'};border:1.5px solid ${on?a.color:a.color+'55'};color:${on?'#fff':'var(--text)'};white-space:nowrap;user-select:none">
+      <span style="width:8px;height:8px;border-radius:50%;background:${on?'#fff':a.color};flex-shrink:0"></span>${a.label}<span style="opacity:.7;font-weight:700;font-size:10px">${counts[a.id]}</span>
+    </span>`;
+  }).join('');
+  const orOn=st.attrFilter.logic==='OR', andOn=!orOn;
+  const n=st.attrFilter.active.size;
+  return `<div style="padding:10px 0;margin-bottom:8px;border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:8px">
+      <span style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;font-weight:700">Highlight by Attribute</span>
+      <div style="display:flex;align-items:center;gap:8px">
+        <div style="display:inline-flex;border:1px solid var(--border);border-radius:14px;overflow:hidden;font-size:10px;font-weight:700">
+          <button onclick="setAttrLogic('OR')" style="border:none;padding:3px 10px;cursor:pointer;background:${orOn?'#374151':'var(--card)'};color:${orOn?'#fff':'var(--muted)'}">OR (any)</button>
+          <button onclick="setAttrLogic('AND')" style="border:none;padding:3px 10px;cursor:pointer;background:${andOn?'#374151':'var(--card)'};color:${andOn?'#fff':'var(--muted)'}">AND (all)</button>
+        </div>
+        <button onclick="clearAttrFilter()" ${n?'':'disabled'} style="font-size:10.5px;color:${n?'var(--accent2)':'var(--muted)'};cursor:${n?'pointer':'default'};font-weight:700;background:none;border:none;padding:0;opacity:${n?1:.4}">Clear</button>
+      </div>
+    </div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap">${chips}</div>
+  </div>`;
+}
+
 function renderMainTab(runners,race,vk,ri){
   const avgScore=runners.length?runners.reduce((a,r)=>a+r.score,0)/runners.length:0;
   // Pre-compute race context for rank badges
   const raceCtx=race&&race.runners?analyzeRaceContext(race.runners):[];
   const ctxMap={};raceCtx.forEach(c=>{ctxMap[c.runner.name]=c;});
+  const attrMap=new Map(runners.map(r=>[r.name,getRunnerAttributes(r,race)]));
   function deltaHtml(score){
     const d=score-avgScore;
     const rd=Math.round(d*10)/10;
@@ -8503,6 +8705,7 @@ function renderMainTab(runners,race,vk,ri){
     <div class="vcl-item"><span class="vcl-dot" style="background:#dc2626"></span>Fail (&lt;40%)</div>
     <span style="margin-left:auto;font-size:11px;color:var(--muted)">Avg: ${Math.round(avgScore)}/${MAX_SCORE} · Variables: ${Object.values(FM).map(f=>f.l).join(' · ')}</span>
   </div>
+  ${renderAttrFilterBar(runners, attrMap)}
   <table class="rtbl"><thead><tr>
     ${thSort('#','number')}${thSort('Horse','score')}${thSort('Form','form')}
     ${thSort('Age','age')}${thSort('RPR','rpr')}
@@ -8516,11 +8719,22 @@ function renderMainTab(runners,race,vk,ri){
     const bjky=isBannedJockey(r.jockey),bhrs=isBannedHorse(r.name);
     if(st.hideBanned&&(bjky||bhrs)) return '';
     const banRowCl=bjky&&bhrs?'ban-row-both':bjky?'ban-row-jky':bhrs?'ban-row-hrs':'';
-    const rowCl=[conf==='TOP PICK'?'top-pick-row':conf==='STRONG'?'strong-row':'',banRowCl].filter(Boolean).join(' ');
+    const rAttrs=attrMap.get(r.name)||[];
+    const activeAttrIds=[...st.attrFilter.active];
+    const attrFiltering=activeAttrIds.length>0;
+    const matchedAttrIds=attrFiltering?activeAttrIds.filter(id=>rAttrs.some(a=>a.id===id)):[];
+    const attrIsMatch=attrFiltering&&(st.attrFilter.logic==='AND'?activeAttrIds.every(id=>rAttrs.some(a=>a.id===id)):matchedAttrIds.length>0);
+    let attrRowStyle='';
+    if(attrFiltering&&attrIsMatch){
+      const blend=attrBlendColor(matchedAttrIds.map(id=>ATTR_META_BY_ID[id].color));
+      const [br,bg2,bb]=blend;
+      attrRowStyle=`box-shadow:inset 4px 0 0 rgb(${br},${bg2},${bb}),0 0 10px rgba(${br},${bg2},${bb},.28);background:rgba(${br},${bg2},${bb},.07)`;
+    }
+    const rowCl=[conf==='TOP PICK'?'top-pick-row':conf==='STRONG'?'strong-row':'',banRowCl,(attrFiltering&&!attrIsMatch)?'attr-dim':''].filter(Boolean).join(' ');
     const isExp=st.expanded===r.name;
     const jkyHtml=bjky?`<span class="ban-jky-name">${r.jockey||'?'}</span><span class="ban-jky-badge">🚫 JOCKEY</span>`:`${r.jockey||'?'}`;
     const hrsBadge=bhrs?`<span class="ban-hrs-badge">🚫 HORSE</span>`:'';
-    let rows=`<tr class="${rowCl} expandable" onclick="toggleExp('${r.name.replace(/'/g,"\\'")}')">
+    let rows=`<tr class="${rowCl} expandable" style="${attrRowStyle}" onclick="toggleExp('${r.name.replace(/'/g,"\\'")}')">
       <td style="font-weight:700;color:var(--muted)">${r.number||'—'}</td>
       <td><div style="font-weight:700;font-size:14px"><button class="wl-track-btn ${isWatched(r.name)?'tracked':''}" onclick="event.stopPropagation();toggleWatch('${r.name.replace(/'/g,"\\'")}','${(race.course||'').replace(/'/g,"\\'")}','${(race.name||'').replace(/'/g,"\\'")}')" title="${isWatched(r.name)?'Remove from watchlist':'Add to watchlist'}">${isWatched(r.name)?'TRACKING':'TRACK'}</button><button class="bet-btn ${isBetted(r.name,race.time||'',race.course||'')?'betting':''}" onclick="event.stopPropagation();toggleBet('${r.name.replace(/'/g,"\\'")}','${(race.time||'').replace(/'/g,"\\'")}','${(race.course||'').replace(/'/g,"\\'")}',${r.score||0})">${isBetted(r.name,race.time||'',race.course||'')?'BETTING':'BET'}</button><button class="cmpsel-btn${st.compareSelect.has(r.name)?' on':''}" id="cmpsel_${r.name.replace(/[^a-zA-Z0-9]/g,'_')}" onclick="event.stopPropagation();hcmpToggle('${r.name.replace(/'/g,"\\'")}')" title="Add to compare">${st.compareSelect.has(r.name)?'✓':'+CMP'}</button>${r.name}${hrsBadge}${rankBadge(r.name)}${getRunnerComboBadges(r)}${getCourseSpecialistBadge(r,race)}${getWatchbackBadge(r,race)}${r.price?`<span class="price-dec">${parseFloat(r.price).toFixed(2)}</span>`:''}</div><div style="font-size:11px;color:var(--muted)">${jkyHtml} · ${r.trainer||'?'} ${getConnectionChangeBadge(r)}</div></td>
       <td>${formHtml(r.form)}${(()=>{const m=calcMomentum(r.form);return m.label!=='UNKNOWN'?` <span class="mom ${m.cls}" title="${m.tip}" style="padding:1px 4px;font-size:8px;vertical-align:middle">${m.icon}</span>`:'';})()}</td>
@@ -8534,6 +8748,14 @@ function renderMainTab(runners,race,vk,ri){
       <td>${confBadge(conf)}</td>
       <td>${varTicks(r.score_breakdown)}</td>
     </tr>`;
+    if(attrFiltering&&attrIsMatch&&matchedAttrIds.length){
+      const reasonItems=matchedAttrIds.map(id=>{
+        const meta=ATTR_META_BY_ID[id];
+        const found=rAttrs.find(a=>a.id===id);
+        return `<div style="font-size:10.5px;line-height:1.4;color:var(--text);background:var(--card);border:1px solid var(--border);border-left:3px solid ${meta.color};padding:4px 8px;border-radius:4px;margin-bottom:4px"><b style="color:${meta.color}">${meta.tag}:</b> ${found?found.reason:''}</div>`;
+      }).join('');
+      rows+=`<tr class="attr-reason-tr"><td colspan="12" style="padding:2px 10px 10px 44px;background:rgba(0,0,0,.02)">${reasonItems}</td></tr>`;
+    }
     if(isExp) rows+=renderExpandedRow(r, race.field_size||runners.length, race);
     return rows;
   }).join('')}
