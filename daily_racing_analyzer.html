@@ -1038,10 +1038,72 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .prixm-rf-badge-lost{color:#dc2626!important}
 .prixm-result-footer-lost{background:rgba(220,38,38,.05)!important;border-top-color:rgba(220,38,38,.12)!important}
 
+
+/* ☘ Emerald engine + 🧭 Horse × Track (2026-09-30) */
+:root{--em:#0f766e;--em2:#10b981;--em-soft:#ecfdf5;--em-line:#a7f3d0}
+.rc-eng{font-size:9.5px;font-weight:800;letter-spacing:.03em;border-radius:5px;padding:1px 6px;white-space:nowrap}
+.rc-eng-em{background:var(--em);color:#fff}
+.rc-eng-px{background:#f0fdf4;color:#15803d;border:1px solid #bbf7d0}
+.rc-px-ghost{font-size:10.5px;color:#9ca3af;margin:1px 0 3px}
+.rc-fit-u{font-size:10px}
+.rc-fit-strip{margin-top:6px;font-size:11px;background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;border-radius:6px;padding:4px 8px}
+.fit-badge{display:inline-block;font-size:10.5px;font-weight:800;border-radius:6px;padding:1px 7px;white-space:nowrap}
+.fit-s{background:#dcfce7;color:#166534}.fit-q{background:#fef3c7;color:#92400e}.fit-u{background:#fee2e2;color:#991b1b}
+.xa-box{border:1px solid var(--border);border-radius:9px;overflow:hidden;background:#fff;margin-top:6px}
+.xa-box-h{padding:7px 11px;font-size:12px;font-weight:700;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;align-items:center}
+.xa-box-h.s{background:#f0fdf4}.xa-box-h.q{background:#fffbeb}.xa-box-h.u{background:#fef2f2}.xa-box-h.n{background:var(--card2)}
+.xa-row2{display:grid;grid-template-columns:22px 1fr 1fr;gap:8px;padding:5px 11px;border-top:1px solid var(--border);font-size:11.5px}
+.xa-row2 .t{color:var(--muted)}
+.xa-row2.unproven{opacity:.72}
+.xa-unp{font-size:9.5px;color:#6b7280;border:1px dashed #cbd5e1;border-radius:4px;padding:0 4px;margin-left:4px;white-space:nowrap}
+.xa-foot{padding:6px 11px;font-size:10.5px;color:var(--muted);background:var(--card2);border-top:1px solid var(--border)}
+.pace-box{background:#fff;border:1px solid var(--border);border-radius:10px;padding:9px 12px;margin:8px 0}
+.pace-lanes{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:6px 0}
+@media(max-width:600px){.pace-lanes{grid-template-columns:repeat(2,1fr)}}
+.pace-lane{background:var(--card2);border-radius:7px;padding:5px 8px;font-size:11.5px;min-height:40px}
+.pace-lane b{display:block;font-size:9.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.em-ir{color:var(--em);font-weight:700}
+
+/* 💷 Ledger */
+.lg-fab{position:fixed;right:88px;bottom:22px;background:#15803d;color:#fff;border:none;border-radius:26px;padding:12px 18px;font:inherit;font-weight:800;font-size:13.5px;box-shadow:0 6px 20px rgba(21,128,61,.35);cursor:pointer;z-index:900;display:flex;gap:7px;align-items:center}
+.lg-fab small{font-weight:600;opacity:.85;font-size:10.5px}.lg-fab .kbd{background:rgba(255,255,255,.2);border-radius:4px;padding:0 5px;font-size:10px}
+.lg-chip{font-size:12px;font-weight:700;padding:5px 12px;border-radius:14px;background:#f0fdf4;border:1px solid #bbf7d0;color:#15803d;cursor:pointer;white-space:nowrap}
+.lg-ov{position:fixed;inset:0;background:rgba(17,24,39,.45);display:flex;align-items:flex-start;justify-content:center;z-index:2000;padding:40px 12px;overflow:auto}
+.lg-modal{background:#fff;border-radius:12px;width:100%;max-width:560px;box-shadow:0 20px 50px rgba(0,0,0,.25);color:var(--text)}
+.lg-mh{padding:13px 18px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}.lg-mh b{font-size:16px}
+.lg-x{border:1px solid var(--border);background:#fff;border-radius:6px;padding:2px 9px;cursor:pointer}
+.lg-mb{padding:14px 18px;display:flex;flex-direction:column;gap:12px}.lg-mf{padding:12px 18px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.lg-f label{display:block;font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700;margin-bottom:4px}
+.lg-f input,.lg-f select{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:7px;font:inherit;font-size:14px;background:#fff;box-sizing:border-box}
+.lg-row{display:flex;gap:10px;flex-wrap:wrap}.lg-row>.lg-f{flex:1;min-width:140px}
+.lg-seg{display:flex;flex-wrap:wrap;gap:4px}.lg-seg button{border:1px solid var(--border);background:#fff;border-radius:6px;padding:5px 10px;font:inherit;font-size:12px;font-weight:600;cursor:pointer}.lg-seg button.on{background:#111827;color:#fff;border-color:#111827}
+.lg-stake{display:flex;border:1px solid var(--border);border-radius:7px;overflow:hidden}.lg-stake input{border:none!important;flex:1;font-size:16px!important;font-weight:700;min-width:0}
+.lg-stake button{border:none;border-left:1px solid var(--border);background:var(--card2);padding:0 12px;font:inherit;font-weight:700;cursor:pointer}.lg-stake button.on{background:#111827;color:#fff}
+.lg-ac{border:1px solid var(--border);border-radius:7px;margin-top:4px;max-height:180px;overflow:auto;display:none}.lg-ac div{padding:6px 10px;font-size:13px;cursor:pointer;display:flex;justify-content:space-between;gap:6px}.lg-ac div:hover{background:var(--card2)}
+.lg-sm{font-size:11.5px;color:var(--muted)}
+.lg-adv{border-radius:9px;padding:9px 12px;font-size:12.5px;margin-top:4px}.lg-adv ul{margin:4px 0 0;padding-left:18px}.lg-g{background:#f0fdf4;border:1px solid #bbf7d0}.lg-z{background:var(--card2);border:1px solid var(--border)}.lg-w{background:#fff7ed;border:1px solid #fed7aa;color:#9a3412}
+.lg-toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:#111827;color:#fff;padding:9px 16px;border-radius:8px;font-size:13px;opacity:0;transition:opacity .2s;z-index:2100;pointer-events:none}.lg-toast.on{opacity:1}
+.lg-card{background:#fff;border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:12px}
+.lg-ch{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700;margin-bottom:8px}
+.lg-set{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end}.lg-set .lg-f{flex:0 1 160px}
+.lg-kpis{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-bottom:12px}
+.lg-kpi{background:#fff;border:1px solid var(--border);border-radius:10px;padding:10px 14px}.lg-kpi span{font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}.lg-kpi b{display:block;font-size:20px;font-variant-numeric:tabular-nums}.lg-kpi small{font-size:11px;color:var(--muted)}
+.lg-two{display:grid;grid-template-columns:1.35fr 1fr;gap:12px}@media(max-width:900px){.lg-two{grid-template-columns:1fr}}
+.lg-plan{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center;padding:8px 0;border-bottom:1px dashed var(--border)}
+.lg-u{font-size:18px;font-weight:900;min-width:52px;text-align:right}.lg-u.z{color:var(--muted);font-size:13px;font-weight:700}
+.lg-cap{height:10px;background:var(--card2);border-radius:6px;overflow:hidden;margin:6px 0 2px}.lg-cap i{display:block;height:100%;background:#15803d}
+.lg-tbl{width:100%;border-collapse:collapse;font-size:12.5px}.lg-tbl th{text-align:left;font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);padding:6px 8px;border-bottom:1px solid var(--border);white-space:nowrap}.lg-tbl td{padding:6px 8px;border-bottom:1px solid var(--border);white-space:nowrap;font-variant-numeric:tabular-nums}
+.lg-mini{font-size:10.5px!important;padding:2px 7px!important}
+.lg-schip{display:inline-block;font-size:10.5px;font-weight:800;border-radius:6px;padding:2px 7px;background:#dcfce7;color:#166534;border:1px solid #bbf7d0;white-space:nowrap;margin-top:3px}
+.lg-schip.pp{background:#fff;color:#6b7280;border:1px dashed #cbd5e1}
+.lg-tier{display:grid;grid-template-columns:44px 1fr;gap:8px;font-size:12.5px;padding:5px 0;border-bottom:1px dashed var(--border)}.lg-tier b{font-size:15px}
+@media(max-width:700px){.lg-fab{right:78px;bottom:16px;padding:10px 14px}.lg-fab small{display:none}}
 </style>
 <script src="results_history.js" onerror=""></script>
 <script src="daily_race_data.js" onerror=""></script>
 <script src="weather_signal.js" onerror=""></script>
+<script src="track_profiles.js" onerror=""></script>
+<script src="xa_validation.js" onerror=""></script>
 </head>
 <body>
 <div class="hdr">
@@ -1055,6 +1117,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 <button class="vbtn" id="clearDataBtn" onclick="clearStoredData().catch(e=>console.error('clearStoredData error:',e))" style="font-size:11px;display:none" title="Clear stored data and revert to sample">🗑 Clear Data</button>
 <button class="vbtn" onclick="showGuide()" style="font-size:11px" title="How to use this tool">❓ Guide</button>
 <button class="vbtn" id="pdfExportBtn" onclick="showMainExportModal()" style="font-size:11px;border-color:var(--accent2);color:var(--accent2)" title="Export daily report as PDF">📄 PDF</button>
+<span id="lgChip" class="lg-chip vo-hide" style="display:none" onclick="switchTab('ledger')" title="Open the 💷 Ledger"></span>
 <span class="date-b" id="dateDisp">Loading...</span>
 <span style="color:var(--muted);font-size:12px" id="statusDisp"></span>
 <div id="statusBar" style="margin-left:4px"></div>
@@ -1067,9 +1130,11 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
   <button class="tab-btn" id="tabCombos" onclick="switchTab('combos')">Combos</button>
   <button class="tab-btn" id="tabTrends" onclick="switchTab('trends')">Trends</button>
   <button class="tab-btn" id="tabGolden" onclick="switchTab('golden')">Golden</button>
-  <button class="tab-btn" id="tabTracks" onclick="switchTab('tracks')">Tracks</button>
+  <button class="tab-btn" id="tabTracks" onclick="switchTab('tracks')">🗺 Track Explorer</button>
   <button class="tab-btn" id="tabTopFinish" onclick="switchTab('topfinish')">Top Finish</button>
   <button class="tab-btn" id="tabWatchback" onclick="switchTab('watchback')">Watchback</button>
+  <button class="tab-btn" id="tabEmerald" onclick="switchTab('emerald')" style="color:#0f766e">☘ Emerald</button>
+  <button class="tab-btn vo-hide" id="tabLedger" onclick="switchTab('ledger')">💷 Ledger</button>
   <span id="dbStatusBadge" style="margin-left:auto;padding:0 12px;font-size:11px;color:var(--muted);align-self:center;display:none"></span>
 </div>
 
@@ -1107,9 +1172,12 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 
 <div id="goldenView" style="display:none;padding:20px 28px;max-width:1200px;margin:0 auto"><div id="goldenContent">Loading...</div></div>
 
-<div id="tracksView" style="display:none;padding:20px 28px;max-width:1200px;margin:0 auto"></div>
+<div id="tracksView" style="display:none;padding:20px 28px;max-width:1200px;margin:0 auto"><div id="texHeader"></div><div id="texProf"></div><div id="texFit" style="display:none"></div><div id="taStatsView" style="display:none"></div></div>
 <div id="topFinishView" style="display:none;padding:20px 28px;max-width:1100px;margin:0 auto"><div id="topFinishContent"></div></div>
 <div id="watchbackView" style="display:none;padding:20px 28px;max-width:1200px;margin:0 auto"><div id="watchbackContent">Loading...</div></div>
+<div id="emeraldView" style="display:none;padding:20px 28px;max-width:1200px;margin:0 auto"><div id="emeraldContent">Loading...</div></div>
+<div id="ledgerView" class="vo-hide" style="display:none;padding:20px 28px 90px;max-width:1200px;margin:0 auto"><div id="ledgerContent">Loading...</div></div>
+<button id="lgFab" class="lg-fab vo-hide" onclick="window.lgOpen&&window.lgOpen()" title="Log a bet (shortcut: B)">＋ Log bet <small id="lgFabSub"></small><span class="kbd">B</span></button>
 
 <div id="modalContainer"></div>
 <div class="hs-overlay" id="hsOverlay" onclick="if(event.target===this)hsClose()">
@@ -1211,7 +1279,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 <button id="betFab" class="bp-toggle-fab" onclick="toggleBetPanel()">🎫<span class="fab-badge">0</span></button>
 
 <script>
-let D=null, st={venue:'all', fieldFilter:new Set(), comboFilter:false, raceTypeFilter:'all', raceCodeFilter:'all', confidenceFilter:'all', gapFilter:new Set(), hideBanned:false, openRace:null, sort:'score', sortDir:-1, expanded:null, detailTab:'main', h2hPair:null, compareSelect:new Set(), xaVenue:null, attrFilter:{active:new Set(), logic:'OR'}};
+let D=null, st={venue:'all', fieldFilter:new Set(), comboFilter:false, raceTypeFilter:'all', engineFilter:'all', fitFilter:'all', raceCodeFilter:'all', confidenceFilter:'all', gapFilter:new Set(), hideBanned:false, openRace:null, sort:'score', sortDir:-1, expanded:null, detailTab:'main', h2hPair:null, compareSelect:new Set(), xaVenue:null, attrFilter:{active:new Set(), logic:'OR'}};
 
 // ==================== PER-DAY DATA STATUS TRACKER ====================
 function getDayStatus(date){
@@ -1329,6 +1397,15 @@ const FM={
   headgear:{l:'Headgear',mx:3},spotlight:{l:'Expert',mx:2}
 };
 const MAX_SCORE=Object.values(FM).reduce((a,f)=>a+f.mx,0); // 118
+// ☘ Emerald factor map — Prixm base re-capped + 3 Irish factors, same 118 total (engine/emerald_engine.py)
+const EM_FM={
+  form:{l:'Form',mx:18},rating:{l:'Rating',mx:14},trainer:{l:'Trainer',mx:10},
+  jockey:{l:'Jockey',mx:9},fitness:{l:'Fitness',mx:7},class:{l:'Class',mx:7},
+  going:{l:'Going',mx:8},course:{l:'Course',mx:6},distance:{l:'Distance',mx:6},
+  age:{l:'Age',mx:5},weight:{l:'Weight',mx:7},headgear:{l:'Headgear',mx:2},spotlight:{l:'Expert',mx:2},
+  draw_bias:{l:'☘ Draw bias',mx:5,ir:1},track_fit:{l:'☘ Track fit',mx:6,ir:1},stable_power:{l:'☘ Stable power',mx:6,ir:1}
+};
+function fmFor(bd){return bd&&('draw_bias' in bd||'stable_power' in bd)?EM_FM:FM;}
 
 /* ==================== ANALYSIS VERSION TRACKING ==================== */
 const ENGINE_NAME='Prixm';
@@ -1367,6 +1444,28 @@ function getNextVersionLabel(proposals){
   return allDone?(Math.floor(cur)+1.0).toFixed(1):parseFloat((cur+0.1).toFixed(1)).toFixed(1);
 }
 function engineLabel(ver){ return ENGINE_NAME+' '+(ver!=null?ver.toFixed(1):getAnalysisVersion().toFixed(1)); }
+// ☘ Emerald (Irish engine) — own version line, derived from its own applied calibrations:
+// both Irish profiles (ire_flat + ire_nh) recalibrated → next major; one profile → +0.1. Starts at 1.0.
+const EMERALD_NAME='Emerald';
+const EMERALD_PROFILES=['ire_flat','ire_nh'];
+function getEmeraldVersion(){
+  const cal=((window._emeraldHistory&&window._emeraldHistory.calibrations)||[]).filter(c=>c.applied);
+  const byDate={};cal.forEach(c=>{(byDate[c.date||'unknown']=byDate[c.date||'unknown']||[]).push(c.profile);});
+  let v=1.0,cycle=new Set();
+  Object.keys(byDate).sort().forEach(d=>{byDate[d].forEach(p=>cycle.add(p));
+    if(EMERALD_PROFILES.every(p=>cycle.has(p))){v=Math.floor(v)+1.0;cycle=new Set();}else v=parseFloat((v+0.1).toFixed(1));});
+  return v;
+}
+function emeraldLabel(ver){ return EMERALD_NAME+' '+(ver!=null?ver:getEmeraldVersion()).toFixed(1); }
+function emeraldVersionHistory(){
+  const cal=((window._emeraldHistory&&window._emeraldHistory.calibrations)||[]).filter(c=>c.applied);
+  const byDate={};cal.forEach(c=>{(byDate[c.date||'unknown']=byDate[c.date||'unknown']||[]).push(c);});
+  const out=[{v:1.0,date:'base',profiles:[]}];let v=1.0,cycle=new Set();
+  Object.keys(byDate).sort().forEach(d=>{byDate[d].forEach(c=>cycle.add(c.profile));
+    if(EMERALD_PROFILES.every(p=>cycle.has(p))){v=Math.floor(v)+1.0;cycle=new Set();}else v=parseFloat((v+0.1).toFixed(1));
+    out.push({v,date:d,profiles:byDate[d].map(c=>c.profile),races:byDate[d].reduce((a,c)=>a+(c.races_used||0),0),cal:byDate[d]});});
+  return out;
+}
 function syncVersionFromCalibrations(hist){
   if(!hist||!hist.calibrations) return;
   const applied=hist.calibrations.filter(c=>c.applied);
@@ -1726,11 +1825,11 @@ function buildRaceBrief(race, rCombos){
 
 function varTicks(bd){
   if(!bd)return'';
-  const keys=Object.keys(FM);
+  const M=fmFor(bd),keys=Object.keys(M);
   return '<div class="vtg">'+keys.map(k=>{
-    const v=bd[k]||0,mx=FM[k].mx,pct=v/mx;
+    const v=bd[k]||0,mx=M[k].mx,pct=v/mx;
     const cl=pct>=0.7?'vt-g':pct>=0.4?'vt-y':'vt-r';
-    return `<div class="vt ${cl}" title="${FM[k].l}: ${v}/${mx}">${v}</div>`;
+    return `<div class="vt ${cl}" title="${M[k].l}: ${v}/${mx}">${v}</div>`;
   }).join('')+'</div>';
 }
 
@@ -1744,6 +1843,8 @@ function switchTab(tab){
   document.getElementById('tabTracks').classList.toggle('active',tab==='tracks');
   document.getElementById('tabTopFinish').classList.toggle('active',tab==='topfinish');
   document.getElementById('tabWatchback').classList.toggle('active',tab==='watchback');
+  document.getElementById('tabEmerald').classList.toggle('active',tab==='emerald');
+  document.getElementById('tabLedger').classList.toggle('active',tab==='ledger');
   document.getElementById('landingView').style.display=tab==='races'?'block':'none';
   document.getElementById('detailView').style.display='none';
   document.getElementById('perfView').style.display=tab==='performance'?'block':'none';
@@ -1753,13 +1854,17 @@ function switchTab(tab){
   document.getElementById('tracksView').style.display=tab==='tracks'?'block':'none';
   document.getElementById('topFinishView').style.display=tab==='topfinish'?'block':'none';
   document.getElementById('watchbackView').style.display=tab==='watchback'?'block':'none';
+  document.getElementById('emeraldView').style.display=tab==='emerald'?'block':'none';
+  document.getElementById('ledgerView').style.display=tab==='ledger'&&!VIEW_ONLY?'block':'none';
   if(tab==='performance') renderPerformance();
   if(tab==='combos') renderCombos();
   if(tab==='trends') renderTrends();
   if(tab==='golden') renderGoldenDashboard();
-  if(tab==='tracks') window.renderTracksTab&&window.renderTracksTab();
+  if(tab==='tracks') window.renderTrackExplorer?window.renderTrackExplorer():(window.renderTracksTab&&window.renderTracksTab());
   if(tab==='topfinish') window.renderTopFinishAnalysis&&window.renderTopFinishAnalysis();
   if(tab==='watchback') window.renderWatchbackDashboard&&window.renderWatchbackDashboard();
+  if(tab==='emerald') window.renderEmeraldTab&&window.renderEmeraldTab('emeraldContent');
+  if(tab==='ledger') window.renderLedger&&window.renderLedger();
 }
 
 /* ==================== GOLDEN DASHBOARD ==================== */
@@ -2689,10 +2794,11 @@ function fmtROI(r){const s=r.toFixed(0);return`<span style="color:${r>=0?'#15803
 
 // ---- stat engine ----
 function computeTrackStats(venue){
-  const hist=window._resultsHistory;
+  const hist=window._allHistory||window._resultsHistory; // horse/venue-level: both engines (UK + Irish)
   if(!hist||!hist.races)return null;
-  const vl=venue.toLowerCase();
-  const races=hist.races.filter(r=>r.venue&&r.venue.toLowerCase()===vl);
+  // normalised track key so "Curragh" / "CURRAGH (IRE)" / "Curragh   (IRE)" are one track
+  const vk=normalizeTrackKey(venue);
+  const races=hist.races.filter(r=>r.venue&&normalizeTrackKey(r.venue)===vk);
   if(!races.length)return null;
 
   const mk=()=>({runs:0,wins:0,placed:0,sp:0});
@@ -2956,14 +3062,16 @@ function wireTips(){
 
 // ---- all venues summary ----
 function allVenueStats(){
-  const hist=window._resultsHistory;
+  const hist=window._allHistory||window._resultsHistory; // horse/venue-level: both engines (UK + Irish)
   if(!hist||!hist.races)return[];
   const map={};
   hist.races.forEach(r=>{
     if(!r.venue)return;
-    if(!map[r.venue])map[r.venue]={runs:0,wins:0};
+    const k=normalizeTrackKey(r.venue);
+    const nm=(TRACK_PROFILES[k]&&TRACK_PROFILES[k].name)||r.venue;
+    if(!map[nm])map[nm]={runs:0,wins:0};
     const top=getTopPick(r);if(!top)return;
-    map[r.venue].runs++;if(top.finish_pos===1)map[r.venue].wins++;
+    map[nm].runs++;if(top.finish_pos===1)map[nm].wins++;
   });
   return Object.entries(map).filter(([,v])=>v.runs>=5)
     .map(([v,d])=>({venue:v,runs:d.runs,wins:d.wins,sr:d.wins/d.runs*100}))
@@ -2989,7 +3097,7 @@ function venueListHTML(list){
 // ---- home screen ----
 window._taHome=function(){
   _currentTrack=null;
-  const view=document.getElementById('tracksView');
+  const view=document.getElementById('taStatsView');
   if(!view)return;
   const hist=window._resultsHistory;
   const hasData=hist&&hist.races&&hist.races.length>0;
@@ -3022,7 +3130,7 @@ window._taSearch=function(q){
 // ---- detail screen ----
 window._taDetail=function(venue){
   _currentTrack=venue;
-  const view=document.getElementById('tracksView');
+  const view=document.getElementById('taStatsView');
   const s=computeTrackStats(venue);
   window._taCurrentStats=s;
   if(!s){view.innerHTML=`<div style="padding:40px;text-align:center;color:#555">No results data for ${venue}.<br><small style="color:#444">Load results history first.</small></div>`;return;}
@@ -3634,21 +3742,729 @@ function buildReportHTML(s,opts){
 
 // ---- public entry points ----
 window.renderTracksTab=function(){
+  // Old Track Analysis now lives in 🗺 Track Explorer → 📊 Stats (#taStatsView)
   try{
     if(_currentTrack)window._taDetail(_currentTrack);
     else window._taHome();
   }catch(e){
-    const v=document.getElementById('tracksView');
+    const v=document.getElementById('taStatsView');
     if(v)v.innerHTML=`<div style="padding:30px;color:#dc2626;font-size:13px;background:#fef2f2;border:1px solid #fecaca;border-radius:8px;margin:20px 0"><strong>Track Analysis Error:</strong><br><code>${e.message}</code><br><pre style="color:#aaa;font-size:11px;margin-top:8px;white-space:pre-wrap">${e.stack||''}</pre></div>`;
     console.error('TrackAnalysis error:',e);
   }
 };
 
 window.openTrackAnalysis=function(venue){
+  // 📊 button on race cards → 🗺 Track Explorer, Stats sub-tab for that venue
+  if(window.openTrackExplorer){window.openTrackExplorer(venue,'stats');return;}
   switchTab('tracks');
   try{window._taDetail(venue);}catch(e){console.error('openTrackAnalysis error:',e);}
 };
 
+})();
+
+/* ==================== 🗺 TRACK EXPLORER (UK · Prixm + Ireland · ☘ Emerald) ====================
+   One tab for every track. Sub-tabs: 🗺 Profile · 🧭 Today's Runners Fit · 📊 Stats (the old Tracks tab).
+   Static track character comes from track_profiles.js. Everything measurable — draw win+place % by stall,
+   winning running styles — is computed live from logged results (both engines) and hidden when the
+   sample is too thin (no-data = blank rule). Display-only: nothing here changes a score. */
+(function(){
+'use strict';
+const S={cty:'all',sub:'prof',key:null,band:null};
+const BANDS=['5f','6f','7f','1m','1m2f+'];
+const bandOf=f=>!f?null:f<=5.5?'5f':f<=6.5?'6f':f<=7.5?'7f':f<=8.5?'1m':'1m2f+';
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const TP=()=>window._trackProfiles||{};
+const hist=()=>((window._allHistory||window._resultsHistory||{}).races)||[];
+const _kc={};const keyOf=v=>v in _kc?_kc[v]:(_kc[v]=getTrackKey(v));
+
+function todayKeys(){
+  const out={};
+  if(!window.D||!D.venues)return out;
+  Object.entries(D.venues).forEach(([vk,v])=>{const k=keyOf(v.course||vk);if(k)(out[k]=out[k]||[]).push(vk);});
+  return out;
+}
+function racesAt(key){return hist().filter(r=>r.venue&&keyOf(r.venue)===key);}
+
+// ── draw heat: placed % by stall per distance band (runs with a draw, field ≥ 6) ──
+function drawStats(key){
+  const out={};
+  racesAt(key).forEach(r=>{
+    const fs=r.field_size||0,b=bandOf(r.distance_f);if(!b||fs<6)return;
+    const pl=typeof getPlaceLimit==='function'?getPlaceLimit(fs):(fs<=7?2:fs<=15?3:4);
+    (r.results||[]).forEach(x=>{
+      if(x.non_runner||!x.draw)return;
+      const d=Math.min(x.draw,16);const o=(out[b]=out[b]||{n:0,st:{}});
+      const s=(o.st[d]=o.st[d]||{n:0,p:0,w:0});s.n++;o.n++;
+      if(x.finish_pos===1)s.w++;if(x.finish_pos&&x.finish_pos<=pl)s.p++;
+    });
+  });
+  return out;
+}
+// ── winning running style (winners with a classified in-running comment) ──
+function styleStats(key){
+  const c={FR:0,P:0,MD:0,HU:0};let n=0;
+  racesAt(key).forEach(r=>{const w=(r.results||[]).find(x=>x.finish_pos===1);if(w&&w.run_style&&c[w.run_style]!=null){c[w.run_style]++;n++;}});
+  return {c,n};
+}
+
+// ── SVG layout sketch ──
+function layoutSVG(tp){
+  const col=tp.country==='IRE'?'#10b981':'#3b82f6';
+  const dirTxt=tp.direction==='R'?'↻ right-handed':tp.direction==='L'?'↺ left-handed':tp.direction==='F8'?'∞ figure-of-eight':'↑ straight course';
+  const circ=tp.circuit_f||12;const rx=Math.min(150,70+circ*5),ry=Math.min(85,45+circ*2.4);
+  const cx=180,cy=112;let track='',post=[cx,cy+ry],stalls=[cx,cy-ry];
+  const L=tp.layout||'oval';
+  if(L==='straight'){
+    track=`<rect x="${cx-22}" y="16" width="44" height="190" rx="6" fill="#e5e7eb"/><line x1="${cx}" y1="22" x2="${cx}" y2="200" stroke="${col}" stroke-width="3" stroke-dasharray="6 5"/>`;
+    post=[cx,24];stalls=[cx,198];
+  }else if(L==='figure8'){
+    track=`<circle cx="${cx-70}" cy="${cy}" r="62" fill="none" stroke="#d1d5db" stroke-width="14"/><circle cx="${cx+70}" cy="${cy}" r="62" fill="none" stroke="#d1d5db" stroke-width="14"/>
+      <circle cx="${cx-70}" cy="${cy}" r="62" fill="none" stroke="${col}" stroke-width="3" stroke-dasharray="6 5"/><circle cx="${cx+70}" cy="${cy}" r="62" fill="none" stroke="${col}" stroke-width="3" stroke-dasharray="6 5"/>`;
+    post=[cx+70,cy+62];stalls=[cx-70,cy-62];
+  }else if(L==='horseshoe'){
+    const d=`M ${cx-rx} ${cy+ry} L ${cx-rx} ${cy-ry+40} Q ${cx-rx} ${cy-ry} ${cx-rx+40} ${cy-ry} L ${cx+rx-40} ${cy-ry} Q ${cx+rx} ${cy-ry} ${cx+rx} ${cy-ry+40} L ${cx+rx} ${cy+ry}`;
+    track=`<path d="${d}" fill="none" stroke="#d1d5db" stroke-width="14" stroke-linecap="round"/><path d="${d}" fill="none" stroke="${col}" stroke-width="3" stroke-dasharray="6 5"/>`;
+    post=tp.direction==='R'?[cx-rx,cy+ry-10]:[cx+rx,cy+ry-10];stalls=tp.direction==='R'?[cx+rx,cy+ry-10]:[cx-rx,cy+ry-10];
+  }else if(L==='triangle'){
+    const d=`M ${cx} ${cy-ry} L ${cx+rx} ${cy+ry} L ${cx-rx} ${cy+ry} Z`;
+    track=`<path d="${d}" fill="none" stroke="#d1d5db" stroke-width="14" stroke-linejoin="round"/><path d="${d}" fill="none" stroke="${col}" stroke-width="3" stroke-dasharray="6 5" stroke-linejoin="round"/>`;
+  }else{
+    const r=L==='circle'?Math.min(rx,ry):null;
+    const sh=L==='circle'?`<circle cx="${cx}" cy="${cy}" r="${ry}" `:`<rect x="${cx-rx}" y="${cy-ry}" width="${rx*2}" height="${ry*2}" rx="${L==='tight_oval'?ry:Math.min(ry,70)}" `;
+    track=`${sh}fill="none" stroke="#d1d5db" stroke-width="14"/>${sh}fill="none" stroke="${col}" stroke-width="3" stroke-dasharray="6 5"/>`;
+    void r;
+  }
+  const straight=(tp.straight_course_f&&L!=='straight')?`<line x1="${cx+rx+22}" y1="${cy+ry}" x2="${cx+rx+22}" y2="${Math.max(10,cy+ry-tp.straight_course_f*20)}" stroke="${col}" stroke-width="6" stroke-linecap="round"/><text x="${cx+rx+14}" y="${Math.max(8,cy+ry-tp.straight_course_f*20)-6}" font-size="10" text-anchor="end" fill="#374151">straight ${tp.straight_course_f}f</text>`:'';
+  return `<svg viewBox="0 0 360 225" style="max-width:100%;height:auto;display:block" role="img" aria-label="${esc(tp.name)} layout sketch">${track}${straight}
+    <circle cx="${post[0]}" cy="${post[1]}" r="7" fill="#111827"/><text x="${post[0]}" y="${Math.min(221,post[1]+20)}" font-size="11" text-anchor="middle" fill="#111827">Winning post</text>
+    <rect x="${stalls[0]-16}" y="${stalls[1]-5}" width="32" height="10" rx="2" fill="#d97706"/><text x="${stalls[0]}" y="${Math.max(10,stalls[1]-9)}" font-size="10" text-anchor="middle" fill="#92400e">stalls</text>
+    <text x="${cx}" y="${cy+4}" font-size="13" text-anchor="middle" fill="#6b7280">${dirTxt}</text></svg>`;
+}
+function elevSVG(tp){
+  const e=tp.elevation||[];if(!e.length)return'';
+  const mn=Math.min(...e)-6,mx=Math.max(...e)+6,w=340/(e.length-1);
+  const Y=v=>100-((v-mn)/(mx-mn||1))*85;
+  const pts=e.map((v,i)=>`${(10+i*w).toFixed(1)},${Y(v).toFixed(1)}`).join(' ');
+  const fill=tp.country==='IRE'?'#ecfdf5':'#eff6ff',line=tp.country==='IRE'?'#0f766e':'#1d4ed8';
+  const flat=Math.max(...e)-Math.min(...e)<3;
+  return `<svg viewBox="0 0 360 115" style="max-width:100%;height:auto;display:block" role="img" aria-label="Elevation of the final 4 furlongs"><polyline points="10,100 ${pts} 350,100" fill="${fill}"/><polyline points="${pts}" fill="none" stroke="${line}" stroke-width="2.5"/>
+    <text x="10" y="112" font-size="9" fill="#6b7280">4f out</text><text x="350" y="112" font-size="9" text-anchor="end" fill="#6b7280">post</text>${flat?'<text x="180" y="60" font-size="11" text-anchor="middle" fill="#9ca3af">flat</text>':''}</svg>`;
+}
+function meter(label,v,txt){
+  return `<div style="display:flex;align-items:center;gap:8px;font-size:12px;margin:4px 0"><span style="width:104px;color:var(--muted)">${label}</span><div style="flex:1;height:8px;background:var(--card2);border-radius:4px;position:relative"><i style="position:absolute;top:-3px;left:calc(${Math.round(v*100)}% - 7px);width:14px;height:14px;border-radius:50%;background:#111827;border:2px solid #fff;box-shadow:0 0 0 1px #111827"></i></div><em style="font-style:normal;width:86px;text-align:right;font-weight:600">${txt}</em></div>`;
+}
+const lvl=(v,a)=>v>=.8?a[3]:v>=.55?a[2]:v>=.25?a[1]:a[0];
+
+function header(){
+  const tk=todayKeys();
+  const list=Object.entries(TP()).filter(([,t])=>S.cty==='all'||t.country===S.cty);
+  const today=list.filter(([k])=>tk[k]).sort((a,b)=>a[1].name.localeCompare(b[1].name));
+  const segBtn=(k,l,on,fn)=>`<button onclick="${fn}" style="border:none;background:${on?'#111827':'none'};color:${on?'#fff':'var(--muted)'};padding:6px 14px;font:inherit;font-size:12px;font-weight:600;cursor:pointer">${l}</button>`;
+  const seg=(items)=>`<div style="display:inline-flex;border:1px solid var(--border);border-radius:8px;overflow:hidden;background:#fff;margin:0 8px 10px 0;flex-wrap:wrap">${items.join('')}</div>`;
+  const cur=S.key&&TP()[S.key];
+  return `<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:6px"><div style="font-size:17px;font-weight:800">🗺 Track Explorer</div><div style="font-size:12px;color:var(--muted)">${Object.keys(TP()).length} tracks · UK (Prixm) + Ireland (☘ Emerald)</div></div>
+    ${seg([segBtn('all','All tracks',S.cty==='all',"window._texSet({cty:'all'})"),segBtn('GB','🇬🇧 UK · Prixm',S.cty==='GB',"window._texSet({cty:'GB'})"),segBtn('IRE','☘ Ireland · Emerald',S.cty==='IRE',"window._texSet({cty:'IRE'})")])}
+    ${seg([segBtn('prof','🗺 Profile',S.sub==='prof',"window._texSet({sub:'prof'})"),segBtn('fit',"🧭 Today's Runners Fit",S.sub==='fit',"window._texSet({sub:'fit'})"),segBtn('stats','📊 Stats',S.sub==='stats',"window._texSet({sub:'stats'})")])}
+    <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:12px">
+      ${today.map(([k,t])=>`<button onclick="window._texSet({key:'${k}'})" style="border:1px solid ${t.country==='IRE'?'#a7f3d0':'#bfdbfe'};background:${S.key===k?(t.country==='IRE'?'#0f766e':'#1d4ed8'):'#fff'};color:${S.key===k?'#fff':(t.country==='IRE'?'#0f766e':'#1d4ed8')};border-radius:16px;padding:4px 12px;font:inherit;font-size:12px;font-weight:600;cursor:pointer">${t.country==='IRE'?'☘ ':''}${esc(t.name)} <span style="font-size:9px;background:#f59e0b;color:#fff;border-radius:4px;padding:0 4px">TODAY</span></button>`).join('')}
+      <select onchange="window._texSet({key:this.value})" style="padding:5px 8px;border:1px solid var(--border);border-radius:6px;font:inherit;font-size:12px;background:#fff">
+        <option value="">${cur?'Other track…':'Choose a track…'}</option>
+        ${list.sort((a,b)=>a[1].name.localeCompare(b[1].name)).map(([k,t])=>`<option value="${k}" ${S.key===k?'selected':''}>${t.country==='IRE'?'☘ ':''}${esc(t.name)}</option>`).join('')}
+      </select>
+    </div>`;
+}
+
+function profile(){
+  const tp=S.key&&TP()[S.key];
+  if(!tp)return `<div style="padding:30px;color:var(--muted);text-align:center">Pick a track above.</div>`;
+  const ire=tp.country==='IRE';
+  const ds=drawStats(S.key);
+  const bands=BANDS.filter(b=>ds[b]&&ds[b].n>=30);
+  if(!S.band||!bands.includes(S.band))S.band=bands[0]||null;
+  let heat='';
+  if(S.band){
+    const o=ds[S.band],stalls=Object.keys(o.st).map(Number).filter(d=>o.st[d].n>=4).sort((a,b)=>a-b);
+    const rates=stalls.map(d=>o.st[d].p/o.st[d].n),mx=Math.max(...rates),mn=Math.min(...rates);
+    heat=`<div style="display:flex;gap:6px;flex-wrap:wrap;margin:6px 0">${bands.map(b=>`<button onclick="window._texSet({band:'${b}'})" style="border:1px solid var(--border);background:${S.band===b?'#111827':'#fff'};color:${S.band===b?'#fff':'var(--text)'};border-radius:14px;padding:2px 10px;font:inherit;font-size:11.5px;cursor:pointer">${b} <span style="opacity:.6">(${ds[b].n})</span></button>`).join('')}</div>
+      <div style="display:flex;gap:3px;flex-wrap:wrap">${stalls.map((d,i)=>{const r=(rates[i]-mn)/((mx-mn)||1);return `<div title="Stall ${d}: ${Math.round(rates[i]*100)}% placed (${o.st[d].n} runs)" style="width:34px;text-align:center;border-radius:5px;padding:5px 0;font-size:11px;font-weight:700;color:#fff;background:${r>.66?'#15803d':r>.33?'#d97706':'#ef4444'}">${d}<div style="font-size:9px;font-weight:600;opacity:.9">${Math.round(rates[i]*100)}%</div></div>`;}).join('')}</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:4px">Win+place % by stall from ${o.n} logged runs at ${S.band} (stalls with ≥4 runs). Green = favoured → red = disadvantaged.</div>`;
+  }
+  const ss=styleStats(S.key);
+  const styles=ss.n>=15?[['Front-runner','FR'],['Prominent','P'],['Mid-div','MD'],['Hold-up','HU']].map(([l,k])=>{const pc=Math.round(ss.c[k]/ss.n*100);return `<div style="display:flex;align-items:center;gap:8px;font-size:12px;margin:4px 0"><span style="width:104px;color:var(--muted)">${l}</span><div style="flex:1;height:10px;background:var(--card2);border-radius:4px;overflow:hidden"><div style="width:${pc}%;height:100%;background:${ire?'#10b981':'#3b82f6'}"></div></div><em style="font-style:normal;width:86px;text-align:right;font-weight:600">${pc}% of wins</em></div>`;}).join('')+`<div style="font-size:11px;color:var(--muted)">From ${ss.n} logged winners with an in-running comment.</div>`:'';
+  const kv=[['Direction',tp.direction==='R'?'Right-handed':tp.direction==='L'?'Left-handed':tp.direction==='F8'?'Figure-of-eight':'Straight'],['Surface',tp.surface==='aw'?'All-weather':tp.surface==='sand'?'Sand (beach)':'Turf'],['Racing',tp.codes==='nh'?'Jumps':tp.codes==='flat'?'Flat':'Flat + Jumps'],['Circuit',tp.circuit_f?`~${tp.circuit_f}f`:'—'],['Home straight',tp.straight_f?`~${tp.straight_f}f`:'—'],['Straight course',tp.straight_course_f?`up to ${tp.straight_course_f}f`:'none']];
+  const card=(t,b)=>`<div style="font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700;margin:14px 0 6px">${t}</div>${b}`;
+  return `<div style="background:#fff;border:1px solid var(--border);border-radius:10px;padding:14px 16px">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px"><div style="font-size:18px;font-weight:800">${ire?'☘ ':''}${esc(tp.name)}</div>
+      <div style="display:flex;gap:6px;align-items:center"><span style="font-size:10.5px;font-weight:700;border-radius:6px;padding:2px 8px;background:${ire?'#0f766e':'#1d4ed8'};color:#fff">${ire?'☘ Emerald track':'🇬🇧 Prixm track'}</span><span title="How well-documented this track's character is — gradients are approximate for 'medium'" style="font-size:10.5px;color:var(--muted);border:1px solid var(--border);border-radius:6px;padding:1px 7px">profile: ${tp.conf||'medium'}</span></div></div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:10px">
+      <div>${layoutSVG(tp)}${card('Elevation · final 4f (hill / dip)',elevSVG(tp))}</div>
+      <div><div style="display:grid;grid-template-columns:auto 1fr;gap:3px 14px;font-size:12.5px">${kv.map(([a,b])=>`<span style="color:var(--muted)">${a}</span><b>${b}</b>`).join('')}</div>
+        ${card('Track character',meter('Sharpness',tp.sharpness,lvl(tp.sharpness,['Galloping','Fair','Sharp','Very sharp']))+meter('Undulation',tp.undulation,lvl(tp.undulation,['Flat','Mild','Undulating','Big']))+meter('Camber / tilt',tp.camber,lvl(tp.camber,['Minimal','Slight','Moderate','Pronounced']))+meter('Uphill finish',tp.uphill_finish,lvl(tp.uphill_finish,['None','Gentle','Stiff','Steep']))+meter('Straight length',Math.min(1,(tp.straight_f||0)/6),lvl(Math.min(1,(tp.straight_f||0)/6),['Short','Medium','Long','Very long'])))}
+        ${tp.stalls&&tp.stalls.length?card('Stalls position by distance',`<table style="width:100%;border-collapse:collapse;font-size:12px"><tr>${['Distance','Stalls','Known bias'].map(h=>`<th style="text-align:left;font-size:10px;text-transform:uppercase;color:var(--muted);padding:4px 6px;border-bottom:1px solid var(--border)">${h}</th>`).join('')}</tr>${tp.stalls.map(r=>`<tr>${r.map(c=>`<td style="padding:4px 6px;border-bottom:1px solid var(--border)">${esc(c)}</td>`).join('')}</tr>`).join('')}</table>`):''}</div>
+    </div>
+    ${heat?card('Stall favoured · draw heat (logged results)',heat):''}
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px">
+      <div>${styles?card('Running style that wins here',styles):''}${card('Horse type this track wants',(tp.wants||[]).map(w=>`<div style="font-size:12.5px;margin:3px 0">✔ ${esc(w)}</div>`).join('')||'<span style="color:var(--muted);font-size:12px">—</span>')}</div>
+      <div>${(tp.caution_flags||[]).length?card('Caution flags',tp.caution_flags.map(f=>`<span style="display:inline-block;background:#fef2f2;color:#b91c1c;border:1px solid #fecaca;border-radius:6px;padding:2px 8px;font-size:11.5px;margin:2px 4px 2px 0">⚠ ${esc(f.replace(/_/g,' '))}</span>`).join('')):''}
+        ${card('Notes',(tp.significant_features||[]).map(f=>`<div style="font-size:12px;color:#374151;margin:2px 0">· ${esc(f)}</div>`).join(''))}</div>
+    </div></div>`;
+}
+
+function fit(){
+  const tp=S.key&&TP()[S.key];if(!tp)return `<div style="padding:30px;color:var(--muted);text-align:center">Pick a track above.</div>`;
+  const vks=todayKeys()[S.key]||[];
+  if(!vks.length)return `<div style="background:#fff;border:1px solid var(--border);border-radius:10px;padding:24px;color:var(--muted)">No races at ${esc(tp.name)} today. Tracks tagged <b style="background:#f59e0b;color:#fff;border-radius:4px;padding:0 4px;font-size:10px">TODAY</b> have runners to check.</div>`;
+  let h='';
+  vks.forEach(vk=>{(D.venues[vk].races||[]).forEach((race,ri)=>{
+    const rs=[...(race.runners||[])].sort((a,b)=>b.score-a.score);
+    const withFit=rs.filter(r=>r.track_fit&&r.track_fit.checks&&r.track_fit.checks.length);
+    h+=`<div style="background:#fff;border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:12px">
+      <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;align-items:center"><div><b>${esc(race.time)}</b> · ${esc(race.name||race.race_name||'')} <span style="color:var(--muted);font-size:12px">${esc(race.distance||'')} · ${esc(race.going||'')} · ${rs.length} runners</span></div>
+      <button class="vbtn" style="font-size:11px;padding:3px 10px" onclick="switchTab('races');openRace('${vk.replace(/'/g,"\\'")}',${ri})">Open race →</button></div>
+      ${renderPaceBox(race)}
+      ${withFit.length?withFit.map(r=>`<div style="margin-top:8px"><div style="font-weight:700;font-size:13px">${esc(r.name)} <span style="color:var(--muted);font-weight:400;font-size:11.5px">· score ${r.score}${r.draw?' · draw '+r.draw:''}</span></div>${renderTrackFitBox(r,race)}</div>`).join(''):'<div style="font-size:12px;color:var(--muted);margin-top:6px">No runner in this race has enough logged history for a track-fit read.</div>'}
+    </div>`;
+  });});
+  return h;
+}
+
+function stats(){
+  const tp=S.key&&TP()[S.key];
+  if(!tp){window.renderTracksTab&&window.renderTracksTab();return;}
+  // find the venue name this track is logged under (most races)
+  const counts={};hist().forEach(r=>{if(r.venue&&keyOf(r.venue)===S.key)counts[r.venue]=(counts[r.venue]||0)+1;});
+  const v=Object.entries(counts).sort((a,b)=>b[1]-a[1])[0];
+  if(v&&window._taDetail)window._taDetail(v[0]);
+  else{const el=document.getElementById('taStatsView');if(el)el.innerHTML=`<div style="background:#fff;border:1px solid var(--border);border-radius:10px;padding:24px;color:var(--muted)">No logged results at ${esc(tp.name)} yet.</div>`;}
+}
+
+function render(){
+  const H=document.getElementById('texHeader');if(!H)return;
+  try{
+    if(!S.key){const tk=Object.keys(todayKeys());S.key=tk.find(k=>S.cty==='all'||TP()[k].country===S.cty)||Object.keys(TP()).find(k=>S.cty==='all'||TP()[k].country===S.cty)||null;}
+    H.innerHTML=header();
+    const P=document.getElementById('texProf'),F=document.getElementById('texFit'),T=document.getElementById('taStatsView');
+    P.style.display=S.sub==='prof'?'':'none';F.style.display=S.sub==='fit'?'':'none';T.style.display=S.sub==='stats'?'':'none';
+    if(S.sub==='prof')P.innerHTML=profile();
+    else if(S.sub==='fit')F.innerHTML=fit();
+    else stats();
+  }catch(e){H.innerHTML=`<div style="padding:20px;color:#dc2626;background:#fef2f2;border:1px solid #fecaca;border-radius:8px"><b>Track Explorer error:</b> ${esc(e.message)}</div>`;console.error('TrackExplorer',e);}
+}
+window._texSet=function(o){
+  if(o.cty){S.cty=o.cty;if(S.key&&TP()[S.key]&&o.cty!=='all'&&TP()[S.key].country!==o.cty)S.key=null;}
+  if(o.sub)S.sub=o.sub;
+  if(o.key!==undefined&&o.key){S.key=o.key;S.band=null;}
+  if(o.band)S.band=o.band;
+  render();
+};
+window.renderTrackExplorer=render;
+window._texDrawStats=drawStats;window._texLayoutSVG=layoutSVG;window._texElevSVG=elevSVG;
+window.openTrackExplorer=function(course,sub){
+  const k=getTrackKey(course);
+  if(k){S.key=k;S.band=null;if(S.cty!=='all'&&TP()[k].country!==S.cty)S.cty='all';}
+  S.sub=sub||'prof';
+  switchTab('tracks');
+  window.scrollTo(0,0);
+};
+})();
+
+
+/* ==================== ☘ EMERALD TAB (Irish engine dashboard) ====================
+   Reads window._emeraldHistory (Irish races only — never mixed into Prixm analytics).
+   Emerald is TRACK-ONLY: no real-money segments until each profile has EM_REAL_MIN races.
+   Calibration reuses _calibrateProfile() on Emerald's own 16 factors; versions are separate from Prixm. */
+(function(){
+'use strict';
+const EM_REAL_MIN=300, EM_RECAL_STEP=300;
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let _proposals=null;
+const emRaces=()=>((window._emeraldHistory&&window._emeraldHistory.races)||[]).filter(r=>(r.results||[]).some(x=>x.score_breakdown&&'stable_power' in x.score_breakdown));
+const pl=fs=>typeof getPlaceLimit==='function'?getPlaceLimit(fs):(fs<=7?2:fs<=15?3:4);
+
+function topBy(race,key){const rs=(race.results||[]).filter(x=>!x.non_runner&&x.finish_pos&&x[key]!=null);if(rs.length<2)return null;return rs.reduce((a,b)=>(b[key]>a[key]?b:a));}
+function perf(races,key){
+  let n=0,w=0,p=0,stake=0,ret=0;
+  races.forEach(r=>{const t=topBy(r,key);if(!t)return;n++;const fs=r.field_size||(r.results||[]).length;
+    if(t.finish_pos===1){w++;if(t.sp){stake++;ret+=t.sp;}}else if(t.sp!=null||t.finish_pos){stake++;}
+    if(t.finish_pos<=pl(fs))p++;});
+  return {n,sr:n?w/n*100:0,pr:n?p/n*100:0,roi:stake?(ret-stake)/stake*100:null};
+}
+function tile(l,v,sub,col){return `<div style="background:#fff;border:1px solid var(--border);border-radius:10px;padding:12px 14px"><div style="font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)">${l}</div><div style="font-size:22px;font-weight:800;${col?'color:'+col:''}">${v}</div><div style="font-size:11px;color:var(--muted)">${sub||''}</div></div>`;}
+const card=(t,b,extra)=>`<div style="background:#fff;border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:12px${extra||''}"><div style="font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700;margin-bottom:8px">${t}</div>${b}</div>`;
+const tbl=(head,rows)=>`<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:12.5px"><tr>${head.map(h=>`<th style="text-align:left;font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);padding:6px 8px;border-bottom:1px solid var(--border);white-space:nowrap">${h}</th>`).join('')}</tr>${rows.map(r=>`<tr>${r.map(c=>`<td style="padding:6px 8px;border-bottom:1px solid var(--border);white-space:nowrap">${c}</td>`).join('')}</tr>`).join('')}</table></div>`;
+
+function prixmVersionHistory(){
+  const cal=((window._resultsHistory&&window._resultsHistory.calibrations)||[]).filter(c=>c.applied);
+  const byDate={};cal.forEach(c=>{(byDate[c.date||'unknown']=byDate[c.date||'unknown']||[]).push(c);});
+  const out=[{v:1.0,date:'base',profiles:[]}];let v=1.0,cycle=new Set();
+  Object.keys(byDate).sort().forEach(d=>{byDate[d].forEach(c=>cycle.add(c.profile));
+    if(['aw','turf_flat','nh'].every(p=>cycle.has(p))){v=Math.floor(v)+1.0;cycle=new Set();}else v=parseFloat((v+0.1).toFixed(1));
+    out.push({v,date:d,profiles:byDate[d].map(c=>c.profile),races:byDate[d].reduce((a,c)=>a+(c.races_used||0),0),cal:byDate[d]});});
+  return out;
+}
+function weightDiff(cal){
+  return cal.map(c=>{const o=c.old_weights||{},n=c.new_weights||{};const ch=Object.keys(n).filter(f=>o[f]!==undefined&&o[f]!==n[f]).map(f=>`${f} ${o[f]}→${n[f]}`);return `<b>${c.profile}</b>: ${ch.join(' · ')||'no change'}`;}).join('<br>');
+}
+
+let _target='emeraldContent';
+function render(target){
+  if(target)_target=target;
+  const el=document.getElementById(_target)||document.getElementById('emeraldContent');if(!el)return;
+  try{
+    const races=emRaces();
+    const byProf={ire_flat:races.filter(r=>r.profile==='ire_flat'),ire_nh:races.filter(r=>r.profile==='ire_nh')};
+    const E=perf(races,'predicted_score'),P=perf(races,'prixm_score');
+    const allIre=((window._emeraldHistory&&window._emeraldHistory.races)||[]).length;
+    const trackOnly=Object.values(byProf).some(a=>a.length<EM_REAL_MIN);
+    let h=`<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px"><div style="font-size:18px;font-weight:800;color:var(--em)">☘ ${emeraldLabel()}</div><div style="font-size:12px;color:var(--muted)">Irish racing engine · ROI + Northern Ireland · own results, calibration and versions</div></div>`;
+    h+=`<div style="background:var(--em-soft);border:1px solid var(--em-line);color:#065f46;border-radius:10px;padding:10px 14px;margin-bottom:12px;font-size:13px">☘ <b>${trackOnly?'Track only.':'Profiles ready.'}</b> Emerald picks are tracked, never counted in Prixm P&amp;L or Golden. Real-money segments unlock at ${EM_REAL_MIN} Emerald-scored races per profile (ire_flat ${byProf.ire_flat.length}/${EM_REAL_MIN} · ire_nh ${byProf.ire_nh.length}/${EM_REAL_MIN}).${allIre>races.length?` ${allIre-races.length} older Irish races were logged before Emerald scoring and are excluded from these stats.`:''}</div>`;
+    h+=`<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px;margin-bottom:12px">
+      ${tile('Emerald races',races.length.toLocaleString(),`ire_flat ${byProf.ire_flat.length} · ire_nh ${byProf.ire_nh.length}`)}
+      ${tile('Top-pick win SR',E.n?E.sr.toFixed(1)+'%':'—',P.n?`Prixm on the same races ${P.sr.toFixed(1)}%`:'',E.sr>=P.sr?'#15803d':'#dc2626')}
+      ${tile('Top-pick place %',E.n?E.pr.toFixed(1)+'%':'—',P.n?`Prixm ${P.pr.toFixed(1)}%`:'')}
+      ${tile('ROI · 1u win on top pick',E.roi==null?'—':(E.roi>=0?'+':'')+E.roi.toFixed(1)+'%',P.roi==null?'at SP':`Prixm ${(P.roi>=0?'+':'')+P.roi.toFixed(1)}% · at SP`,E.roi!=null&&E.roi>=0?'#15803d':'#dc2626')}
+    </div>`;
+    // calibration
+    const calN=((window._emeraldHistory&&window._emeraldHistory.calibrations)||[]).filter(c=>c.applied);
+    const lastN=p=>{const c=calN.filter(x=>x.profile===p).sort((a,b)=>(b.date||'').localeCompare(a.date||''))[0];return c?(c.races_used||0):0;};
+    const calRows=['ire_flat','ire_nh'].map(p=>{const n=byProf[p].length,need=lastN(p)?lastN(p)+EM_RECAL_STEP:50;const pct=Math.min(100,n/need*100);
+      return `<div style="font-size:13px;margin-top:8px"><b>${p}</b> <span style="color:var(--muted)">· ${n} races${lastN(p)?` · last calibrated on ${lastN(p)}`:''}</span></div><div style="height:9px;background:var(--card2);border-radius:5px;overflow:hidden;margin:5px 0 2px"><i style="display:block;height:100%;width:${pct}%;background:var(--em2)"></i></div><div style="font-size:11px;color:var(--muted)">${n>=need?'Ready to calibrate':`${need-n} more races before ${lastN(p)?'the next':'the first'} calibration`}</div>`;}).join('');
+    const ready=['ire_flat','ire_nh'].some(p=>byProf[p].length>=(lastN(p)?lastN(p)+EM_RECAL_STEP:50));
+    let prop='';
+    if(_proposals&&_proposals.length){
+      prop=`<div style="margin-top:10px">${tbl(['Profile','Races','Top-pick placed: now → proposed','Weight changes'],_proposals.map(r=>[r.profile,r.races,`${r.oldPct}% → <b style="color:${r.newPct>=r.oldPct?'#15803d':'#dc2626'}">${r.newPct}%</b>`,Object.keys(r.newW).filter(f=>r.oldW[f]!==r.newW[f]).map(f=>`${f} ${r.oldW[f]}→${r.newW[f]}`).join(' · ')||'no change']))}
+        <div style="display:flex;gap:8px;margin-top:8px" class="vo-hide"><button class="vbtn" style="background:var(--em);color:#fff;border-color:var(--em)" onclick="window._emApplyCal()">✓ Apply → ${emeraldLabel(nextVer(_proposals))}</button><button class="vbtn" onclick="window._emCancelCal()">Cancel</button></div></div>`;
+    }
+    h+=`<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:12px">`;
+    h+=card('Calibration · Emerald profiles',calRows+(ready&&!VIEW_ONLY&&!_proposals?`<button class="vbtn vo-hide" style="margin-top:10px;background:var(--em);color:#fff;border-color:var(--em)" onclick="window._emRunCal()">☘ Run Emerald calibration</button>`:'')+prop);
+    const pv=prixmVersionHistory(),ev=emeraldVersionHistory();
+    h+=card('Engine versions',tbl(['Engine','Version','Date','Change'],[
+      ...pv.map(x=>[`<b>Prixm</b>`,x.v.toFixed(1),x.date,x.cal?`<span style="font-size:11px">${weightDiff(x.cal)}</span>`:'<span style="color:var(--muted)">base weights</span>']),
+      ...ev.map(x=>[`<b style="color:var(--em)">☘ Emerald</b>`,x.v.toFixed(1),x.date,x.cal?`<span style="font-size:11px">${weightDiff(x.cal)}</span>`:'<span style="color:var(--muted)">base weights</span>'])])+`<div style="font-size:11px;color:var(--muted);margin-top:6px">Every version keeps its old and new weights in calibrations.json.</div>`);
+    h+=`</div>`;
+    // per track
+    const byT={};races.forEach(r=>{const k=getTrackKey(r.venue)||normalizeTrackKey(r.venue);(byT[k]=byT[k]||[]).push(r);});
+    const trows=Object.entries(byT).map(([k,rs])=>{const e=perf(rs,'predicted_score'),p=perf(rs,'prixm_score');const tp=(window._trackProfiles||{})[k];
+      return {k,name:tp?tp.name:k,dir:tp?tp.direction:'',n:e.n,sr:e.sr,pr:e.pr,d:e.sr-p.sr};}).filter(x=>x.n>=5).sort((a,b)=>b.n-a.n);
+    h+=card('Per track · Emerald top pick',trows.length?tbl(['Track','Dir','Races','Win %','Place %','vs Prixm (win pts)',''],trows.map(t=>[`<b>${esc(t.name)}</b>`,t.dir,t.n,t.sr.toFixed(0)+'%',t.pr.toFixed(0)+'%',`<span style="color:${t.d>=0?'#15803d':'#dc2626'};font-weight:700">${t.d>=0?'+':''}${t.d.toFixed(1)}</span>`,`<button class="vbtn" style="font-size:10.5px;padding:2px 8px" onclick="openTrackExplorer('${esc(t.name).replace(/'/g,"\\'")}','prof')">🗺</button>`])):'<div style="color:var(--muted);font-size:12px">Needs at least 5 Emerald-scored races at a track.</div>');
+    // factor strength
+    const cal=['ire_flat','ire_nh'].map(p=>_calibrateProfile(window._emeraldHistory,p)).filter(Boolean);
+    if(cal.length){
+      const agg={};cal.forEach(c=>Object.entries(c.corrs).forEach(([f,v])=>{(agg[f]=agg[f]||[]).push(v);}));
+      const fs=Object.entries(agg).map(([f,a])=>[f,a.reduce((x,y)=>x+y,0)/a.length]).sort((a,b)=>b[1]-a[1]);
+      const mx=Math.max(...fs.map(x=>Math.abs(x[1])),0.01);
+      h+=card('Factor strength · Spearman ρ vs finish (Emerald races)',fs.map(([f,v])=>`<div style="display:grid;grid-template-columns:130px 1fr 52px;gap:8px;align-items:center;font-size:12px;margin:3px 0"><span class="${EM_FM[f]&&EM_FM[f].ir?'em-ir':''}">${(EM_FM[f]&&EM_FM[f].l)||f}</span><div style="height:8px;background:var(--card2);border-radius:4px;overflow:hidden"><div style="height:100%;width:${Math.abs(v)/mx*100}%;background:${v>=0?'var(--em2)':'#ef4444'}"></div></div><span style="text-align:right;color:var(--muted)">${v.toFixed(3)}</span></div>`).join(''));
+    }
+    h+=renderXaValidationCard('emerald');
+    el.innerHTML=h;
+  }catch(e){el.innerHTML=`<div style="padding:20px;color:#dc2626;background:#fef2f2;border:1px solid #fecaca;border-radius:8px"><b>Emerald tab error:</b> ${esc(e.message)}</div>`;console.error('EmeraldTab',e);}
+}
+function nextVer(props){
+  const cal=((window._emeraldHistory&&window._emeraldHistory.calibrations)||[]).filter(c=>c.applied);
+  const cyc=new Set();let v=getEmeraldVersion();
+  // profiles already done since the last major bump
+  const byDate={};cal.forEach(c=>{(byDate[c.date]=byDate[c.date]||[]).push(c.profile);});
+  let cycle=new Set();Object.keys(byDate).sort().forEach(d=>{byDate[d].forEach(p=>cycle.add(p));if(EMERALD_PROFILES.every(p=>cycle.has(p)))cycle=new Set();});
+  props.forEach(p=>cycle.add(p.profile));void cyc;
+  return EMERALD_PROFILES.every(p=>cycle.has(p))?Math.floor(v)+1.0:parseFloat((v+0.1).toFixed(1));
+}
+window._emRunCal=function(){
+  const byProf=p=>emRaces().filter(r=>r.profile===p).length;
+  const cal=((window._emeraldHistory&&window._emeraldHistory.calibrations)||[]).filter(c=>c.applied);
+  const last=p=>{const c=cal.filter(x=>x.profile===p).sort((a,b)=>(b.date||'').localeCompare(a.date||''))[0];return c?(c.races_used||0):0;};
+  _proposals=['ire_flat','ire_nh'].filter(p=>byProf(p)>=(last(p)?last(p)+EM_RECAL_STEP:50)).map(p=>_calibrateProfile(window._emeraldHistory,p)).filter(Boolean);
+  if(!_proposals.length)_proposals=null;
+  render();
+};
+window._emCancelCal=function(){_proposals=null;render();};
+window._emApplyCal=function(){
+  if(!_proposals)return;
+  const eh=window._emeraldHistory;eh.calibrations=eh.calibrations||[];eh.weight_profiles=eh.weight_profiles||{};
+  const today=new Date().toISOString().slice(0,10);
+  _proposals.forEach(res=>{
+    eh.calibrations.push({date:today,profile:res.profile,engine:'emerald',races_used:res.races,old_weights:eh.weight_profiles[res.profile]||res.oldW,new_weights:res.newW,applied:true,correlations:res.corrs||{}});
+    eh.weight_profiles[res.profile]=res.newW;
+    try{localStorage.setItem('calibWeights_'+res.profile,JSON.stringify(res.newW));}catch(e){}
+    try{rescoreTodayWithWeights(res.newW,res.profile);}catch(e){}
+  });
+  const all=[...((window._resultsHistory&&window._resultsHistory.calibrations)||[]),...eh.calibrations];
+  try{localStorage.setItem('calibHistory',JSON.stringify(all));}catch(e){}
+  try{fetch('http://localhost:7432/api/calibrations',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(all)});}catch(e){}
+  _proposals=null;render();try{renderRaceCards();renderD1Sidebar();}catch(e){}
+};
+window.renderEmeraldTab=render;
+})();
+
+/* 🧭 Track-fit validation table — shared by the Emerald tab and the Performance tab */
+function renderXaValidationCard(engine){
+  const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const v=window._xaValidation;
+  const box=b=>`<div style="background:#fff;border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:12px"><div style="font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700;margin-bottom:8px">🧭 Does the Horse × Track flag work?</div>${b}</div>`;
+  if(!v||!v.verdicts)return box('<div style="font-size:12px;color:var(--muted)">Validation runs automatically after Fetch Results (scripts/validate_track_fit.py).</div>');
+  const lab={s:'<span class="fit-badge fit-s">✅ SUITS</span>',q:'<span class="fit-badge fit-q">⚠ QUESTION</span>',u:'<span class="fit-badge fit-u">❌ UNSUITED</span>',none:'<span style="color:var(--muted)">no badge</span>'};
+  const rows=['s','q','u','none'].map(k=>{const x=v.verdicts[engine?engine+':'+k:k]||(engine?null:v.verdicts[k]);if(!x||!x.n)return null;
+    return `<tr><td style="padding:5px 8px;border-bottom:1px solid var(--border)">${lab[k]}</td><td style="padding:5px 8px;border-bottom:1px solid var(--border)">${x.n.toLocaleString()}</td><td style="padding:5px 8px;border-bottom:1px solid var(--border)">${(x.placed*100).toFixed(1)}%</td><td style="padding:5px 8px;border-bottom:1px solid var(--border)">${(x.expected*100).toFixed(1)}%</td><td style="padding:5px 8px;border-bottom:1px solid var(--border);font-weight:700;color:${x.lift>=0?'#15803d':'#dc2626'}">${x.lift>=0?'+':''}${(x.lift*100).toFixed(0)}%</td></tr>`;}).filter(Boolean).join('');
+  const checks=Object.entries(v.checks||{}).sort((a,b)=>b[1].n-a[1].n).map(([k,x])=>{
+    const good=/good$/.test(k),ok=x.n>=v.min_n&&(good?x.lift>=v.min_lift:x.lift<=-v.min_lift);const st=x.n<v.min_n?'unproven':ok?'counted':'dropped';
+    return `<tr><td style="padding:4px 8px;border-bottom:1px solid var(--border);font-size:11.5px">${k.replace(/_/g,' ')}</td><td style="padding:4px 8px;border-bottom:1px solid var(--border)">${x.n}</td><td style="padding:4px 8px;border-bottom:1px solid var(--border);color:${x.lift>=0?'#15803d':'#dc2626'}">${x.lift>=0?'+':''}${(x.lift*100).toFixed(0)}%</td><td style="padding:4px 8px;border-bottom:1px solid var(--border)"><span style="font-size:10.5px;border-radius:5px;padding:1px 6px;background:${st==='counted'?'#dcfce7':st==='dropped'?'#fee2e2':'var(--card2)'};color:${st==='counted'?'#166534':st==='dropped'?'#991b1b':'var(--muted)'}">${st}</span></td></tr>`;}).join('');
+  const th=h=>`<th style="text-align:left;font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);padding:5px 8px;border-bottom:1px solid var(--border)">${h}</th>`;
+  return box(`<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:12.5px"><tr>${th('Verdict')}${th('Runners')}${th('Placed')}${th('Expected for score rank')}${th('Lift')}</tr>${rows||'<tr><td colspan="5" style="padding:6px 8px;color:var(--muted)">Not enough '+(engine==='emerald'?'Emerald ':'')+'runners yet.</td></tr>'}</table></div>
+    <details style="margin-top:8px"><summary style="cursor:pointer;font-size:12px;font-weight:700">Every check type (${Object.keys(v.checks||{}).length})</summary><div style="overflow-x:auto;margin-top:6px"><table style="width:100%;border-collapse:collapse;font-size:12px"><tr>${th('Check')}${th('n')}${th('Lift')}${th('Status')}</tr>${checks}</table></div></details>
+    <div style="font-size:11px;color:var(--muted);margin-top:6px">Lift = how much more/less often flagged runners placed than expected for their score rank, on logged results since ${v.since}. Only "counted" checks (n ≥ ${v.min_n}, lift in the right direction ≥ ${Math.round(v.min_lift*100)}%) build the ✅/⚠/❌ badge; "dropped" checks are hidden. Updated ${esc(v.generated||'')}.</div>`);
+}
+
+
+/* ==================== 💷 LEDGER — money tracker + staking advisor ====================
+   PRIVATE: bets live in race_data.db (bets table, /api/bets) or this browser's localStorage when the
+   DB server is off. Never written to results_history.json, never pushed to GitHub; the whole feature
+   is hidden in VIEW_ONLY (GitHub Pages).
+   Units: every bet stores stake in units AND the £ size of a unit at the time → changing the unit
+   never rewrites history. Advisor talks to Prixm + ☘ Emerald (picks, segments, Verification,
+   🧭 track fit, tight-race check) and never pushes: 0u with the reason whenever there's no value. */
+(function(){
+'use strict';
+const LS_BETS='ledgerBets',LS_SET='ledgerSettings';
+const DEF={unit:10,bank:0,mode:'engine',pct:5,max:5}; // start bank £0 → Kelly sizes from a notional 100u bank + running P&L
+const TYPES=['WIN','EW','PLACE','TOP N','LENGTH','ACCA','OTHER'];
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const LG={bets:[],db:false,loaded:false};
+const S=()=>{try{return Object.assign({},DEF,JSON.parse(localStorage.getItem(LS_SET)||'{}'));}catch(e){return {...DEF};}};
+const saveS=o=>{try{localStorage.setItem(LS_SET,JSON.stringify(o));}catch(e){}};
+const today=()=>(window.D&&D.date)||new Date().toISOString().slice(0,10);
+const gbp=x=>(x<0?'−£':'£')+Math.abs(x).toFixed(2);
+const uf=x=>(x>0?'+':x<0?'−':'')+Math.abs(x).toFixed(2)+'u';
+const norm=s=>String(s||'').toLowerCase().replace(/\([^)]*\)/g,' ').replace(/[^a-z]/g,'');
+function parsePrice(s){s=String(s||'').trim().toUpperCase();if(!s)return null;if(/^EVS?|EVENS$/.test(s))return 2;if(s.includes('/')){const[a,b]=s.split('/').map(Number);return b?Math.round((1+a/b)*100)/100:null;}const v=parseFloat(s);return v>1?v:null;}
+function placeTerms(fs,hcp){if(!fs||fs<=4)return{places:1,frac:0,ew:false};if(fs<=7)return{places:2,frac:0.25,ew:true};if(fs<=15)return{places:3,frac:0.2,ew:true};return hcp?{places:4,frac:0.25,ew:true}:{places:3,frac:0.2,ew:true};}
+
+// ── P&L (mirror of scripts/db_server.py bet_pnl) ──
+function betPnl(b,pos,nr){
+  const t=(b.bet_type||'').toUpperCase(),u=+b.stake_u||0,pr=+b.price||0,pl=+b.places||0;
+  if(nr)return['V',0];
+  if(t==='WIN')return pos===1?['W',u*(pr-1)]:['L',-u];
+  if(t==='EW'){const f=+b.ew_fraction||0.2,h=u/2,win=pos===1?h*(pr-1):-h,plc=(pos&&pl&&pos<=pl)?h*(pr-1)*f:-h;return[pos===1?'W':(pos&&pl&&pos<=pl)?'P':'L',win+plc];}
+  if(t==='PLACE'||t==='TOP N'){if(!pl)return null;return (pos&&pos<=pl)?['W',u*(pr-1)]:['L',-u];}
+  return null;
+}
+const pnlOf=b=>b.result==='O'?0:(b.pnl_u!=null?+b.pnl_u:0);
+function settleLocal(){ // DB-less fallback: settle against logged results in memory
+  const H=((window._allHistory||window._resultsHistory||{}).races)||[];let n=0;
+  LG.bets.filter(b=>b.result==='O').forEach(b=>{
+    const race=H.find(r=>r.date===b.date&&r.time===b.time&&(norm(r.venue)===norm(b.venue)||norm(r.venue).startsWith(norm(b.venue))||norm(b.venue).startsWith(norm(r.venue))));if(!race)return;
+    const run=(race.results||[]).find(x=>norm(x.name)===norm(b.horse));if(!run)return;
+    const o=betPnl(b,run.finish_pos,run.non_runner);if(!o)return;
+    Object.assign(b,{result:o[0],pnl_u:Math.round(o[1]*10000)/10000,finish_pos:run.finish_pos,sp:run.sp,settled_at:new Date().toISOString().slice(0,19)});n++;
+  });
+  if(n&&!LG.db)persistLocal();return n;
+}
+function persistLocal(){try{localStorage.setItem(LS_BETS,JSON.stringify(LG.bets));}catch(e){}}
+async function load(){
+  if(VIEW_ONLY)return;
+  try{const r=await fetch('http://localhost:7432/api/bets',{signal:AbortSignal.timeout(2500)});if(r.ok){LG.bets=await r.json();LG.db=true;}}catch(e){}
+  if(!LG.db){try{LG.bets=JSON.parse(localStorage.getItem(LS_BETS)||'[]');}catch(e){LG.bets=[];}}
+  settleLocal();LG.loaded=true;refreshChrome();
+}
+async function saveBet(b,quiet){
+  if(LG.db){
+    try{const r=await fetch('http://localhost:7432/api/bets',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)});const j=await r.json();if(j.ok){if(!b.id)b.id=j.ids[0];}}catch(e){LG.db=false;}
+  }
+  if(!b.id)b.id='L'+Date.now()+Math.random().toString(36).slice(2,6);
+  const i=LG.bets.findIndex(x=>x.id===b.id);if(i>=0)LG.bets[i]=b;else LG.bets.push(b);
+  if(!LG.db)persistLocal();
+  if(!quiet){settleLocal();refreshChrome();}
+}
+async function deleteBet(id){
+  if(LG.db&&typeof id==='number'){try{await fetch('http://localhost:7432/api/bets/'+id,{method:'DELETE'});}catch(e){}}
+  LG.bets=LG.bets.filter(b=>b.id!==id);if(!LG.db)persistLocal();refreshChrome();
+}
+
+// ── money maths ──
+const settled=()=>LG.bets.filter(b=>b.result&&b.result!=='O');
+const plU=()=>settled().reduce((a,b)=>a+pnlOf(b),0);
+const plGBP=()=>settled().reduce((a,b)=>a+pnlOf(b)*(+b.unit_gbp||10),0);
+const bankNow=()=>S().bank+plGBP();
+const todayU=()=>LG.bets.filter(b=>b.date===today()).reduce((a,b)=>a+(+b.stake_u||0),0);
+function brakeOn(){const days={};settled().forEach(b=>{days[b.date]=(days[b.date]||0)+pnlOf(b);});const last=Object.keys(days).sort().slice(-3);return last.length===3&&last.every(d=>days[d]<0);}
+
+// ── segment strike rates, live from logged results (Golden = real money; Silver/Bronze paper) ──
+function segSR(seg){
+  const H=((window._resultsHistory||{}).races)||[];if(window._lgSegCache&&window._lgSegCache.n===H.length&&window._lgSegCache[seg])return window._lgSegCache[seg];
+  let n=0,w=0;H.forEach(r=>{if(r.segment!==seg)return;const res=(r.results||[]).filter(x=>!x.non_runner&&x.finish_pos&&x.predicted_score!=null);if(!res.length)return;const t=res.reduce((a,b)=>b.predicted_score>a.predicted_score?b:a);if(!(t.sp>2))return;n++;if(t.finish_pos===1)w++;});
+  window._lgSegCache=window._lgSegCache&&window._lgSegCache.n===H.length?window._lgSegCache:{n:H.length};
+  return (window._lgSegCache[seg]={sr:n?w/n:0,n});
+}
+
+// ── context for a runner: engine, pick category, segment, verification, fit, tight ──
+function todaysPicks(em){
+  const k=(em?'e':'p')+(D&&D.date)+'|'+Object.keys((D&&D.venues)||{}).length;
+  const c=window._lgPickCache||(window._lgPickCache={});
+  if(!c[k]||Date.now()-c[k].t>4000){let ps=[];try{ps=getPrixmPicks(getTop10Picks(D,em?'emerald':undefined),em?'emerald':undefined);}catch(e){}c[k]={t:Date.now(),ps};}
+  return c[k].ps;
+}
+function ctxFor(vk,ri,name){
+  const venue=D&&D.venues&&D.venues[vk];const race=venue&&venue.races[ri];if(!race)return null;
+  const r=race.runners.find(x=>x.name===name);if(!r)return null;
+  const em=isIreland(race.course||venue.course);const eng=em?'emerald':'prixm';
+  const pick=todaysPicks(em).find(p=>p.horse===name&&p.time===race.time)||null;
+  let seg=null;if(!em){try{seg=getGoldenFlags(race)?'golden':getSilverFlags(race)?'silver':getBronzeFlags(race)?'bronze':null;}catch(e){}
+    const sorted=[...race.runners].sort((a,b)=>b.score-a.score);if(seg&&sorted[0].name!==name)seg=null;}
+  let verif=null;if(pick&&pick.edge>=60){try{const v=runVerificationPass(pick,race,r);verif=v&&v.verdict;}catch(e){}}
+  let tight=false;try{tight=rpTightCheck(race,race.runners).tight;}catch(e){}
+  const fs=race.field_size||race.runners.length,hcp=race.handicap||/handicap/i.test(race.race_name||race.name||'');
+  const srt=[...race.runners].sort((a,b)=>b.score-a.score),isTop=srt[0]&&srt[0].name===name;
+  const gap=srt.length>1?srt[0].score-srt[1].score:0;
+  let vol=false;try{vol=rpComputeVolatility(race,rpBuildPredictedOrder(race.runners,race).order).level==='VOLATILE';}catch(e){}
+  return {vk,ri,race,r,em,eng,pick,cat:pick&&pick.category,seg,verif,fit:r.track_fit&&r.track_fit.verdict,tight,fs,hcp,isTop,gap,vol,
+    model:calcCompetitiveProb(r.score||0,race.runners.map(x=>x.score||0),1)/100,price:r.price?parseFloat(r.price):null};
+}
+const floorHalf=x=>Math.floor(x*2)/2;
+// ── Stake sizing: real win chance × price → ¼ Kelly on the staking bank ──
+// Win chance = how this exact kind of selection has done in logged results (engine × confidence × gap ×
+// handicap), pulled toward the average when the sample is small, then adjusted for ⭐ Golden, Verification,
+// 🧭 track fit (measured lifts) and volatile races. Stake = ¼ Kelly × staking bank (⅙ after 3 losing days).
+// Start bank £0 → staking bank = notional 100u + running P&L. Picks only; no bet = blank.
+const LG_MIN_EV=0.03,LG_K=30;
+function effBank(){const s=S();return (s.bank>0?s.bank:100*s.unit)+plGBP();}
+function lgConf(sc){const p=sc/118*100;return p>=64?'TOP':p>=55?'STRONG':p>=47?'SOLID':'MOD';}
+const lgGb=g=>g>=18?'18+':g>=10?'10-18':g>=5?'5-10':'<5';
+function lgBuckets(){
+  const A=((window._allHistory||window._resultsHistory||{}).races)||[];
+  if(window._lgBk&&window._lgBk.n===A.length)return window._lgBk;
+  const m={n:A.length,b:{},all:{uk:[0,0],ire:[0,0]}};
+  A.forEach(r=>{const res=(r.results||[]).filter(x=>!x.non_runner&&x.finish_pos&&x.predicted_score!=null);if(res.length<3)return;
+    const sc=res.map(x=>x.predicted_score).sort((x,y)=>y-x),t=res.reduce((x,y)=>y.predicted_score>x.predicted_score?y:x);
+    const e=isEmeraldRace(r)?'ire':'uk',k=`${e}|${lgConf(sc[0])}|${lgGb(sc[0]-sc[1])}|${r.handicap?'H':'NH'}`;
+    const o=(m.b[k]=m.b[k]||[0,0]);o[0]++;o[1]+=t.finish_pos===1?1:0;m.all[e][0]++;m.all[e][1]+=t.finish_pos===1?1:0;});
+  window._lgBk=m;return m;
+}
+function winChance(c){
+  const rows=[];let p;
+  if(c.isTop){
+    const m=lgBuckets(),conf=lgConf(c.r.score||0),tail=`${conf}|${lgGb(c.gap)}|${c.hcp?'H':'NH'}`;
+    const ukAll=m.all.uk[0]?m.all.uk[1]/m.all.uk[0]:0.25,uk=m.b['uk|'+tail]||[0,0];
+    const ukP=(uk[1]+ukAll*LG_K)/(uk[0]+LG_K);
+    const lbl=`${conf==='TOP'?'TOP PICK':conf} · gap ${lgGb(c.gap)} · ${c.hcp?'handicap':'non-handicap'}`;
+    if(c.em){const ir=m.b['ire|'+tail]||[0,0];p=(ir[1]+ukP*LG_K)/(ir[0]+LG_K);rows.push([`${lbl}: Irish ${ir[0]} races (${ir[0]?Math.round(ir[1]/ir[0]*100):0}% won), anchored on UK ${(ukP*100).toFixed(0)}%`,p]);}
+    else{p=ukP;rows.push([`${lbl}: ${uk[0]} logged races won ${uk[0]?(uk[1]/uk[0]*100).toFixed(1):'—'}%${uk[0]<200?', pulled toward the average':''}`,p]);}
+  }else{p=c.model*0.92;rows.push([`Not the top-rated runner: engine win chance ${(c.model*100).toFixed(0)}% × 0.92`,p]);}
+  if(c.seg==='golden'&&c.isTop){const g=segSR('golden');if(g.n>=20){p=(g.sr*g.n+p*20)/(g.n+20);rows.push([`⭐ Golden: blended with live Golden ${(g.sr*100).toFixed(0)}% (n=${g.n})`,p]);}}
+  if(c.verif==='CONFIRMED'){p*=1.05;rows.push(['Verification ✅ CONFIRMED ×1.05',p]);}
+  else if(c.verif==='CONDITIONAL'){p*=0.95;rows.push(['Verification ⚠ CONDITIONAL ×0.95',p]);}
+  const V=(window._xaValidation&&window._xaValidation.verdicts)||{};
+  if(c.fit==='s'){const f=1+Math.max(0,(V.s&&V.s.lift)||0.11);p*=f;rows.push([`🧭 ✅ suits the track ×${f.toFixed(2)} (measured)`,p]);}
+  if(c.fit==='u'){const f=1+Math.min(0,(V.u&&V.u.lift)||-0.16);p*=f;rows.push([`🧭 ❌ unsuited ×${f.toFixed(2)} (measured)`,p]);}
+  if(c.vol){p*=0.9;rows.push(['Volatile race ×0.90',p]);}
+  return{p:Math.min(p,0.85),rows};
+}
+function suggest(c,price){
+  price=price||c.price;const set=S();
+  const none=why=>({u:0,kind:'none',why:[why]});
+  if(!c.cat)return none(`Not a ${c.em?'☘ Emerald':'Prixm'} pick`);
+  if(c.tight)return none('Tight race: the engine can\'t separate the top runners');
+  if(c.verif==='FLAGGED')return none('Verification Pass 🚫 FLAGGED');
+  const W=winChance(c),p=W.p,paper=c.em||c.seg==='silver'||c.seg==='bronze';
+  const paperWhy=c.em?'☘ Emerald is track-only: paper stake, not real money yet':c.seg==='silver'?'🥈 Silver is paper-only':c.seg==='bronze'?'🥉 Bronze is paper-only':'';
+  const bank=effBank(),kd=brakeOn()?6:4,maxU=Math.min(set.max,c.seg==='golden'&&c.verif==='CONFIRMED'?5:3);
+  const why=W.rows.map(([t])=>t);why.push(`Win chance ${(p*100).toFixed(1)}% · fair price ${(1/p).toFixed(2)}`);
+  if(kd===6)why.push('Losing-run brake: ⅙ Kelly until a winning day');
+  const ladder=[0.5,1,2,3,5].filter(u=>u<=maxU).map(u=>{const f=kd*u*set.unit/bank;if(f>=p)return null;return{u,min:Math.max(1+(1-p)/(p-f),(1+LG_MIN_EV)/p)};}).filter(Boolean);
+  if(set.mode==='flat'){if(!price)return{u:0,kind:'ladder',p,why,ladder:[{u:1,min:(1+LG_MIN_EV)/p}],paper,paperWhy};
+    return p*price-1>=LG_MIN_EV?{u:1,kind:paper?'paper':'go',p,why:[...why,'Flat staking: 1u'],ladder,paperWhy,f:p*price-1}:none('No value at this price');}
+  if(!price)return{u:0,kind:'ladder',p,why,ladder,paper,paperWhy};
+  const ev=p*price-1,b=price-1,f=(p*b-(1-p))/b;
+  if(ev<LG_MIN_EV||f<=0)return{...none(`No value at ${price.toFixed(2)} (needs ${(ladder[0]?ladder[0].min:(1+LG_MIN_EV)/p).toFixed(2)}+)`),p,ladder};
+  const u=Math.min(maxU,floorHalf(f/kd*bank/set.unit));
+  if(u<0.5)return{...none('Edge too small for 0.5u of the staking bank'),p,ladder};
+  why.push(`At ${price.toFixed(2)}: EV +${(ev*100).toFixed(0)}% · Kelly ${(f*100).toFixed(1)}% of bank → 1/${kd} = ${(f/kd*100).toFixed(1)}% of £${bank.toFixed(0)}`);
+  if(u>=maxU&&maxU<5)why.push(`Capped at ${maxU}u${maxU===3?' (5u needs ⭐ Golden + ✅ CONFIRMED)':''}`);
+  return{u,kind:paper?'paper':'go',p,why,ladder,paperWhy,f,ev};
+}
+// small chip for race cards / runner rows — blank when no bet is advised
+function lgChip(s){
+  if(!s||s.kind==='none')return'';
+  if(s.kind==='ladder'){if(!s.ladder.length)return'';return `<span class="lg-schip${s.paper?' pp':''}" title="${esc(s.why.join(' · '))}">💡 ${s.ladder.slice(0,3).map(l=>`${l.u}u @ ${l.min.toFixed(2)}+`).join(' · ')}${s.paper?' · paper':''}</span>`;}
+  return `<span class="lg-schip${s.kind==='paper'?' pp':''}" title="${esc(s.why.join(' · '))}">💡 ${s.u}u${s.kind==='paper'?' · paper':''}</span>`;
+}
+window.lgChipForRunner=function(vk,ri,name){if(VIEW_ONLY)return'';try{const c=ctxFor(vk,ri,name);return c&&c.cat?lgChip(suggest(c)):'';}catch(e){return'';}};
+window.lgChipForRace=function(vk,ri){if(VIEW_ONLY||!D||!D.venues[vk])return'';try{const race=D.venues[vk].races[ri];const em=isIreland(race.course||D.venues[vk].course);
+  const pk=todaysPicks(em).find(p=>p.venueKey===vk&&p.raceIdx===ri);return pk?window.lgChipForRunner(vk,ri,pk.horse):'';}catch(e){return'';}};
+
+// ── chrome: header chip + FAB ──
+function refreshChrome(){
+  if(VIEW_ONLY)return;
+  const chip=document.getElementById('lgChip');if(chip){chip.textContent=`💷 ${gbp(bankNow())} · ${uf(plU())}`;chip.style.display='';}
+  const fs=document.getElementById('lgFabSub');if(fs)fs.textContent=`today ${todayU().toFixed(1)}u`;
+  const v=document.getElementById('ledgerView');if(v&&v.style.display==='block')render();
+}
+
+// ── quick-log modal ──
+let M=null;
+function allRunners(){const out=[];if(!window.D||!D.venues)return out;Object.entries(D.venues).forEach(([vk,v])=>(v.races||[]).forEach((r,ri)=>(r.runners||[]).forEach(x=>out.push({vk,ri,name:x.name,course:v.course||vk,time:r.time,em:isIreland(v.course||vk)}))));return out;}
+function openModal(vk,ri,name,presetU){
+  if(VIEW_ONLY)return;
+  M={c:(vk!=null&&name)?ctxFor(vk,ri,name):null,type:'WIN',unitMode:'gbp',places:null};
+  let el=document.getElementById('lgModal');if(!el){el=document.createElement('div');el.id='lgModal';document.body.appendChild(el);}
+  el.innerHTML=`<div class="lg-ov" onclick="if(event.target===this)window.lgClose()"><div class="lg-modal" role="dialog" aria-label="Log a bet">
+    <div class="lg-mh"><b>＋ Log a bet</b><button class="lg-x" onclick="window.lgClose()" aria-label="Close">✕</button></div>
+    <div class="lg-mb">
+      <div class="lg-f"><label>Horse (today's runners, both engines)</label><input id="lgHorse" autocomplete="off" placeholder="Start typing…" oninput="window.lgSearch(this.value)"><div id="lgAc" class="lg-ac"></div><div id="lgRace" class="lg-sm"></div></div>
+      <div class="lg-f"><label>Bet type</label><div class="lg-seg" id="lgType">${TYPES.map(t=>`<button data-t="${t}" class="${t==='WIN'?'on':''}" onclick="window.lgType('${t}')">${t}</button>`).join('')}</div><div id="lgPlaces" class="lg-sm"></div></div>
+      <div class="lg-row"><div class="lg-f"><label>Stake</label><div class="lg-stake"><input id="lgStake" type="number" step="0.5" min="0" placeholder="5" oninput="window.lgUpd()"><button data-u="gbp" class="on" onclick="window.lgUnit('gbp')">£</button><button data-u="u" onclick="window.lgUnit('u')">u</button></div><div id="lgConv" class="lg-sm"></div></div>
+        <div class="lg-f"><label>Price (7/4 or 2.75)</label><input id="lgPrice" placeholder="e.g. 7/4" oninput="window.lgUpd()"><div id="lgPriceConv" class="lg-sm"></div></div></div>
+      <div class="lg-row"><div class="lg-f"><label>Bookmaker</label><select id="lgBook">${['Bet365','Betfair Exchange','Paddy Power','William Hill','Sky Bet','Betfred','Other'].map(x=>`<option>${x}</option>`).join('')}</select></div>
+        <div class="lg-f"><label>Note (optional)</label><input id="lgNote" placeholder="e.g. took early price"></div></div>
+      <div id="lgAdv"></div></div>
+    <div class="lg-mf"><span id="lgSum" class="lg-sm"></span><div style="display:flex;gap:6px"><button class="vbtn" id="lgUseSug" style="display:none"></button><button class="vbtn" style="background:#15803d;color:#fff;border-color:#15803d" onclick="window.lgSave()">Save bet</button></div></div>
+  </div></div>`;
+  if(M.c){document.getElementById('lgHorse').value=M.c.r.name;if(M.c.price)document.getElementById('lgPrice').value=M.c.price.toFixed(2);}
+  if(presetU){window.lgUnit('u');document.getElementById('lgStake').value=presetU;}
+  window.lgUpd();setTimeout(()=>{const f=document.getElementById(M.c?'lgStake':'lgHorse');f&&f.focus();},30);
+}
+window.lgClose=()=>{const el=document.getElementById('lgModal');if(el)el.innerHTML='';M=null;};
+window.lgSearch=q=>{
+  const box=document.getElementById('lgAc');q=q.toLowerCase().trim();
+  const m=q?allRunners().filter(r=>r.name.toLowerCase().includes(q)).slice(0,12):[];
+  box.style.display=m.length?'block':'none';
+  box.innerHTML=m.map((r,i)=>`<div onclick="window.lgPick(${i})"><span>${esc(r.name)}</span><span class="lg-sm">${esc(r.course)} ${esc(r.time)} · ${r.em?'☘ Emerald':'Prixm'}</span></div>`).join('');
+  window._lgAc=m;
+};
+window.lgPick=i=>{const r=window._lgAc[i];M.c=ctxFor(r.vk,r.ri,r.name);document.getElementById('lgHorse').value=r.name;document.getElementById('lgAc').style.display='none';if(M.c&&M.c.price)document.getElementById('lgPrice').value=M.c.price.toFixed(2);window.lgUpd();};
+window.lgType=t=>{M.type=t;document.querySelectorAll('#lgType button').forEach(b=>b.classList.toggle('on',b.dataset.t===t));window.lgUpd();};
+window.lgUnit=u=>{const inp=document.getElementById('lgStake');const v=+inp.value,unit=S().unit;if(v&&u!==M.unitMode)inp.value=u==='u'?+(v/unit).toFixed(2):+(v*unit).toFixed(2);M.unitMode=u;document.querySelectorAll('.lg-stake button').forEach(b=>b.classList.toggle('on',b.dataset.u===u));window.lgUpd();};
+const stakeU=()=>{const v=+(document.getElementById('lgStake')||{}).value||0;return M.unitMode==='u'?v:v/S().unit;};
+window.lgUpd=()=>{
+  if(!M)return;const c=M.c,su=stakeU(),pr=parsePrice((document.getElementById('lgPrice')||{}).value),unit=S().unit;
+  const sv=+document.getElementById('lgStake').value||0;
+  document.getElementById('lgRace').innerHTML=c?`${esc(c.race.course)} ${esc(c.race.time)} · <b class="rc-eng ${c.em?'rc-eng-em':'rc-eng-px'}">${c.em?'☘ '+emeraldLabel():engineLabel()}</b>${c.cat?` <b class="fit-badge" style="background:#ede9fe;color:#6d28d9">${c.cat}</b>`:''}${c.seg==='golden'?' <b class="fit-badge" style="background:#fef3c7;color:#92400e">⭐ Golden</b>':''} · ${c.fs} runners${c.fit==='u'?' · <span class="fit-badge fit-u">❌ unsuited</span>':''}`:'';
+  const pt=c?placeTerms(c.fs,c.hcp):null;
+  if(c&&(M.type==='EW'||M.type==='PLACE'))M.places=pt.places;
+  document.getElementById('lgPlaces').innerHTML=M.type==='EW'?(pt&&pt.ew?`Each-way terms: ${pt.frac===0.25?'¼':'⅕'} odds, ${pt.places} places`:'<span style="color:#dc2626">No each-way on 4 runners or fewer</span>'):
+    M.type==='TOP N'?`Pays if the horse finishes in the top <input id="lgN" type="number" min="1" max="10" value="${M.places||3}" style="width:52px" oninput="window.lgSetN(this.value)">`:M.type==='PLACE'&&pt?`Place: ${pt.places} places`:['LENGTH','ACCA','OTHER'].includes(M.type)?'Settled by hand in the Ledger.':'';
+  document.getElementById('lgConv').innerHTML=sv?(M.unitMode==='gbp'?`£${sv.toFixed(2)} = <b>${su.toFixed(2)}u</b> <span class="lg-sm">(1u = £${unit})</span>`:`${sv}u = <b>£${(sv*unit).toFixed(2)}</b>`)+(M.type==='EW'?` <span class="lg-sm">(half win · half place)</span>`:''):'';
+  document.getElementById('lgPriceConv').textContent=pr?`decimal ${pr.toFixed(2)} · implied ${(100/pr).toFixed(1)}%`:'';
+  let adv='';const btn=document.getElementById('lgUseSug');btn.style.display='none';
+  if(c){const s=suggest(c,pr);
+    if(s.kind==='none')adv=c.cat?`<div class="lg-sm">No bet advised — ${esc(s.why[0])}. You can still log it as your own call.</div>`:'';
+    else if(s.kind==='ladder')adv=s.ladder.length?`<div class="lg-adv lg-z"><b>💡 Enter the price.</b> ${s.paper?'(paper) ':''}Stake by price: ${s.ladder.map(l=>`${l.u}u at ${l.min.toFixed(2)}+`).join(' · ')}</div>`:'';
+    else{adv=`<div class="lg-adv ${s.kind==='paper'?'lg-z':'lg-g'}"><b>💡 ${s.kind==='paper'?'Paper stake':'Engine suggests'} ${s.u}u (£${(s.u*unit).toFixed(2)})${M.type!=='WIN'?' — for a WIN bet':''}</b><ul>${[...s.why,s.paperWhy].filter(Boolean).map(w=>`<li>${esc(w)}</li>`).join('')}</ul></div>`;
+      btn.style.display='';btn.textContent=`Use ${s.u}u`;btn.onclick=()=>{window.lgUnit('u');document.getElementById('lgStake').value=s.u;window.lgUpd();};
+      if(su>s.u*1.5)adv+=`<div class="lg-adv lg-w">⚠ Your stake (${su.toFixed(2)}u) is well above the suggestion.</div>`;}
+    M.sug=s.u;}
+  if(su&&c&&!c.em&&realTodayU()+su>dailyBudgetU())adv+=`<div class="lg-adv lg-w">⚠ This takes today to ${(realTodayU()+su).toFixed(1)}u — over today's ${dailyBudgetU()}u budget.</div>`;
+  document.getElementById('lgAdv').innerHTML=adv;
+  const h=c?c.r.name:(document.getElementById('lgHorse').value||'');
+  document.getElementById('lgSum').textContent=h&&su&&pr?`${h} · ${M.type} · ${su.toFixed(2)}u (£${(su*unit).toFixed(2)}) @ ${pr.toFixed(2)}`:'';
+};
+window.lgSetN=v=>{M.places=Math.max(1,parseInt(v)||1);};
+window.lgSave=async()=>{
+  const c=M&&M.c,su=stakeU(),prRaw=(document.getElementById('lgPrice')||{}).value,pr=parsePrice(prRaw),horse=c?c.r.name:document.getElementById('lgHorse').value.trim();
+  if(!horse||!su||!pr){document.getElementById('lgSum').innerHTML='<span style="color:#dc2626">Pick a horse and enter a stake and price.</span>';return;}
+  if(M.type==='EW'&&c&&!placeTerms(c.fs,c.hcp).ew){document.getElementById('lgSum').innerHTML='<span style="color:#dc2626">No each-way on 4 runners or fewer.</span>';return;}
+  const pt=c?placeTerms(c.fs,c.hcp):{places:0,frac:0};
+  const b={created:new Date().toISOString().slice(0,19),date:today(),venue:c?c.race.course:'',time:c?c.race.time:'',horse,engine:c?c.eng:'prixm',
+    category:c&&c.cat||null,segment:c&&c.seg||null,bet_type:M.type,stake_u:Math.round(su*100)/100,unit_gbp:S().unit,price:pr,price_raw:prRaw,
+    bookmaker:document.getElementById('lgBook').value,note:document.getElementById('lgNote').value||null,suggested_u:M.sug!=null?M.sug:null,
+    places:M.type==='EW'||M.type==='PLACE'?pt.places:M.type==='TOP N'?(M.places||3):null,ew_fraction:M.type==='EW'?pt.frac:null,field_size:c?c.fs:null,result:'O',source:'app'};
+  await saveBet(b);
+  try{if(c&&!isBetted(horse,c.race.time||'',c.race.course||'')){const l=loadBetList();l.push({horse,time:c.race.time,venue:c.race.course,score:c.r.score,betType:M.type==='TOP N'?'TOP '+(M.places||3):M.type});saveBetList(l);renderBetPanel();}}catch(e){}
+  const msg=`Logged ${horse}: ${b.stake_u}u (£${(b.stake_u*b.unit_gbp).toFixed(2)}) @ ${pr.toFixed(2)}`;
+  window.lgClose();toast(msg);try{renderRaceCards();}catch(e){}
+};
+function toast(t){let el=document.getElementById('lgToast');if(!el){el=document.createElement('div');el.id='lgToast';el.className='lg-toast';document.body.appendChild(el);}el.textContent=t;el.classList.add('on');setTimeout(()=>el.classList.remove('on'),2400);}
+
+// ── Ledger tab ──
+const F={eng:'',type:'',sug:''};
+function dailyBudgetU(){const s=S();return floorHalf(effBank()*s.pct/100/s.unit);}
+function realTodayU(){return LG.bets.filter(b=>b.date===today()&&b.engine!=='emerald').reduce((a,b)=>a+(+b.stake_u||0),0);}
+function planRows(){
+  const out=[];if(!window.D||!D.venues)return out;
+  [false,true].forEach(em=>todaysPicks(em).forEach(p=>{const c=ctxFor(p.venueKey,p.raceIdx,p.horse);if(c){const s=suggest(c);if(s.kind!=='none')out.push({p,c,s});}}));
+  // strongest first (Kelly share), so the day's best fancy is funded before anything weaker
+  const rank=o=>o.s.kind==='go'?0:o.s.kind==='ladder'&&!o.s.paper?1:2; // real bets → awaiting price → paper
+  out.sort((x,y)=>(rank(x)-rank(y))||((y.s.f||0)-(x.s.f||0)));
+  let room=dailyBudgetU()-realTodayU(),first=true;
+  out.forEach(o=>{o.u=0;o.full=false;
+    if(o.s.kind==='paper'){o.u=o.s.u;return;}          // paper stakes never use the budget
+    if(o.s.kind!=='go')return;
+    let u=o.s.u;
+    if(first){first=false;o.full=u>room;}           // strongest real bet: never squeezed by the budget
+    else if(u>room)u=Math.max(0,floorHalf(room));
+    o.u=u;room-=u;});
+  return out;
+}
+function render(){
+  const el=document.getElementById('ledgerContent');if(!el)return;
+  if(VIEW_ONLY){el.innerHTML='';return;}
+  try{
+    const set=S(),st=settled(),open=LG.bets.filter(b=>b.result==='O');
+    const staked=st.reduce((a,b)=>a+(+b.stake_u||0),0),won=st.filter(b=>b.result==='W'||b.result==='P').length;
+    let run=0,peak=0,dd=0;st.slice().sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time)).forEach(b=>{run+=pnlOf(b);peak=Math.max(peak,run);dd=Math.min(dd,run-peak);});
+    const openU=open.reduce((a,b)=>a+(+b.stake_u||0),0);
+    const card=(t,b)=>`<div class="lg-card"><div class="lg-ch">${t}</div>${b}</div>`;
+    const kpi=(l,v,s)=>`<div class="lg-kpi"><span>${l}</span><b>${v}</b><small>${s}</small></div>`;
+    let h=`<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px"><div style="font-size:18px;font-weight:800">💷 Ledger</div><div class="lg-sm">${LG.db?'🟢 saved in race_data.db':'🟡 DB server off — saved in this browser only'} · private, never published</div><button class="vbtn" style="margin-left:auto;background:#15803d;color:#fff;border-color:#15803d" onclick="window.lgOpen()">＋ Log bet</button></div>`;
+    h+=card('Bankroll settings <span class="lg-sm" style="text-transform:none;letter-spacing:0;font-weight:400">— changing the unit only affects future bets; past bets keep the unit they were placed at</span>',`<div class="lg-set">
+      <div class="lg-f"><label>1 unit = £</label><input type="number" min="1" step="1" value="${set.unit}" onchange="window.lgSet('unit',this.value)"></div>
+      <div class="lg-f"><label>Starting bank £ <span style="text-transform:none;font-weight:400">(0 = notional 100u)</span></label><input type="number" step="10" min="0" value="${set.bank}" onchange="window.lgSet('bank',this.value)"></div>
+      <div class="lg-f"><label>Staking style</label><select onchange="window.lgSet('mode',this.value)"><option value="engine" ${set.mode==='engine'?'selected':''}>Engine-scaled (tiers + ¼ Kelly)</option><option value="flat" ${set.mode==='flat'?'selected':''}>Flat 1u</option></select></div>
+      <div class="lg-f"><label>Daily budget (% of bank)</label><input type="number" step="0.5" min="0" value="${set.pct}" onchange="window.lgSet('pct',this.value)"></div>
+      <div class="lg-f"><label>Max single (u)</label><input type="number" step="0.5" value="${set.max}" onchange="window.lgSet('max',this.value)"></div></div>`);
+    h+=`<div class="lg-kpis">${kpi('Bank now',gbp(bankNow()),set.bank>0?'start £'+set.bank:'P&amp;L since start (£0)')}${kpi('Staking bank','£'+effBank().toFixed(0),set.bank>0?'start + P&amp;L':'notional 100u + P&amp;L')}${kpi('P&amp;L',`<span style="color:${plU()>=0?'#15803d':'#dc2626'}">${uf(plU())}</span>`,gbp(plGBP()))}${kpi('ROI',staked?`<span style="color:${plU()>=0?'#15803d':'#dc2626'}">${(plU()/staked*100).toFixed(1)}%</span>`:'—',staked.toFixed(1)+'u staked')}${kpi('Strike rate',st.length?(won/st.length*100).toFixed(0)+'%':'—',`${won}/${st.length} bets`)}${kpi('Open exposure',openU.toFixed(1)+'u','£'+open.reduce((a,b)=>a+(+b.stake_u||0)*(+b.unit_gbp||10),0).toFixed(2)+' at risk')}${kpi('Max drawdown',`<span style="color:#dc2626">${uf(dd)}</span>`,brakeOn()?'🟠 brake ON':'brake off')}</div>`;
+    const plan=planRows();
+    const realGo=plan.filter(o=>o.s.kind==='go'&&o.u>0);
+    const planHtml=(realGo.length?'':'<div class="lg-adv lg-z" style="margin-bottom:8px">😌 <b>No bets advised today.</b> Nothing has enough value (or prices aren\'t in yet). That\'s a fine outcome; the budget carries over.</div>')+plan.map(o=>{const logged=LG.bets.some(b=>b.date===today()&&norm(b.horse)===norm(o.p.horse));
+      if(o.s.kind==='go'&&!o.u)return '';                      // squeezed out by the budget → blank
+      const val=o.s.kind==='ladder'?lgChip(o.s):`${o.u}u<div class="lg-sm" style="font-weight:600">£${(o.u*set.unit).toFixed(0)}${o.s.kind==='paper'?' · paper':''}</div>`;
+      return `<div class="lg-plan"><div><b>${esc(o.p.horse)}</b> <span class="lg-sm">${esc(o.p.venue)} ${esc(o.p.time)}</span><br>
+        <b class="rc-eng ${o.c.em?'rc-eng-em':'rc-eng-px'}">${o.c.em?'☘':'Prixm'}</b> <b class="fit-badge" style="background:#ede9fe;color:#6d28d9">${o.p.category}</b>${o.c.seg==='golden'?' <b class="fit-badge" style="background:#fef3c7;color:#92400e">⭐ Golden</b>':o.c.seg?` <b class="fit-badge" style="background:#e0e7ff;color:#3730a3">${o.c.seg}</b>`:''}${o.full?' <b class="fit-badge fit-s">⭐ strongest today: funded in full</b>':''}
+        <details><summary class="lg-sm" style="cursor:pointer">why ${o.s.kind==='paper'?'(paper)':''}</summary><div class="lg-sm">${[...o.s.why,o.s.paperWhy].filter(Boolean).map(esc).join('<br>')}</div></details></div>
+        <div class="lg-u ${o.s.kind==='paper'?'z':''}" style="${o.s.kind==='ladder'?'font-size:12px;font-weight:600;max-width:240px;text-align:right':''}">${val}</div>
+        <div>${logged?'<span class="lg-sm">✔ logged</span>':(o.u||o.s.kind==='ladder')?`<button class="vbtn" style="font-size:11px;padding:3px 10px;background:#15803d;color:#fff;border-color:#15803d" onclick="window.lgOpen('${o.p.venueKey.replace(/'/g,"\\'")}',${o.p.raceIdx},'${o.p.horse.replace(/'/g,"\\'")}',${o.u||0})">Log</button>`:''}</div></div>`;}).join('');
+    const planned=realGo.reduce((a,o)=>a+o.u,0),budget=dailyBudgetU();
+    h+=`<div class="lg-two"><div>`;
+    h+=card('💡 Today\'s staking plan <span class="lg-sm" style="text-transform:none;letter-spacing:0;font-weight:400">— Prixm + ☘ Emerald picks, strongest first</span>',planHtml+`<div style="margin-top:10px;font-size:12px"><b>Planned ${planned.toFixed(1)}u${planned>budget?' (strongest bet over-rides the budget)':''} · today's budget ${budget}u (${set.pct}% of £${effBank().toFixed(0)} staking bank${set.bank>0?'':' — notional 100u, no start bank set'})</b></div><div class="lg-cap"><i style="width:${Math.min(100,planned/Math.max(0.5,budget)*100)}%"></i></div><div class="lg-sm">No bet advised → left out. Prices not in yet → the price you'd need for each stake.</div>`);
+    const openRows=open.slice().sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time)).map(b=>{const manual=['LENGTH','ACCA','OTHER'].includes(b.bet_type);const idq=typeof b.id==='number'?b.id:`'${b.id}'`;
+      return [`${esc(b.date.slice(5))} <b>${esc(b.horse)}</b><div class="lg-sm">${esc(b.venue)} ${esc(b.time)}</div>`,esc(b.bet_type),`${b.stake_u}u<div class="lg-sm">£${(b.stake_u*b.unit_gbp).toFixed(2)}</div>`,(+b.price).toFixed(2),
+        manual?`<button class="vbtn lg-mini" onclick="window.lgSettle(${idq},'W')">Won</button> <button class="vbtn lg-mini" onclick="window.lgSettle(${idq},'L')">Lost</button> <button class="vbtn lg-mini" onclick="window.lgSettle(${idq},'V')">Void</button>`:'<span class="lg-sm">auto on Fetch Results</span>',
+        `<button class="vbtn lg-mini" title="Delete" onclick="window.lgDel(${idq})">🗑</button>`];});
+    h+=card('Open bets',openRows.length?tbl(['Bet','Type','Stake','Price','Settle',''],openRows):'<div class="lg-sm">No open bets.</div>');
+    const fl=st.filter(b=>(!F.eng||b.engine===F.eng)&&(!F.type||b.bet_type===F.type)&&(!F.sug||(F.sug==='f'?followed(b):!followed(b)))).sort((a,b)=>(b.date+b.time).localeCompare(a.date+a.time));
+    const sel=(k,opts)=>`<select onchange="window.lgFilter('${k}',this.value)" style="padding:3px 6px;border:1px solid var(--border);border-radius:6px;font-size:11.5px">${opts.map(([v,l])=>`<option value="${v}" ${F[k]===v?'selected':''}>${l}</option>`).join('')}</select>`;
+    h+=card(`History <span style="float:right;display:flex;gap:6px;text-transform:none;letter-spacing:0">${sel('eng',[['','All engines'],['prixm','Prixm'],['emerald','☘ Emerald']])}${sel('type',[['','All types'],...TYPES.map(t=>[t,t])])}${sel('sug',[['','All bets'],['f','Followed suggestion'],['o','Own call']])}</span>`,
+      fl.length?tbl(['Date','Horse','Engine','Type','Stake','Price','Result','P&L','Sugg.'],fl.slice(0,200).map(b=>[esc(b.date.slice(5)),`<b>${esc(b.horse)}</b><div class="lg-sm">${esc(b.venue||'')} ${esc(b.time||'')}</div>`,b.engine==='emerald'?'<b class="rc-eng rc-eng-em">☘</b>':'<b class="rc-eng rc-eng-px">Prixm</b>',esc(b.bet_type),`${b.stake_u}u<div class="lg-sm">£${(b.stake_u*b.unit_gbp).toFixed(2)}</div>`,(+b.price||0).toFixed(2),
+        `<b class="fit-badge ${b.result==='W'?'fit-s':b.result==='P'?'fit-q':b.result==='V'?'':'fit-u'}">${({W:'WON',P:'PLACED',L:'LOST',V:'VOID'})[b.result]||b.result}</b>`,`<b style="color:${pnlOf(b)>=0?'#15803d':'#dc2626'}">${uf(pnlOf(b))}</b><div class="lg-sm">${gbp(pnlOf(b)*(+b.unit_gbp||10))}</div>`,`<span class="lg-sm">${followed(b)?'✔ followed':b.suggested_u>0?b.suggested_u+'u':'own call'}</span>`])):'<div class="lg-sm">No settled bets for this filter.</div>');
+    h+=`</div><div>`;
+    // curve
+    let c=0;const pts=[0,...st.slice().sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time)).map(b=>c+=pnlOf(b))];
+    const mn=Math.min(...pts,0),mx=Math.max(...pts,0.5),W=380,Hh=140,X=i=>10+i*(W/Math.max(1,pts.length-1)),Y=v=>10+(mx-v)/((mx-mn)||1)*Hh;
+    h+=card('Bankroll curve (units)',pts.length>1?`<svg viewBox="0 0 400 170" style="width:100%;height:auto" role="img" aria-label="Cumulative profit in units"><line x1="10" x2="${W+10}" y1="${Y(0)}" y2="${Y(0)}" stroke="#d1d5db" stroke-dasharray="4 4"/><polyline fill="none" stroke="#15803d" stroke-width="2.5" points="${pts.map((v,i)=>X(i)+','+Y(v)).join(' ')}"/>${pts.map((v,i)=>`<circle cx="${X(i)}" cy="${Y(v)}" r="2.5" fill="${i&&v<pts[i-1]?'#dc2626':'#15803d'}"/>`).join('')}<text x="${W+8}" y="${Y(pts[pts.length-1])-6}" font-size="11" text-anchor="end" font-weight="700" fill="${pts[pts.length-1]>=0?'#15803d':'#dc2626'}">${uf(pts[pts.length-1])}</text></svg>`:'<div class="lg-sm">Settle a bet to start the curve.</div>');
+    const grp=(k,f)=>{const g={};st.forEach(b=>{(g[f(b)]=g[f(b)]||[]).push(b);});return Object.entries(g).map(([n,bs])=>{const s=bs.reduce((a,b)=>a+(+b.stake_u||0),0),p=bs.reduce((a,b)=>a+pnlOf(b),0);return [`${k}: <b>${esc(n)}</b>`,bs.length,`<b style="color:${p>=0?'#15803d':'#dc2626'}">${uf(p)}</b>`,s?(p/s*100).toFixed(0)+'%':'—'];});};
+    h+=card('Breakdown',st.length?tbl(['Group','Bets','P&L','ROI'],[...grp('Engine',b=>b.engine==='emerald'?'☘ Emerald':'Prixm'),...grp('Type',b=>b.bet_type),...grp('Stake',b=>followed(b)?'followed suggestion':'own call')]):'<div class="lg-sm">—</div>');
+    const g=segSR('golden');
+    h+=card('How the stake is worked out',`<div style="font-size:12.5px;line-height:1.6">
+      <b>1 · Win chance</b> — how this kind of pick has actually done in your logged results (engine × confidence × gap × handicap), pulled toward the average when the sample is small; then ⭐ Golden, Verification, 🧭 track fit (measured lifts) and volatile-race adjustments.<br>
+      <b>2 · Stake</b> — ¼ Kelly × staking bank: bigger for a bigger edge, small for outsiders (Kelly allows for how often they lose). Nothing under +3% value. Max 3u; 5u only for ⭐ Golden + ✅ CONFIRMED.<br>
+      <b>3 · Daily budget</b> — ${set.pct}% of today's staking bank. Picks are funded strongest first; the day's strongest bet is always funded in full.<br>
+      <b>4 · Guards</b> — tight race or Verification 🚫 → no bet (left blank) · 3 losing days → ⅙ Kelly until a winning day · ☘ Emerald / Silver / Bronze stakes are paper and never use the budget.<br>
+      <b>Staking bank</b> — ${set.bank>0?'your starting bank':'notional 100u (no starting bank set)'} + settled P&amp;L = £${effBank().toFixed(0)}.</div>`);
+    h+=`</div></div>`;
+    el.innerHTML=h;
+  }catch(e){el.innerHTML=`<div style="padding:20px;color:#dc2626;background:#fef2f2;border:1px solid #fecaca;border-radius:8px"><b>Ledger error:</b> ${esc(e.message)}</div>`;console.error('Ledger',e);}
+}
+const followed=b=>b.suggested_u>0&&Math.abs((+b.suggested_u)-(+b.stake_u))<0.01;
+const tbl=(head,rows)=>`<div style="overflow-x:auto"><table class="lg-tbl"><tr>${head.map(x=>`<th>${x}</th>`).join('')}</tr>${rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</table></div>`;
+window.lgSet=(k,v)=>{const s=S();const n=parseFloat(v);s[k]=k==='mode'?v:(isNaN(n)?DEF[k]:n);saveS(s);refreshChrome();render();};
+window.lgFilter=(k,v)=>{F[k]=v;render();};
+window.lgSettle=async(id,res)=>{const b=LG.bets.find(x=>x.id===id);if(!b)return;const pnl=res==='W'?b.stake_u*(b.price-1):res==='L'?-b.stake_u:0;Object.assign(b,{result:res,pnl_u:Math.round(pnl*10000)/10000,settled_at:new Date().toISOString().slice(0,19)});await saveBet(b);};
+window.lgDel=async id=>{const b=LG.bets.find(x=>x.id===id);if(b&&confirm(`Delete this bet on ${b.horse}?`))await deleteBet(id);};
+window.lgOpen=(vk,ri,name,u)=>openModal(vk,ri,name,u);
+window.renderLedger=render;
+window.ledgerLoad=load;
+document.addEventListener('keydown',e=>{
+  if(VIEW_ONLY)return;
+  if(e.key==='Escape'&&document.querySelector('#lgModal .lg-ov'))window.lgClose();
+  if((e.key==='b'||e.key==='B')&&!e.ctrlKey&&!e.metaKey&&!e.altKey&&!/INPUT|SELECT|TEXTAREA/.test((document.activeElement||{}).tagName||'')&&!document.querySelector('#lgModal .lg-ov')){e.preventDefault();openModal();}
+});
 })();
 
 /* ==================== WATCHBACK DASHBOARD (improvement.md Feature 3) ====================
@@ -4108,6 +4924,8 @@ window.xaClearStaleCache=xaClearStaleCache;
 })();
 
 /* ==================== PROFILE CLASSIFIER ==================== */
+// ☘ Emerald calibration profiles for Irish races (Dundalk AW sits in ire_flat — see results_fetcher.classify_profile)
+function classifyEmeraldProfile(race){return /hurdle|chase|nh flat|bumper/i.test((race&&(race.race_type||race.type))||'')?'ire_nh':'ire_flat';}
 function classifyProfile(surface,raceType){
   const rt=(raceType||'').toLowerCase(),s=(surface||'').toLowerCase();
   if(s==='aw'||s==='all-weather') return 'aw';
@@ -4344,8 +5162,19 @@ function renderPicksCalendar(){
 }
 
 /* ==================== PERFORMANCE TAB RENDERER ==================== */
+// Performance tab engine toggle — the two engines' results never mix
+function perfEngineToggle(){
+  const e=st.perfEngine||'prixm';
+  const b=(k,l,col)=>`<button class="vbtn${e===k?' on':''}" style="font-size:12px;${e===k&&col?'background:'+col+';border-color:'+col+';color:#fff':''}" onclick="st.perfEngine='${k}';renderPerformance()">${l}</button>`;
+  return `<div style="display:flex;gap:8px;margin-bottom:14px;align-items:center;flex-wrap:wrap">${b('prixm',engineLabel()+' · UK')}${b('emerald','☘ '+emeraldLabel()+' · IRE','#0f766e')}<span style="font-size:11px;color:var(--muted)">UK and Irish results are kept separate.</span></div>`;
+}
 async function renderPerformance(){
   const el=document.getElementById('perfContent');
+  if(st.perfEngine==='emerald'){
+    el.innerHTML=perfEngineToggle()+'<div id="perfEmerald"></div>';
+    window.renderEmeraldTab&&window.renderEmeraldTab('perfEmerald');
+    return;
+  }
   let history=window._resultsHistory;
   if(!history){const stored=localStorage.getItem('resultsHistory');if(stored){try{history=JSON.parse(stored);}catch(e){}}}
   if(!history){try{const r=await fetch('results_history.json?t='+Date.now());if(r.ok)history=await r.json();}catch(e){}}
@@ -4777,7 +5606,7 @@ async function renderPerformance(){
     if(!s.tiers.length&&!Object.keys(s.corrs).length){
       h+='<div class="nodata"><p>No results data for this filter yet.</p></div>';
     }
-    el.innerHTML=h;
+    el.innerHTML=perfEngineToggle()+h+renderXaValidationCard('prixm');
   }
   window._rpf=renderPerfHTML;
   window._rhf=window._rhf||'all';
@@ -4788,10 +5617,12 @@ async function renderPerformance(){
 /* ==================== CALIBRATION REPORT ==================== */
 function _calibrateProfile(history,profile){
   // Internal: compute calibration for a single profile, returns result object or null
-  const races=history.races.filter(r=>r.profile===profile);
+  // ☘ Emerald profiles (ire_*) calibrate Emerald's own 16 factors on Emerald-scored Irish races only
+  const isEm=/^ire_/.test(profile);
+  const races=history.races.filter(r=>r.profile===profile&&(!isEm||(r.results||[]).some(x=>x.score_breakdown&&'stable_power' in x.score_breakdown)));
   if(races.length<50) return null;
-  const factors=['form','rating','trainer','jockey','fitness','class','going','course','distance','age','weight','draw','headgear','spotlight'];
-  const oldW=history.weight_profiles?.[profile]||Object.fromEntries(factors.map((f,i)=>[f,[20,15,12,10,8,8,8,6,6,7,8,5,3,2][i]]));
+  const factors=isEm?Object.keys(EM_FM):['form','rating','trainer','jockey','fitness','class','going','course','distance','age','weight','draw','headgear','spotlight'];
+  const oldW=history.weight_profiles?.[profile]||(isEm?Object.fromEntries(factors.map(f=>[f,EM_FM[f].mx])):Object.fromEntries(factors.map((f,i)=>[f,[20,15,12,10,8,8,8,6,6,7,8,5,3,2][i]])));
   function spearman(x,y){
     if(x.length<10) return 0;
     const rank=arr=>{const s=arr.map((v,i)=>[v,i]).sort((a,b)=>a[0]-b[0]);const r=new Array(arr.length);let i=0;while(i<s.length){let j=i;while(j<s.length&&s[j][0]===s[i][0])j++;const avg=(i+j+1)/2;for(let k=i;k<j;k++)r[s[k][1]]=avg;i=j;}return r;};
@@ -4891,7 +5722,7 @@ function rescoreRunnerWithWeights(runner,newW){
   if(!bd) return runner.score;
   let total=0;
   Object.keys(bd).forEach(f=>{
-    const cap=newW[f]!==undefined?newW[f]:(FM[f]?FM[f].mx:10);
+    const cap=newW[f]!==undefined?newW[f]:(fmFor(bd)[f]?fmFor(bd)[f].mx:10);
     total+=Math.min(bd[f]||0,cap);
   });
   return total;
@@ -4905,8 +5736,8 @@ function rescoreTodayWithWeights(newW,profile){
   Object.values(D.venues).forEach(venue=>{
     venue.races.forEach(race=>{
       // Check if this race matches the calibrated profile
-      const rp=classifyProfile(race.surface||race.going||'',race.race_type||race.type||'');
-      if(rp!==profile&&profile!=='all') return;
+      const rp=isIreland(race.course)?classifyEmeraldProfile(race):classifyProfile(race.surface||race.going||'',race.race_type||race.type||'');
+      if(rp!==profile&&!(profile==='all'&&!isIreland(race.course))) return; // Prixm weights never touch ☘ Irish races
       race.runners.forEach(runner=>{
         if(!runner.score_breakdown) return;
         const newScore=rescoreRunnerWithWeights(runner,newW);
@@ -4932,7 +5763,7 @@ function applyUnifiedCalibration(){
   history.calibrations=history.calibrations||[];
   // Seed from calibHistory if in-memory calibrations are empty (guards against source-switch edge cases)
   if(!history.calibrations.length){
-    try{const c=localStorage.getItem('calibHistory');if(c){const saved=JSON.parse(c);if(Array.isArray(saved))history.calibrations.push(...saved);}}catch(e){}
+    try{const c=localStorage.getItem('calibHistory');if(c){const saved=JSON.parse(c);if(Array.isArray(saved))history.calibrations.push(...saved.filter(c=>!/^ire_/.test(c.profile||'')));}}catch(e){}
   }
   history.weight_profiles=history.weight_profiles||{};
   const today=new Date().toISOString().slice(0,10);
@@ -4948,10 +5779,12 @@ function applyUnifiedCalibration(){
   window._resultsHistory=history;
   try{localStorage.setItem('resultsHistory',JSON.stringify(history));}catch(e){}
   // Persist calibrations to localStorage AND server file (belt+suspenders)
-  try{localStorage.setItem('calibHistory',JSON.stringify(history.calibrations||[]));}catch(e){}
+  // calibrations.json holds BOTH engines — always persist Prixm + ☘ Emerald entries together
+  const _allCalibs=()=>[...(history.calibrations||[]),...((window._emeraldHistory&&window._emeraldHistory.calibrations)||[])];
+  try{localStorage.setItem('calibHistory',JSON.stringify(_allCalibs()));}catch(e){}
   try{localStorage.setItem('calibWeightProfiles',JSON.stringify(history.weight_profiles||{}));}catch(e){}
   // Write to server file — survives localStorage issues
-  try{fetch('http://localhost:7432/api/calibrations',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(history.calibrations||[])});}catch(e){}
+  try{fetch('http://localhost:7432/api/calibrations',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(_allCalibs())});}catch(e){}
   // Track calibration cycle — minor bump per surface, major bump when all 3 done
   let cycle=getCalibCycle();
   proposals.forEach(res=>{if(!cycle.includes(res.profile))cycle.push(res.profile);});
@@ -5036,14 +5869,16 @@ function saveDayData(data){
 function applyCalibratedWeightsToData(data){
   // Apply any persisted calibrated weights to rescore runners in the given data
   if(!data||!data.venues) return;
-  ['aw','turf_flat','nh'].forEach(prf=>{
+  // Prixm profiles apply to UK races only; ☘ Emerald profiles (ire_flat/ire_nh) to Irish races only
+  ['aw','turf_flat','nh','ire_flat','ire_nh'].forEach(prf=>{
     try{
       const stored=localStorage.getItem('calibWeights_'+prf);
       if(!stored) return;
       const cw=JSON.parse(stored);
       Object.values(data.venues).forEach(venue=>{
         venue.races.forEach(race=>{
-          const rp=classifyProfile(race.surface||race.going||'',race.race_type||race.type||'');
+          const ire=isIreland(race.course||venue.course);
+          const rp=ire?classifyEmeraldProfile(race):classifyProfile(race.surface||race.going||'',race.race_type||race.type||'');
           if(rp!==prf) return;
           race.runners.forEach(runner=>{
             if(!runner.score_breakdown) return;
@@ -5200,12 +6035,17 @@ async function load(){
       for(const c of fileHist.calibrations){if(!existCal.has(c.date+c.profile)){(window._resultsHistory.calibrations||(window._resultsHistory.calibrations=[])).push(c);}}
     }
   }
+  // ☘ Split history by engine. window._resultsHistory stays Prixm/UK-only so every existing Prixm
+  // analysis (Golden, calibration, Performance, Combos, Trends…) is untouched by Irish races.
+  // window._emeraldHistory = Irish races; window._allHistory = both (horse/venue-level lookups).
+  splitEngineHistory();
   // Apply any persisted calibrated weights to rescore today's runners on load
   applyCalibratedWeightsToData(D);
   // Sync analysisVersion in localStorage to match computed version from stored calibrations
   // Prevents stale 1.x display when localStorage was cleared but calibrations are in results_history
   syncVersionFromCalibrations(window._resultsHistory);
   await render();
+  try{window.ledgerLoad&&window.ledgerLoad();}catch(e){console.error('ledger load',e);}
 }
 
 function showPaste(){
@@ -5254,7 +6094,7 @@ function showGuide(){
   document.getElementById('modalContainer').innerHTML=`<div class="modal-bg" onclick="if(event.target===this)closeModal()"><div class="modal" style="max-width:820px">
     <button class="mclose" onclick="closeModal()">&times;</button>
     <h2 style="display:flex;align-items:center;gap:8px;margin-bottom:4px">📖 Daily Racing Analyzer — Complete Guide</h2>
-    <p style="font-size:11px;color:var(--muted);margin-bottom:16px">6-engine system · 14-variable scoring · Auto-calibration · Threshold filtering · Combo tracking · PDF export</p>
+    <p style="font-size:11px;color:var(--muted);margin-bottom:16px">Prixm (UK) + ☘ Emerald (Ireland) · 14-variable scoring · 🧭 Horse × Track · 🗺 Track Explorer · 💷 Ledger · Auto-calibration · PDF export</p>
 
     <!-- QUICK START -->
     <div class="guide-section" style="border-left-color:#ef4444">
@@ -5270,6 +6110,72 @@ function showGuide(){
       <p style="margin-top:6px;font-size:11px"><b>Morning:</b> Load today's data → check Top 10 picks (BET vs SKIP tags) → download PDF for offline use.<br>
       <b>After racing:</b> Log results for each race → hit Submit Pick Results → system auto-calibrates for tomorrow.<br>
       <b>Status bar</b> (top-right) turns all-green when a day's pipeline is complete.</p>
+    </div>
+
+    <!-- ☘ EMERALD ENGINE -->
+    <div class="guide-section" style="border-left-color:#0f766e">
+      <h3><span class="gi">☘</span> Emerald — the Irish engine (${emeraldLabel()})</h3>
+      <p>Irish races (Republic + Northern Ireland, 26 tracks) are scored by <b>Emerald</b>, not Prixm. Same 118-point scale so scores, gaps and confidence read the same way.</p>
+      <ul style="font-size:11.5px;margin:6px 0 0 16px;line-height:1.6">
+        <li><b>Base factors</b> — Prixm's 13 (generic draw removed), re-capped. Going / Course / Distance use the horse's <b>own logged runs</b> instead of fixed values.</li>
+        <li><b>☘ Draw bias (5)</b> — draw vs this track's logged draw results at this trip. <b>☘ Track fit (6)</b> — the Horse × Track cross analysis (validated checks only). <b>☘ Stable power (6)</b> — Irish trainer/jockey tiers in Irish name formats (e.g. "W P Mullins") + logged strike rates + RTF.</li>
+        <li>Irish cards show a <b>☘ Emerald</b> badge and a faded <i>"Prixm would say…"</i> line for comparison. Every Irish runner keeps its Prixm score.</li>
+        <li><b>Track only:</b> Emerald picks sit in their own sidebar panel and are never counted in Prixm P&amp;L, Golden, Silver or Bronze. Real-money segments unlock at 300 Emerald-scored races per profile (ire_flat / ire_nh).</li>
+        <li>Own results log, own calibration (☘ Emerald tab → Run Emerald calibration) and own version history — Prixm stays UK-only and is untouched.</li>
+      </ul>
+    </div>
+
+    <!-- 🧭 HORSE × TRACK -->
+    <div class="guide-section" style="border-left-color:#7c3aed">
+      <h3><span class="gi">🧭</span> Horse × Track cross analysis &amp; pace map</h3>
+      <p>Each runner's running style, stamina and record (sharp vs galloping tracks, left/right-handed, uphill finishes, draw) is checked against what today's track demands.</p>
+      <ul style="font-size:11.5px;margin:6px 0 0 16px;line-height:1.6">
+        <li><b>✅ SUITS · ⚠ QUESTION · ❌ UNSUITED</b> — built only from checks that <b>logged results have proven</b> actually predict finishing position (Performance → "Does the Horse × Track flag work?"). Checks the data contradicts are dropped; thin ones show as <i>unproven</i> rows only.</li>
+        <li><b>No history = blank.</b> Nothing is ever flagged as "unknown". Race cards show only ❌; the full reasons are in the expanded runner (race view) and 🗺 Track Explorer → Today's Runners Fit.</li>
+        <li><b>🏁 Pace map</b> — front-runner / prominent / mid-div / hold-up lanes from logged in-running comments, plus a one-line read on the likely pace.</li>
+        <li>Prixm races: <b>flag only</b> — never changes score, gap or segment. Emerald races: validated checks feed the ☘ Track fit factor.</li>
+      </ul>
+    </div>
+
+    <!-- 🗺 TRACK EXPLORER -->
+    <div class="guide-section" style="border-left-color:#1d4ed8">
+      <h3><span class="gi">🗺</span> Track Explorer (replaces the old Tracks tab)</h3>
+      <p>Every UK (Prixm) and Irish (☘ Emerald) track in one tab — toggle All / UK / Ireland, tracks racing today are tagged <b>TODAY</b>.</p>
+      <ul style="font-size:11.5px;margin:6px 0 0 16px;line-height:1.6">
+        <li><b>🗺 Profile</b> — layout sketch (direction, straight course, stalls, winning post), final-4f hill/dip profile, sharpness · undulation · camber · uphill finish · straight length, stalls by distance, <b>draw heat by stall</b> and <b>winning running styles</b> (both computed from logged results, hidden until there's enough data), horse type the track wants, caution flags.</li>
+        <li><b>🧭 Today's Runners Fit</b> — every race at that track today with its pace map and each runner's cross analysis.</li>
+        <li><b>📊 Stats</b> — the old Track Analysis (top-pick SR by gap/going/type, jockeys, draw, trainers, PDF).</li>
+        <li>Shortcuts: <b>🗺 … track profile →</b> in any race header, the 📊 button on race cards.</li>
+      </ul>
+    </div>
+
+    <!-- 🏁 REPLAY + 📏 LENGTH BET -->
+    <div class="guide-section" style="border-left-color:#3b82f6">
+      <h3><span class="gi">🏁</span> Predict tab — race replay &amp; length bet</h3>
+      <ul style="font-size:11.5px;margin:6px 0 0 16px;line-height:1.6">
+        <li><b>Race replay</b> runs on the race's own track shape, with real silks. Early positions come from the pace map + draw; the finish order and gaps come from the predicted lengths. No commentary.</li>
+        <li><b>Predicted finish · lengths</b> — score gaps converted to beaten lengths using how scores have translated into real margins in logged results (Flat / AW / Jumps).</li>
+        <li><b>📏 Length bet</b> — winning-distance chances (&lt;1L · 1–3L · 3–6L · 6L+) from logged results for this race type and gap. <b>Tight race</b> (gap &lt; 8, top-2 win chance within 8 pts, or Verification 🚫) → "No length bet suggestion", nothing else. Enter the bookmaker's price to get EV; it only says <b>value</b> when your price beats the fair price.</li>
+      </ul>
+    </div>
+
+    <!-- 💷 LEDGER -->
+    <div class="guide-section" style="border-left-color:#15803d">
+      <h3><span class="gi">💷</span> Ledger — money tracker &amp; staking advisor</h3>
+      <ul style="font-size:11.5px;margin:6px 0 0 16px;line-height:1.6">
+        <li>Log a bet from <b>any tab</b>: the <b>＋ Log bet</b> button, the <b>B</b> key, or <b>BET</b> on a runner (pre-filled). Stake in <b>£ or units</b> — £5 with 1u = £10 is saved as 0.5u. Price as 7/4 or 2.75. EW terms come from the field size.</li>
+        <li><b>💡 Stake per pick</b> (Prixm / ☘ Emerald NAP · WIN · STRONG · PLACE): win chance = how that kind of pick has actually done in your logged results (confidence × gap × handicap), adjusted for ⭐ Golden, Verification and 🧭 track fit. Stake = <b>¼ Kelly</b> on the staking bank: bigger edge → bigger stake, outsiders stay small. Shown as a 💡 chip on race cards and runner rows; with no price yet it shows the price needed for each stake.</li>
+        <li><b>No bet advised → left blank</b> (tight race, no value, Verification 🚫). Days with no bets are normal.</li>
+        <li><b>Staking bank</b> = your starting bank (0 = a notional 100u) + settled P&amp;L. <b>Daily budget</b> = % of it; picks are funded strongest first and the day's strongest bet is always funded in full. Max 3u (5u only for ⭐ Golden + ✅ CONFIRMED); 3 losing days → ⅙ Kelly. ☘ Emerald / Silver / Bronze stakes are paper.</li>
+        <li>Open WIN / EW / PLACE / TOP N bets <b>settle automatically</b> when Fetch Results runs; LENGTH / ACCA / OTHER are settled by hand in the Ledger.</li>
+        <li>Changing the unit only affects future bets. <b>Private</b>: stored in race_data.db (or this browser when the DB server is off), never published — the Ledger is hidden on the online (GitHub) version.</li>
+      </ul>
+    </div>
+
+    <!-- FILTERS & TOGGLES -->
+    <div class="guide-section" style="border-left-color:#9ca3af">
+      <h3><span class="gi">🎛</span> New filters &amp; toggles</h3>
+      <p style="font-size:11.5px"><b>Engine</b> pill (Prixm · UK / ☘ Emerald · IRE) and <b>🧭 Track fit</b> pill (❌ top pick unsuited / hide those races) in the race filter bar · <b>Performance</b> tab has a Prixm / ☘ Emerald toggle — UK and Irish results never mix · header chip shows your bank and P&amp;L.</p>
     </div>
 
     <!-- SYSTEM OVERVIEW -->
@@ -5596,7 +6502,7 @@ function _hsPosClass(p){return p===1?'hs-pos1':p===2?'hs-pos2':p===3?'hs-pos3':p
 
 /* ---------- data helpers ---------- */
 function _hsHorseHistory(name){
-  const hist=window._resultsHistory;
+  const hist=window._allHistory||window._resultsHistory; // horse/venue-level: both engines (UK + Irish)
   if(!hist?.races)return[];
   const hn=name.toLowerCase().trim();
   const runs=[];
@@ -5622,7 +6528,7 @@ function _hsHorseAtVenue(name,venue){
 }
 
 function _hsJkyAtVenue(jky,venue){
-  const hist=window._resultsHistory;
+  const hist=window._allHistory||window._resultsHistory; // horse/venue-level: both engines (UK + Irish)
   if(!hist?.races)return{runs:0,wins:0,places:0,winPct:0,placePct:0,rides:[]};
   const jn=(jky||'').toLowerCase().trim();
   const vn=(venue||'').toLowerCase().replace(/\s*\(aw\)$/,'');
@@ -5640,7 +6546,7 @@ function _hsJkyAtVenue(jky,venue){
 }
 
 function _hsJkyOnHorse(jky,horseName){
-  const hist=window._resultsHistory;
+  const hist=window._allHistory||window._resultsHistory; // horse/venue-level: both engines (UK + Irish)
   if(!hist?.races)return{runs:0,wins:0,places:0,winPct:0,placePct:0};
   const jn=(jky||'').toLowerCase().trim(),hn=horseName.toLowerCase().trim();
   let runs=0,wins=0,places=0;
@@ -5655,7 +6561,7 @@ function _hsJkyOnHorse(jky,horseName){
 }
 
 function _hsJkyRecentRides(jky,limit=8){
-  const hist=window._resultsHistory;
+  const hist=window._allHistory||window._resultsHistory; // horse/venue-level: both engines (UK + Irish)
   if(!hist?.races)return[];
   const jn=(jky||'').toLowerCase().trim();
   const rides=[];
@@ -5669,7 +6575,7 @@ function _hsJkyRecentRides(jky,limit=8){
 }
 
 function _hsTrnAtVenue(trn,venue){
-  const hist=window._resultsHistory;
+  const hist=window._allHistory||window._resultsHistory; // horse/venue-level: both engines (UK + Irish)
   if(!hist?.races)return{runs:0,wins:0,winPct:0};
   const tn=(trn||'').toLowerCase().trim(),vn=(venue||'').toLowerCase().replace(/\s*\(aw\)$/,'');
   // trainers are on racecard runners, not in results — use getConnectionStats which scans race.trainer_stats if present
@@ -5686,7 +6592,7 @@ function _hsTrnAtVenue(trn,venue){
 }
 
 function _hsTrnOnGoing(trn,going){
-  const hist=window._resultsHistory;
+  const hist=window._allHistory||window._resultsHistory; // horse/venue-level: both engines (UK + Irish)
   if(!hist?.races)return{runs:0,wins:0,winPct:0};
   const tn=(trn||'').toLowerCase().trim(),gn=(going||'').toLowerCase().replace(/[\s-]+/g,'');
   let runs=0,wins=0;
@@ -6044,7 +6950,7 @@ function hcmpToggle(name){
 }
 
 function _jkyHistoryAtVenue(jockeyName,venue){
-  const hist=window._resultsHistory;
+  const hist=window._allHistory||window._resultsHistory; // horse/venue-level: both engines (UK + Irish)
   if(!hist||!hist.races)return[];
   const jn=(jockeyName||'').trim().toLowerCase();
   const vn=(venue||'').trim().toLowerCase().replace(/\s*\(aw\)$/,'');
@@ -6331,8 +7237,7 @@ function renderD1Sidebar(){
   const prixm=getPrixmPicks(rawPicks);
   const hist=window._resultsHistory;
   let picksHtml='<div style="padding:12px 14px;font-size:12px;color:#9ca3af">No qualifying picks today</div>';
-  if(prixm.length){
-    picksHtml=prixm.slice(0,6).map(p=>{
+  const _pickCard=(p,hist,em)=>{
       const catCls=p.category==='NAP'?'d1-cb-nap':p.category==='WIN'?'d1-cb-win':p.category==='STRONG'?'d1-cb-strong':'d1-cb-place';
       const edgeCol=p.category==='NAP'?'#a855f7':p.category==='WIN'?'#15803d':p.category==='STRONG'?'#1d4ed8':'#f59e0b';
       const edgePct=Math.min(100,p.edge||0);
@@ -6373,8 +7278,14 @@ function renderD1Sidebar(){
         ${tagsHtml}
         ${resFtr}
       </div>`;
-    }).join('');
+  };
+  if(prixm.length){
+    picksHtml=prixm.slice(0,6).map(p=>_pickCard(p,hist)).join('');
   }
+  // ☘ Emerald picks — Irish races, tracking only (not in Prixm P&L / Golden)
+  const emPicks=getPrixmPicks(getTop10Picks(D,'emerald'),'emerald');
+  const emHist=window._allHistory||hist;
+  const emHtml=emPicks.length?emPicks.slice(0,5).map(p=>_pickCard(p,emHist,true)).join(''):'<div style="padding:12px 14px;font-size:12px;color:#9ca3af">No Emerald picks today</div>';
   let plHtml='<div class="d1-pl-row"><span class="d1-pl-label">No results today</span></div>';
   if(hist&&hist.races&&date){
     const todayR=hist.races.filter(h=>h.date===date&&h.result);
@@ -6399,6 +7310,14 @@ function renderD1Sidebar(){
       </div>
       ${picksHtml}
     </div>
+    ${Object.values(D.venues).some(v=>isIreland(v.course))?`<div class="d1-panel" style="border-color:var(--em-line)">
+      <div class="d1-panel-hdr" style="background:var(--em-soft)">
+        <span class="d1-panel-title" style="color:var(--em)">☘ Emerald Picks</span>
+        <span class="d1-panel-date">IRE · ${emeraldLabel()}</span>
+      </div>
+      ${emHtml}
+      <div style="font-size:10px;color:var(--muted);padding:6px 12px;background:var(--card2)">Track only — not counted in Prixm P&amp;L or Golden.</div>
+    </div>`:''}
     <div class="d1-panel">
       <div class="d1-panel-hdr">
         <span class="d1-panel-title">Today's Results</span>
@@ -6502,17 +7421,19 @@ function calcAdjScore(runner,adj){
   return s;
 }
 
-function getTop10Picks(data){
+function getTop10Picks(data,engine){
   // Smart selection: when feedback adjustments exist, consider top 3 per race
   // and pick the horse that scores best under adjusted weights (may reject raw #1)
+  // engine: undefined/'prixm' → UK races (default, unchanged) · 'emerald' → ☘ Irish races only
   if(!data||!data.venues) return [];
-  const adj=getPicksFactorAdjustments();
+  const em=engine==='emerald';
+  const adj=em?null:getPicksFactorAdjustments(); // pick feedback adjustments are Prixm-calibrated
   let racePicks=[];
   Object.entries(data.venues).forEach(([vk,venue])=>{
     // Double-check excluded venues (safety net in case data wasn't pre-filtered)
     const vName=(venue.course||vk).toLowerCase().replace(/-/g,' ');
     if(EXCLUDED_VENUES.some(ex=>vName.includes(ex))) return;
-    if(isIreland(venue.course||vk)) return; // display only — excluded from picks/analysis
+    if(em!==isIreland(venue.course||vk)) return; // Prixm = UK only; ☘ Emerald = Irish only
     if(isLongchamp(venue.course||vk)) return; // display only — excluded from picks/analysis
     if(isDeauville(venue.course||vk)) return; // display only — excluded from picks/analysis
     venue.races.forEach((race,ri)=>{
@@ -6559,10 +7480,12 @@ function getTop10Picks(data){
 }
 
 /* ==================== PRIXM PICK OF THE DAY ENGINE ==================== */
-function getPrixmPicks(picks){
+function getPrixmPicks(picks,engine){
   // Quality-gated daily selections from Top 10 picks
   // Each pick gets a bet category and target finish based on edge analysis
+  // engine 'emerald' → same logic for ☘ Irish picks (getTop10Picks(D,'emerald'))
   if(!picks||!picks.length||!D||!D.venues) return [];
+  const _em=engine==='emerald';
   const prixm=[];
   picks.forEach(p=>{
     // Reconstruct race data for edge/CDP/momentum calculation
@@ -6570,7 +7493,7 @@ function getPrixmPicks(picks){
     if(!venue) return;
     const race=venue.races[p.raceIdx];
     if(!race||!race.runners) return;
-    if(isIreland(race.course)) return;
+    if(_em!==isIreland(race.course)) return;
     const sorted=[...race.runners].sort((a,b)=>b.score-a.score);
     const runner=race.runners.find(r=>r.name===p.horse);
     if(!runner) return;
@@ -6668,6 +7591,11 @@ function getPrixmBetRec(pick, race){
 
   // Reasoning tags
   const tags=[];
+  // 🧭 Horse × Track — negative only (validated ❌ verdict); ✅ stays out of the sidebar to cut noise
+  if(runner.track_fit&&runner.track_fit.verdict==='u'){
+    const why=(runner.track_fit.checks||[]).filter(c=>c[0]==='❌'&&c[4]==='valid').map(c=>c[1]).slice(0,1).join('');
+    tags.push({t:'🧭 unsuited'+(why?': '+why.toLowerCase():''),c:'neg'});
+  }
   // Gap
   if(gap>=10) tags.push({t:'+'+gap+'pt gap',c:'pos'});
   else if(gap>=5) tags.push({t:'+'+gap+'pt gap',c:'pos'});
@@ -6776,7 +7704,7 @@ function monthsAgo(dateStr){
   return (Date.now()-new Date(dateStr).getTime())/(1000*60*60*24*30);
 }
 function getHorseRunHistory(horseName){
-  const hist=window._resultsHistory;
+  const hist=window._allHistory||window._resultsHistory; // horse/venue-level: both engines (UK + Irish)
   if(!hist||!hist.races) return [];
   const name=(horseName||'').trim().toLowerCase();
   const runs=[];
@@ -7135,7 +8063,7 @@ function patchRunnerWatchback(date,venue,time,name,fields){
    last run both mean "show nothing", not a fallback badge. Step 3 (scoring boost) is explicitly
    NOT implemented — spec requires 50+ validated NEAR_MISS/UNLUCKY cases first. Do not add it here. */
 function getWatchbackContext(horseName){
-  const hist=window._resultsHistory;
+  const hist=window._allHistory||window._resultsHistory; // horse/venue-level: both engines (UK + Irish)
   if(!hist||!hist.races) return null;
   const n=(horseName||'').trim().toLowerCase();
   if(!n) return null;
@@ -7532,6 +8460,8 @@ function filterVenue(v){st.venue=v;renderVenueBar();renderRaceCards();renderFiel
 function filterFieldSize(f){if(st.fieldFilter.has(f))st.fieldFilter.delete(f);else st.fieldFilter.add(f);renderRaceCards();renderFieldSizeBar()}
 function setComboFilter(v){st.comboFilter=st.comboFilter===v?false:v;renderRaceCards();renderFieldSizeBar()}
 function filterRaceType(t){st.raceTypeFilter=st.raceTypeFilter===t?'all':t;renderRaceCards();renderFieldSizeBar()}
+function filterEngine(e){st.engineFilter=st.engineFilter===e?'all':e;renderRaceCards();renderFieldSizeBar()}
+function filterFit(f){st.fitFilter=st.fitFilter===f?'all':f;renderRaceCards();renderFieldSizeBar()}
 
 const FIELD_BRACKETS=[
   {key:'all',label:'All',min:0,max:999},
@@ -7567,7 +8497,7 @@ function filterRaceCode(c){st.raceCodeFilter=st.raceCodeFilter===c?'all':c;rende
 
 let _fsbPillOpen=null;
 function fsbToggle(key){_fsbPillOpen=_fsbPillOpen===key?null:key;renderFieldSizeBar();}
-function fsbClearAll(){_fsbPillOpen=null;st.fieldFilter.clear();st.gapFilter.clear();st.raceTypeFilter='all';st.raceCodeFilter='all';st.confidenceFilter='all';st.comboFilter=false;renderVenueBar();renderRaceCards();renderFieldSizeBar();}
+function fsbClearAll(){_fsbPillOpen=null;st.fieldFilter.clear();st.gapFilter.clear();st.raceTypeFilter='all';st.raceCodeFilter='all';st.confidenceFilter='all';st.comboFilter=false;st.engineFilter='all';st.fitFilter='all';renderVenueBar();renderRaceCards();renderFieldSizeBar();}
 (function(){document.addEventListener('click',function(e){if(_fsbPillOpen&&!e.target.closest('#fieldSizeBar')){_fsbPillOpen=null;renderFieldSizeBar();}});})();
 
 function renderFieldSizeBar(){
@@ -7580,6 +8510,7 @@ function renderFieldSizeBar(){
   const confCounts={'TOP PICK':0,'STRONG':0,'SOLID':0,'MODERATE':0};
   const gapCounts={tight:0,competitive:0,clear:0};
   const rcCounts={};
+  const engCounts={prixm:0,emerald:0};let topUCount=0;
   let total=0;
   venues.forEach(vk=>{
     const v=D.venues[vk];if(!v)return;
@@ -7596,6 +8527,8 @@ function renderFieldSizeBar(){
         gapCounts[getGapBracket(Math.round((s[0].score-s[1].score)*10)/10)]++;
       }else gapCounts.tight++;
       const rt=(r.race_type||'Unknown').trim();rcCounts[rt]=(rcCounts[rt]||0)+1;
+      engCounts[ire?'emerald':'prixm']++;
+      if(r.runners&&r.runners.length){const t0=[...r.runners].sort((a,b)=>b.score-a.score)[0];if(t0&&t0.track_fit&&t0.track_fit.verdict==='u')topUCount++;}
     });
   });
   // ── Historical bracket stats ──
@@ -7688,120 +8621,100 @@ function renderFieldSizeBar(){
     <div class="fsb-chip" onclick="openBanModal()" style="border-color:rgba(239,68,68,.4);color:#f87171">🚫 Manage Banned (${bc})</div>
     <div class="fsb-chip" onclick="toggleHideBanned()" style="border-color:${hiding?'#ef4444':'rgba(16,185,129,.4)'};color:${hiding?'#f87171':'#34d399'}">${hiding?'🙈 Hiding Banned':'👀 Show Banned'}</div>
   </div>`:null;
-  const anyActive=fsActive||gapActive||rtActive||codeActive||confActive||!!st.comboFilter;
+  // ── Dropdown: Engine (☘ Emerald) ──
+  const engActive=st.engineFilter&&st.engineFilter!=='all';
+  const engDrop=`<div class="fsb-drop-title">Engine</div><div class="fsb-chips">
+    <div class="fsb-chip colored${st.engineFilter==='prixm'?' on':''}" style="border-left-color:#15803d" onclick="filterEngine('prixm')">${engineLabel()} · UK (${engCounts.prixm})</div>
+    ${engCounts.emerald?`<div class="fsb-chip colored${st.engineFilter==='emerald'?' on':''}" style="border-left-color:#0f766e" onclick="filterEngine('emerald')">☘ ${emeraldLabel()} · IRE (${engCounts.emerald})</div>`:''}
+  </div>${engActive?clearRow("filterEngine(st.engineFilter)"):''}`;
+  // ── Dropdown: Track fit (🧭 only ❌ — validated verdicts) ──
+  const fitActive=st.fitFilter&&st.fitFilter!=='all';
+  const fitDrop=`<div class="fsb-drop-title">🧭 Track fit</div><div class="fsb-chips">
+    <div class="fsb-chip${st.fitFilter==='topU'?' on':''}" onclick="filterFit('topU')">❌ Top pick unsuited (${topUCount})</div>
+    <div class="fsb-chip${st.fitFilter==='hideU'?' on':''}" onclick="filterFit('hideU')">Hide races where top pick is ❌ (${total-topUCount})</div>
+  </div>${fitActive?clearRow("filterFit(st.fitFilter)"):''}`;
+  const anyActive=fsActive||gapActive||rtActive||codeActive||confActive||!!st.comboFilter||engActive||fitActive;
   el.innerHTML=`<div class="fsb-bar">
+    ${engCounts.emerald?pill('engine',engActive?(st.engineFilter==='emerald'?'☘ Emerald':'Prixm'):'Engine',engActive,0,engDrop):''}
     ${pill('field','Field Size',fsActive,fsActive?st.fieldFilter.size:0,fsDrop)}
     ${pill('gap','Gap',gapActive,gapActive?st.gapFilter.size:0,gapDrop)}
     ${pill('rtype',rtActive?(rtSel?.short||'Race Type'):'Race Type',rtActive,0,rtDrop)}
     ${showCode?pill('code',codeActive?st.raceCodeFilter:'Code',codeActive,0,codeDrop):''}
     ${pill('conf',confActive?(confSel?.label||'Confidence'):'Confidence',confActive,0,confDrop,true)}
+    ${topUCount||fitActive?pill('fit',fitActive?(st.fitFilter==='topU'?'❌ Unsuited':'Hide ❌'):'🧭 Track fit',fitActive,0,fitDrop,true):''}
     ${comboN&&comboDrop?pill('combo','🔥 Combo',!!st.comboFilter,0,comboDrop,true):''}
     ${bc&&bannedDrop?pill('banned','🚫 Banned',hiding,bc,bannedDrop,true):''}
     ${anyActive?`<button class="fsb-clear" onclick="fsbClearAll()">✕ Clear all</button>`:''}
   </div>`;
 }
 
-const IRE_TRACKS=new Set(['curragh','leopardstown','fairyhouse','punchestown','galway','naas','cork','tipperary','gowran park','killarney','listowel','dundalk','navan','tramore','sligo','roscommon','ballinrobe','clonmel','limerick','thurles','wexford','bellewstown','down royal','downpatrick','laytown']);
-function isIreland(course){const v=(course||'').toLowerCase().replace(/\s*\([a-z]{2,3}\)\s*$/,'').trim();return v.includes('(ire)')||IRE_TRACKS.has(v);}
+// Synced copy of IRE_TRACKS in scripts/results_fetcher.py (single source of truth) — 26 tracks, ROI + NI.
+const IRE_TRACKS=new Set(['ballinrobe','bellewstown','clonmel','cork','curragh','down royal','downpatrick','dundalk','fairyhouse','galway','gowran park','kilbeggan','killarney','laytown','leopardstown','limerick','listowel','naas','navan','punchestown','roscommon','sligo','thurles','tipperary','tramore','wexford']);
+// Checks "(IRE)" BEFORE stripping suffixes (the old version stripped first, so the (IRE) test never fired,
+// and "Dundalk (AW) (IRE)" failed the set lookup).
+function isIreland(course){const raw=(course||'').toLowerCase();if(raw.includes('(ire)'))return true;const v=raw.replace(/\s*\([^)]*\)/g,' ').replace(/-/g,' ').replace(/\s+/g,' ').trim().replace(/^the /,'');return IRE_TRACKS.has(v)||[...IRE_TRACKS].some(t=>v.startsWith(t+' '));}
+function isEmeraldRace(r){return !!r&&(r.engine==='emerald'||isIreland(r.venue||r.course));}
+function splitEngineHistory(){
+  const h=window._resultsHistory;if(!h||!Array.isArray(h.races))return;
+  const all=(window._allHistory&&window._allHistory.races&&h.races.length<window._allHistory.races.length)?window._allHistory.races:h.races;
+  const emer=all.filter(isEmeraldRace), uk=all.filter(r=>!isEmeraldRace(r));
+  window._allHistory={version:1,races:all};
+  window._emeraldHistory={version:1,races:emer,calibrations:(h.calibrations||[]).filter(c=>/^ire_/.test(c.profile||'')),weight_profiles:{}};
+  h.races=uk;
+  h.calibrations=(h.calibrations||[]).filter(c=>!/^ire_/.test(c.profile||''));
+  const badge=document.getElementById('dbStatusBadge');
+  if(badge&&badge.style.display!=='none'&&emer.length) badge.textContent=badge.textContent.replace(/(\d+) races/,`${uk.length} UK · ☘ ${emer.length} IRE`);
+}
 function isLongchamp(course){return(course||'').toLowerCase().replace(/-/g,' ').includes('longchamp');}
 function isDeauville(course){return(course||'').toLowerCase().replace(/-/g,' ').includes('deauville');}
 function getRaceBorderColor(r){const ire=isIreland(r.course),hcp=r.handicap||/handicap/i.test(r.race_name||'');if(ire&&hcp)return'#f87171';if(ire)return'#10b981';if(hcp)return'#f59e0b';return'#3b82f6';}
 
-/* ==================== TRACK PROFILE DATABASE (improvement.md Feature 4) ====================
-   Static lookup, ~20 major UK tracks. Display-only soft signal — NEVER modifies predicted_score.
-   Expand this object as more tracks are needed; unseeded tracks simply show no Track Profile card. */
-const TRACK_PROFILES={
-  'Chester':{shape:'tight_oval',circumference_furlongs:10,turns:5,
-    significant_features:['Extremely sharp left-hand turns throughout','Draw critical at sprint distances — low numbers heavily favoured','Front-runners dominate due to tight bends','Big-striding galloping types disadvantaged','Stamina less important than agility and balance'],
-    draw_bias:{'5f':'low_draw_strong','6f':'low_draw_moderate','7f':'low_draw_slight','1m2f+':'negligible'},
-    running_styles:['front_runner','prominent'],caution_flags:['large_striding_horse','hold_up_horse','high_draw_sprint']},
-  'Epsom':{shape:'horseshoe',circumference_furlongs:12,turns:3,
-    significant_features:['Significant downhill gradient to Tattenham Corner','Camber on left-hand bend — horses must balance','Straight 5f course has significant camber','Quirky track — some horses never handle it','Stiff uphill finish from 2f out'],
-    draw_bias:{'5f':'low_draw_significant_camber','6f':'mixed','1m':'stalls_position_matters','1m4f':'wide_draw_disadvantage_tattenham'},
-    running_styles:['balanced','adaptable'],caution_flags:['high_strung','unbalanced_mover','first_time_here']},
-  'Goodwood':{shape:'undulating_horseshoe',circumference_furlongs:14,turns:3,
-    significant_features:['Undulating with significant uphill finish','Stiff 2f uphill run-in tests stamina','Suits genuine stayers and horses with a high cruising speed','Draw less significant at longer distances','Very different from flat galloping tracks'],
-    draw_bias:{'5f':'slight_low_draw','6f':'mixed','1m+':'negligible'},
-    running_styles:['hold_up','strong_finisher'],caution_flags:['one_paced_horse','flat_track_specialist']},
-  'Cheltenham':{shape:'oval_undulating',circumference_furlongs:16,turns:4,
-    significant_features:['Uphill finish — significant stamina test','Old Course: tighter turns, suits handier horses','New Course: more galloping, suits long-striding types','Famous hill on back straight — saps pace','Right-handed — suits right-handed horses'],
-    draw_bias:{'all':'negligible'},
-    running_styles:['prominent','economical_jumper'],caution_flags:['flat_track_only_specialist','poor_jumper_on_hurdles']},
-  'Newmarket':{shape:'straight_or_sweeping',circumference_furlongs:18,turns:1,
-    significant_features:['Long straight Rowley Mile course — no tight turns','Dip at the bushes and rise to the finish','Suits long-striding galloping types','Draw can matter in large fields over sprint distances','July Course used in summer — similar straight-course principles'],
-    draw_bias:{'5f':'high_draw_slight_advantage','6f':'mixed','1m+':'negligible'},
-    running_styles:['galloper','long_strider'],caution_flags:['sharp_track_specialist','small_horse_on_soft']},
-  'Ascot':{shape:'round_with_home_turn',circumference_furlongs:14,turns:'undulating right-handed, spur for straight mile',
-    significant_features:['Stiff finish with uphill approach to the winning post','Round course has a spur for straight-mile races','Testing track — stamina and class both examined','High-class fields typical, draw rarely decisive'],
-    draw_bias:{'5f':'high_draw_slight_stands_side','6f':'slight','1m+':'negligible'},
-    running_styles:['galloper','strong_traveller'],caution_flags:[]},
-  'York':{shape:'flat_galloping',circumference_furlongs:14,turns:2,
-    significant_features:['Very fair, galloping track — few surprises','Long home straight allows a true test','Draw bias minimal except in big round-course fields','Suits genuine gallopers slightly over extreme hold-up types'],
-    draw_bias:{'5f':'high_draw_slight_stands_side','6f':'mixed','1m+':'negligible'},
-    running_styles:['galloper'],caution_flags:['extreme_hold_up_style_big_fields']},
-  'Doncaster':{shape:'flat_galloping',circumference_furlongs:16,turns:2,
-    significant_features:['Wide, galloping, fair track','Long straight examines stamina late','Draw negligible at most distances','Home of the St Leger — a true stamina test at 1m6f+'],
-    draw_bias:{'5f':'low_draw_slight_stands_side','6f':'mixed','1m+':'negligible'},
-    running_styles:['galloper'],caution_flags:[]},
-  'Newbury':{shape:'flat_galloping',circumference_furlongs:14,turns:2,
-    significant_features:['Wide, galloping park course','Long home straight, stiff test','Draw has occasionally mattered in big sprint fields — low draw favoured','Fair, true test of stamina'],
-    draw_bias:{'5f':'low_draw_slight','6f':'slight','1m+':'negligible'},
-    running_styles:['galloper'],caution_flags:[]},
-  'Sandown':{shape:'undulating',circumference_furlongs:12,turns:3,
-    significant_features:['Stiff uphill finish (the Railway Straight)','Undulating course tests balance','Suits genuine, tough stayers','Downhill run before the home turn can unbalance novices'],
-    draw_bias:{'all':'negligible'},
-    running_styles:['tough_traveller','strong_finisher'],caution_flags:['inexperienced_horse_first_time_here']},
-  'Haydock':{shape:'flat_galloping',circumference_furlongs:12.5,turns:2,
-    significant_features:['Flat, fair, galloping track','Sweeping bends, no tight turns','Genuine stamina test, minimal draw bias','Often holds ground — a good test in testing conditions'],
-    draw_bias:{'all':'negligible'},
-    running_styles:['galloper'],caution_flags:[]},
-  'Aintree':{shape:'flat_sweeping',circumference_furlongs:16,turns:'left-handed, National fences on the National course; tighter Mildmay course',
-    significant_features:['Flat, galloping — deceptively stiff run-in','National fences unique — jumping experience matters hugely','Mildmay course tighter, more like a conventional jumps track','Good jumping and stamina rewarded over the National fences'],
-    draw_bias:{'all':'negligible'},
-    running_styles:['bold_jumper','stayer'],caution_flags:['inexperienced_over_national_fences']},
-  'Kempton':{shape:'tight_flat',circumference_furlongs:10,turns:'right-handed on turf; separate sharper AW oval',
-    significant_features:['Sharp, flat, tight turns on the turf course','Speed and handiness favoured over big stamina','AW (Polytrack) is a separate, sharper oval — treat as a different track'],
-    draw_bias:{'5f':'low_draw_slight_turf','6f':'slight'},
-    running_styles:['handy','sharp_traveller'],caution_flags:['big_striding_galloper_turf']},
-  'Lingfield':{shape:'undulating_plus_flat_aw',circumference_furlongs:12,turns:'left-handed, two distinct courses',
-    significant_features:['Turf course undulating with a stiffish uphill finish','AW (Polytrack) course flatter, fairer, more of a speed test','Two distinct tracks under one name — always check surface'],
-    draw_bias:{'5f_aw':'low_draw_slight'},
-    running_styles:['adaptable'],caution_flags:['turf_form_not_transferable_to_aw']},
-  'Wolverhampton':{shape:'tight_aw_only',circumference_furlongs:8.75,turns:'left-handed, sharp',
-    significant_features:['Tight, sharp track — handiness key','Tapeta surface, different characteristics to Polytrack tracks','Draw can matter over sprint trips in big fields'],
-    draw_bias:{'5f':'high_draw_slight','6f':'mixed'},
-    running_styles:['handy','sharp_traveller'],caution_flags:['big_striding_galloper']},
-  'Nottingham':{shape:'flat_galloping',circumference_furlongs:12,turns:2,
-    significant_features:['Fair, flat, galloping track','Long home straight','Draw rarely a major factor'],
-    draw_bias:{'all':'negligible'},
-    running_styles:['galloper'],caution_flags:[]},
-  'Leicester':{shape:'flat_galloping',circumference_furlongs:12,turns:2,
-    significant_features:['Fair, flat, galloping course','Sweeping turns, no tight bends','Draw rarely decisive'],
-    draw_bias:{'all':'negligible'},
-    running_styles:['galloper'],caution_flags:[]},
-  'Salisbury':{shape:'straight_plus_round',circumference_furlongs:12,turns:'right-handed round course',
-    significant_features:['Testing, undulating track','Uphill in the closing stages','Draw can matter fractionally on the straight course'],
-    draw_bias:{'straight_course':'slight'},
-    running_styles:['stayer'],caution_flags:[]},
-  'Windsor':{shape:'figure_of_eight',circumference_furlongs:14,turns:'figure-of-eight, right- then left-handed',
-    significant_features:['Unusual figure-of-eight layout — crosses over itself via a bridge','Flat, sharp turns require balance and handiness','Not a course for long-striding gallopers'],
-    draw_bias:{'all':'negligible'},
-    running_styles:['handy','balanced'],caution_flags:['long_striding_galloper','inexperienced_horse_first_time_here']},
-  'Beverley':{shape:'tight_undulating',circumference_furlongs:12,turns:'left-handed, tricky home turn',
-    significant_features:['Tight, undulating track with a tricky home turn','Draw can matter — low draw often favoured on the round course','Sharp track suits handy, experienced types'],
-    draw_bias:{'5f':'low_draw_slight','6f':'low_draw_slight'},
-    running_styles:['handy'],caution_flags:['big_striding_galloper','inexperienced_horse_first_time_here']}
-};
-function normalizeTrackKey(course){return(course||'').replace(/\s*\([a-z]{2,3}\)\s*$/i,'').replace(/-/g,' ').trim();}
+/* ==================== TRACK PROFILE DATABASE (improvement.md Feature 4 → 🗺 Track Explorer) ====================
+   Loaded from track_profiles.js (window._trackProfiles), generated by scripts/build_track_profiles.py —
+   the same file the ☘ Emerald engine reads. 86 tracks (26 Ireland + 60 UK), keyed by lowercase name.
+   Display-only for Prixm — NEVER modifies predicted_score. Edit the Python table, re-run the script. */
+const TRACK_PROFILES=window._trackProfiles||{};
+function normalizeTrackKey(course){return(course||'').toLowerCase().replace(/\s*\([^)]*\)/g,' ').replace(/-/g,' ').replace(/\s+/g,' ').trim().replace(/^the /,'');}
 function getTrackProfile(course){
   const key=normalizeTrackKey(course);
+  if(!key) return null;
   if(TRACK_PROFILES[key]) return TRACK_PROFILES[key];
-  // loose match: "Newmarket (Rowley Mile)" / "Newmarket July" etc. → base Newmarket entry
-  const lower=key.toLowerCase();
-  const found=Object.keys(TRACK_PROFILES).find(k=>lower.startsWith(k.toLowerCase()));
+  // loose match: "Newmarket July" → newmarket, "Fontwell" ↔ "fontwell park"
+  const found=Object.keys(TRACK_PROFILES).find(k=>key.startsWith(k)||k.startsWith(key));
   return found?TRACK_PROFILES[found]:null;
 }
+function getTrackKey(course){const tp=getTrackProfile(course);if(!tp)return null;return Object.keys(TRACK_PROFILES).find(k=>TRACK_PROFILES[k]===tp)||null;}
 function isTrackProfiled(course){return !!getTrackProfile(course);}
+
+/* ==================== 🧭 HORSE × TRACK CROSS ANALYSIS (display) ====================
+   Computed in Python (engine/emerald_engine.py → runner.track_fit, race.pace) from the horse's
+   logged runs + in-running comments vs the track's character. Every check type is validated
+   against logged results (scripts/validate_track_fit.py → xa_validation.js):
+     valid     → counts toward the ✅/⚠/❌ verdict        unproven → shown as a detail row only
+     refuted   → never shown (the data says it doesn't matter)
+   No evidence → nothing rendered at all (no "unknown" flags). Prixm: display-only, never scores.
+   ☘ Emerald: validated checks feed the Track fit factor. */
+const FIT_LBL={s:['fit-s','✅ SUITS'],q:['fit-q','⚠ QUESTION'],u:['fit-u','❌ UNSUITED']};
+function fitBadge(r){const v=r&&r.track_fit&&r.track_fit.verdict;return v&&FIT_LBL[v]?`<div style="margin-top:3px"><span class="fit-badge ${FIT_LBL[v][0]}" title="🧭 Horse × Track — expand the runner for the reasons">${FIT_LBL[v][1]}</span></div>`:'';}
+function renderTrackFitBox(r,race){
+  const tf=r&&r.track_fit;if(!tf||!tf.checks||!tf.checks.length)return'';
+  const tp=getTrackProfile(race.course);const v=tf.verdict;
+  const hcls=v||'n';
+  const head=v?`<span class="fit-badge ${FIT_LBL[v][0]}">${FIT_LBL[v][1]}${v==='u'?' — think about it':''}</span>`:`<span style="font-size:10.5px;color:var(--muted)">No proven signal yet</span>`;
+  const rows=tf.checks.map(c=>`<div class="xa-row2${c[4]==='unproven'?' unproven':''}"><span>${c[0]}</span><span class="t">${c[1]}</span><span>${c[2]}${c[4]==='unproven'?'<span class="xa-unp" title="Not enough logged cases yet to prove this check predicts results — shown for context, not counted">unproven</span>':''}</span></div>`).join('');
+  const em=isIreland(race.course);
+  return `<div style="grid-column:1/-1"><div class="xa-box"><div class="xa-box-h ${hcls}"><span>🧭 Horse × Track: ${tp?tp.name:race.course} ${race.distance||''}</span>${head}</div>
+    <div class="xa-row2" style="font-weight:700;font-size:9.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)"><span></span><span>Track demands</span><span>This horse</span></div>
+    ${rows}
+    <div class="xa-foot">${em?'☘ Emerald: validated checks feed the <b>Track fit</b> factor.':'Prixm: <b>flag only</b> — never changes the score, gap or Golden/Silver/Bronze.'} Checks come from logged runs + in-running comments; only checks proven on past results count toward the verdict.</div></div></div>`;
+}
+function renderPaceBox(race){
+  const p=race&&race.pace;if(!p)return'';
+  const lane=k=>(p[k]||[]).length?(p[k]||[]).join('<br>'):'<span style="color:var(--muted)">—</span>';
+  return `<div class="pace-box"><div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)">🏁 Pace map <span style="font-weight:400;text-transform:none;letter-spacing:0">(from logged in-running comments)</span></div>
+    <div class="pace-lanes"><div class="pace-lane"><b>Front-runner</b>${lane('FR')}</div><div class="pace-lane"><b>Prominent</b>${lane('P')}</div><div class="pace-lane"><b>Mid-div</b>${lane('MD')}</div><div class="pace-lane"><b>Hold-up</b>${lane('HU')}</div></div>
+    <div style="font-size:12px;font-weight:600">${p.verdict}</div></div>`;
+}
 function renderTrackProfileSection(runner, race){
   const tp=getTrackProfile(race&&race.course);
   if(!tp) return '<div style="font-size:11px;color:var(--muted);font-style:italic;padding:4px 0">No track profile on file for this course yet.</div>';
@@ -7988,6 +8901,13 @@ function renderRaceCards(){
       return true;
     });
   }
+  // ☘ Engine filter (Prixm UK / Emerald IRE)
+  if(st.engineFilter&&st.engineFilter!=='all'){
+    races=races.filter(r=>st.engineFilter==='emerald'?isIreland(r.course):!isIreland(r.course));
+  }
+  // 🧭 Track-fit filter — only ever acts on ❌ UNSUITED (validated verdicts)
+  if(st.fitFilter==='topU') races=races.filter(r=>{const t=r.runners&&[...r.runners].sort((a,b)=>b.score-a.score)[0];return t&&t.track_fit&&t.track_fit.verdict==='u';});
+  else if(st.fitFilter==='hideU') races=races.filter(r=>{const t=r.runners&&[...r.runners].sort((a,b)=>b.score-a.score)[0];return !(t&&t.track_fit&&t.track_fit.verdict==='u');});
   // Apply race code filter (Flat/Hurdle/Chase)
   if(st.raceCodeFilter&&st.raceCodeFilter!=='all'){
     races=races.filter(r=>(r.race_type||'').trim()===st.raceCodeFilter);
@@ -8039,7 +8959,7 @@ function renderRaceCards(){
     });
   }
 
-  const hist=window._resultsHistory;
+  const hist=window._allHistory||window._resultsHistory; // both engines — Irish cards show ✓ Result too
   // Pre-compute today's combo matches keyed by venueKey+raceIdx for O(1) lookup
   const comboByRace={};
   todayCombos.forEach(m=>{
@@ -8076,6 +8996,14 @@ function renderRaceCards(){
     const dataSeg=_gf?'golden':_sf?'silver':_bf?'bronze':'';
     const _xaR=_xaByRace[r.venueKey+'_'+r.raceIdx];
     const xaCls=_xaR?(_xaR.strength==='strong'?'rc-xa-strong':'rc-xa-mod'):'';
+    const _em=isIreland(r.course);
+    const _engBadge=_em?`<span class="rc-eng rc-eng-em" title="Scored by the ☘ Emerald engine (Irish racing)">☘ ${emeraldLabel()}</span>`:`<span class="rc-eng rc-eng-px">${engineLabel()}</span>`;
+    // Emerald cards: what Prixm would have said (kept on every runner as prixm_score)
+    const _pxSorted=_em&&r.runners&&r.runners.some(x=>x.prixm_score!=null)?[...r.runners].sort((a,b)=>(b.prixm_score||0)-(a.prixm_score||0)):null;
+    const _pxLine=_pxSorted&&_pxSorted.length>1?`<div class="rc-px-ghost">Prixm would say: ${_pxSorted[0].name} ${_pxSorted[0].prixm_score} · gap ${Math.round((_pxSorted[0].prixm_score-_pxSorted[1].prixm_score)*10)/10}</div>`:'';
+    const _uIcon=ru=>ru&&ru.track_fit&&ru.track_fit.verdict==='u'?` <span class="rc-fit-u" title="🧭 Unsuited to this track — open the race for the reasons">❌</span>`:'';
+    const _topU=top&&sortedR[0]&&sortedR[0].track_fit&&sortedR[0].track_fit.verdict==='u'?sortedR[0]:null;
+    const _topUReason=_topU?(_topU.track_fit.checks.filter(c=>c[0]==='❌'&&c[4]==='valid').map(c=>c[1]).slice(0,2).join(' · ')||'track demands'):'';
     return `<div class="rc ${cardExtraCls} ${xaCls}" id="${cardId}" data-seg="${dataSeg}" style="border-left:5px solid ${getRaceBorderColor(r)}" onclick="openRace('${r.venueKey}',${r.raceIdx}).catch(e=>console.error('openRace error:',e))">
   <div class="rc-ch">
     <div>
@@ -8083,6 +9011,7 @@ function renderRaceCards(){
       <span class="rc-card-venue">${r.course}<button class="ta-track-btn" onclick="event.stopPropagation();openTrackAnalysis('${r.course.replace(/'/g,"\\'")}')" title="Track Analysis" style="margin-left:4px;font-size:9px;padding:0 3px;background:none;border:none;cursor:pointer;color:#9ca3af">📊</button></span>
     </div>
     <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px">
+      ${_engBadge}
       ${segBadge}
       ${logged?'<span class="rc-logged">✓ Result</span>':''}
     </div>
@@ -8110,11 +9039,13 @@ function renderRaceCards(){
     </div>
   </div>
   <div class="rc-cpicks">
-    ${top?`<div class="rc-p1"><span class="rc-p1-star">★</span><span class="rc-p1-name">${top.name}</span><span class="rc-p1-sc">${topScore}/118</span></div><div class="rc-p1-bar"><div class="rc-p1-fill" style="width:${topPct}%"></div></div>`:`<span style="font-size:11px;color:#9ca3af">No data</span>`}
-    ${second?`<div class="rc-p2"><span class="rc-p2-num">2.</span><span class="rc-p2-name">${second.name}</span><span class="rc-p2-sc">${second.score}/118</span></div><div class="rc-p2-bar"><div class="rc-p2-fill" style="width:${secondPct}%"></div></div>`:''}
+    ${top?`<div class="rc-p1"><span class="rc-p1-star">★</span><span class="rc-p1-name">${top.name}${_uIcon(sortedR[0])}</span><span class="rc-p1-sc">${topScore}/118</span></div><div class="rc-p1-bar"><div class="rc-p1-fill" style="width:${topPct}%"></div></div>${_pxLine}`:`<span style="font-size:11px;color:#9ca3af">No data</span>`}
+    ${second?`<div class="rc-p2"><span class="rc-p2-num">2.</span><span class="rc-p2-name">${second.name}${_uIcon(second)}</span><span class="rc-p2-sc">${second.score}/118</span></div><div class="rc-p2-bar"><div class="rc-p2-fill" style="width:${secondPct}%"></div></div>`:''}
   </div>
   ${rCombos.length?`<div class="rc-combo-row">${rCombos.map(m=>`<span class="rc-combo-tag">⚡ ${m.runner.name} · ${m.combo.type.replace('+',' + ')} · ${Math.round(m.combo.placeRate)}% placed</span>`).join('')}</div>`:''}
   ${_ban?renderBanFlag(_ban):''}
+  ${_topU?`<div class="rc-fit-strip">🧭 Top pick unsuited: ${_topUReason}. Think about it.</div>`:''}
+  ${window.lgChipForRace?window.lgChipForRace(r.venueKey,r.raceIdx):''}
   ${_xaR?`<div class="rc-xa-strip ${_xaR.strength==='strong'?'rc-xa-strip-strong':'rc-xa-strip-mod'}"><span class="rc-xa-strip-icon">⚡</span>${_xaR.labels.map(l=>`<span class="rc-xa-chip ${_xaR.strength==='strong'?'rc-xa-chip-strong':'rc-xa-chip-mod'}">${l}</span>`).join('')}</div>`:''}
 </div>`;
   }).join('');
@@ -8172,14 +9103,17 @@ async function renderDetail(){
 
   // Header (shared between tabs)
   let html=`
-  <div class="race-title" style="border-left:9px solid ${getRaceBorderColor(race)};padding-left:10px">${race.time} — ${race.name}</div>
+  <div class="race-title" style="border-left:9px solid ${getRaceBorderColor(race)};padding-left:10px">${race.time} — ${race.name||race.race_name||''}</div>
   <div class="race-sub">
     <span>${race.course}</span><span>${race.distance}</span><span>${race.going}</span>
     <span>${race.race_type}</span><span>${race.field_size} runners</span>
     ${race.race_class?`<span>Class ${race.race_class}</span>`:''}
     ${race.pattern?`<span>${race.pattern}</span>`:''}
     ${race.prize?`<span>Prize: £${race.prize}</span>`:''}
+    ${isIreland(race.course)?`<b class="rc-eng rc-eng-em" style="align-self:center;font-size:11px;padding:3px 9px">☘ ${emeraldLabel()}</b>`:`<b class="rc-eng rc-eng-px" style="align-self:center;font-size:11px;padding:3px 9px">${engineLabel()}</b>`}
+    ${getTrackProfile(race.course)?`<button class="vbtn" style="font-size:11px;padding:3px 10px" onclick="openTrackExplorer('${(race.course||'').replace(/'/g,"\\'")}','prof')">🗺 ${getTrackProfile(race.course).name} track profile →</button>`:''}
   </div>
+  ${renderPaceBox(race)}
   <div class="sumstrip">
     <div class="ss"><div class="sv">${runners.length}</div><div class="sl">Runners</div></div>
     <div class="ss"><div class="sv" style="color:#059669">${topPicks}</div><div class="sl">Top Picks</div></div>
@@ -8218,6 +9152,7 @@ async function renderDetail(){
   }
   el.innerHTML=html;
   if(tab==='gap')gaptUpdate();
+  if(tab==='predict'&&window._rpReplay){try{rpReplayInit();}catch(e){console.error('replay init',e);}}
 }
 
 function getRunnerComboBadges(runner){
@@ -8247,7 +9182,7 @@ function getRunnerComboBadges(runner){
 }
 
 function getCourseSpecialistBadge(r, race){
-  const hist=window._resultsHistory;
+  const hist=window._allHistory||window._resultsHistory; // horse/venue-level: both engines (UK + Irish)
   if(!hist||!hist.races||!race) return '';
   const horseName=(r.name||'').trim().toLowerCase();
   const targetVenue=(race.course||'').trim().toLowerCase().replace(/\s*\(aw\)$/,'');
@@ -8272,7 +9207,7 @@ function getCourseSpecialistBadge(r, race){
 /* ==================== CONNECTION CHANGE DETECTOR ==================== */
 // Detects jockey/trainer changes: compares today vs last race only
 function detectConnectionChange(runner){
-  const hist=window._resultsHistory;
+  const hist=window._allHistory||window._resultsHistory; // horse/venue-level: both engines (UK + Irish)
   if(!hist||!hist.races||!hist.races.length) return null;
   const horseName=(runner.name||'').trim().toLowerCase();
   const todayJockey=(runner.jockey||'').trim().toLowerCase();
@@ -8300,7 +9235,7 @@ function detectConnectionChange(runner){
 
 // Get win/place stats for a jockey or trainer from results_history
 function getConnectionStats(name,type){
-  const hist=window._resultsHistory;
+  const hist=window._allHistory||window._resultsHistory; // horse/venue-level: both engines (UK + Irish)
   if(!hist||!hist.races) return {runs:0,wins:0,places:0,winPct:0,placePct:0};
   const n=(name||'').trim().toLowerCase();
   if(!n) return {runs:0,wins:0,places:0,winPct:0,placePct:0};
@@ -8353,7 +9288,7 @@ function getConnectionChangeBadge(runner){
    the SQLite schema — see plan Phase 2); until then those rows are omitted and a
    note is shown instead of faking data. */
 function getHorseHistRuns(name){
-  const hist=window._resultsHistory;
+  const hist=window._allHistory||window._resultsHistory; // horse/venue-level: both engines (UK + Irish)
   const out=[];
   if(!hist||!hist.races) return out;
   const n=(name||'').trim().toLowerCase();
@@ -8703,7 +9638,7 @@ function renderMainTab(runners,race,vk,ri){
     <div class="vcl-item"><span class="vcl-dot" style="background:#059669"></span>Pass (≥70%)</div>
     <div class="vcl-item"><span class="vcl-dot" style="background:#d97706"></span>Marginal (40-69%)</div>
     <div class="vcl-item"><span class="vcl-dot" style="background:#dc2626"></span>Fail (&lt;40%)</div>
-    <span style="margin-left:auto;font-size:11px;color:var(--muted)">Avg: ${Math.round(avgScore)}/${MAX_SCORE} · Variables: ${Object.values(FM).map(f=>f.l).join(' · ')}</span>
+    <span style="margin-left:auto;font-size:11px;color:var(--muted)">Avg: ${Math.round(avgScore)}/${MAX_SCORE} · ${isIreland(race&&race.course)?'☘ '+emeraldLabel()+' · ':''}Variables: ${Object.values(isIreland(race&&race.course)?EM_FM:FM).map(f=>f.l).join(' · ')}</span>
   </div>
   ${renderAttrFilterBar(runners, attrMap)}
   <table class="rtbl"><thead><tr>
@@ -8743,9 +9678,9 @@ function renderMainTab(runners,race,vk,ri){
       <td>${wtStr(r.lbs)}</td>
       <td>${r.draw||'—'}</td>
       <td>${r.last_run!=null?r.last_run+'d':'—'}</td>
-      <td><span class="sbar"><span class="sfill" style="width:${(r.score/MAX_SCORE)*100}%;background:${sc(r.score)}"></span></span><b style="color:${sc(r.score)}">${r.score}</b><span style="color:var(--muted);font-size:10px">/${MAX_SCORE}</span></td>
+      <td><span class="sbar"><span class="sfill" style="width:${(r.score/MAX_SCORE)*100}%;background:${sc(r.score)}"></span></span><b style="color:${sc(r.score)}">${r.score}</b><span style="color:var(--muted);font-size:10px">/${MAX_SCORE}</span>${r.prixm_score!=null?`<div style="font-size:9.5px;color:#9ca3af" title="What Prixm scored this runner">Prixm ${r.prixm_score}</div>`:''}</td>
       <td>${deltaHtml(r.score)}</td>
-      <td>${confBadge(conf)}</td>
+      <td>${confBadge(conf)}${fitBadge(r)}${window.lgChipForRunner?`<div>${window.lgChipForRunner(vk,ri,r.name)}</div>`:''}</td>
       <td>${varTicks(r.score_breakdown)}</td>
     </tr>`;
     if(attrFiltering&&attrIsMatch&&matchedAttrIds.length){
@@ -9123,68 +10058,194 @@ function renderPredictTab(runners, race, vk){
     </div>`;
   });
 
-  // Race track animation — spacing driven by the same predicted order above, not a separate calc
-  const leaderScore=rows[0].runner.score||0;
-  const gaps=rows.map(r=>leaderScore-(r.runner.score||0));
-  const maxGap=Math.max(...gaps,1);
-  let prevPct=null;
-  const track=rows.map((r,i)=>{
-    let pct=90-(gaps[i]/maxGap)*65;
-    if(prevPct!=null) pct=Math.min(pct,prevPct-4);
-    pct=Math.max(pct,8);
-    prevPct=pct;
-    return{...r,finishPct:pct};
-  });
-  const laneHtml=track.map(r=>`
-    <div style="display:flex;align-items:center;gap:8px" class="rp-lane${r.pos===1?' rp-lane-leader':''}">
-      <div style="flex:0 0 150px;font-size:11px;color:${r.pos===1?'#d97706':'var(--muted)'};font-weight:${r.pos===1?'700':'400'};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${r.pos===1?'👑 ':''}${r.runner.name}</div>
-      <div style="position:relative;flex:1;height:26px;background:var(--card2);border-radius:4px;overflow:hidden;${r.pos===1?'outline:1px solid rgba(217,119,6,.35)':''}">
-        <div style="position:absolute;right:6%;top:0;bottom:0;width:2px;background:repeating-linear-gradient(180deg,var(--muted),var(--muted) 4px,transparent 4px,transparent 8px)"></div>
-        <div class="rp-horse-icon${r.pos===1?' rp-leader-icon':''}" data-finish="${r.finishPct}" style="position:absolute;left:0%;top:50%;transform:translateY(-50%);font-size:16px;transition-property:left;transition-duration:${(2.2+Math.random()*0.8).toFixed(2)}s;transition-timing-function:cubic-bezier(.25,.7,.4,1)">🐎</div>
-      </div>
-    </div>`).join('');
-
-  const trackSection=`<div>
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-      <span style="font-size:11px;color:var(--muted)">Illustrative — lane spacing reflects the predicted score gaps above, not real finishing margins.</span>
-      <button onclick="rpRunRace()" style="background:var(--accent2);color:#fff;border:none;border-radius:6px;padding:6px 14px;font-size:12px;cursor:pointer">▶ Run it</button>
-    </div>
-    <div style="display:flex;flex-direction:column;gap:6px" id="rpTrackWrap">${laneHtml}</div>
-  </div>`;
+  // 🏁 Track-true replay + 📏 length bet (replaced the old lane slider 2026-09-30)
+  window._rpReplay={order:pred.order,race};
+  const trackSection=rpReplayHTML();
+  const lengthSection=rpLengthPanelHTML(pred.order,race,runners);
 
   return `<div style="padding:16px">
     <div style="font-size:12px;color:var(--muted);margin-bottom:12px">${race.handicap?'Handicap':'Non-Handicap'} · predicting top ${N} of ${runners.length} runners</div>
     ${notes}
     ${section('🔮 Predicted Order',posRows)}
-    ${section('🏁 Predicted Race Animation',trackSection)}
+    ${section('🏁 Race Replay',trackSection)}
+    ${section('📏 Predicted Finish · Length Bet',lengthSection)}
   </div>`;
 }
 
-function rpRunRace(){
-  const wrap=document.getElementById('rpTrackWrap');
-  if(!wrap) return;
-  const icons=wrap.querySelectorAll('.rp-horse-icon');
-  const lanes=wrap.querySelectorAll('.rp-lane');
-  icons.forEach(el=>{ el.style.left='0%'; });
-  lanes.forEach(l=>{ l.style.boxShadow=''; });
-  wrap.querySelectorAll('.rp-winner-badge').forEach(b=>b.remove());
-  void wrap.offsetWidth; // force reflow so the reset takes before re-animating
-  setTimeout(()=>{
-    icons.forEach(el=>{ el.style.left=el.dataset.finish+'%'; });
-    const leader=wrap.querySelector('.rp-leader-icon');
-    if(leader){
-      leader.addEventListener('transitionend',function onDone(){
-        leader.removeEventListener('transitionend',onDone);
-        const lane=leader.closest('.rp-lane');
-        lane.style.boxShadow='0 0 14px 2px rgba(217,119,6,.5)';
-        const badge=document.createElement('span');
-        badge.className='rp-winner-badge';
-        badge.textContent='🏆 WINNER';
-        badge.style.cssText='font-size:11px;font-weight:bold;color:#d97706;margin-left:8px';
-        lane.appendChild(badge);
-      },{once:true});
+/* ==================== 🏁 RACE REPLAY (track-true) + 📏 LENGTH BET ====================
+   Replaces the old 🐎 lane slider. Display-only — never touches scores/segments.
+   Geometry: the race's own track from track_profiles.js (direction, straight course, uphill finish).
+   Early positions: pace map styles (race.pace, from logged in-running comments) + draw.
+   Finishing gaps: predicted beaten lengths = score gap × lengths-per-point learned from logged results
+   (winner's margin over 2nd when the top pick won). No commentary by design.
+   Length bet: winning-distance bands from logged results per race type × gap band. Tight race
+   (gap < 8, top-2 win chance within 8 pts, or Verification 🚫 FLAGGED) → "No length bet suggestion",
+   nothing else. Never pushes: only "value" when the price you type beats the fair price. */
+const RP_BANDS=['< 1L','1–3L','3–6L','6L +'];
+function rpParseLen(s){
+  if(s==null)return null;if(typeof s==='number')return s;
+  let t=String(s).trim().toLowerCase();if(!t)return null;
+  const W={nse:0.02,sh:0.1,shd:0.1,hd:0.2,snk:0.25,nk:0.3,dht:0,dist:30};if(t in W)return W[t];
+  t=t.replace('¼',' .25').replace('½',' .5').replace('¾',' .75');
+  let v=0,ok=false;t.split(/\s+/).forEach(p=>{if(/^\d+\/\d+$/.test(p)){const[a,b]=p.split('/').map(Number);v+=a/b;ok=true;}else if(!isNaN(parseFloat(p))){v+=parseFloat(p);ok=true;}});
+  return ok?v:null;
+}
+function rpGroup(r){const rt=(r.race_type||'').toLowerCase();if(/hurdle|chase|nh flat|bumper/.test(rt))return'nh';const s=((r.surface||'')+' '+(r.going||'')).toLowerCase();return /\baw\b|all-weather|standard|polytrack|tapeta/.test(s)?'aw':'flat';}
+const rpFmtL=x=>{if(x==null)return'—';if(x<0.15)return'shd';if(x<0.25)return'hd';if(x<0.4)return'nk';const w=Math.floor(x+1e-9),f=x-w;const fr=f>=0.7?'¾':f>=0.45?'½':f>=0.2?'¼':'';return (w||'')+fr+'L';};
+function rpLenModel(){
+  const H=((window._allHistory||window._resultsHistory||{}).races)||[];
+  if(window._rpLenModel&&window._rpLenModel.n===H.length)return window._rpLenModel;
+  const m={n:H.length,k:{},bands:{}};const ratios={};
+  H.forEach(r=>{
+    const res=(r.results||[]).filter(x=>!x.non_runner&&x.finish_pos&&x.predicted_score!=null);if(res.length<3)return;
+    const sc=res.map(x=>x.predicted_score).sort((a,b)=>b-a),gap=sc[0]-sc[1];
+    const sec=res.find(x=>x.finish_pos===2);const mg=sec?rpParseLen(sec.distance_beaten):null;if(mg==null||mg>40)return;
+    const top=res.reduce((a,b)=>b.predicted_score>a.predicted_score?b:a);
+    const eng=isEmeraldRace(r)?'ire':'uk',g=rpGroup(r),gb=gap>=10?'hi':'lo';
+    const band=mg<1?0:mg<3?1:mg<6?2:3;
+    [eng+':'+g+':'+gb,'any:'+g+':'+gb].forEach(key=>{const b=(m.bands[key]=m.bands[key]||{any:[0,0,0,0],top:[0,0,0,0],n:0,nTop:0});b.any[band]++;b.n++;if(top.finish_pos===1){b.top[band]++;b.nTop++;}});
+    if(top.finish_pos===1&&gap>=1)(ratios[g]=ratios[g]||[]).push(mg/gap);
+  });
+  Object.entries(ratios).forEach(([g,a])=>{a.sort((x,y)=>x-y);m.k[g]=a[Math.floor(a.length/2)]||0.15;});
+  window._rpLenModel=m;return m;
+}
+function rpPredictLengths(order,race){
+  const m=rpLenModel(),k=m.k[rpGroup(race)]||0.15;
+  const top=(order[0]&&order[0].runner.score)||0;let prev=0;
+  return order.map((o,i)=>{if(i===0)return 0;const v=Math.max(prev+0.1,(top-(o.runner.score||0))*k);prev=v;return Math.round(v*4)/4;});
+}
+function rpTightCheck(race,runners){
+  const s=[...runners].sort((a,b)=>b.score-a.score);if(s.length<2)return{tight:true,reasons:[]};
+  const gap=Math.round((s[0].score-s[1].score)*10)/10,all=runners.map(r=>r.score||0);
+  const p1=calcCompetitiveProb(s[0].score,all,1),p2=calcCompetitiveProb(s[1].score,all,1),pd=Math.round(p1-p2);
+  let verif='—',flagged=false;
+  try{const em=isIreland(race.course);const pk=getPrixmPicks(getTop10Picks(D,em?'emerald':undefined),em?'emerald':undefined).find(p=>p.horse===s[0].name&&p.time===race.time);
+    if(pk&&pk.edge>=60){const v=runVerificationPass(pk,race,s[0]);if(v&&v.verdict){verif=v.verdict;flagged=v.verdict==='FLAGGED';}}}catch(e){}
+  const reasons=[['Score gap',gap.toFixed(1),gap>=8,'≥ 8'],['Top-2 win chance gap',pd+' pts',pd>=8,'≥ 8 pts'],['Verification Pass',verif,!flagged,'not FLAGGED']];
+  return{tight:reasons.some(x=>!x[2]),reasons,gap,p1};
+}
+function rpLengthPanelHTML(order,race,runners){
+  const lens=rpPredictLengths(order,race);
+  const ladder=order.slice(0,Math.min(order.length,8)).map((o,i)=>`<div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px dashed var(--border);font-size:13px"><b style="width:22px">${i+1}</b><span style="flex:1;font-weight:600">${o.runner.name}</span><span style="color:var(--muted);font-variant-numeric:tabular-nums">${i?'+'+rpFmtL(lens[i]-lens[i-1])+' · '+rpFmtL(lens[i])+' total':'—'}</span></div>`).join('');
+  const T=rpTightCheck(race,runners);
+  const gate=T.reasons.map(([k,v,ok,need])=>`<div style="display:grid;grid-template-columns:22px 1fr auto;gap:6px;font-size:12.5px;padding:3px 0"><span>${ok?'✅':'❌'}</span><span>${k} <span style="color:var(--muted);font-size:11px">(needs ${need})</span></span><b>${v}</b></div>`).join('');
+  let body='';
+  if(T.tight){
+    body=`<div style="background:var(--card2);border:1px solid var(--border);border-radius:9px;padding:10px 12px;font-size:13px;margin-top:8px">🚫 <b>No length bet suggestion.</b> Tight race — the engine can't separate the top runners, so the winning margin can't be read. Nothing to push here.</div>`;
+  }else{
+    const m=rpLenModel(),g=rpGroup(race),gb=T.gap>=10?'hi':'lo',em=isIreland(race.course);
+    let key=(em?'ire':'uk')+':'+g+':'+gb,src=em?'Irish':'UK';
+    if(!m.bands[key]||m.bands[key].n<150){key='any:'+g+':'+gb;src=em?'UK + Irish (not enough Irish yet)':'all';}
+    const B=m.bands[key];
+    if(!B||B.n<60){body=`<div style="font-size:12px;color:var(--muted);margin-top:8px">Not enough logged margins for this race type yet.</div>`;}
+    else{
+      const pct=B.any.map(x=>x/B.n*100),best=pct.indexOf(Math.max(...pct));
+      window._rpLenCtx={p:pct[best]/100,label:RP_BANDS[best]};
+      const gl={flat:'Flat',aw:'All-weather',nh:'Jumps'}[g];
+      body=`<div style="font-size:11.5px;color:var(--muted);margin:8px 0 4px">Winning distance (any winner) · <b>${gl} · gap ${gb==='hi'?'≥ 10':'< 10'}</b> · ${B.n} logged races (${src})</div>
+        ${pct.map((p,i)=>`<div style="display:grid;grid-template-columns:62px 1fr 44px 70px;gap:8px;align-items:center;font-size:12.5px;margin:4px 0;${i===best?'font-weight:700':''}"><span>${RP_BANDS[i]}</span><div style="height:12px;background:var(--card2);border-radius:6px;overflow:hidden"><i style="display:block;height:100%;width:${p}%;background:${i===best?'#15803d':'#3b82f6'}"></i></div><span>${p.toFixed(0)}%</span><span style="text-align:right;color:var(--muted)">fair ${(100/Math.max(p,0.1)).toFixed(2)}</span></div>`).join('')}
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:10px;font-size:12.5px">Price for <b>${RP_BANDS[best]}</b> <input id="rpLenPrice" type="number" step="0.05" min="1.01" placeholder="e.g. 3.5" oninput="rpLenVerdict()" style="width:84px;padding:5px 8px;border:1px solid var(--border);border-radius:6px;font:inherit"><span style="font-size:11px;color:var(--muted)">(decimal — bookmaker's winning-distance market)</span></div>
+        <div id="rpLenVerdict"></div>`;
+      if(B.nTop>=40){
+        const top=order[0].runner,pw=calcCompetitiveProb(top.score,runners.map(r=>r.score||0),1)/100;
+        const rows=[1,2,3].map(i=>{const cum=B.top.slice(i).reduce((a,b)=>a+b,0)/B.nTop,pr=pw*cum*100;return `<tr><td style="padding:4px 8px;border-bottom:1px solid var(--border)">${top.name} to win by ${['','1L','3L','6L'][i]}+</td><td style="padding:4px 8px;border-bottom:1px solid var(--border)">${pr.toFixed(1)}%</td><td style="padding:4px 8px;border-bottom:1px solid var(--border)">${(100/Math.max(pr,0.1)).toFixed(2)}</td></tr>`;}).join('');
+        body+=`<details style="margin-top:10px"><summary style="cursor:pointer;font-size:12px;font-weight:700">Top pick + margin (only where a bookmaker offers "to win by X lengths")</summary><table style="width:100%;border-collapse:collapse;font-size:12px;margin-top:6px"><tr><th style="text-align:left;padding:4px 8px;font-size:10px;color:var(--muted)">BET</th><th style="text-align:left;padding:4px 8px;font-size:10px;color:var(--muted)">CHANCE</th><th style="text-align:left;padding:4px 8px;font-size:10px;color:var(--muted)">FAIR PRICE</th></tr>${rows}</table></details>`;
+      }
     }
-  },30);
+  }
+  setTimeout(()=>{try{rpLenVerdict();}catch(e){}},0);
+  return `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px">
+    <div><div style="font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700;margin-bottom:6px">Predicted finish · lengths</div>${ladder}
+      <div style="font-size:11px;color:var(--muted);margin-top:6px">Beaten lengths = score gap × lengths-per-point learned from logged results for ${({flat:'Flat',aw:'all-weather',nh:'jumps'})[rpGroup(race)]} races.</div></div>
+    <div><div style="font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700;margin-bottom:6px">📏 Length bet · race check</div>${gate}${body}</div></div>`;
+}
+function rpLenVerdict(){
+  const el=document.getElementById('rpLenVerdict'),c=window._rpLenCtx;if(!el||!c)return;
+  const inp=document.getElementById('rpLenPrice');const pr=inp?parseFloat(inp.value):NaN,fair=1/c.p;
+  const box=(bg,bd,col,t)=>`<div style="background:${bg};border:1px solid ${bd};color:${col};border-radius:9px;padding:9px 12px;font-size:13px;margin-top:8px">${t}</div>`;
+  if(!pr||pr<=1){el.innerHTML=box('#fffbeb','#fde68a','#78350f',`No suggestion until you enter a price. Only worth it at <b>${fair.toFixed(2)}</b> or bigger.`);return;}
+  const ev=(c.p*pr-1)*100;
+  el.innerHTML=ev>5?box('#f0fdf4','#bbf7d0','#14532d',`✅ <b>Value.</b> EV +${ev.toFixed(1)}% at ${pr}. Small stake only (0.5u) — margin bets are volatile.`)
+    :ev>-3?box('#fffbeb','#fde68a','#78350f',`⚖️ <b>Marginal.</b> EV ${ev.toFixed(1)}%. Skip unless the price is ${(fair*1.05).toFixed(2)}+.`)
+    :box('#fef2f2','#fecaca','#7f1d1d',`🚫 <b>No bet.</b> EV ${ev.toFixed(1)}% — price below the fair ${fair.toFixed(2)}.`);
+}
+
+// ── replay ──
+function rpReplayHTML(){
+  return `<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px">
+      <span style="font-size:11px;color:var(--muted)">The race's own track · early positions from the pace map + draw · finish from predicted lengths.</span>
+      <span style="display:flex;gap:6px;align-items:center"><button onclick="rpRunRace()" style="background:var(--accent2);color:#fff;border:none;border-radius:6px;padding:6px 14px;font-size:12px;font-weight:700;cursor:pointer">▶ Run it</button>
+      <select id="rpSpeed" style="padding:4px 6px;border:1px solid var(--border);border-radius:6px;font-size:12px"><option value="1">1×</option><option value="0.5">0.5×</option><option value="2">2×</option></select></span></div>
+    <div style="position:relative;background:#f7faf7;border:1px solid var(--border);border-radius:10px;overflow:hidden">
+      <svg id="rpSvg" viewBox="0 0 640 330" style="display:block;width:100%;max-width:860px;margin:0 auto;height:auto"></svg>
+      <div id="rpPhase" style="position:absolute;top:8px;left:8px;background:#fff;border:1px solid var(--border);border-radius:14px;padding:2px 10px;font-size:11.5px;font-weight:700">Ready</div>
+      <div id="rpFur" style="position:absolute;top:8px;right:8px;background:#fff;border:1px solid var(--border);border-radius:14px;padding:2px 10px;font-size:11.5px;font-weight:700"></div></div>
+    <div id="rpLegend" style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px;font-size:11.5px"></div>`;
+}
+const RP_EARLY={FR:0,P:1.5,MD:4,HU:7};
+const rpSS=(a,b,x)=>{const k=Math.min(1,Math.max(0,(x-a)/(b-a)));return k*k*(3-2*k);};
+function rpColour(name){let h=0;for(const c of name)h=(h*31+c.charCodeAt(0))>>>0;return ['#15803d','#1d4ed8','#dc2626','#7c3aed','#0f766e','#ea580c','#be185d','#0369a1','#4d7c0f','#9333ea','#b45309','#334155'][h%12];}
+function rpReplayInit(order,race){
+  if(order&&race)window._rpReplay={order,race};
+  const R=window._rpReplay;const svg=document.getElementById('rpSvg');if(!R||!svg)return;
+  const race2=R.race,tp=getTrackProfile(race2.course)||{},df=race2.distance_f||8;
+  const straightRace=tp.layout==='straight'||(tp.straight_course_f&&df<=tp.straight_course_f);
+  const cx=320,cy=165,rx=250,ry=tp.layout==='tight_oval'||tp.layout==='circle'?120:110,cr=tp.layout==='tight_oval'||tp.layout==='circle'?100:70;
+  const s=tp.direction==='L'?-1:1; // reverse-of-race direction from the post: RH races run clockwise
+  const d=straightRace?`M ${cx} 40 L ${cx} 300`:`M ${cx} ${cy+ry} L ${cx+s*(rx-cr)} ${cy+ry} Q ${cx+s*rx} ${cy+ry} ${cx+s*rx} ${cy+ry-cr} L ${cx+s*rx} ${cy-ry+cr} Q ${cx+s*rx} ${cy-ry} ${cx+s*(rx-cr)} ${cy-ry} L ${cx-s*(rx-cr)} ${cy-ry} Q ${cx-s*rx} ${cy-ry} ${cx-s*rx} ${cy-ry+cr} L ${cx-s*rx} ${cy+ry-cr} Q ${cx-s*rx} ${cy+ry} ${cx-s*(rx-cr)} ${cy+ry} Z`;
+  const runners=R.order.map(o=>o.runner),lens=rpPredictLengths(R.order,race2),fs=runners.length;
+  const col=isIreland(race2.course)?'#10b981':'#3b82f6';
+  svg.innerHTML=`<defs>${runners.map((r,i)=>`<clipPath id="rpcp${i}"><circle r="10"/></clipPath>`).join('')}</defs>
+    <path d="${d}" fill="none" stroke="#d6e9dc" stroke-width="50" stroke-linecap="round" stroke-linejoin="round"/>
+    <path id="rpPath" d="${d}" fill="none" stroke="#fff" stroke-width="1.5" stroke-dasharray="5 6"/>
+    <path id="rpHill" fill="none" stroke="#f59e0b" stroke-width="50" stroke-opacity=".2"/>
+    <text x="${cx}" y="${straightRace?20:cy+5}" font-size="14" text-anchor="middle" fill="#9ca3af">${straightRace?'straight course':tp.direction==='L'?'↺ left-handed':tp.direction==='R'?'↻ right-handed':''}</text>
+    <g id="rpToks"></g>`;
+  const P=document.getElementById('rpPath'),PL=P.getTotalLength();
+  const circ=tp.circuit_f||12,Lrace=straightRace?PL:Math.min(PL*0.985,PL*df/circ);
+  const post=P.getPointAtLength(0);
+  svg.insertAdjacentHTML('beforeend',`<line x1="${post.x-(straightRace?30:0)}" y1="${post.y-(straightRace?0:30)}" x2="${post.x+(straightRace?30:0)}" y2="${post.y+(straightRace?0:30)}" stroke="#dc2626" stroke-width="3"/><text x="${post.x}" y="${post.y+(straightRace?-10:46)}" font-size="11" text-anchor="middle" fill="#dc2626" font-weight="700">POST</text>`);
+  if((tp.uphill_finish||0)>=0.6){let hd='';const segLen=Lrace*Math.min(0.4,2/df);for(let i=0;i<=20;i++){const q=P.getPointAtLength(segLen*i/20);hd+=(i?' L ':'M ')+q.x+' '+q.y;}
+    document.getElementById('rpHill').setAttribute('d',hd);const h=P.getPointAtLength(segLen*0.6);svg.insertAdjacentHTML('beforeend',`<text x="${h.x}" y="${h.y-34}" font-size="11" fill="#b45309" font-weight="700" text-anchor="middle">▲ uphill</text>`);}
+  const style=n=>{const p=race2.pace;if(!p)return null;for(const k of['FR','P','MD','HU'])if((p[k]||[]).includes(n))return k;return null;};
+  const layer=document.getElementById('rpToks');
+  R.toks=runners.map((r,i)=>{
+    const g=document.createElementNS('http://www.w3.org/2000/svg','g');const c=rpColour(r.name);
+    g.innerHTML=(r.silk_url?`<g clip-path="url(#rpcp${i})"><rect x="-10" y="-10" width="20" height="20" fill="#fff"/><image href="${r.silk_url}" x="-10" y="-10" width="20" height="20" preserveAspectRatio="xMidYMid slice"/></g>`:`<circle r="10" fill="${c}"/>`)+
+      `<circle r="10" fill="none" stroke="#111827" stroke-width="1.5"/><text y="${r.silk_url?20:3.5}" font-size="${r.silk_url?9:9}" font-weight="800" text-anchor="middle" fill="${r.silk_url?'#111':'#fff'}" stroke="${r.silk_url?'#fff':'none'}" stroke-width="${r.silk_url?2.4:0}" paint-order="stroke">${r.number||i+1}</text>`;
+    layer.appendChild(g);
+    const st=style(r.name),early=(st?RP_EARLY[st]:3)+(r.draw&&fs>=8&&r.draw>fs*0.6?1:0);
+    return {r,g,st,early,fin:lens[i],draw:r.draw,i,d:0};
+  });
+  R.P=P;R.Lrace=Lrace;R.perLen=Lrace/(df*80)*16;R.df=df;R.rh=tp.direction!=='L';R.lastOrder='';
+  document.getElementById('rpLegend').innerHTML=R.toks.map(o=>`<span style="display:inline-flex;align-items:center;gap:5px">${o.r.silk_url?`<img src="${o.r.silk_url}" alt="" style="width:16px;height:16px;border-radius:50%;border:1px solid #111">`:`<i style="width:14px;height:14px;border-radius:50%;background:${rpColour(o.r.name)};display:inline-block"></i>`}${o.r.number||o.i+1} · ${o.r.name}${o.st?` <span style="color:var(--muted)">(${({FR:'front-runner',P:'prominent',MD:'mid-div',HU:'hold-up'})[o.st]}${o.draw?', draw '+o.draw:''})</span>`:o.draw?` <span style="color:var(--muted)">(draw ${o.draw})</span>`:''}</span>`).join('');
+  rpFrame(0);document.getElementById('rpPhase').textContent='Ready';
+}
+function rpFrame(t){
+  const R=window._rpReplay;if(!R||!R.toks)return;const P=R.P,n=R.toks.length;
+  R.toks.forEach(o=>{
+    const lag=o.early*rpSS(0,0.2,t)+(o.fin-o.early)*rpSS(0.62,1,t);
+    const dist=Math.max(0,Math.min(P.getTotalLength(),R.Lrace*(1-t)+lag*R.perLen));
+    const a=P.getPointAtLength(dist),b=P.getPointAtLength(Math.max(0,dist-2));
+    let tx=a.x-b.x,ty=a.y-b.y;const m=Math.hypot(tx,ty)||1;
+    const start=o.draw?((o.draw-1)/Math.max(1,n-1))*2-1:(o.i/Math.max(1,n-1))*2-1;
+    const packed=(Math.min(o.early,4)/4)*1.2-0.6,late=(Math.min(o.fin,4)/4)*1.4-0.7;
+    let lat=start+(packed-start)*rpSS(0.05,0.3,t);lat=lat+(late-lat)*rpSS(0.7,0.95,t);
+    const off=lat*16*(R.rh?1:-1);
+    o.g.setAttribute('transform',`translate(${(a.x-ty/m*off).toFixed(2)},${(a.y+tx/m*off).toFixed(2)})`);o.d=dist;
+  });
+  const ord=[...R.toks].sort((x,y)=>y.d-x.d),key=ord.map(o=>o.i).join();
+  if(key!==R.lastOrder){const L=document.getElementById('rpToks');ord.forEach(o=>L.appendChild(o.g));R.lastOrder=key;}
+  const ph=t>=1?'🏁 Finish':t<0.12?'Start':t<0.45?'Early':t<0.62?'Mid-race':t<0.82?'Home turn':'Final furlongs';
+  const pe=document.getElementById('rpPhase');if(pe)pe.textContent=ph;
+  const fe=document.getElementById('rpFur');if(fe){fe.textContent=t>=1?'':`${Math.max(0,Math.ceil(R.df*(1-t)))}f to go`;fe.style.display=t>=1?'none':'';}
+}
+function rpRunRace(){
+  const R=window._rpReplay;if(!R)return;if(!R.toks)rpReplayInit();
+  if(R.timer){R.timer.raf&&cancelAnimationFrame(R.timer.raf);R.timer.to&&clearTimeout(R.timer.to);}
+  const sp=parseFloat((document.getElementById('rpSpeed')||{}).value||'1')||1,dur=10000/sp,t0=performance.now();
+  const tick=()=>{const t=Math.max(0,Math.min(1,(performance.now()-t0)/dur));rpFrame(t);if(t<1)R.timer=document.hidden?{to:setTimeout(tick,32)}:{raf:requestAnimationFrame(tick)};};
+  tick();
 }
 
 /* ==================== GAP % TAB ==================== */
@@ -9496,21 +10557,25 @@ function renderExpandedRow(r, fieldSize, race){
       ${renderRunnerFormHistory(r,race)}
     </div>
 
+    <!-- ── 🧭 HORSE × TRACK cross analysis (hidden entirely when there is no evidence) ── -->
+    ${race?renderTrackFitBox(r,race):''}
+
     <!-- ── COLLAPSIBLE: Factor Breakdown ── -->
     <div style="grid-column:1/-1">
       <button onclick="toggleSection('fb_${uid}')" style="width:100%;display:flex;align-items:center;justify-content:space-between;background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:8px 12px;cursor:pointer;color:var(--muted);font-size:11px;font-weight:700">
-        <span>Factor Breakdown <span style="font-weight:400;opacity:.6">(${r.score}/${MAX_SCORE})</span></span>
+        <span>Factor Breakdown${fmFor(bd)===EM_FM?' · ☘ Emerald':''} <span style="font-weight:400;opacity:.6">(${r.score}/${MAX_SCORE}${r.prixm_score!=null?` · Prixm ${r.prixm_score}`:''})</span></span>
         <span id="arr_fb_${uid}">▼</span>
       </button>
       <div id="fb_${uid}" style="display:none;margin-top:6px">
         <div class="exp-factors">
-          ${Object.entries(FM).map(([k,m])=>{
+          ${Object.entries(fmFor(bd)).map(([k,m])=>{
             const v=bd[k]||0,pct=(v/m.mx)*100;
             const barCol=pct>=80?'#5D4A66':pct>=60?'#C1CEFE':pct>=40?'#B2BD7E':'#EC7357';
             const numCol=pct>=80?'#5D4A66':pct>=60?'#0891b2':pct>=40?'#d97706':'#dc2626';
-            return `<div class="ef"><div class="efl">${m.l}</div><div class="efv" style="color:${numCol}">${v}</div><div class="efm">/ ${m.mx}</div><div class="efbar"><div class="efbar-f" style="width:0;background:${barCol}" data-w="${pct}"></div></div></div>`;
+            return `<div class="ef"><div class="efl${m.ir?' em-ir':''}">${m.l}</div><div class="efv" style="color:${numCol}">${v}</div><div class="efm">/ ${m.mx}</div><div class="efbar"><div class="efbar-f" style="width:0;background:${barCol}" data-w="${pct}"></div></div></div>`;
           }).join('')}
         </div>
+        ${fmFor(bd)===EM_FM?`<div style="font-size:10.5px;color:var(--muted);margin-top:6px">☘ Irish factors: draw vs this track's logged draw results · Horse × Track fit (validated checks only) · Irish stable tiers + logged strike rates. Going/Course/Distance use the horse's own logged runs.</div>`:''}
       </div>
     </div>
 
@@ -9677,7 +10742,7 @@ function renderRunnerFormHistory(runner, race){
 
   // Priority 2: cross-reference results_history for runs we've logged
   const histRuns=[];
-  const hist=window._resultsHistory;
+  const hist=window._allHistory||window._resultsHistory; // horse/venue-level: both engines (UK + Irish)
   if(hist&&hist.races){
     hist.races.forEach(hRace=>{
       const res=(hRace.results||[]).find(r=>r.name===runner.name);
@@ -9951,6 +11016,11 @@ function isBetted(horseName,time,venue){
 function toggleBet(horseName,time,venue,score){
   let list=loadBetList();
   const idx=list.findIndex(b=>b.horse===horseName&&b.time===time&&b.venue===venue);
+  // 💷 BET → Ledger quick-log (stake/price/units). Saving also adds the runner to this day's 🎫 slip.
+  if(idx<0&&!VIEW_ONLY&&window.lgOpen&&D&&D.venues){
+    for(const [vk,v] of Object.entries(D.venues)){const ri=(v.races||[]).findIndex(r=>r.time===time&&(r.course||v.course)===venue);
+      if(ri>=0){window.lgOpen(vk,ri,horseName);return;}}
+  }
   if(idx>=0){
     list.splice(idx,1);
     saveBetList(list);
@@ -10665,14 +11735,14 @@ function showMainExportModal(){
     });
     const ch=id=>document.getElementById(id);
     if(p==='full'){
-      ['xPicks','xFlags','xRaces','xFlags2'].forEach(id=>{if(ch(id))ch(id).checked=true;});
+      ['xPicks','xFlags','xRaces','xFlags2','xEmerald','xFit','xTracks'].forEach(id=>{if(ch(id))ch(id).checked=true;});
       ['xCombos','xRef'].forEach(id=>{if(ch(id))ch(id).checked=false;});
     }else if(p==='picks'){
-      ['xPicks','xFlags'].forEach(id=>{if(ch(id))ch(id).checked=true;});
-      ['xRaces','xCombos','xFlags2','xRef'].forEach(id=>{if(ch(id))ch(id).checked=false;});
+      ['xPicks','xFlags','xEmerald'].forEach(id=>{if(ch(id))ch(id).checked=true;});
+      ['xRaces','xCombos','xFlags2','xRef','xFit','xTracks'].forEach(id=>{if(ch(id))ch(id).checked=false;});
     }else if(p==='golden'){
-      ['xPicks','xFlags','xRaces'].forEach(id=>{if(ch(id))ch(id).checked=true;});
-      ['xCombos','xFlags2','xRef'].forEach(id=>{if(ch(id))ch(id).checked=false;});
+      ['xPicks','xFlags','xRaces','xFit'].forEach(id=>{if(ch(id))ch(id).checked=true;});
+      ['xCombos','xFlags2','xRef','xEmerald','xTracks'].forEach(id=>{if(ch(id))ch(id).checked=false;});
     }
   };
   mc.innerHTML=`<div class="modal-bg" onclick="if(event.target===this)closeModal()">
@@ -10694,6 +11764,9 @@ function showMainExportModal(){
         <label style="display:flex;align-items:center;gap:7px;font-size:13px;color:#ccc;cursor:pointer"><input type="checkbox" id="xCombos" style="accent-color:#f59e0b"> Combo tracker alerts</label>
         <label style="display:flex;align-items:center;gap:7px;font-size:13px;color:#ccc;cursor:pointer"><input type="checkbox" id="xFlags2" checked style="accent-color:#f59e0b"> Condition flags per horse</label>
         <label style="display:flex;align-items:center;gap:7px;font-size:13px;color:#ccc;cursor:pointer"><input type="checkbox" id="xRef" style="accent-color:#f59e0b"> Reference guide</label>
+        <label style="display:flex;align-items:center;gap:7px;font-size:13px;color:#ccc;cursor:pointer"><input type="checkbox" id="xEmerald" checked style="accent-color:#0f766e"> ☘ Emerald picks (Irish)</label>
+        <label style="display:flex;align-items:center;gap:7px;font-size:13px;color:#ccc;cursor:pointer"><input type="checkbox" id="xFit" checked style="accent-color:#7c3aed"> 🧭 Track fit ❌ + pace verdict</label>
+        <label style="display:flex;align-items:center;gap:7px;font-size:13px;color:#ccc;cursor:pointer"><input type="checkbox" id="xTracks" checked style="accent-color:#1d4ed8"> 🗺 Today's track profiles</label>
       </div>
       <div style="display:flex;gap:12px;margin-bottom:18px;flex-wrap:wrap">
         <div style="flex:1;min-width:120px">
@@ -10732,6 +11805,9 @@ function runMainExport(){
     combos:!!document.getElementById('xCombos')?.checked,
     condFlags:!!document.getElementById('xFlags2')?.checked,
     ref:!!document.getElementById('xRef')?.checked,
+    emerald:!!document.getElementById('xEmerald')?.checked,
+    fit:!!document.getElementById('xFit')?.checked,
+    tracks:!!document.getElementById('xTracks')?.checked,
     horsesN:document.getElementById('xHorsesN')?.value||'5',
     theme:document.getElementById('xTheme')?.value||'light',
     preset:window._exportPreset||'full',
@@ -10893,6 +11969,23 @@ function buildMainExportHTML(opts){
     h+='</div>';
   }
 
+  // ☘ EMERALD PICKS (Irish races — track only)
+  if(opts.emerald){
+    let emP=[];try{emP=getPrixmPicks(getTop10Picks(D,'emerald'),'emerald');}catch(e){}
+    if(emP.length){
+      h+=secHdr('☘ Emerald Picks <span style="color:'+fg+';font-size:12px;font-weight:800;text-transform:none;letter-spacing:0;margin-left:4px">'+emeraldLabel()+' · Irish racing · track only (not in Prixm P&amp;L)</span>');
+      h+='<div style="display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap">';
+      emP.slice(0,6).forEach(function(p){
+        const catCol=p.category==='NAP'?'#7c3aed':p.category==='WIN'?'#059669':p.category==='STRONG'?'#2563eb':'#d97706';
+        h+='<div style="background:'+(dk?'rgba(16,185,129,.08)':'#ecfdf5')+';border:1px solid '+(dk?'#065f46':'#a7f3d0')+';border-radius:7px;padding:8px 12px;flex:1;min-width:160px">';
+        h+='<div style="font-size:9px;font-weight:800;letter-spacing:.4px;color:'+catCol+'">● '+p.category+'</div>';
+        h+='<div style="font-size:12px;font-weight:700;color:'+fg+'">'+p.horse+'</div>';
+        h+='<div style="font-size:10px;color:'+muted+'">'+p.time+' '+(p.venue||'')+' · Edge '+(p.edge||0)+(p.tags&&p.tags.length?' · '+p.tags.slice(0,2).map(function(t){return t.t;}).join(' · '):'')+'</div></div>';
+      });
+      h+='</div>';
+    }
+  }
+
   // RACES
   if(opts.races){
     const displayRaces=opts.preset==='golden'?races.filter(function(r){return getGoldenFlags(r)||getSilverFlags(r)||getBronzeFlags(r);}):races;
@@ -10906,8 +11999,10 @@ function buildMainExportHTML(opts){
       const gf=getGoldenFlags(race),sf=getSilverFlags(race),bf=getBronzeFlags(race);
       const segTag=gf?'<span style="font-size:9px;font-weight:700;padding:2px 6px;border-radius:3px;background:#fef3c7;color:#d97706">⭐ GOLDEN</span>':sf?'<span style="font-size:9px;font-weight:700;padding:2px 6px;border-radius:3px;background:#f1f5f9;color:#475569">🥈 SILVER</span>':bf?'<span style="font-size:9px;font-weight:700;padding:2px 6px;border-radius:3px;background:#ffedd5;color:#c2410c">🥉 BRONZE</span>':'';
       h+='<div class="race-block"><div style="background:#f0ede8;border:1px solid #e5e0d8;color:#111827;padding:7px 12px;border-radius:6px 6px 0 0;display:flex;justify-content:space-between;align-items:center">';
-      h+='<div style="display:flex;align-items:center;gap:10px"><span style="font-weight:800;font-size:13px;color:#15803d">'+race.time+'</span><span style="font-weight:700;font-size:12px;color:#111827">'+race.venueName+'</span>'+segTag+'</div>';
+      const _emTag=isIreland(race.venueName||race.course)?'<span style="font-size:9px;font-weight:700;padding:2px 6px;border-radius:3px;background:#0f766e;color:#fff">☘ EMERALD</span>':'';
+      h+='<div style="display:flex;align-items:center;gap:10px"><span style="font-weight:800;font-size:13px;color:#15803d">'+race.time+'</span><span style="font-weight:700;font-size:12px;color:#111827">'+race.venueName+'</span>'+segTag+_emTag+'</div>';
       h+='<div style="font-size:10px;color:#6b7280;text-align:right">'+(race.distance||'')+' | '+(race.going||'')+' | '+(race.race_type||'')+' | Cl'+(race.race_class||'?')+' | '+fs+'r</div></div>';
+      if(opts.fit&&race.pace&&race.pace.verdict) h+='<div style="font-size:10.5px;color:'+muted+';border:1px solid '+border+';border-top:none;padding:4px 10px;background:'+card+'">🏁 Pace: '+race.pace.verdict+'</div>';
       h+='<table style="width:100%;border-collapse:collapse;font-size:11.5px;border:1px solid '+border+';border-top:none">';
       h+='<thead><tr style="background:'+card2+'"><th style="'+thStyle+'">#</th><th style="'+thStyle+'">Horse</th><th style="'+thStyle+'">J / T</th><th style="'+thStyle+'">Form</th><th style="'+thStyle+'">Score</th><th style="'+thStyle+'">Conf</th><th style="'+thStyle+'">Gap</th>'+(opts.condFlags?'<th style="'+thStyle+'">Flags</th>':'')+'</tr></thead><tbody>';
       showRows.forEach(function(r,i){
@@ -10923,7 +12018,8 @@ function buildMainExportHTML(opts){
         const flagIcons=condFlags.map(function(f){return f.icon;}).join(' ');
         h+='<tr style="background:'+rowBg+'">';
         h+='<td style="padding:5px 8px;border-bottom:1px solid '+border+';font-weight:800;color:'+rankCol+'">'+(i+1)+'</td>';
-        h+='<td style="padding:5px 8px;border-bottom:1px solid '+border+'"><div style="font-weight:700;color:'+fg+';font-size:12px">'+r.name+'</div></td>';
+        const _u=opts.fit&&r.track_fit&&r.track_fit.verdict==='u'?(r.track_fit.checks||[]).filter(function(c){return c[0]==='❌'&&c[4]==='valid';}).map(function(c){return c[1];}).slice(0,2).join(' · '):'';
+        h+='<td style="padding:5px 8px;border-bottom:1px solid '+border+'"><div style="font-weight:700;color:'+fg+';font-size:12px">'+r.name+(_u?' <span style="font-size:10px;color:'+red+'">❌</span>':'')+'</div>'+(_u?'<div style="font-size:9.5px;color:'+red+'">🧭 unsuited: '+_u+'</div>':'')+(r.prixm_score!=null?'<div style="font-size:9px;color:'+muted+'">Prixm '+r.prixm_score+'</div>':'')+'</td>';
         h+='<td style="padding:5px 8px;border-bottom:1px solid '+border+';font-size:10px;color:'+muted+'">'+(r.jockey||'')+(r.trainer?' / '+r.trainer:'')+'</td>';
         h+='<td style="padding:5px 8px;border-bottom:1px solid '+border+';font-size:11px;font-weight:700;color:'+fg+'">'+(r.form||'—').substring(0,6)+'</td>';
         h+='<td style="padding:5px 8px;border-bottom:1px solid '+border+'"><div style="display:flex;align-items:center;gap:5px"><div style="width:44px;height:5px;background:'+card2+';border-radius:3px"><div style="width:'+sp.toFixed(0)+'%;height:5px;background:'+sCol+';border-radius:3px"></div></div><span style="font-weight:700;color:'+sCol+';font-size:11px">'+r.score+'</span></div></td>';
@@ -10934,6 +12030,35 @@ function buildMainExportHTML(opts){
       });
       h+='</tbody></table></div>';
     });
+  }
+
+  // 🗺 TODAY'S TRACK PROFILES
+  if(opts.tracks){
+    const seen={};const keys=[];
+    Object.values(D.venues).forEach(function(v){const k=getTrackKey(v.course);if(k&&!seen[k]){seen[k]=1;keys.push(k);}});
+    if(keys.length){
+      h+='<div style="page-break-before:always"></div>';
+      h+=secHdr('🗺 Today\'s Track Profiles <span style="color:'+fg+';font-size:12px;font-weight:800;text-transform:none;letter-spacing:0;margin-left:4px">'+keys.length+' track'+(keys.length!==1?'s':'')+'</span>');
+      const lv=function(v,a){return v>=.8?a[3]:v>=.55?a[2]:v>=.25?a[1]:a[0];};
+      keys.forEach(function(k){
+        const tp=TRACK_PROFILES[k];if(!tp)return;
+        const ire=tp.country==='IRE';
+        h+='<div class="race-block" style="border:1px solid '+border+';border-radius:8px;padding:10px 12px;margin-bottom:14px">';
+        h+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><b style="font-size:14px">'+(ire?'☘ ':'')+tp.name+'</b><span style="font-size:9px;font-weight:700;padding:2px 7px;border-radius:4px;background:'+(ire?'#0f766e':'#1d4ed8')+';color:#fff">'+(ire?'Emerald track':'Prixm track')+'</span></div>';
+        h+='<div style="display:flex;gap:14px;align-items:flex-start">';
+        h+='<div style="width:46%">'+(window._texLayoutSVG?window._texLayoutSVG(tp):'')+(window._texElevSVG?'<div style="font-size:9px;color:'+muted+';margin-top:4px">Final 4f elevation</div>'+window._texElevSVG(tp):'')+'</div>';
+        h+='<div style="flex:1;font-size:11px;line-height:1.55">';
+        h+='<div><b>'+(tp.direction==='R'?'Right-handed':tp.direction==='L'?'Left-handed':tp.direction==='F8'?'Figure-of-eight':'Straight')+'</b> · '+(tp.surface==='aw'?'All-weather':tp.surface==='sand'?'Sand':'Turf')+' · circuit ~'+(tp.circuit_f||'—')+'f · straight ~'+(tp.straight_f||'—')+'f'+(tp.straight_course_f?' · straight course '+tp.straight_course_f+'f':'')+'</div>';
+        h+='<div>Sharpness <b>'+lv(tp.sharpness,['galloping','fair','sharp','very sharp'])+'</b> · undulation <b>'+lv(tp.undulation,['flat','mild','undulating','big'])+'</b> · camber <b>'+lv(tp.camber,['minimal','slight','moderate','pronounced'])+'</b> · uphill finish <b>'+lv(tp.uphill_finish,['none','gentle','stiff','steep'])+'</b></div>';
+        if(tp.stalls&&tp.stalls.length) h+='<div style="margin-top:4px"><b>Stalls:</b> '+tp.stalls.map(function(x){return x[0]+' — '+x[1]+' ('+x[2]+')';}).join(' · ')+'</div>';
+        if(window._texDrawStats){const ds=window._texDrawStats(k);const bands=Object.keys(ds).filter(function(b){return ds[b].n>=30;});
+          bands.slice(0,2).forEach(function(b){const o=ds[b];const st=Object.keys(o.st).map(Number).filter(function(d){return o.st[d].n>=4;}).sort(function(a,b){return a-b;});
+            h+='<div style="margin-top:4px"><b>Draw '+b+'</b> (placed %, '+o.n+' runs): '+st.map(function(d){return d+':'+Math.round(o.st[d].p/o.st[d].n*100)+'%';}).join(' ')+'</div>';});}
+        if(tp.wants&&tp.wants.length) h+='<div style="margin-top:4px"><b>Wants:</b> '+tp.wants.join(' · ')+'</div>';
+        if(tp.caution_flags&&tp.caution_flags.length) h+='<div style="margin-top:4px;color:'+red+'"><b>Caution:</b> '+tp.caution_flags.map(function(f){return f.replace(/_/g,' ');}).join(' · ')+'</div>';
+        h+='</div></div></div>';
+      });
+    }
   }
 
   // COMBOS
