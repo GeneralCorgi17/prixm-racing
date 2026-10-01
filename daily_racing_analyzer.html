@@ -1098,6 +1098,52 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .lg-schip.pp{background:#fff;color:#6b7280;border:1px dashed #cbd5e1}
 .lg-tier{display:grid;grid-template-columns:44px 1fr;gap:8px;font-size:12.5px;padding:5px 0;border-bottom:1px dashed var(--border)}.lg-tier b{font-size:15px}
 @media(max-width:700px){.lg-fab{right:78px;bottom:16px;padding:10px 14px}.lg-fab small{display:none}}
+/* 🐎 M tab — lane race animation */
+.m-title{font-size:18px;font-weight:800}
+.m-sub{font-size:12px;color:var(--muted);margin:2px 0 12px}
+.m-chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.m-chip{font:inherit;font-size:12px;font-weight:600;background:var(--card);border:1px solid var(--border);color:#374151;border-radius:16px;padding:5px 12px;cursor:pointer}
+.m-chip:hover{border-color:#cfc8bc}
+.m-chip.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.m-times{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;margin-bottom:12px;scrollbar-width:thin}
+.m-time{flex:0 0 auto;font:inherit;font-size:12px;font-weight:700;background:var(--card);border:1px solid var(--border);border-left:5px solid var(--c,#3b82f6);border-radius:8px;padding:6px 10px;cursor:pointer;text-align:left;color:var(--text)}
+.m-time small{display:block;font-size:10px;font-weight:500;color:var(--muted)}
+.m-time.on{box-shadow:0 0 0 2px var(--accent)}
+.m-card{background:var(--card);border:1px solid var(--border);border-left:9px solid var(--c,#3b82f6);border-radius:12px;padding:16px 18px}
+.m-rhdr{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:flex-start}
+.m-rname{font-size:15px;font-weight:800}
+.m-rmeta{font-size:12px;color:var(--muted);margin-top:3px}
+.m-stats{display:flex;gap:18px;margin-top:10px}
+.m-stat b{display:block;font-size:17px}
+.m-stat span{font-size:10px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;font-weight:700}
+.m-seg{display:inline-block;font-size:11px;font-weight:800;border-radius:12px;padding:2px 9px;margin-left:6px;vertical-align:2px}
+.m-ctrl{display:flex;gap:6px;align-items:center}
+.m-btn{font:inherit;font-size:12px;font-weight:600;background:var(--card2);border:1px solid var(--border);border-radius:6px;padding:6px 10px;cursor:pointer;color:var(--text)}
+.m-run{background:var(--accent2);border-color:var(--accent2);color:#fff;font-weight:700;padding:7px 16px}
+.m-run:hover{background:#2563eb}
+select.m-btn{padding:5px 6px}
+.m-track{display:flex;flex-direction:column;gap:5px;margin-top:14px;background:#eaf3ea;border:1px solid #d6e9dc;border-radius:10px;padding:10px}
+.m-lane{display:flex;align-items:center;gap:8px}
+.m-no{flex:0 0 20px;text-align:right;font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums;font-weight:700}
+.m-silk{flex:0 0 20px;width:20px;height:20px;border-radius:50%;border:1px solid #111;background:#ddd center/cover no-repeat}
+.m-label{flex:0 0 160px;font-size:12.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.m-runway{position:relative;flex:1;height:28px;background:repeating-linear-gradient(90deg,#cfe6d3 0 18px,#c4dfc9 18px 20px);border-radius:4px;overflow:hidden}
+.m-rail{position:absolute;left:0;right:0;bottom:0;height:2px;background:#fff;opacity:.7}
+.m-finish{position:absolute;right:6%;top:0;bottom:0;width:5px;background:repeating-linear-gradient(180deg,#111 0 4px,#fff 4px 8px)}
+.m-horse{position:absolute;left:0;top:50%;transform:translateY(-50%) scaleX(-1);font-size:19px;line-height:1;transition-property:left;transition-timing-function:cubic-bezier(.25,.7,.4,1);will-change:left}
+.m-horse.running{left:var(--finish)}
+.m-score{flex:0 0 44px;text-align:right;font-size:11.5px;color:var(--muted);font-variant-numeric:tabular-nums;font-weight:600}
+.m-lead .m-label{color:var(--gold);font-weight:800}
+.m-lead .m-runway{outline:2px solid rgba(217,119,6,.45)}
+.m-lane.m-flash .m-runway{animation:mPulse 1s ease-in-out 2}
+@keyframes mPulse{0%,100%{box-shadow:0 0 6px 1px rgba(217,119,6,.35)}50%{box-shadow:0 0 16px 4px rgba(217,119,6,.75)}}
+.m-badge{flex:0 0 auto;font-size:11px;font-weight:800;color:var(--gold);white-space:nowrap;animation:mPop .35s ease}
+@keyframes mPop{0%{transform:scale(0)}70%{transform:scale(1.25)}100%{transform:scale(1)}}
+.m-foot{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center;margin-top:10px}
+.m-note{font-size:11px;color:var(--muted)}
+.m-open{font:inherit;font-size:12px;font-weight:600;background:none;border:1px solid var(--accent2);color:var(--accent2);border-radius:6px;padding:5px 12px;cursor:pointer}
+.m-empty{color:var(--muted);padding:40px;text-align:center}
+@media(max-width:700px){#mView{padding:14px 16px!important}.m-label{flex-basis:92px}.m-score,.m-silk{display:none}.m-stats{gap:12px}}
 </style>
 <script src="results_history.js" onerror=""></script>
 <script src="daily_race_data.js" onerror=""></script>
@@ -1135,6 +1181,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
   <button class="tab-btn" id="tabWatchback" onclick="switchTab('watchback')">Watchback</button>
   <button class="tab-btn" id="tabEmerald" onclick="switchTab('emerald')" style="color:#0f766e">☘ Emerald</button>
   <button class="tab-btn vo-hide" id="tabLedger" onclick="switchTab('ledger')">💷 Ledger</button>
+  <button class="tab-btn" id="tabM" onclick="switchTab('m')" title="🐎 Race animation">🐎 M</button>
   <span id="dbStatusBadge" style="margin-left:auto;padding:0 12px;font-size:11px;color:var(--muted);align-self:center;display:none"></span>
 </div>
 
@@ -1177,6 +1224,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 <div id="watchbackView" style="display:none;padding:20px 28px;max-width:1200px;margin:0 auto"><div id="watchbackContent">Loading...</div></div>
 <div id="emeraldView" style="display:none;padding:20px 28px;max-width:1200px;margin:0 auto"><div id="emeraldContent">Loading...</div></div>
 <div id="ledgerView" class="vo-hide" style="display:none;padding:20px 28px 90px;max-width:1200px;margin:0 auto"><div id="ledgerContent">Loading...</div></div>
+<div id="mView" style="display:none;padding:20px 28px;max-width:1300px;margin:0 auto"><div id="mContent">Loading...</div></div>
 <button id="lgFab" class="lg-fab vo-hide" onclick="window.lgOpen&&window.lgOpen()" title="Log a bet (shortcut: B)">＋ Log bet <small id="lgFabSub"></small><span class="kbd">B</span></button>
 
 <div id="modalContainer"></div>
@@ -1845,6 +1893,7 @@ function switchTab(tab){
   document.getElementById('tabWatchback').classList.toggle('active',tab==='watchback');
   document.getElementById('tabEmerald').classList.toggle('active',tab==='emerald');
   document.getElementById('tabLedger').classList.toggle('active',tab==='ledger');
+  document.getElementById('tabM').classList.toggle('active',tab==='m');
   document.getElementById('landingView').style.display=tab==='races'?'block':'none';
   document.getElementById('detailView').style.display='none';
   document.getElementById('perfView').style.display=tab==='performance'?'block':'none';
@@ -1856,6 +1905,7 @@ function switchTab(tab){
   document.getElementById('watchbackView').style.display=tab==='watchback'?'block':'none';
   document.getElementById('emeraldView').style.display=tab==='emerald'?'block':'none';
   document.getElementById('ledgerView').style.display=tab==='ledger'&&!VIEW_ONLY?'block':'none';
+  document.getElementById('mView').style.display=tab==='m'?'block':'none';
   if(tab==='performance') renderPerformance();
   if(tab==='combos') renderCombos();
   if(tab==='trends') renderTrends();
@@ -1865,6 +1915,7 @@ function switchTab(tab){
   if(tab==='watchback') window.renderWatchbackDashboard&&window.renderWatchbackDashboard();
   if(tab==='emerald') window.renderEmeraldTab&&window.renderEmeraldTab('emeraldContent');
   if(tab==='ledger') window.renderLedger&&window.renderLedger();
+  if(tab==='m') window.renderMTab&&window.renderMTab();
 }
 
 /* ==================== GOLDEN DASHBOARD ==================== */
@@ -6172,6 +6223,16 @@ function showGuide(){
       </ul>
     </div>
 
+    <!-- 🐎 M TAB -->
+    <div class="guide-section" style="border-left-color:#d97706">
+      <h3><span class="gi">🐎</span> M — race animation</h3>
+      <ul style="font-size:11.5px;margin:6px 0 0 16px;line-height:1.6">
+        <li>Top-level <b>🐎 M</b> tab: pick a venue chip and a race time (or ◀ ▶), then <b>▶ Run it</b>. Each runner gallops down its own lane; the 👑 leader flashes <b>🏆 WINNER</b>. Speed 0.5× / 1× / 2×.</li>
+        <li>Finishing order = the engine's predicted order (same as 🔮 Predict). Lane spacing comes from score gaps — <b>illustrative, not real margins</b>.</li>
+        <li>Race header shows gap / score / confidence and the ⭐ / 🥈 / 🥉 badge. <b>Open race →</b> jumps to the full race view. Display only — never changes scores or segments.</li>
+      </ul>
+    </div>
+
     <!-- FILTERS & TOGGLES -->
     <div class="guide-section" style="border-left-color:#9ca3af">
       <h3><span class="gi">🎛</span> New filters &amp; toggles</h3>
@@ -10247,6 +10308,104 @@ function rpRunRace(){
   const tick=()=>{const t=Math.max(0,Math.min(1,(performance.now()-t0)/dur));rpFrame(t);if(t<1)R.timer=document.hidden?{to:setTimeout(tick,32)}:{raf:requestAnimationFrame(tick)};};
   tick();
 }
+
+/* ==================== 🐎 M TAB — lane race animation ====================
+   Brings back the old 🐎 lane slider as its own top-level tab (mockup: m_tab_main_mockup.html).
+   Order = rpBuildPredictedOrder() so it matches the Predict tab exactly. Lane spacing from score
+   gaps (illustrative, not real margins). Display-only — never writes to runners/races/scores/segments.
+   No commentary (user rule). Winner badge fires on a timer, not transitionend (hidden tabs never fire it). */
+(function(){
+  const M={venue:'all',key:null,timer:null};
+  const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  function races(){
+    const out=[];if(!D||!D.venues)return out;
+    Object.entries(D.venues).forEach(([vk,v])=>(v.races||[]).forEach((r,ri)=>{
+      const course=r.course||v.course||vk;
+      if(isExcludedVenue(course)||!(r.runners||[]).some(x=>!x.non_runner))return;
+      out.push({vk,ri,course,race:r,key:vk+'|'+ri});
+    }));
+    return out.sort((a,b)=>(a.race.time||'').localeCompare(b.race.time||'')||a.course.localeCompare(b.course));
+  }
+  const venuesOf=all=>[...new Set(all.map(x=>x.course))].sort();
+  function segBadge(race){
+    try{
+      if(getGoldenFlags(race))return['⭐ GOLDEN','#fef3c7','#92400e'];
+      if(getSilverFlags(race))return['🥈 SILVER','#dbeafe','#1e40af'];
+      if(getBronzeFlags(race))return['🥉 BRONZE','#fde7d4','#9a3412'];
+    }catch(e){}
+    return null;
+  }
+  function lanes(order){
+    const lead=order[0].score||0,gaps=order.map(r=>lead-(r.score||0)),mx=Math.max(...gaps,1);let prev=null;
+    return order.map((r,i)=>{let p=90-(gaps[i]/mx)*65;if(prev!=null)p=Math.min(p,prev-4);p=Math.max(p,8);prev=p;return{r,p,pos:i+1};});
+  }
+  const visible=all=>all.filter(x=>M.venue==='all'||x.course===M.venue);
+  window.renderMTab=function(){
+    const el=document.getElementById('mContent');if(!el)return;
+    clearTimeout(M.timer);
+    const all=races();
+    if(!all.length){el.innerHTML='<div class="m-empty">No races loaded — run Fetch Racecard first.</div>';return;}
+    const venues=venuesOf(all);
+    if(M.venue!=='all'&&!venues.includes(M.venue))M.venue='all';
+    const vis=visible(all);
+    const cur=vis.find(x=>x.key===M.key)||vis[0];M.key=cur.key;
+    const {course,race}=cur,runners=(race.runners||[]).filter(x=>!x.non_runner);
+    let order;try{order=rpBuildPredictedOrder(runners,race).order.map(o=>o.runner);}catch(e){order=[...runners].sort((a,b)=>(b.score||0)-(a.score||0));}
+    const seg=segBadge(race),byScore=[...runners].sort((a,b)=>(b.score||0)-(a.score||0));
+    const gap=byScore.length>1?((byScore[0].score||0)-(byScore[1].score||0)).toFixed(1):'—';
+    el.innerHTML=`
+      <div class="m-title">🐎 M — Race Animation</div>
+      <div class="m-sub">Pick a race, hit Run it. Horses finish in the engine's predicted order (same as 🔮 Predict).</div>
+      <div class="m-chips">${['all',...venues].map((v,i)=>`<button class="m-chip ${M.venue===v?'on':''}" onclick="mTabVenue(${i})">${v==='all'?'All venues':esc(v)}</button>`).join('')}</div>
+      <div class="m-times">${vis.map((x,i)=>`<button class="m-time ${x.key===M.key?'on':''}" style="--c:${getRaceBorderColor(x.race)}" onclick="mTabPick(${i})">${esc(x.race.time)}<small>${esc(x.course)}</small></button>`).join('')}</div>
+      <div class="m-card" style="--c:${getRaceBorderColor(race)}">
+        <div class="m-rhdr">
+          <div>
+            <div class="m-rname">${esc(race.time)} ${esc(course)}${seg?`<span class="m-seg" style="background:${seg[1]};color:${seg[2]}">${seg[0]}</span>`:''}</div>
+            <div class="m-rmeta">${esc(race.race_name||'')} · ${esc(race.distance||'')} · ${esc(race.going||'')} · ${runners.length} runners · ${race.handicap?'Handicap':'Non-handicap'}</div>
+            <div class="m-stats"><div class="m-stat"><b>${gap}</b><span>Gap</span></div><div class="m-stat"><b>${(byScore[0].score||0).toFixed(1)}</b><span>Score</span></div><div class="m-stat"><b>${esc(byScore[0].confidence||'—')}</b><span>Conf</span></div></div>
+          </div>
+          <div class="m-ctrl">
+            <button class="m-btn" onclick="mTabStep(-1)" title="Previous race">◀</button>
+            <button class="m-btn" onclick="mTabStep(1)" title="Next race">▶</button>
+            <select class="m-btn" id="mSpeed" title="Speed"><option value="1">1×</option><option value="0.5">0.5×</option><option value="2">2×</option></select>
+            <button class="m-btn m-run" onclick="mRunRace()">▶ Run it</button>
+          </div>
+        </div>
+        <div class="m-track" id="mTrack">${lanes(order).map(t=>`<div class="m-lane ${t.pos===1?'m-lead':''}">
+            <span class="m-no">${esc(t.r.number||'')}</span>
+            <span class="m-silk" style="${t.r.silk_url?`background-image:url('${esc(t.r.silk_url)}')`:''}"></span>
+            <div class="m-label" title="${esc(t.r.name)}">${t.pos===1?'👑 ':''}${esc(t.r.name)}</div>
+            <div class="m-runway"><div class="m-rail"></div><div class="m-finish"></div>
+              <div class="m-horse ${t.pos===1?'m-leader':''}" style="--finish:${t.p}%" data-d="${(2.2+Math.random()*0.8).toFixed(2)}">🐎</div></div>
+            <span class="m-score">${(t.r.score||0).toFixed(1)}</span></div>`).join('')}</div>
+        <div class="m-foot"><span class="m-note">Illustrative only — lane spacing from predicted score gaps, not real finishing margins.</span>
+          <button class="m-open" onclick="mTabOpen()">Open race →</button></div>
+      </div>`;
+    const on=el.querySelector('.m-time.on');if(on)on.scrollIntoView({block:'nearest',inline:'center'});
+  };
+  // index-based handlers — venue names never go inside inline JS strings
+  window.mTabVenue=function(i){M.venue=['all',...venuesOf(races())][i]||'all';M.key=null;window.renderMTab();};
+  window.mTabPick=function(i){const x=visible(races())[i];if(x){M.key=x.key;window.renderMTab();}};
+  window.mTabStep=function(d){const vis=visible(races()),n=vis[vis.findIndex(x=>x.key===M.key)+d];if(n){M.key=n.key;window.renderMTab();}};
+  window.mTabOpen=function(){const c=races().find(x=>x.key===M.key);if(!c)return;switchTab('races');openRace(c.vk,c.ri);};
+  window.mRunRace=function(){
+    const wrap=document.getElementById('mTrack');if(!wrap)return;
+    const sp=parseFloat((document.getElementById('mSpeed')||{}).value)||1,horses=wrap.querySelectorAll('.m-horse');
+    clearTimeout(M.timer);
+    horses.forEach(h=>{h.style.transitionProperty='none';h.classList.remove('running');}); // snap back to start
+    wrap.querySelectorAll('.m-lane').forEach(l=>l.classList.remove('m-flash'));
+    wrap.querySelectorAll('.m-badge').forEach(b=>b.remove());
+    void wrap.offsetWidth;
+    horses.forEach(h=>{h.style.removeProperty('transition-property');h.style.transitionDuration=(h.dataset.d/sp).toFixed(2)+'s';});
+    M.timer=setTimeout(()=>{ // setTimeout, not rAF — rAF pauses on background tabs
+      horses.forEach(h=>h.classList.add('running'));
+      const lead=wrap.querySelector('.m-leader');if(!lead)return;
+      M.timer=setTimeout(()=>{const lane=lead.closest('.m-lane');if(!lane)return;lane.classList.add('m-flash');
+        const b=document.createElement('span');b.className='m-badge';b.textContent='🏆 WINNER';lane.appendChild(b);},parseFloat(lead.style.transitionDuration)*1000+60);
+    },30);
+  };
+})();
 
 /* ==================== GAP % TAB ==================== */
 // gap = top-pick predicted_score minus 2nd-pick predicted_score, per historical race

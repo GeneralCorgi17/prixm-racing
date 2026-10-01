@@ -116,6 +116,10 @@ Tab id stays `tabTracks`/`switchTab('tracks')`. IIFE `window.renderTrackExplorer
 
 Replaced the 🐎 lane slider (`rpReplayInit`/`rpFrame`/`rpRunRace`): track-true SVG replay on the race's own track shape, silks from `silk_url`, early positions from pace map + draw, finish from predicted lengths; smoothstep maths, persistent nodes, rAF loop. **No commentary** (user rule). `rpPredictLengths()` = score gap × lengths-per-point learned from logged margins (Flat ≈0.19, AW ≈0.21, NH ≈0.5). `rpLengthPanelHTML()` = winning-distance bands per race type × gap band from logged results; **tight race gate** (`rpTightCheck`: gap < 8, top-2 BT win-chance diff < 8 pts, or Verification FLAGGED) → "No length bet suggestion" only. EV verdict only from a user-entered price — never pushes.
 
+## 🐎 M Tab — lane race animation (added 2026-10-01)
+
+Top-level tab `tabM` / `switchTab('m')` / `#mView` — revives the old 🐎 lane slider (removed from Predict 2026-09-30) as its own tab. IIFE `🐎 M TAB` right after the Predict replay code: `window.renderMTab()`, `mTabVenue/mTabPick/mTabStep/mTabOpen`, `mRunRace()`. Venue chips → race-time strip → race card (border colour, ⭐/🥈/🥉 badge, GAP/SCORE/CONF) → one lane per runner. Order = `rpBuildPredictedOrder()` (same as 🔮 Predict); lane finish % from score gaps (illustrative, not margins). 🏆 WINNER fires on a timer (not `transitionend` — hidden tabs never fire it). **No commentary** (user rule). Display-only, works in VIEW_ONLY. Mockups: `m_tab_main_mockup.html`, `m_tab_mockup.html`.
+
 ## 💷 Ledger — money tracker + staking advisor
 
 PRIVATE: `bets` table in race_data.db (`GET/POST /api/bets`, `DELETE /api/bets/{id}`, auto-settle via `settle_open_bets()` on GET and after Fetch Results) or `localStorage.ledgerBets` when the DB server is off. Never in results_history.json; race_data.db is gitignored; whole feature hidden in VIEW_ONLY. Stakes stored as units + `unit_gbp` at bet time (unit changes never rewrite history). ＋ Log bet FAB / **B** key / BET button (also adds to the 🎫 slip). Advisor `suggest()` (picks only — NAP/WIN/STRONG/PLACE of both engines): `winChance()` = live top-pick win rate for engine × confidence × gap band × handicap (`lgBuckets()`, shrunk to the average with K=30; Irish buckets anchored on UK), × ⭐ Golden blend / Verification ±5% / 🧭 measured track-fit lift / volatile ×0.9; stake = **¼ Kelly × staking bank** (`effBank()` = start bank, or notional 100u when it's 0, + settled P&L), min +3% EV, max 3u (5u only Golden + CONFIRMED), ⅙ Kelly after 3 losing days. No price → price ladder (`1u @ 3.2+`). **No bet → blank** (never "0u"). Daily plan: budget = `pct`% of staking bank, real bets strongest first, the strongest always funded in full; ☘ Emerald/Silver/Bronze stakes are paper (outside the budget). Chips: `lgChipForRace()` on race cards, `lgChipForRunner()` in the runner table. Starts empty (no seeded bets). Settings in `localStorage.ledgerSettings` — defaults 1u = £10, starting bank £0 (= notional 100u staking bank), daily budget 5%, max single 5u.
@@ -517,6 +521,7 @@ Irish venues also caught by `(IRE)` suffix check before list lookup.
 - **Horse watchlist** — track specific horses across race days
 - **Results logger** — fetches and logs race results
 - **Weight calibration** — self-tuning factor weights from logged results
+- **🐎 M tab** — lane race animation for any race on today's card (see 🐎 M Tab above)
 - **Golden Dashboard tab** — analytics: Golden (gap≥18 score≥74) + Silver (gap 10–<12 score≥72 Turf) + Bronze (gap 8–<10 score≥74 Good/GF) sections. Auto-polls every 60s.
 
 ## Code Style

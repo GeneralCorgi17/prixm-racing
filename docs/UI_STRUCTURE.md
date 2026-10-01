@@ -10,7 +10,7 @@
 ```
 <body>
   .hdr                    ← header bar (title, buttons, date, status)
-  .tab-bar                ← 6 tab buttons
+  .tab-bar                ← tab buttons (see Tab Bar table)
   #landingView            ← Races tab (default)
   #detailView             ← Race detail (replaces landing on click)
   #perfView               ← Performance tab
@@ -18,6 +18,8 @@
   #trendsView             ← Trends tab
   #ozzyView               ← Ozzy tab
   #goldenView             ← Golden dashboard tab
+  #tracksView / #topFinishView / #watchbackView / #emeraldView / #ledgerView
+  #mView                  ← 🐎 M race animation tab
   #modalContainer         ← Overlay modals (dynamically inserted)
   #betPanel               ← Right sidebar bet list (collapsible)
   #betFab                 ← Floating ticket button (bottom-right)
@@ -50,8 +52,13 @@ Right:
 | `tabPerf` | Performance | `switchTab('performance')` |
 | `tabCombos` | Combos | `switchTab('combos')` |
 | `tabTrends` | Trends | `switchTab('trends')` |
-| `tabOzzy` | 🧠 Ozzy | `switchTab('ozzy')` |
 | `tabGolden` | Golden | `switchTab('golden')` |
+| `tabTracks` | 🗺 Track Explorer | `switchTab('tracks')` |
+| `tabTopFinish` | Top Finish | `switchTab('topfinish')` |
+| `tabWatchback` | Watchback | `switchTab('watchback')` |
+| `tabEmerald` | ☘ Emerald | `switchTab('emerald')` |
+| `tabLedger` | 💷 Ledger | `switchTab('ledger')` (hidden in VIEW_ONLY) |
+| `tabM` | 🐎 M | `switchTab('m')` → `renderMTab()` |
 | `dbStatusBadge` | — | `🟢 DB N races` or `🟡 JSON` — set during init(), margin-left:auto |
 
 **`switchTab(tab)`** — toggles `.active` class, shows/hides view divs, calls render function for the selected tab.
@@ -254,6 +261,18 @@ Turf inferred: going does NOT start with "Standard" (AW going).
 Key functions: `buildSilverPicks` · `groupBySilverGapBand` (inside IIFE). Reuses `groupByScoreBand` and `groupByGoing`.
 
 Racecard badge: `getSilverFlags(race)` + `renderSilverFlag(sf)` — global scope, fires if gap 10–12 + score≥72 + not AW.
+
+---
+
+## 🐎 M Tab (`#mView` → `#mContent`)
+
+Lane race animation (the old 🐎 slider, revived 2026-10-01). IIFE after the Predict replay code (search `🐎 M TAB`).
+
+- Venue chips → race-time strip (border colour = `getRaceBorderColor`) → race card (⭐/🥈/🥉 via `getGoldenFlags`/`getSilverFlags`/`getBronzeFlags`, GAP/SCORE/CONF).
+- Order = `rpBuildPredictedOrder(runners, race).order` (same as 🔮 Predict). Lane finish % = 90 − gap/maxGap×65 (min 4% apart, floor 8%) — illustrative only.
+- `window.renderMTab()`, `mTabVenue(i)`, `mTabPick(i)`, `mTabStep(±1)`, `mTabOpen()` (→ `switchTab('races')` + `openRace(vk,ri)`), `mRunRace()` (CSS `left` transition, speed 0.5/1/2×; 🏆 WINNER fires on a timer, not `transitionend`).
+- State is module-local (`M.venue`, `M.key`) — not in `st`, not in localStorage. Display-only; excluded venues skipped via `isExcludedVenue`.
+- Mockups: `m_tab_main_mockup.html` (in-app look), `m_tab_mockup.html` (standalone).
 
 ---
 
