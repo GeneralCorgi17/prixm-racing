@@ -266,13 +266,14 @@ Racecard badge: `getSilverFlags(race)` + `renderSilverFlag(sf)` — global scope
 
 ## 🐎 MT Tab (`#mView` → `#mContent`)
 
-Race track animation (label **🐎 MT**; ids stay `tabM` / `switchTab('m')`). IIFE after the Predict replay code (search `🐎 MT TAB`). Added 2026-10-01 as a straight-lane slider, switched to the track the same day.
+Race track simulation (label **🐎 MT**; ids stay `tabM` / `switchTab('m')`). Inline `MTSim` engine + MT IIFE after the Predict replay code (search `🐎 MT race simulation` / `🐎 MT TAB`).
 
-- Venue chips → race-time strip (border colour = `getRaceBorderColor`) → race card (⭐/🥈/🥉 via `getGoldenFlags`/`getSilverFlags`/`getBronzeFlags`, GAP/SCORE/CONF) → `#mtSvg` track stage (`#mtPhase`, `#mtFur`, `#mtWinner` pills) → `#mtLegend`.
-- Track shape from `rpTrackGeom(race)` (shared with the Predict replay `rpReplayInit`). 🐎 emoji tokens mirror to face travel direction; number badge colour = `rpColour(name)`.
-- Order = `rpBuildPredictedOrder(runners, race).order` (same as 🔮 Predict). Early positions from `race.pace` + draw (no style → predicted rank, staggered); finish gaps from `rpPredictLengths()`.
-- `window.renderMTab()`, `mTabVenue(i)`, `mTabPick(i)`, `mTabStep(±1)`, `mTabOpen()` (→ `switchTab('races')` + `openRace(vk,ri)`), `mRunRace()` (10s ÷ speed; rAF, setTimeout when hidden).
-- State is module-local (`M.venue`, `M.key`, `M.run`) — not in `st`, not in localStorage. Display-only; excluded venues skipped via `isExcludedVenue`.
+- Venue chips → race-time strip (border colour = `getRaceBorderColor`) → race card (⭐/🥈/🥉 via `getGoldenFlags`/`getSilverFlags`/`getBronzeFlags`, GAP/SCORE/CONF) → `#mtSvg` stage (`#mtPhase`, `#mtFur`, `#mtWinner` pills) → `.mt-legend` (silk images).
+- `MTSim.render(svg,{race,order,lens,styles,geom,onTick})`: geom from `rpTrackGeom(race)`; order `rpBuildPredictedOrder().order`; lens `rpPredictLengths()`; styles from `race.pace`. `MTSim.run(speed)` (10s ÷ speed + pull-up; rAF, setTimeout when hidden), `MTSim.stop()` (also called by `switchTab` when leaving).
+- Horse = SVG with JS-posed legs (keyframed gallop), coat from `runner.colour`, jockey shirt = silk `<pattern>`; colours parsed from the silk SVG (CORS `*`).
+- `window.renderMTab()`, `mTabVenue(i)`, `mTabPick(i)`, `mTabStep(±1)`, `mTabOpen()` (→ `switchTab('races')` + `openRace(vk,ri)`), `mRunRace()`.
+- State is module-local — not in `st`, not in localStorage. Display-only; excluded venues skipped via `isExcludedVenue`.
+- Mockups: `mt_main_mockup.html` + `mt_sim.js` (engine copy), `mt_horse_mockup.html` (design picker).
 
 ---
 

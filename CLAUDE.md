@@ -116,9 +116,12 @@ Tab id stays `tabTracks`/`switchTab('tracks')`. IIFE `window.renderTrackExplorer
 
 Replaced the 🐎 lane slider (`rpReplayInit`/`rpFrame`/`rpRunRace`): track-true SVG replay on the race's own track shape, silks from `silk_url`, early positions from pace map + draw, finish from predicted lengths; smoothstep maths, persistent nodes, rAF loop. **No commentary** (user rule). `rpPredictLengths()` = score gap × lengths-per-point learned from logged margins (Flat ≈0.19, AW ≈0.21, NH ≈0.5). `rpLengthPanelHTML()` = winning-distance bands per race type × gap band from logged results; **tight race gate** (`rpTightCheck`: gap < 8, top-2 BT win-chance diff < 8 pts, or Verification FLAGGED) → "No length bet suggestion" only. EV verdict only from a user-entered price — never pushes.
 
-## 🐎 MT Tab — race track animation (added 2026-10-01)
+## 🐎 MT Tab — race track simulation (added 2026-10-01)
 
-Top-level tab labelled **🐎 MT** (ids unchanged: `tabM` / `switchTab('m')` / `#mView`). IIFE `🐎 MT TAB` right after the Predict replay code: `window.renderMTab()`, `mTabVenue/mTabPick/mTabStep/mTabOpen`, `mRunRace()`. Venue chips → race-time strip → race card (border colour, ⭐/🥈/🥉 badge, GAP/SCORE/CONF) → SVG of the race's **own track** (`rpTrackGeom(race)` — shared with the Predict replay) with 🐎 emoji runners (mirrored to face travel direction, number badge, smaller in 9+/13+ fields) → legend. Order = `rpBuildPredictedOrder()` (same as 🔮 Predict); early positions from pace map + draw (no style logged → spaced by predicted rank + staggered across the track), finish gaps from `rpPredictLengths()`. Own SVG/state (`mtSvg`, module-local `M.run`) so it never clashes with `window._rpReplay`. Winner gets a pulsing ring + 🏆 WINNER pill. **No commentary** (user rule). Display-only, works in VIEW_ONLY. Started as a straight-lane slider (mockups `m_tab_main_mockup.html`, `m_tab_mockup.html`), switched to the track the same day at user request.
+Top-level tab labelled **🐎 MT** (ids unchanged: `tabM` / `switchTab('m')` / `#mView`). Two inline blocks right after the Predict replay code:
+- **`MTSim` engine** (`window.MTSim.render(svg,{race,order,lens,styles,geom,onTick})` / `.run(speed)` / `.stop()`): SVG horses (faces right, coat from `runner.colour`, jockey shirt = the real Racing Post silk printed via an SVG `<pattern>`, cap/sleeve colours parsed from the silk SVG — rp-assets serves CORS `*`). Keyframed rotary gallop (stance/swing per leg, footfall far-hind → near-hind → far-fore → near-fore → suspension); every part posed from JS each frame (no SMIL — re-ordering nodes restarts SMIL). Stride rate = ground speed ÷ stride length (floor 2.2/s so short straights still gallop). Race sim: early positions from pace styles + draw (no style → predicted rank), mid-race surges for show, settle into the predicted finish, run past the post and pull up. Straight courses = zoomed vertical track, one lane per runner by draw, horses sized to the lane; ovals = `rpTrackGeom` path. Latest `render()` wins (async silk fetch). Mockup copy: `mt_sim.js` + `mt_main_mockup.html` (inline copy is the source of truth).
+- **MT tab IIFE** (`🐎 MT TAB`): `window.renderMTab()`, `mTabVenue/mTabPick/mTabStep/mTabOpen`, `mRunRace()`. Venue chips → race-time strip → race card (border colour, ⭐/🥈/🥉, GAP/SCORE/CONF) → stage (phase / furlongs / 🏆 WINNER pills) → legend with silks. Order = `rpBuildPredictedOrder()`, lengths = `rpPredictLengths()` (same as 🔮 Predict). `switchTab` stops the sim when leaving the tab.
+**No commentary** (user rule). Display-only, works in VIEW_ONLY. History: straight-lane 🐎 emoji slider → emoji on the track → galloping silk horses (design B picked from `mt_horse_mockup.html`), all 2026-10-01.
 
 ## 💷 Ledger — money tracker + staking advisor
 
@@ -521,7 +524,7 @@ Irish venues also caught by `(IRE)` suffix check before list lookup.
 - **Horse watchlist** — track specific horses across race days
 - **Results logger** — fetches and logs race results
 - **Weight calibration** — self-tuning factor weights from logged results
-- **🐎 MT tab** — 🐎 horses run the race's own track for any race on today's card (see 🐎 MT Tab above)
+- **🐎 MT tab** — galloping horses in real silks run the race's own track for any race on today's card (see 🐎 MT Tab above)
 - **Golden Dashboard tab** — analytics: Golden (gap≥18 score≥74) + Silver (gap 10–<12 score≥72 Turf) + Bronze (gap 8–<10 score≥74 Good/GF) sections. Auto-polls every 60s.
 
 ## Code Style

@@ -1122,17 +1122,17 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .m-run{background:var(--accent2);border-color:var(--accent2);color:#fff;font-weight:700;padding:7px 16px}
 .m-run:hover{background:#2563eb}
 select.m-btn{padding:5px 6px}
-.mt-stage{position:relative;margin-top:14px;background:#f7faf7;border:1px solid var(--border);border-radius:10px;overflow:hidden}
-.mt-stage svg{display:block;width:100%;max-width:880px;margin:0 auto;height:auto}
+.mt-stage{position:relative;margin-top:14px;background:#f4f8f2;border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.mt-stage svg{display:block;width:100%;height:auto}
 .mt-pill{position:absolute;top:8px;background:#fff;border:1px solid var(--border);border-radius:14px;padding:2px 10px;font-size:11.5px;font-weight:700}
-.mt-winpill{top:auto;bottom:8px;left:50%;transform:translateX(-50%);color:var(--gold);border-color:rgba(217,119,6,.5);animation:mPop .35s ease}
+.mt-winpill{top:8px;left:50%;transform:translateX(-50%);color:var(--gold);border-color:rgba(217,119,6,.5);animation:mPop .35s ease}
 .mt-ring{opacity:0}
-.mt-win .mt-ring{animation:mtPulse 1s ease-in-out 3 forwards}
+.mt-won .mt-ring{animation:mtPulse 1s ease-in-out 3 forwards}
 @keyframes mtPulse{0%{opacity:.2}50%{opacity:1}100%{opacity:.85}}
 @keyframes mPop{0%{transform:translateX(-50%) scale(0)}70%{transform:translateX(-50%) scale(1.2)}100%{transform:translateX(-50%) scale(1)}}
 .mt-legend{display:flex;gap:6px 14px;flex-wrap:wrap;margin-top:10px;font-size:11.5px}
 .mt-leg{display:inline-flex;align-items:center;gap:5px}
-.mt-leg img,.mt-leg i{width:16px;height:16px;border-radius:50%;border:1px solid #111;display:inline-block;object-fit:cover}
+.mt-leg img{width:18px;height:14px;object-fit:contain}
 .mt-leg span{color:var(--muted)}
 .m-foot{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center;margin-top:10px}
 .m-note{font-size:11px;color:var(--muted)}
@@ -1911,6 +1911,7 @@ function switchTab(tab){
   if(tab==='emerald') window.renderEmeraldTab&&window.renderEmeraldTab('emeraldContent');
   if(tab==='ledger') window.renderLedger&&window.renderLedger();
   if(tab==='m') window.renderMTab&&window.renderMTab();
+  else if(window.MTSim) MTSim.stop();
 }
 
 /* ==================== GOLDEN DASHBOARD ==================== */
@@ -6220,10 +6221,10 @@ function showGuide(){
 
     <!-- 🐎 MT TAB -->
     <div class="guide-section" style="border-left-color:#d97706">
-      <h3><span class="gi">🐎</span> MT — race track animation</h3>
+      <h3><span class="gi">🐎</span> MT — race track simulation</h3>
       <ul style="font-size:11.5px;margin:6px 0 0 16px;line-height:1.6">
-        <li>Top-level <b>🐎 MT</b> tab: pick a venue chip and a race time (or ◀ ▶), then <b>▶ Run it</b>. 🐎 horses run round the race's <b>own track</b> (left/right-handed, straight course, ▲ uphill finish) to the finish line; the winner gets a ring and <b>🏆 WINNER</b>. Speed 0.5× / 1× / 2×.</li>
-        <li>Finishing order = the engine's predicted order (same as 🔮 Predict). Early positions from the pace map + draw, gaps at the line from predicted lengths — <b>illustrative, not a real race</b>.</li>
+        <li>Top-level <b>🐎 MT</b> tab: pick a venue chip and a race time (or ◀ ▶), then <b>▶ Run it</b>. Galloping horses — each jockey wearing the runner's <b>real silks</b> — run the race's <b>own track</b> (left/right-handed oval, or a wide straight course) and pull up after the line. The winner gets a ring and <b>🏆 WINNER</b>. Speed 0.5× / 1× / 2×.</li>
+        <li>Finishing order = the engine's predicted order and gaps at the line = predicted lengths (same as 🔮 Predict). Early positions from the pace map + draw; the mid-race moves are for show — <b>illustrative, not a real race</b>.</li>
         <li>Race header shows gap / score / confidence and the ⭐ / 🥈 / 🥉 badge. <b>Open race →</b> jumps to the full race view. Display only — never changes scores or segments.</li>
       </ul>
     </div>
@@ -10309,14 +10310,200 @@ function rpRunRace(){
   tick();
 }
 
-/* ==================== 🐎 MT TAB — race track animation ====================
-   Own top-level tab (tab id tabM / switchTab('m')). 🐎 icons run round the race's own track —
-   same geometry as the Predict replay (rpTrackGeom), early positions from pace map + draw,
-   finish from predicted lengths (rpPredictLengths). Order = rpBuildPredictedOrder() so it matches
-   🔮 Predict exactly. Own SVG/state (mtSvg, M.run) so it never clashes with the Predict replay.
-   Display-only — never writes to runners/races/scores/segments. No commentary (user rule). */
+/* 🐎 MT race simulation — galloping horses (silk-print jockeys) on the race's own track.
+   Inline copy for the 🐎 MT tab (mockup engine file: mt_sim.js — keep in sync). Display-only: reads runners, never writes back.
+   API:  MTSim.render(svg, {race, order:[{runner}], lens:[lengths behind], styles:{name:'FR'|'P'|'MD'|'HU'},
+                            geom:{straight, d, df, circ, rh}, onTick(info)})  → Promise
+         MTSim.run(speed)  ·  MTSim.stop()
+   Gait: keyframed rotary gallop (Muybridge-style). Each leg has a stance phase (hoof planted, sweeping
+   back) and a swing phase (knee/hock folded, reaching forward); footfall far-hind → near-hind →
+   far-fore → near-fore, then a gathered suspension with all four off the ground. Stride rate comes from
+   the horse's real speed so hooves plant instead of sliding. */
 (function(){
-  const M={venue:'all',key:null,run:null};
+  const TAU=Math.PI*2;
+  const ss=(a,b,x)=>{const k=Math.min(1,Math.max(0,(x-a)/(b-a)));return k*k*(3-2*k);};
+  const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const hashCol=n=>{let h=0;for(const c of n)h=(h*31+c.charCodeAt(0))>>>0;return ['#15803d','#1d4ed8','#dc2626','#7c3aed','#0f766e','#ea580c','#be185d','#0369a1','#4d7c0f','#9333ea','#b45309','#334155'][h%12];};
+  const COAT={b:'#7b4a2a',br:'#4a2c1a','b/br':'#5a3520',ch:'#a0522d',gr:'#a8a29e',bl:'#26211f',ro:'#8b7d7b'};
+  const coatOf=r=>COAT[(r.colour||'b').toLowerCase()]||COAT.b;
+  const shade=(hex,k)=>{const n=parseInt(hex.slice(1),16);return '#'+[n>>16,n>>8&255,n&255].map(x=>Math.min(255,Math.round(x*k)).toString(16).padStart(2,'0')).join('');};
+
+  /* silk → shirt/cap colours (Racing Post silks are SVGs served with CORS *) */
+  const SILK={};
+  async function silkColours(r){
+    const fb={shirt:hashCol(r.name),cap:shade(hashCol(r.name),0.6)};
+    if(!r.silk_url)return fb;if(SILK[r.silk_url])return SILK[r.silk_url];
+    try{
+      const t=await (await fetch(r.silk_url)).text(),w={};
+      t.replace(/<path[^>]*fill:rgb\(([\d.]+)%,([\d.]+)%,([\d.]+)%\)[^>]*d="([^"]*)"/g,(m,R,G,B,d)=>{
+        const hex='#'+[R,G,B].map(x=>Math.round(x*2.55).toString(16).padStart(2,'0')).join('');w[hex]=(w[hex]||0)+d.length;return m;});
+      const top=Object.entries(w).sort((a,b)=>b[1]-a[1]).map(x=>x[0]);
+      SILK[r.silk_url]=top.length?{shirt:top[0],cap:top[1]||shade(top[0],0.6)}:fb;
+    }catch(e){SILK[r.silk_url]=fb;}
+    return SILK[r.silk_url];
+  }
+
+  /* ---- gait keyframes: [cycle t, upper-leg °, lower-leg ° relative]. SVG rotate(+) swings the hoof BACK (horse faces right). ---- */
+  const KF={
+    fore:[[0,-30,0],[.18,-4,0],[.36,28,8],[.50,22,95],[.68,-12,80],[.86,-40,12],[1,-30,0]],   // knee folds back under the forearm
+    hind:[[0,-26,0],[.20,2,-4],[.40,34,12],[.54,24,-60],[.74,-10,-78],[.90,-34,-18],[1,-26,0]], // hock folds the cannon forward
+  };
+  function kf(tab,t){t=((t%1)+1)%1;for(let i=0;i<tab.length-1;i++){const a=tab[i],b=tab[i+1];if(t<=b[0]){const u=(t-a[0])/(b[0]-a[0]),e=(1-Math.cos(Math.PI*u))/2;return [a[1]+(b[1]-a[1])*e,a[2]+(b[2]-a[2])*e];}}return [tab[0][1],tab[0][2]];}
+  // hip, knee/hock, hoof, type, footfall offset, far side?
+  const LEGS=[
+    {hip:[-12,1],kn:[-15.5,12],hf:[-12.5,22.5],type:'hind',off:0.00,far:1},
+    {hip:[7,2],kn:[8,12.5],hf:[7.5,22.5],type:'fore',off:0.34,far:1},
+    {hip:[-9,2],kn:[-12.5,12],hf:[-9.5,22.5],type:'hind',off:0.09,far:0},
+    {hip:[10,3],kn:[11,13],hf:[10.5,22.5],type:'fore',off:0.44,far:0},
+  ];
+  const STRIDE=42; // body travel per gallop cycle, in horse units (≈ stance sweep ÷ stance share)
+
+  function legSVG(L,col){
+    return `<g class="lu"><path d="M${L.hip[0]},${L.hip[1]} L${L.kn[0]},${L.kn[1]}" stroke="${col}" stroke-width="${L.type==='hind'?4.4:3.6}" stroke-linecap="round"/>
+      <g class="ll"><path d="M${L.kn[0]},${L.kn[1]} L${L.hf[0]},${L.hf[1]}" stroke="${col}" stroke-width="2.4" stroke-linecap="round"/><path d="M${L.hf[0]-1.6},${L.hf[1]+0.4} l3.6,0 l-0.4,1.8 l-3,0 z" fill="#1f1a17"/></g></g>`;
+  }
+  // horse faces right, hooves at y≈19. Design B: jockey shirt = the real silk print.
+  function horseSVG(r,uid,c){
+    const coat=coatOf(r),dark=shade(coat,0.6),far=shade(coat,0.75),print=!!r.silk_url;
+    return `<g class="hz">
+      ${print?`<defs><pattern id="mts${uid}" patternContentUnits="objectBoundingBox" width="1" height="1"><image href="${esc(r.silk_url)}" x="-.35" y="-.1" width="1.7" height="1.3" preserveAspectRatio="none"/></pattern></defs>`:''}
+      <circle class="mt-ring" cx="2" cy="-2" r="30" fill="rgba(217,119,6,.12)" stroke="#d97706" stroke-width="2.5"/>
+      <ellipse class="sh" cx="0" cy="24.5" rx="21" ry="2.6" fill="rgba(0,0,0,.14)"/>
+      <g class="bob">
+        <g class="tail"><path d="M-15,-3 C-21,-5 -26,0 -28,8" stroke="${dark}" stroke-width="3.6" fill="none" stroke-linecap="round"/></g>
+        ${legSVG(LEGS[0],far)}${legSVG(LEGS[1],far)}
+        <path d="M-16,-1 C-16,-7 -9,-8 0,-7.5 C8,-7.5 14,-6 16,-1 C16,5 9,7 0,7 C-9,7 -16,6 -16,-1 Z" fill="${coat}"/>
+        <g class="head">
+          <path d="M9,-4 C13,-11 16,-16 21,-19 L26,-16.5 C22,-11 19,-5 15,3 Z" fill="${coat}"/>
+          <path d="M21,-19.5 C25,-22 30,-20.5 34,-15.5 C35,-13.6 33.4,-12.3 31.2,-13 C28.5,-13.4 26,-12.5 24.5,-11.5 Z" fill="${coat}"/>
+          <path d="M21.5,-19 L22.6,-23.5 L24.8,-19.6 Z" fill="${dark}"/>
+          <path d="M10,-6 C13,-12 16,-17 21,-19.5" stroke="${dark}" stroke-width="2.2" fill="none" stroke-linecap="round"/><circle cx="27.4" cy="-17" r=".9" fill="#111"/>
+        </g>
+        ${legSVG(LEGS[2],coat)}${legSVG(LEGS[3],coat)}
+        <rect x="-7" y="-6.5" width="11.5" height="9" rx="1.6" fill="#fff" stroke="#d1d5db" stroke-width=".6"/>
+        <g class="jk">
+          <path d="M-1,-9 L6,-4.5 L3.5,1.5" stroke="#f3f4f6" stroke-width="3.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M3.5,1.5 L5.2,2.4" stroke="#111" stroke-width="3" stroke-linecap="round"/>
+          <path d="M-7,-9.5 C-5,-15.5 3,-18 9.5,-15.8 L8.6,-11.4 C3.5,-10.6 -1.5,-8.6 -4.2,-6.6 Z" fill="${print?`url(#mts${uid})`:c.shirt}" stroke="${shade(c.shirt,0.7)}" stroke-width=".5"/>
+          <path class="arm" d="M6,-14.6 L16.5,-11" stroke="${c.shirt}" stroke-width="2.8" stroke-linecap="round"/>
+          <path d="M16.5,-11 L31,-13.4" stroke="#3f2d20" stroke-width=".7"/>
+          <circle cx="10.6" cy="-18.6" r="3.3" fill="#f1c27d"/>
+          <path d="M7.2,-19.2 A3.5,3.5 0 0 1 14.1,-19.6 L16.4,-19 L14,-18.3 Z" fill="${c.cap}"/>
+        </g>
+      </g></g>`;
+  }
+  function rig(g){const lu=[...g.querySelectorAll('.lu')];return{legs:lu.map((u,j)=>({u,l:u.querySelector('.ll'),L:LEGS[j]})),bob:g.querySelector('.bob'),tail:g.querySelector('.tail'),head:g.querySelector('.head'),jk:g.querySelector('.jk'),sh:g.querySelector('.sh')};}
+  // ph = gallop cycle position, k = 0 standing … 1 full gallop
+  function pose(R,ph,k){
+    R.legs.forEach(({u,l,L})=>{const[a,b]=kf(KF[L.type],ph-L.off);
+      u.setAttribute('transform',`rotate(${(a*k).toFixed(1)} ${L.hip[0]} ${L.hip[1]})`);l.setAttribute('transform',`rotate(${(b*k).toFixed(1)} ${L.kn[0]} ${L.kn[1]})`);});
+    const lift=2.4*k*(0.5+0.5*Math.cos(TAU*(ph-0.93))),pitch=-2.6*k*Math.cos(TAU*(ph-0.16));
+    R.bob.setAttribute('transform',`translate(0 ${(-lift).toFixed(2)}) rotate(${pitch.toFixed(2)} 0 0)`);
+    R.head.setAttribute('transform',`rotate(${(7*k*Math.cos(TAU*(ph-0.6))-(1-k)*3).toFixed(1)} 13 -2)`);
+    R.tail.setAttribute('transform',`rotate(${(22*k+5*k*Math.sin(TAU*ph)).toFixed(1)} -15 -3)`);
+    R.jk.setAttribute('transform',`translate(${(0.8*k*Math.sin(TAU*(ph-0.2))).toFixed(2)} ${(lift*0.55).toFixed(2)})`); // jockey rides the motion
+    R.sh.setAttribute('rx',(21-3*k*(0.5+0.5*Math.cos(TAU*(ph-0.93)))).toFixed(1));
+  }
+
+  /* ---- race sim ---- */
+  const EARLY={FR:0,P:1.5,MD:4,HU:7};
+  function lagAt(m,t){
+    const settle=m.early*ss(0,0.2,t),finish=(m.fin-m.early)*ss(0.62,1,t);
+    const bell=ss(0.12,0.32,t)*(1-ss(0.58,0.88,t));
+    return Math.max(0,settle+finish+1.3*bell*Math.sin(TAU*(t*1.6+m.seed)));
+  }
+  let S=null,SEQ=0;
+  async function render(svg,o){
+    stop();const seq=++SEQ;
+    const {race,order,lens,styles={},geom,onTick}=o,n=order.length;
+    const cols=await Promise.all(order.map(x=>silkColours(x.runner)));
+    if(seq!==SEQ||!svg.isConnected)return; // a newer race was picked while silks loaded
+    let body='';const G={...geom};
+    if(G.straight){
+      const W=640,H=340,tw=Math.min(520,150+n*28),cx=W/2,yS=H-46,yF=104;
+      svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
+      body+=`<rect x="${cx-tw/2}" y="0" width="${tw}" height="${H}" fill="#cfe6d3"/>`;
+      for(let k=0;k<12;k++)body+=`<rect x="${cx-tw/2+k*tw/12}" y="0" width="${tw/24}" height="${H}" fill="#c6e0cb" opacity=".6"/>`;
+      body+=`<line x1="${cx-tw/2}" y1="0" x2="${cx-tw/2}" y2="${H}" stroke="#fff" stroke-width="4"/><line x1="${cx+tw/2}" y1="0" x2="${cx+tw/2}" y2="${H}" stroke="#fff" stroke-width="4"/>`;
+      for(let f=1;f<G.df;f++){const fy=yF+(yS-yF)*f/G.df;body+=`<line x1="${cx-tw/2}" y1="${fy}" x2="${cx+tw/2}" y2="${fy}" stroke="#fff" stroke-opacity=".5" stroke-dasharray="4 6"/><text x="${cx+tw/2+6}" y="${fy+3}" font-size="10" fill="#6b7280">${f}f</text>`;}
+      body+=`<line x1="${cx-tw/2}" y1="${yF}" x2="${cx+tw/2}" y2="${yF}" stroke="#111" stroke-width="5" stroke-dasharray="6 6"/><text x="${cx+tw/2+6}" y="${yF+4}" font-size="12" font-weight="800">FINISH</text>
+        <text x="${cx-tw/2-8}" y="${yS}" font-size="10" fill="#6b7280" text-anchor="end">START</text><text x="${cx-tw/2-8}" y="${yS+14}" font-size="10" fill="#9ca3af" text-anchor="end">straight course</text>`;
+      Object.assign(G,{s:Math.min(1.4,Math.max(0.6,tw/n/42)),yS,yF,L:yS-yF,runout:38,cx,tw});
+    }else{
+      svg.setAttribute('viewBox','0 0 640 330');
+      body+=`<path d="${G.d}" fill="none" stroke="#cfe6d3" stroke-width="70" stroke-linejoin="round" stroke-linecap="round"/>
+        <path class="mt-path" d="${G.d}" fill="none" stroke="#fff" stroke-width="1.5" stroke-dasharray="5 6"/>
+        <text x="320" y="170" font-size="14" text-anchor="middle" fill="#9ca3af">${G.rh?'↻ right-handed':'↺ left-handed'}</text>`;
+      Object.assign(G,{s:n>12?0.5:0.6,runout:70});
+    }
+    body+=`<g class="mt-toks">${order.map((x,i)=>`<g data-i="${i}"><g class="flip">${horseSVG(x.runner,'r'+i,cols[i])}</g><text class="num" font-weight="800" text-anchor="middle" fill="#111">${esc(x.runner.number||i+1)}</text></g>`).join('')}</g>`;
+    svg.innerHTML=body;
+    if(!G.straight){
+      const P=svg.querySelector('.mt-path'),PL=P.getTotalLength();Object.assign(G,{P,PL,L:Math.min(PL*0.985,PL*G.df/(G.circ||12))});
+      const post=P.getPointAtLength(0);
+      svg.querySelector('.mt-toks').insertAdjacentHTML('beforebegin',`<line x1="${post.x}" y1="${post.y-36}" x2="${post.x}" y2="${post.y+36}" stroke="#111" stroke-width="5" stroke-dasharray="5 5"/><text x="${post.x}" y="${post.y+52}" font-size="11" font-weight="800" text-anchor="middle">FINISH</text>`);
+    }
+    G.perLen=G.straight?G.L/(G.df*80)*9:G.L/(G.df*80)*16;
+    const lanes=[...order.keys()].sort((a,b)=>(order[a].runner.draw||a+1)-(order[b].runner.draw||b+1));
+    const M=order.map((x,i)=>{const r=x.runner,st=styles[r.name],g=svg.querySelector(`.mt-toks > g[data-i="${i}"]`);
+      return{r,i,g,flip:g.querySelector('.flip'),num:g.querySelector('.num'),R:rig(g),fin:lens[i]||0,early:(st?EARLY[st]:Math.min(7,i*0.8))+(r.draw&&n>=8&&r.draw>n*0.6?1:0),
+        seed:((r.name||'').length*7+i*13)%10/10,lane:lanes.indexOf(i),pack:st?(Math.min(EARLY[st],4)/4)*1.2-0.6:((i%3)-1)*0.75,ph:Math.random(),k:0,face:0,prev:null,d:0};});
+    S={svg,G,M,onTick,lastOrder:'',raf:null,speed:1};
+    frame(0,0);
+  }
+  function place(m,x,y,face){
+    const s=S.G.s;m.g.setAttribute('transform',`translate(${x.toFixed(1)},${y.toFixed(1)})`);
+    if(face!==m.face){m.face=face;m.flip.setAttribute('transform',`scale(${s*face},${s})`);
+      m.num.setAttribute('x',(-1.3*s*face).toFixed(2));m.num.setAttribute('y',(0.6*s).toFixed(2));m.num.setAttribute('font-size',(6.5*s).toFixed(2));}
+  }
+  function frame(t,dt){
+    if(!S)return;const G=S.G,n=S.M.length,tc=Math.min(1,t);
+    const u=t>1?Math.min(1,(t-1)/0.22):0,pull=1-(1-u)*(1-u);
+    S.M.forEach(m=>{
+      const toGo=G.L*(1-tc)+lagAt(m,tc)*G.perLen-pull*G.runout;let x,y,face=1;
+      if(G.straight){
+        x=G.cx-G.tw/2+G.tw*(m.lane+0.5)/n+3.6*Math.sin(TAU*(tc*0.9+m.seed))*ss(0.1,0.3,tc)*(1-ss(0.7,0.9,tc));y=G.yF+toGo;
+      }else{
+        const P=G.P,wrap=v=>((v%G.PL)+G.PL)%G.PL,a=P.getPointAtLength(wrap(toGo)),b=P.getPointAtLength(wrap(toGo-2));
+        const st=((m.lane)/Math.max(1,n-1))*2-1,lat=(st+(m.pack-st)*ss(0.04,0.3,tc))*(G.rh?1:-1)*17;
+        const tx=a.x-b.x,ty=a.y-b.y,mm=Math.hypot(tx,ty)||1;x=a.x-ty/mm*lat;y=a.y+tx/mm*lat;
+        const vx=b.x-a.x;face=Math.abs(vx)>0.4?(vx>0?1:-1):(m.face||1);
+      }
+      // gait from ground speed: planted hooves → cycles/s = speed ÷ stride length (with a floor so short straights still read as a gallop)
+      const v=m.prev&&dt>0?Math.hypot(x-m.prev[0],y-m.prev[1])/dt:0;m.prev=[x,y];
+      const race=G.L*S.speed/10,kT=Math.min(1,v/(race*0.55||1));m.k+=(kT-m.k)*Math.min(1,dt*5);
+      const rate=Math.min(4.2*S.speed,Math.max(v/(STRIDE*G.s),2.2*S.speed*m.k));
+      m.ph+=dt*rate;place(m,x,y,face);pose(m.R,m.ph,m.k);m.d=toGo;
+    });
+    const ord=[...S.M].sort((a,b)=>b.d-a.d),key=ord.map(m=>m.i).join();
+    if(key!==S.lastOrder){const L=S.svg.querySelector('.mt-toks');ord.forEach(m=>L.appendChild(m.g));S.lastOrder=key;}
+    S.M[0].g.classList.toggle('mt-won',t>=1);
+    S.onTick&&S.onTick({t,done:t>=1,phase:t>=1?'🏁 Finish':t===0?'Ready':t<0.12?'Start':t<0.45?'Early':t<0.62?'Mid-race':t<0.82?(G.straight?'Two out':'Home turn'):'Final furlongs',
+      furlongs:Math.max(0,Math.ceil(G.df*(1-tc))),winner:S.M[0].r.name});
+  }
+  function stop(){if(S&&S.raf){cancelAnimationFrame(S.raf);clearTimeout(S.raf);S.raf=null;}}
+  function run(speed){
+    if(!S)return;stop();const me=S;me.speed=speed||1;const dur=10000/me.speed,t0=performance.now();let last=t0;
+    me.M.forEach(m=>{m.prev=null;m.k=0;});
+    const next=f=>{me.raf=document.hidden?setTimeout(()=>f(performance.now()),32):requestAnimationFrame(f);};
+    const tick=now=>{if(S!==me)return;const dt=Math.min(0.05,(now-last)/1000);last=now;const t=Math.min(1.22,(now-t0)/dur);frame(t,dt);
+      if(t<1.22)next(tick);
+      else{let c=0;const settle=n2=>{if(S!==me)return;const d2=Math.min(0.05,(n2-last)/1000);last=n2;me.M.forEach(m=>{m.k*=Math.max(0,1-d2*3);m.ph+=d2*2*m.k;pose(m.R,m.ph,m.k);});if(++c<70)next(settle);};next(settle);}};
+    next(tick);
+  }
+  window.MTSim={render,run,stop,_frame:(t,dt)=>frame(t,dt),_pose:pose,_horse:horseSVG,_rig:rig};
+})();
+
+/* ==================== 🐎 MT TAB — race track simulation ====================
+   Own top-level tab (tab id tabM / switchTab('m')). Galloping horses with silk-print jockeys run the
+   race's own track (rpTrackGeom — shared with the Predict replay). Engine = MTSim below (mockups:
+   mt_main_mockup.html + mt_sim.js — this inline copy is the source of truth for the app).
+   Order = rpBuildPredictedOrder(), gaps at the line = rpPredictLengths() (same as 🔮 Predict); early
+   positions from the pace map + draw (no style → predicted rank); mid-race surges are for show and
+   always settle into the predicted finish. Display-only — never writes to runners/races/scores/segments.
+   No commentary (user rule). */
+(function(){
+  const M={venue:'all',key:null};
   const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const STYLE_LBL={FR:'front-runner',P:'prominent',MD:'mid-div',HU:'hold-up'};
   function races(){
@@ -10338,70 +10525,15 @@ function rpRunRace(){
     }catch(e){}
     return null;
   }
-  function stop(){const R=M.run;if(R&&R.timer){R.timer.raf&&cancelAnimationFrame(R.timer.raf);R.timer.to&&clearTimeout(R.timer.to);R.timer=null;}}
-
-  function trackInit(race,order){ // order = [{runner,...}] from rpBuildPredictedOrder
-    const svg=document.getElementById('mtSvg');if(!svg)return;
-    const {tp,df,straightRace,cx,cy,d}=rpTrackGeom(race);
-    svg.innerHTML=`<path d="${d}" fill="none" stroke="#cfe6d3" stroke-width="56" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="${d}" fill="none" stroke="#bcd9c2" stroke-width="58" stroke-opacity=".5" stroke-dasharray="2 18"/>
-      <path id="mtPath" d="${d}" fill="none" stroke="#fff" stroke-width="1.5" stroke-dasharray="5 6"/>
-      <path id="mtHill" fill="none" stroke="#f59e0b" stroke-width="56" stroke-opacity=".2"/>
-      <text x="${cx}" y="${straightRace?324:cy+5}" font-size="${straightRace?11:14}" text-anchor="middle" fill="#9ca3af">${straightRace?'straight course':tp.direction==='L'?'↺ left-handed':tp.direction==='R'?'↻ right-handed':''}</text>
-      <g id="mtToks"></g>`;
-    const P=document.getElementById('mtPath'),PL=P.getTotalLength();
-    const circ=tp.circuit_f||12,Lrace=straightRace?PL:Math.min(PL*0.985,PL*df/circ);
-    const post=P.getPointAtLength(0);
-    svg.insertAdjacentHTML('beforeend',`<line x1="${post.x-(straightRace?32:0)}" y1="${post.y-(straightRace?0:32)}" x2="${post.x+(straightRace?32:0)}" y2="${post.y+(straightRace?0:32)}" stroke="#111" stroke-width="4" stroke-dasharray="4 4"/><text x="${post.x}" y="${post.y+(straightRace?-12:48)}" font-size="11" text-anchor="middle" fill="#111" font-weight="800">FINISH</text>`);
-    if((tp.uphill_finish||0)>=0.6){let hd='';const segLen=Lrace*Math.min(0.4,2/df);for(let i=0;i<=20;i++){const q=P.getPointAtLength(segLen*i/20);hd+=(i?' L ':'M ')+q.x+' '+q.y;}
-      document.getElementById('mtHill').setAttribute('d',hd);const h=P.getPointAtLength(segLen*0.6);svg.insertAdjacentHTML('beforeend',`<text x="${h.x}" y="${h.y-36}" font-size="11" fill="#b45309" font-weight="700" text-anchor="middle">▲ uphill</text>`);}
-    const pace=race.pace,styleOf=n=>{if(!pace)return null;for(const k of['FR','P','MD','HU'])if((pace[k]||[]).includes(n))return k;return null;};
-    const lens=rpPredictLengths(order,race),fs=order.length,layer=document.getElementById('mtToks');
-    const hs=fs>12?18:fs>8?21:24,k=hs/24; // smaller 🐎 in big fields
-    const toks=order.map((o,i)=>{
-      const r=o.runner,g=document.createElementNS('http://www.w3.org/2000/svg','g');
-      g.innerHTML=`<circle class="mt-ring" r="${17*k}" fill="rgba(217,119,6,.15)" stroke="#d97706" stroke-width="3"/>
-        <g class="mt-flip"><text font-size="${hs}" text-anchor="middle" y="${8*k}">🐎</text></g>
-        <circle cx="${11*k}" cy="${-12*k}" r="7" fill="${rpColour(r.name)}" stroke="#fff" stroke-width="1.5"/>
-        <text x="${11*k}" y="${-12*k+3}" font-size="8" font-weight="800" text-anchor="middle" fill="#fff">${esc(r.number||i+1)}</text>`;
-      layer.appendChild(g);
-      // no running style logged → space by predicted rank and stagger across the track, so the field never stacks into one 🐎
-      const st=styleOf(r.name),early=(st?RP_EARLY[st]:Math.min(7,i*0.8))+(r.draw&&fs>=8&&r.draw>fs*0.6?1:0);
-      const packed=st?(Math.min(early,4)/4)*1.2-0.6:((i%3)-1)*0.7;
-      return {r,g,flip:g.querySelector('.mt-flip'),st,early,packed,fin:lens[i],draw:r.draw,i,d:0,face:1};
-    });
-    M.run={P,Lrace,perLen:Lrace/(df*80)*16,df,rh:tp.direction!=='L',toks,lastOrder:'',timer:null};
-    document.getElementById('mtLegend').innerHTML=toks.map(o=>`<span class="mt-leg">${o.r.silk_url?`<img src="${esc(o.r.silk_url)}" alt="">`:`<i style="background:${rpColour(o.r.name)}"></i>`}${o.i===0?'👑 ':''}<b>${esc(o.r.number||o.i+1)}</b> ${esc(o.r.name)}${o.st?` <span>(${STYLE_LBL[o.st]}${o.draw?', draw '+esc(o.draw):''})</span>`:o.draw?` <span>(draw ${esc(o.draw)})</span>`:''}</span>`).join('');
-    frame(0);
-  }
-
-  function frame(t){
-    const R=M.run;if(!R)return;const P=R.P,n=R.toks.length,PL=P.getTotalLength();
-    R.toks.forEach(o=>{
-      const lag=o.early*rpSS(0,0.2,t)+(o.fin-o.early)*rpSS(0.62,1,t);
-      const dist=Math.max(0,Math.min(PL,R.Lrace*(1-t)+lag*R.perLen));
-      const a=P.getPointAtLength(dist),b=P.getPointAtLength(Math.max(0,dist-2));
-      let tx=a.x-b.x,ty=a.y-b.y;const m=Math.hypot(tx,ty)||1;
-      const start=o.draw?((o.draw-1)/Math.max(1,n-1))*2-1:(o.i/Math.max(1,n-1))*2-1;
-      const late=(Math.min(o.fin,4)/4)*1.4-0.7;
-      let lat=start+(o.packed-start)*rpSS(0.05,0.3,t);lat=lat+(late-lat)*rpSS(0.7,0.95,t);
-      const off=lat*22*(R.rh?1:-1); // track is 56 wide — use most of it
-      o.g.setAttribute('transform',`translate(${(a.x-ty/m*off).toFixed(2)},${(a.y+tx/m*off).toFixed(2)})`);o.d=dist;
-      // 🐎 faces left by default — mirror it when travelling right (keep last facing on vertical stretches)
-      const vx=b.x-a.x;if(Math.abs(vx)>0.4){const f=vx>0?-1:1;if(f!==o.face){o.face=f;o.flip.setAttribute('transform',`scale(${f},1)`);}}
-    });
-    const ord=[...R.toks].sort((x,y)=>y.d-x.d),key=ord.map(o=>o.i).join();
-    if(key!==R.lastOrder){const L=document.getElementById('mtToks');if(L)ord.forEach(o=>L.appendChild(o.g));R.lastOrder=key;}
-    const done=t>=1;
-    R.toks[0].g.classList.toggle('mt-win',done);
-    const pe=document.getElementById('mtPhase');if(pe)pe.textContent=done?'🏁 Finish':t<0.12?'Start':t<0.45?'Early':t<0.62?'Mid-race':t<0.82?'Home turn':'Final furlongs';
-    const fe=document.getElementById('mtFur');if(fe){fe.textContent=done?'':`${Math.max(0,Math.ceil(R.df*(1-t)))}f to go`;fe.style.display=done?'none':'';}
-    const we=document.getElementById('mtWinner');if(we){we.style.display=done?'':'none';if(done)we.textContent=`🏆 WINNER — ${R.toks[0].r.name}`;}
+  function onTick(i){
+    const pe=document.getElementById('mtPhase');if(!pe)return;pe.textContent=i.phase;
+    const fe=document.getElementById('mtFur');fe.style.display=i.done||i.t===0?'none':'';fe.textContent=i.furlongs+'f to go';
+    const we=document.getElementById('mtWinner');we.style.display=i.done?'':'none';if(i.done)we.textContent='🏆 WINNER — '+i.winner;
   }
 
   window.renderMTab=function(){
     const el=document.getElementById('mContent');if(!el)return;
-    stop();
+    MTSim.stop();
     const all=races();
     if(!all.length){el.innerHTML='<div class="m-empty">No races loaded — run Fetch Racecard first.</div>';return;}
     const venues=venuesOf(all);
@@ -10410,11 +10542,13 @@ function rpRunRace(){
     const cur=vis.find(x=>x.key===M.key)||vis[0];M.key=cur.key;
     const {course,race}=cur,runners=(race.runners||[]).filter(x=>!x.non_runner);
     let order;try{order=rpBuildPredictedOrder(runners,race).order;}catch(e){order=[...runners].sort((a,b)=>(b.score||0)-(a.score||0)).map(r=>({runner:r}));}
+    let lens;try{lens=rpPredictLengths(order,race);}catch(e){lens=order.map((o,i)=>i*0.5);}
+    const styles={};if(race.pace)for(const k of['FR','P','MD','HU'])(race.pace[k]||[]).forEach(n=>styles[n]=k);
     const seg=segBadge(race),byScore=[...runners].sort((a,b)=>(b.score||0)-(a.score||0));
     const gap=byScore.length>1?((byScore[0].score||0)-(byScore[1].score||0)).toFixed(1):'—';
     el.innerHTML=`
       <div class="m-title">🐎 MT — Race Track</div>
-      <div class="m-sub">Pick a race, hit Run it. Horses run the race's own track and finish in the engine's predicted order (same as 🔮 Predict).</div>
+      <div class="m-sub">Pick a race, hit Run it. Horses gallop the race's own track and finish in the engine's predicted order (same as 🔮 Predict).</div>
       <div class="m-chips">${['all',...venues].map((v,i)=>`<button class="m-chip ${M.venue===v?'on':''}" onclick="mTabVenue(${i})">${v==='all'?'All venues':esc(v)}</button>`).join('')}</div>
       <div class="m-times">${vis.map((x,i)=>`<button class="m-time ${x.key===M.key?'on':''}" style="--c:${getRaceBorderColor(x.race)}" onclick="mTabPick(${i})">${esc(x.race.time)}<small>${esc(x.course)}</small></button>`).join('')}</div>
       <div class="m-card" style="--c:${getRaceBorderColor(race)}">
@@ -10434,28 +10568,24 @@ function rpRunRace(){
         <div class="mt-stage">
           <svg id="mtSvg" viewBox="0 0 640 330"></svg>
           <div id="mtPhase" class="mt-pill" style="left:8px">Ready</div>
-          <div id="mtFur" class="mt-pill" style="right:8px"></div>
+          <div id="mtFur" class="mt-pill" style="left:110px;display:none"></div>
           <div id="mtWinner" class="mt-pill mt-winpill" style="display:none"></div>
         </div>
-        <div id="mtLegend" class="mt-legend"></div>
-        <div class="m-foot"><span class="m-note">Illustrative — early positions from the pace map + draw, finish from predicted lengths. Not a real race.</span>
+        <div class="mt-legend">${order.map((o,i)=>{const r=o.runner,st=styles[r.name];return `<span class="mt-leg">${r.silk_url?`<img src="${esc(r.silk_url)}" alt="">`:''}${i===0?'👑 ':''}<b>${esc(r.number||i+1)}</b> ${esc(r.name)}${st?` <span>(${STYLE_LBL[st]}${r.draw?', draw '+esc(r.draw):''})</span>`:r.draw?` <span>(draw ${esc(r.draw)})</span>`:''}</span>`;}).join('')}</div>
+        <div class="m-foot"><span class="m-note">Illustrative — finish in predicted order with gaps from predicted lengths; mid-race moves are for show. Not a real race.</span>
           <button class="m-open" onclick="mTabOpen()">Open race →</button></div>
       </div>`;
     const on=el.querySelector('.m-time.on');if(on)on.scrollIntoView({block:'nearest',inline:'center'});
-    try{trackInit(race,order);}catch(e){console.error('MT track init',e);}
+    const g=rpTrackGeom(race);
+    MTSim.render(document.getElementById('mtSvg'),{race,order,lens,styles,onTick,
+      geom:{straight:!!g.straightRace,d:g.d,df:g.df,circ:g.tp.circuit_f||12,rh:g.tp.direction!=='L'}}).catch(e=>console.error('MT render',e));
   };
   // index-based handlers — venue names never go inside inline JS strings
   window.mTabVenue=function(i){M.venue=['all',...venuesOf(races())][i]||'all';M.key=null;window.renderMTab();};
   window.mTabPick=function(i){const x=visible(races())[i];if(x){M.key=x.key;window.renderMTab();}};
   window.mTabStep=function(d){const vis=visible(races()),n=vis[vis.findIndex(x=>x.key===M.key)+d];if(n){M.key=n.key;window.renderMTab();}};
-  window.mTabOpen=function(){stop();const c=races().find(x=>x.key===M.key);if(!c)return;switchTab('races');openRace(c.vk,c.ri);};
-  window.mRunRace=function(){
-    const R=M.run;if(!R)return;stop();
-    const sp=parseFloat((document.getElementById('mSpeed')||{}).value)||1,dur=10000/sp,t0=performance.now();
-    // rAF when visible, setTimeout when hidden (rAF pauses on background tabs)
-    const tick=()=>{const t=Math.max(0,Math.min(1,(performance.now()-t0)/dur));frame(t);if(t<1&&M.run===R)R.timer=document.hidden?{to:setTimeout(tick,32)}:{raf:requestAnimationFrame(tick)};else R.timer=null;};
-    tick();
-  };
+  window.mTabOpen=function(){MTSim.stop();const c=races().find(x=>x.key===M.key);if(!c)return;switchTab('races');openRace(c.vk,c.ri);};
+  window.mRunRace=function(){MTSim.run(parseFloat((document.getElementById('mSpeed')||{}).value)||1);};
 })();
 
 /* ==================== GAP % TAB ==================== */
