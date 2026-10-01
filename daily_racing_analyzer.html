@@ -1094,6 +1094,12 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .lg-cap{height:10px;background:var(--card2);border-radius:6px;overflow:hidden;margin:6px 0 2px}.lg-cap i{display:block;height:100%;background:#15803d}
 .lg-tbl{width:100%;border-collapse:collapse;font-size:12.5px}.lg-tbl th{text-align:left;font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);padding:6px 8px;border-bottom:1px solid var(--border);white-space:nowrap}.lg-tbl td{padding:6px 8px;border-bottom:1px solid var(--border);white-space:nowrap;font-variant-numeric:tabular-nums}
 .lg-mini{font-size:10.5px!important;padding:2px 7px!important}
+.lg-ac div.act{background:#111827;color:#fff}.lg-ac div.act .lg-sm{color:#d1d5db}
+.lg-sub{margin-top:6px;padding:8px;border:1px dashed var(--border);border-radius:8px;background:var(--card2)}.lg-sub .lg-seg button{font-size:11.5px;padding:4px 8px}.lg-sub .lg-seg button small{opacity:.65;font-weight:500;margin-left:3px}
+.lg-f label.lg-chk{display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;margin:8px 0 0;text-transform:none;letter-spacing:0;color:var(--text);cursor:pointer}.lg-chk input{width:auto!important;margin:0}
+.lg-pay{border:1px solid #bbf7d0;background:#f0fdf4;border-radius:9px;padding:10px 12px}.lg-pay .big{display:flex;justify-content:space-between;align-items:baseline;gap:8px}.lg-pay .big b{font-size:22px;color:#15803d;font-variant-numeric:tabular-nums}
+.lg-pay table{width:100%;border-collapse:collapse;font-size:12px;margin-top:6px}.lg-pay td{padding:3px 0;border-top:1px dashed #bbf7d0;font-variant-numeric:tabular-nums}.lg-pay td:last-child{text-align:right;font-weight:700}.lg-pay.off{background:var(--card2);border-color:var(--border)}
+.lg-legs{margin-top:6px;display:flex;flex-direction:column;gap:4px}.lg-leg{display:flex;align-items:center;gap:6px;border:1px solid var(--border);border-radius:7px;padding:5px 8px;font-size:12.5px}.lg-leg input{width:62px;padding:3px 5px}.lg-leg .lg-x{margin-left:auto}
 .lg-schip{display:inline-block;font-size:10.5px;font-weight:800;border-radius:6px;padding:2px 7px;background:#dcfce7;color:#166534;border:1px solid #bbf7d0;white-space:nowrap;margin-top:3px}
 .lg-schip.pp{background:#fff;color:#6b7280;border:1px dashed #cbd5e1}
 .lg-tier{display:grid;grid-template-columns:44px 1fr;gap:8px;font-size:12.5px;padding:5px 0;border-bottom:1px dashed var(--border)}.lg-tier b{font-size:15px}
@@ -4194,9 +4200,49 @@ function betPnl(b,pos,nr){
   return null;
 }
 const pnlOf=b=>b.result==='O'?0:(b.pnl_u!=null?+b.pnl_u:0);
+const legsOf=b=>{try{const l=typeof b.legs==='string'?JSON.parse(b.legs):b.legs;return Array.isArray(l)?l:[];}catch(e){return[];}};
+function findRun(H,date,venue,time,horse){
+  const race=H.find(r=>r.date===date&&r.time===time&&(norm(r.venue)===norm(venue)||norm(r.venue).startsWith(norm(venue))||norm(venue).startsWith(norm(r.venue))));
+  return race?(race.results||[]).find(x=>norm(x.name)===norm(horse))||null:null;
+}
+// ── Multiples (mirror of scripts/db_server.py MULTI / multi_pnl) ──
+// sizes = fold sizes covered (1 = singles). ACCA = one n-fold. bet_type 'TRIXIE EW' = each-way version.
+const MULTI=[{k:'DOUBLE',n:2,s:[2]},{k:'TREBLE',n:3,s:[3]},{k:'TRIXIE',n:3,s:[2,3]},{k:'PATENT',n:3,s:[1,2,3]},
+  {k:'YANKEE',n:4,s:[2,3,4]},{k:'LUCKY 15',n:4,s:[1,2,3,4]},{k:'CANADIAN',n:5,s:[2,3,4,5]},{k:'LUCKY 31',n:5,s:[1,2,3,4,5]},
+  {k:'HEINZ',n:6,s:[2,3,4,5,6]},{k:'LUCKY 63',n:6,s:[1,2,3,4,5,6]},{k:'SUPER HEINZ',n:7,s:[2,3,4,5,6,7]},{k:'GOLIATH',n:8,s:[2,3,4,5,6,7,8]}];
+const nCk=(n,k)=>{let r=1;for(let i=1;i<=k;i++)r=r*(n-k+i)/i;return r;};
+function combosOf(n,sizes){const out=[];sizes.forEach(k=>{const go=(st,acc)=>{if(acc.length===k){out.push(acc.slice());return;}for(let i=st;i<n;i++){acc.push(i);go(i+1,acc);acc.pop();}};go(0,[]);});return out;}
+// {sizes, ew} for a multiple bet type, or null (single-race / manual)
+function multiDef(type,nLegs){const t=String(type||'').toUpperCase(),ew=/ EW$/.test(t),k=t.replace(/ EW$/,'');
+  if(k==='ACCA')return nLegs>=2?{k,sizes:[nLegs],ew:false,n:nLegs}:null;const m=MULTI.find(x=>x.k===k);return m?{k,sizes:m.s,ew,n:m.n}:null;}
+const multiBets=d=>d.sizes.reduce((a,k)=>a+nCk(d.n,k),0)*(d.ew?2:1);
+// total return for one line stake: win part = Π win factors, each-way adds Π place factors
+function multiReturn(n,d,line,wf,pf){return combosOf(n,d.sizes).reduce((a,c)=>a+line*c.reduce((m,i)=>m*wf(i),1)+(d.ew?line*c.reduce((m,i)=>m*pf(i),1):0),0);}
+const legPlace=l=>1+((+l.price||1)-1)*(+l.frac||0);
+// settle: all legs resulted → winning combos pay (non-runner leg ×1.0); any ACCA loser settles early as lost
+function multiPnl(b,runs){
+  const legs=legsOf(b),d=multiDef(b.bet_type,legs.length);if(!d||legs.length!==d.n)return null;const u=+b.stake_u||0;
+  if(d.k==='ACCA'&&runs.some(r=>r&&!r.non_runner&&r.finish_pos!==1))return['L',-u];
+  if(runs.some(r=>!r))return null;
+  if(runs.every(r=>r.non_runner))return['V',0];
+  const wf=i=>runs[i].non_runner?1:runs[i].finish_pos===1?(+legs[i].price||1):0;
+  const pf=i=>runs[i].non_runner?1:(runs[i].finish_pos&&legs[i].places&&runs[i].finish_pos<=legs[i].places)?legPlace(legs[i]):0;
+  const ret=multiReturn(legs.length,d,u/multiBets(d),wf,pf),pnl=ret-u;
+  return[ret<=0?'L':pnl>0?'W':'P',pnl];
+}
+// potential return (units) if everything wins / places
+function potReturnU(b){
+  const u=+b.stake_u||0,pr=+b.price||0,legs=legsOf(b),d=multiDef(b.bet_type,legs.length);
+  if(d&&legs.length===d.n)return multiReturn(legs.length,d,u/multiBets(d),i=>+legs[i].price||1,i=>legPlace(legs[i]));
+  if(b.bet_type==='EW'){const h=u/2;return h*pr+h*(1+(pr-1)*(+b.ew_fraction||0.2));}
+  return u*pr;
+}
 function settleLocal(){ // DB-less fallback: settle against logged results in memory
   const H=((window._allHistory||window._resultsHistory||{}).races)||[];let n=0;
   LG.bets.filter(b=>b.result==='O').forEach(b=>{
+    if(multiDef(b.bet_type,legsOf(b).length)){const legs=legsOf(b);
+      const o=multiPnl(b,legs.map(l=>findRun(H,b.date,l.venue,l.time,l.horse)));if(!o)return;
+      Object.assign(b,{result:o[0],pnl_u:Math.round(o[1]*10000)/10000,settled_at:new Date().toISOString().slice(0,19)});n++;return;}
     const race=H.find(r=>r.date===b.date&&r.time===b.time&&(norm(r.venue)===norm(b.venue)||norm(r.venue).startsWith(norm(b.venue))||norm(b.venue).startsWith(norm(r.venue))));if(!race)return;
     const run=(race.results||[]).find(x=>norm(x.name)===norm(b.horse));if(!run)return;
     const o=betPnl(b,run.finish_pos,run.non_runner);if(!o)return;
@@ -4349,18 +4395,18 @@ let M=null;
 function allRunners(){const out=[];if(!window.D||!D.venues)return out;Object.entries(D.venues).forEach(([vk,v])=>(v.races||[]).forEach((r,ri)=>(r.runners||[]).forEach(x=>out.push({vk,ri,name:x.name,course:v.course||vk,time:r.time,em:isIreland(v.course||vk)}))));return out;}
 function openModal(vk,ri,name,presetU){
   if(VIEW_ONLY)return;
-  M={c:(vk!=null&&name)?ctxFor(vk,ri,name):null,type:'WIN',unitMode:'gbp',places:null};
+  M={c:(vk!=null&&name)?ctxFor(vk,ri,name):null,type:'WIN',unitMode:'gbp',places:null,legs:[],multi:null,ew:false};
   let el=document.getElementById('lgModal');if(!el){el=document.createElement('div');el.id='lgModal';document.body.appendChild(el);}
   el.innerHTML=`<div class="lg-ov" onclick="if(event.target===this)window.lgClose()"><div class="lg-modal" role="dialog" aria-label="Log a bet">
     <div class="lg-mh"><b>＋ Log a bet</b><button class="lg-x" onclick="window.lgClose()" aria-label="Close">✕</button></div>
     <div class="lg-mb">
-      <div class="lg-f"><label>Horse (today's runners, both engines)</label><input id="lgHorse" autocomplete="off" placeholder="Start typing…" oninput="window.lgSearch(this.value)"><div id="lgAc" class="lg-ac"></div><div id="lgRace" class="lg-sm"></div></div>
-      <div class="lg-f"><label>Bet type</label><div class="lg-seg" id="lgType">${TYPES.map(t=>`<button data-t="${t}" class="${t==='WIN'?'on':''}" onclick="window.lgType('${t}')">${t}</button>`).join('')}</div><div id="lgPlaces" class="lg-sm"></div></div>
-      <div class="lg-row"><div class="lg-f"><label>Stake</label><div class="lg-stake"><input id="lgStake" type="number" step="0.5" min="0" placeholder="5" oninput="window.lgUpd()"><button data-u="gbp" class="on" onclick="window.lgUnit('gbp')">£</button><button data-u="u" onclick="window.lgUnit('u')">u</button></div><div id="lgConv" class="lg-sm"></div></div>
+      <div class="lg-f"><label id="lgHLbl">Horse (today's runners, both engines)</label><input id="lgHorse" autocomplete="off" placeholder="Start typing…" role="combobox" aria-autocomplete="list" aria-controls="lgAc" oninput="window.lgSearch(this.value)" onkeydown="window.lgKey(event)"><div id="lgAc" class="lg-ac" role="listbox"></div><div id="lgRace" class="lg-sm"></div><div id="lgLegs"></div></div>
+      <div class="lg-f"><label>Bet type</label><div class="lg-seg" id="lgType">${TYPES.map(t=>`<button data-t="${t}" class="${t==='WIN'?'on':''}" onclick="window.lgType('${t}')">${t}</button>`).join('')}</div><div id="lgSub"></div><div id="lgPlaces" class="lg-sm"></div></div>
+      <div class="lg-row"><div class="lg-f"><label id="lgStakeLbl">Stake</label><div class="lg-stake"><input id="lgStake" type="number" step="0.5" min="0" placeholder="5" oninput="window.lgUpd()"><button data-u="gbp" class="on" onclick="window.lgUnit('gbp')">£</button><button data-u="u" onclick="window.lgUnit('u')">u</button></div><div id="lgConv" class="lg-sm"></div></div>
         <div class="lg-f"><label>Price (7/4 or 2.75)</label><input id="lgPrice" placeholder="e.g. 7/4" oninput="window.lgUpd()"><div id="lgPriceConv" class="lg-sm"></div></div></div>
       <div class="lg-row"><div class="lg-f"><label>Bookmaker</label><select id="lgBook">${['Bet365','Betfair Exchange','Paddy Power','William Hill','Sky Bet','Betfred','Other'].map(x=>`<option>${x}</option>`).join('')}</select></div>
         <div class="lg-f"><label>Note (optional)</label><input id="lgNote" placeholder="e.g. took early price"></div></div>
-      <div id="lgAdv"></div></div>
+      <div id="lgPay"></div><div id="lgAdv"></div></div>
     <div class="lg-mf"><span id="lgSum" class="lg-sm"></span><div style="display:flex;gap:6px"><button class="vbtn" id="lgUseSug" style="display:none"></button><button class="vbtn" style="background:#15803d;color:#fff;border-color:#15803d" onclick="window.lgSave()">Save bet</button></div></div>
   </div></div>`;
   if(M.c){document.getElementById('lgHorse').value=M.c.r.name;if(M.c.price)document.getElementById('lgPrice').value=M.c.price.toFixed(2);}
@@ -4368,27 +4414,108 @@ function openModal(vk,ri,name,presetU){
   window.lgUpd();setTimeout(()=>{const f=document.getElementById(M.c?'lgStake':'lgHorse');f&&f.focus();},30);
 }
 window.lgClose=()=>{const el=document.getElementById('lgModal');if(el)el.innerHTML='';M=null;};
+const multiMode=()=>M.type==='ACCA'||M.type==='OTHER';
+const fixedMulti=()=>M.type==='OTHER'&&M.multi&&M.multi!=='CUSTOM';
+// the current modal's multiple definition (ACCA / Trixie / …) or null
+const curDef=()=>M.type==='ACCA'?multiDef('ACCA',M.legs.length):fixedMulti()?multiDef(M.multi+(M.ew?' EW':'')):null;
 window.lgSearch=q=>{
-  const box=document.getElementById('lgAc');q=q.toLowerCase().trim();
-  const m=q?allRunners().filter(r=>r.name.toLowerCase().includes(q)).slice(0,12):[];
-  box.style.display=m.length?'block':'none';
-  box.innerHTML=m.map((r,i)=>`<div onclick="window.lgPick(${i})"><span>${esc(r.name)}</span><span class="lg-sm">${esc(r.course)} ${esc(r.time)} · ${r.em?'☘ Emerald':'Prixm'}</span></div>`).join('');
-  window._lgAc=m;
+  q=q.toLowerCase().trim();
+  window._lgAc=q?allRunners().filter(r=>r.name.toLowerCase().includes(q)).slice(0,12):[];window._lgAcIdx=window._lgAc.length?0:-1;renderAc();
 };
-window.lgPick=i=>{const r=window._lgAc[i];M.c=ctxFor(r.vk,r.ri,r.name);document.getElementById('lgHorse').value=r.name;document.getElementById('lgAc').style.display='none';if(M.c&&M.c.price)document.getElementById('lgPrice').value=M.c.price.toFixed(2);window.lgUpd();};
-window.lgType=t=>{M.type=t;document.querySelectorAll('#lgType button').forEach(b=>b.classList.toggle('on',b.dataset.t===t));window.lgUpd();};
+function renderAc(){
+  const box=document.getElementById('lgAc'),m=window._lgAc||[];box.style.display=m.length?'block':'none';
+  box.innerHTML=m.map((r,i)=>`<div role="option" aria-selected="${i===window._lgAcIdx}" class="${i===window._lgAcIdx?'act':''}" onmousedown="event.preventDefault();window.lgPick(${i})" onmouseenter="window._lgAcIdx=${i};this.parentNode.querySelectorAll('div').forEach((d,j)=>d.classList.toggle('act',j===${i}))"><span>${esc(r.name)}</span><span class="lg-sm">${esc(r.course)} ${esc(r.time)} · ${r.em?'☘ Emerald':'Prixm'}</span></div>`).join('');
+  const a=box.querySelector('.act');if(a)a.scrollIntoView({block:'nearest'});
+}
+// ↑ ↓ move · Enter picks · Esc closes
+window.lgKey=e=>{
+  const m=window._lgAc||[],box=document.getElementById('lgAc');if(!m.length||box.style.display==='none')return;
+  if(e.key==='ArrowDown'){e.preventDefault();window._lgAcIdx=(window._lgAcIdx+1)%m.length;renderAc();}
+  else if(e.key==='ArrowUp'){e.preventDefault();window._lgAcIdx=(window._lgAcIdx-1+m.length)%m.length;renderAc();}
+  else if(e.key==='Enter'){e.preventDefault();if(window._lgAcIdx>=0)window.lgPick(window._lgAcIdx);}
+  else if(e.key==='Escape'){e.preventDefault();e.stopPropagation();box.style.display='none';}
+};
+function legFrom(vk,ri,name){const race=D.venues[vk].races[ri],run=(race.runners||[]).find(x=>x.name===name)||{};
+  const hcp=!!(race.handicap||/handicap/i.test(race.race_name||race.name||'')),pt=placeTerms(race.field_size||(race.runners||[]).length,hcp);
+  return{vk,ri,horse:name,venue:race.course||D.venues[vk].course||vk,time:race.time,price_raw:run.price?parseFloat(run.price).toFixed(2):'',
+    hcp,em:isIreland(race.course||D.venues[vk].course||vk),places:pt.places,frac:pt.frac};}
+function renderSub(){
+  const el=document.getElementById('lgSub');if(!el)return;
+  el.innerHTML=M.type!=='OTHER'?'':`<div class="lg-sub"><div class="lg-sm" style="margin-bottom:5px">Multiple bet — pick the type, then add exactly that many horses</div><div class="lg-seg">${MULTI.map(m=>`<button class="${M.multi===m.k?'on':''}" onclick="window.lgMulti('${m.k}')">${m.k}<small>${m.n} sel · ${multiBets({n:m.n,sizes:m.s})} bets</small></button>`).join('')}<button class="${M.multi==='CUSTOM'?'on':''}" onclick="window.lgMulti('CUSTOM')">CUSTOM</button></div>
+    ${fixedMulti()?`<label class="lg-chk"><input type="checkbox" ${M.ew?'checked':''} onchange="window.lgEW(this.checked)"> Each-way (doubles the bets)</label>`:''}</div>`;
+}
+window.lgMulti=k=>{M.multi=k;const d=curDef();if(d&&M.legs.length>d.n)M.legs.length=d.n;if(k==='CUSTOM')M.ew=false;renderSub();renderLegs();window.lgUpd();};
+window.lgEW=v=>{M.ew=!!v;window.lgUpd();};
+function renderLegs(){
+  const el=document.getElementById('lgLegs');if(!el)return;const on=multiMode();
+  document.getElementById('lgHLbl').textContent=on?'Selections (one per race)':"Horse (today's runners, both engines)";
+  document.getElementById('lgHorse').placeholder=on?'Add a horse…':'Start typing…';
+  if(!on){el.innerHTML='';return;}
+  const d=curDef(),need=fixedMulti()?d.n:0;
+  el.innerHTML=`<div class="lg-legs">${M.legs.map((l,i)=>`<div class="lg-leg"><b>${i+1}.</b> <span><b>${esc(l.horse)}</b> <span class="lg-sm">${esc(l.venue)} ${esc(l.time)}${l.em?' · ☘':''}</span>${l.hcp?' <span class="fit-badge fit-q" title="Handicap race">⚠ hcp</span>':''}</span>
+    <input placeholder="price" value="${esc(l.price_raw)}" aria-label="Leg price" oninput="window.lgLegPrice(${i},this.value)"><button class="lg-x" onclick="window.lgLegDel(${i})" aria-label="Remove leg">✕</button></div>`).join('')}</div>
+    <div class="lg-sm" style="margin-top:4px">${M.type==='OTHER'&&!M.multi?'Pick the multiple type below (CUSTOM for anything else).':M.multi==='CUSTOM'&&M.type==='OTHER'?'Custom: add the horses (optional) and type the total price — settled by hand.':need?`${M.legs.length} / ${need} selections${M.legs.length<need?` — add ${need-M.legs.length} more`:' ✔'}`:M.legs.length<2?`Add ${M.legs.length?'at least one more horse':'2+ horses'} — each pick adds a leg (one per race).`:`${M.legs.length}-fold · price = all leg prices multiplied`}</div>`;
+}
+window.lgLegPrice=(i,v)=>{if(M&&M.legs[i]){M.legs[i].price_raw=v;window.lgUpd();}};
+window.lgLegDel=i=>{M.legs.splice(i,1);renderLegs();window.lgUpd();};
+window.lgPick=i=>{const r=window._lgAc[i];window._lgAc=[];document.getElementById('lgAc').style.display='none';
+  if(multiMode()){const h=document.getElementById('lgHorse');h.value='';const d=curDef();
+    if(M.legs.some(l=>l.vk===r.vk&&l.ri===r.ri))toast('Already have a leg in that race');
+    else if(fixedMulti()&&M.legs.length>=d.n)toast(`${M.multi} takes ${d.n} horses — remove one first`);
+    else M.legs.push(legFrom(r.vk,r.ri,r.name));
+    renderLegs();window.lgUpd();h.focus();return;}
+  M.c=ctxFor(r.vk,r.ri,r.name);document.getElementById('lgHorse').value=r.name;if(M.c&&M.c.price)document.getElementById('lgPrice').value=M.c.price.toFixed(2);window.lgUpd();};
+window.lgType=t=>{
+  const was=multiMode(),to=t==='ACCA'||t==='OTHER';
+  if(to&&!was&&M.c){M.legs=[legFrom(M.c.vk,M.c.ri,M.c.r.name)];M.c=null;document.getElementById('lgHorse').value='';document.getElementById('lgPrice').value='';}
+  if(!to&&was&&M.legs.length){const l=M.legs[0];M.c=ctxFor(l.vk,l.ri,l.horse);document.getElementById('lgHorse').value=l.horse;document.getElementById('lgPrice').value=l.price_raw||'';M.legs=[];}
+  M.type=t;if(t!=='OTHER'){M.multi=null;M.ew=false;}
+  renderSub();renderLegs();
+  document.querySelectorAll('#lgType button').forEach(b=>b.classList.toggle('on',b.dataset.t===t));window.lgUpd();};
 window.lgUnit=u=>{const inp=document.getElementById('lgStake');const v=+inp.value,unit=S().unit;if(v&&u!==M.unitMode)inp.value=u==='u'?+(v/unit).toFixed(2):+(v*unit).toFixed(2);M.unitMode=u;document.querySelectorAll('.lg-stake button').forEach(b=>b.classList.toggle('on',b.dataset.u===u));window.lgUpd();};
 const stakeU=()=>{const v=+(document.getElementById('lgStake')||{}).value||0;return M.unitMode==='u'?v:v/S().unit;};
+// live payout for the modal, in units: {total, max, rows:[[label, text]], note}
+function modalPayout(pr){
+  const su=stakeU(),unit=S().unit,g=x=>'£'+(x*unit).toFixed(2);if(!su)return null;
+  const d=curDef();
+  if(d){
+    const legs=M.legs.map(l=>({...l,price:parsePrice(l.price_raw)}));
+    if(legs.length!==d.n||!legs.every(l=>l.price))return null;
+    const nb=multiBets(d),total=M.type==='ACCA'?su:su*nb,ln=total/nb;
+    const ret=set=>multiReturn(legs.length,d,ln,i=>set.has(i)?legs[i].price:0,i=>set.has(i)?legPlace(legs[i]):0);
+    const idx=legs.map((_,i)=>i),by=idx.slice().sort((a,b)=>legs[b].price-legs[a].price),rows=[];
+    if(d.k!=='ACCA')for(let w=legs.length;w>=Math.min(...d.sizes);w--){const hi=ret(new Set(by.slice(0,w))),lo=ret(new Set(by.slice(-w)));
+      rows.push([w===legs.length?`All ${w} win`:`${w} of ${legs.length} win`,Math.abs(hi-lo)<0.00005?g(hi):`${g(lo)} – ${g(hi)}`]);}
+    const brk=d.sizes.map(k=>{const c=nCk(d.n,k);return `${c} ${k===1?'single':k===2?'double':k===3?'treble':k+'-fold'}${c>1?'s':''}`;}).join(' · ');
+    return{total,max:ret(new Set(idx)),rows,note:d.k==='ACCA'?`${d.n}-fold @ ${legs.reduce((a,l)=>a*l.price,1).toFixed(2)}`:`${nb} bets × ${g(ln)} = ${g(total)}${d.ew?' (each-way)':''} · ${brk}`};
+  }
+  if(!pr)return null;
+  const c=M.c;
+  if(M.type==='EW'&&c){const t=placeTerms(c.fs,c.hcp);if(!t.ew)return null;const h=su/2,pl=h*(1+(pr-1)*t.frac);
+    return{total:su,max:h*pr+pl,rows:[['Wins',g(h*pr+pl)],[`Places only (top ${t.places}, ${t.frac===0.25?'¼':'⅕'} odds)`,g(pl)]],note:`${g(h)} win + ${g(h)} place`};}
+  return{total:su,max:su*pr,rows:[],note:M.type==='WIN'?'If it wins':M.type==='PLACE'?'If it places':M.type==='TOP N'?`If it finishes in the top ${M.places||3}`:'At the price entered'};
+}
 window.lgUpd=()=>{
-  if(!M)return;const c=M.c,su=stakeU(),pr=parsePrice((document.getElementById('lgPrice')||{}).value),unit=S().unit;
+  if(!M)return;
+  const fx=fixedMulti(),pEl=document.getElementById('lgPrice');
+  if(M.type==='ACCA'){const ps=M.legs.map(l=>parsePrice(l.price_raw));pEl.value=M.legs.length>=2&&ps.every(Boolean)?ps.reduce((a,b)=>a*b,1).toFixed(2):'';}
+  if(fx)pEl.value='';
+  pEl.readOnly=M.type==='ACCA'||fx;pEl.placeholder=fx?'from leg prices':'e.g. 7/4';
+  document.getElementById('lgStakeLbl').textContent=fx?'Stake per bet':'Stake';
+  const c=M.c,su=stakeU(),pr=parsePrice(pEl.value),unit=S().unit;
   const sv=+document.getElementById('lgStake').value||0;
   document.getElementById('lgRace').innerHTML=c?`${esc(c.race.course)} ${esc(c.race.time)} · <b class="rc-eng ${c.em?'rc-eng-em':'rc-eng-px'}">${c.em?'☘ '+emeraldLabel():engineLabel()}</b>${c.cat?` <b class="fit-badge" style="background:#ede9fe;color:#6d28d9">${c.cat}</b>`:''}${c.seg==='golden'?' <b class="fit-badge" style="background:#fef3c7;color:#92400e">⭐ Golden</b>':''} · ${c.fs} runners${c.fit==='u'?' · <span class="fit-badge fit-u">❌ unsuited</span>':''}`:'';
   const pt=c?placeTerms(c.fs,c.hcp):null;
   if(c&&(M.type==='EW'||M.type==='PLACE'))M.places=pt.places;
   document.getElementById('lgPlaces').innerHTML=M.type==='EW'?(pt&&pt.ew?`Each-way terms: ${pt.frac===0.25?'¼':'⅕'} odds, ${pt.places} places`:'<span style="color:#dc2626">No each-way on 4 runners or fewer</span>'):
-    M.type==='TOP N'?`Pays if the horse finishes in the top <input id="lgN" type="number" min="1" max="10" value="${M.places||3}" style="width:52px" oninput="window.lgSetN(this.value)">`:M.type==='PLACE'&&pt?`Place: ${pt.places} places`:['LENGTH','ACCA','OTHER'].includes(M.type)?'Settled by hand in the Ledger.':'';
-  document.getElementById('lgConv').innerHTML=sv?(M.unitMode==='gbp'?`£${sv.toFixed(2)} = <b>${su.toFixed(2)}u</b> <span class="lg-sm">(1u = £${unit})</span>`:`${sv}u = <b>£${(sv*unit).toFixed(2)}</b>`)+(M.type==='EW'?` <span class="lg-sm">(half win · half place)</span>`:''):'';
+    M.type==='TOP N'?`Pays if the horse finishes in the top <input id="lgN" type="number" min="1" max="10" value="${M.places||3}" style="width:52px" oninput="window.lgSetN(this.value)">`:M.type==='PLACE'&&pt?`Place: ${pt.places} places`:M.type==='ACCA'?'Settles automatically when every leg has a result (any loser = lost; a non-runner leg is void). Or settle by hand in the Ledger.':fx?'Settles automatically when every leg has a result: each winning combination pays; a non-runner leg is void (×1.0).':['LENGTH','OTHER'].includes(M.type)?'Settled by hand in the Ledger.':'';
+  document.getElementById('lgConv').innerHTML=sv?(M.unitMode==='gbp'?`£${sv.toFixed(2)} = <b>${su.toFixed(2)}u</b> <span class="lg-sm">(1u = £${unit})</span>`:`${sv}u = <b>£${(sv*unit).toFixed(2)}</b>`)+(M.type==='EW'?` <span class="lg-sm">(half win · half place)</span>`:fx?' <span class="lg-sm">per bet</span>':''):'';
   document.getElementById('lgPriceConv').textContent=pr?`decimal ${pr.toFixed(2)} · implied ${(100/pr).toFixed(1)}%`:'';
+  const P=modalPayout(pr),g=x=>'£'+(x*unit).toFixed(2);
+  document.getElementById('lgPay').innerHTML=P?`<div class="lg-pay"><div class="big"><span class="lg-sm" style="color:#166534;font-weight:700">POTENTIAL RETURN${P.rows.length>1&&M.type!=='EW'?' (all win)':''}</span><b>${g(P.max)}</b></div>
+    <div class="lg-sm">Total stake ${g(P.total)} (${P.total.toFixed(2)}u) · profit <b style="color:#15803d">${g(P.max-P.total)}</b> · ${esc(P.note)}</div>
+    ${P.rows.length?`<table>${P.rows.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join('')}</table>`:''}</div>`
+    :`<div class="lg-pay off lg-sm">Potential return shows here once the horse${multiMode()?'s':''}, stake and price${multiMode()?'s':''} are in.</div>`;
   let adv='';const btn=document.getElementById('lgUseSug');btn.style.display='none';
   if(c){const s=suggest(c,pr);
     if(s.kind==='none')adv=c.cat?`<div class="lg-sm">No bet advised — ${esc(s.why[0])}. You can still log it as your own call.</div>`:'';
@@ -4397,13 +4524,16 @@ window.lgUpd=()=>{
       btn.style.display='';btn.textContent=`Use ${s.u}u`;btn.onclick=()=>{window.lgUnit('u');document.getElementById('lgStake').value=s.u;window.lgUpd();};
       if(su>s.u*1.5)adv+=`<div class="lg-adv lg-w">⚠ Your stake (${su.toFixed(2)}u) is well above the suggestion.</div>`;}
     M.sug=s.u;}
-  if(su&&c&&!c.em&&realTodayU()+su>dailyBudgetU())adv+=`<div class="lg-adv lg-w">⚠ This takes today to ${(realTodayU()+su).toFixed(1)}u — over today's ${dailyBudgetU()}u budget.</div>`;
+  const tot=P?P.total:su;
+  if(tot&&!(c&&c.em)&&!(multiMode()&&M.legs.length&&M.legs.every(l=>l.em))&&realTodayU()+tot>dailyBudgetU())adv+=`<div class="lg-adv lg-w">⚠ This takes today to ${(realTodayU()+tot).toFixed(1)}u — over today's ${dailyBudgetU()}u budget.</div>`;
   document.getElementById('lgAdv').innerHTML=adv;
-  const h=c?c.r.name:(document.getElementById('lgHorse').value||'');
-  document.getElementById('lgSum').textContent=h&&su&&pr?`${h} · ${M.type} · ${su.toFixed(2)}u (£${(su*unit).toFixed(2)}) @ ${pr.toFixed(2)}`:'';
+  const label=M.type==='OTHER'&&M.multi&&M.multi!=='CUSTOM'?M.multi+(M.ew?' EW':''):M.type==='ACCA'?(M.legs.length>=2?M.legs.length+'-fold acca':''):M.type;
+  const h=multiMode()?label:c?c.r.name+' · '+M.type:'';
+  document.getElementById('lgSum').textContent=h&&P?`${h} · stake ${g(P.total)} · returns up to ${g(P.max)}`:'';
 };
-window.lgSetN=v=>{M.places=Math.max(1,parseInt(v)||1);};
+window.lgSetN=v=>{M.places=Math.max(1,parseInt(v)||1);window.lgUpd();};
 window.lgSave=async()=>{
+  if(M&&multiMode())return saveMulti();
   const c=M&&M.c,su=stakeU(),prRaw=(document.getElementById('lgPrice')||{}).value,pr=parsePrice(prRaw),horse=c?c.r.name:document.getElementById('lgHorse').value.trim();
   if(!horse||!su||!pr){document.getElementById('lgSum').innerHTML='<span style="color:#dc2626">Pick a horse and enter a stake and price.</span>';return;}
   if(M.type==='EW'&&c&&!placeTerms(c.fs,c.hcp).ew){document.getElementById('lgSum').innerHTML='<span style="color:#dc2626">No each-way on 4 runners or fewer.</span>';return;}
@@ -4414,9 +4544,35 @@ window.lgSave=async()=>{
     places:M.type==='EW'||M.type==='PLACE'?pt.places:M.type==='TOP N'?(M.places||3):null,ew_fraction:M.type==='EW'?pt.frac:null,field_size:c?c.fs:null,result:'O',source:'app'};
   await saveBet(b);
   try{if(c&&!isBetted(horse,c.race.time||'',c.race.course||'')){const l=loadBetList();l.push({horse,time:c.race.time,venue:c.race.course,score:c.r.score,betType:M.type==='TOP N'?'TOP '+(M.places||3):M.type});saveBetList(l);renderBetPanel();}}catch(e){}
-  const msg=`Logged ${horse}: ${b.stake_u}u (£${(b.stake_u*b.unit_gbp).toFixed(2)}) @ ${pr.toFixed(2)}`;
+  const msg=`Logged ${horse}: £${(b.stake_u*b.unit_gbp).toFixed(2)} @ ${pr.toFixed(2)} — returns up to £${(potReturnU(b)*b.unit_gbp).toFixed(2)}`;
   window.lgClose();toast(msg);try{renderRaceCards();}catch(e){}
 };
+// ACCA, Trixie/Patent/… and CUSTOM (OTHER) — one bet row, legs as JSON, stake_u = total stake
+async function saveMulti(){
+  const err=t=>{document.getElementById('lgSum').innerHTML=`<span style="color:#dc2626">${t}</span>`;};
+  const custom=M.type==='OTHER'&&!fixedMulti(),d=curDef(),ps=M.legs.map(l=>parsePrice(l.price_raw)),su=stakeU();
+  if(M.type==='ACCA'&&M.legs.length<2)return err('An acca needs at least 2 horses.');
+  if(fixedMulti()&&M.legs.length!==d.n)return err(`${M.multi} needs exactly ${d.n} horses.`);
+  if(!custom&&!ps.every(Boolean))return err('Enter a price for every leg.');
+  if(!su)return err('Enter a stake.');
+  const legs=M.legs.map((l,i)=>({venue:l.venue,time:l.time,horse:l.horse,price:ps[i]||null,engine:l.em?'emerald':'prixm',places:l.places,frac:l.frac}));
+  const typed=document.getElementById('lgHorse').value.trim(),manualPr=parsePrice(document.getElementById('lgPrice').value);
+  if(custom&&!legs.length&&!typed)return err('Add a horse (or type what the bet is).');
+  if(custom&&!manualPr)return err('Enter the total price.');
+  const total=custom||M.type==='ACCA'?su:su*multiBets(d);
+  const srt=legs.slice().sort((a,b)=>a.time.localeCompare(b.time));
+  const type=custom?'OTHER':M.type==='ACCA'?'ACCA':M.multi+(M.ew?' EW':'');
+  const b={created:new Date().toISOString().slice(0,19),date:today(),venue:srt[0]?srt[0].venue:'',time:srt[0]?srt[0].time:'',
+    horse:legs.length?legs.map(l=>l.horse).join(' / '):typed,engine:legs.length&&legs.every(l=>l.engine==='emerald')?'emerald':'prixm',category:null,segment:null,
+    bet_type:type,stake_u:Math.round(total*100)/100,unit_gbp:S().unit,price:null,price_raw:custom?document.getElementById('lgPrice').value:legs.map(l=>l.price).join(' × '),
+    bookmaker:document.getElementById('lgBook').value,note:document.getElementById('lgNote').value||null,
+    suggested_u:null,places:null,ew_fraction:null,field_size:null,legs:legs.length?JSON.stringify(legs):null,result:'O',source:'app'};
+  // price = all-win return ÷ stake, so a manual "Won" settles at the full return
+  b.price=custom?manualPr:Math.round(potReturnU(b)/b.stake_u*10000)/10000;
+  await saveBet(b);
+  const msg=`Logged ${type==='ACCA'?legs.length+'-fold acca':type}: £${(b.stake_u*b.unit_gbp).toFixed(2)} — returns up to £${(potReturnU(b)*b.unit_gbp).toFixed(2)}`;
+  window.lgClose();toast(msg);try{renderRaceCards();}catch(e){}
+}
 function toast(t){let el=document.getElementById('lgToast');if(!el){el=document.createElement('div');el.id='lgToast';el.className='lg-toast';document.body.appendChild(el);}el.textContent=t;el.classList.add('on');setTimeout(()=>el.classList.remove('on'),2400);}
 
 // ── Ledger tab ──
@@ -4470,14 +4626,16 @@ function render(){
     const planned=realGo.reduce((a,o)=>a+o.u,0),budget=dailyBudgetU();
     h+=`<div class="lg-two"><div>`;
     h+=card('💡 Today\'s staking plan <span class="lg-sm" style="text-transform:none;letter-spacing:0;font-weight:400">— Prixm + ☘ Emerald picks, strongest first</span>',planHtml+`<div style="margin-top:10px;font-size:12px"><b>Planned ${planned.toFixed(1)}u${planned>budget?' (strongest bet over-rides the budget)':''} · today's budget ${budget}u (${set.pct}% of £${effBank().toFixed(0)} staking bank${set.bank>0?'':' — notional 100u, no start bank set'})</b></div><div class="lg-cap"><i style="width:${Math.min(100,planned/Math.max(0.5,budget)*100)}%"></i></div><div class="lg-sm">No bet advised → left out. Prices not in yet → the price you'd need for each stake.</div>`);
-    const openRows=open.slice().sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time)).map(b=>{const manual=['LENGTH','ACCA','OTHER'].includes(b.bet_type);const idq=typeof b.id==='number'?b.id:`'${b.id}'`;
-      return [`${esc(b.date.slice(5))} <b>${esc(b.horse)}</b><div class="lg-sm">${esc(b.venue)} ${esc(b.time)}</div>`,esc(b.bet_type),`${b.stake_u}u<div class="lg-sm">£${(b.stake_u*b.unit_gbp).toFixed(2)}</div>`,(+b.price).toFixed(2),
-        manual?`<button class="vbtn lg-mini" onclick="window.lgSettle(${idq},'W')">Won</button> <button class="vbtn lg-mini" onclick="window.lgSettle(${idq},'L')">Lost</button> <button class="vbtn lg-mini" onclick="window.lgSettle(${idq},'V')">Void</button>`:'<span class="lg-sm">auto on Fetch Results</span>',
+    const openRows=open.slice().sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time)).map(b=>{const lg=legsOf(b),md=multiDef(b.bet_type,lg.length),manual=['LENGTH','OTHER'].includes(b.bet_type)||!!md;const idq=typeof b.id==='number'?b.id:`'${b.id}'`;
+      const ret=potReturnU(b)*(+b.unit_gbp||10);
+      return [lg.length?`${esc(b.date.slice(5))} <b>${b.bet_type==='ACCA'?lg.length+'-fold':esc(b.bet_type)}</b>${lg.map(l=>`<div class="lg-sm"><b style="color:var(--text)">${esc(l.horse)}</b> ${esc(l.venue)} ${esc(l.time)}${l.price?' @ '+(+l.price).toFixed(2):''}</div>`).join('')}`:`${esc(b.date.slice(5))} <b>${esc(b.horse)}</b><div class="lg-sm">${esc(b.venue)} ${esc(b.time)}</div>`,esc(b.bet_type),`${b.stake_u}u<div class="lg-sm">£${(b.stake_u*b.unit_gbp).toFixed(2)}</div>`,md?'<span class="lg-sm">legs</span>':(+b.price).toFixed(2),
+        `<b style="color:#15803d">£${ret.toFixed(2)}</b><div class="lg-sm">+£${(ret-b.stake_u*(+b.unit_gbp||10)).toFixed(2)}</div>`,
+        manual?`${md?'<div class="lg-sm">auto when all legs are in · or</div>':''}<button class="vbtn lg-mini" onclick="window.lgSettle(${idq},'W')">Won</button> <button class="vbtn lg-mini" onclick="window.lgSettle(${idq},'L')">Lost</button> <button class="vbtn lg-mini" onclick="window.lgSettle(${idq},'V')">Void</button>`:'<span class="lg-sm">auto on Fetch Results</span>',
         `<button class="vbtn lg-mini" title="Delete" onclick="window.lgDel(${idq})">🗑</button>`];});
-    h+=card('Open bets',openRows.length?tbl(['Bet','Type','Stake','Price','Settle',''],openRows):'<div class="lg-sm">No open bets.</div>');
+    h+=card('Open bets',openRows.length?tbl(['Bet','Type','Stake','Price','To return','Settle',''],openRows):'<div class="lg-sm">No open bets.</div>');
     const fl=st.filter(b=>(!F.eng||b.engine===F.eng)&&(!F.type||b.bet_type===F.type)&&(!F.sug||(F.sug==='f'?followed(b):!followed(b)))).sort((a,b)=>(b.date+b.time).localeCompare(a.date+a.time));
     const sel=(k,opts)=>`<select onchange="window.lgFilter('${k}',this.value)" style="padding:3px 6px;border:1px solid var(--border);border-radius:6px;font-size:11.5px">${opts.map(([v,l])=>`<option value="${v}" ${F[k]===v?'selected':''}>${l}</option>`).join('')}</select>`;
-    h+=card(`History <span style="float:right;display:flex;gap:6px;text-transform:none;letter-spacing:0">${sel('eng',[['','All engines'],['prixm','Prixm'],['emerald','☘ Emerald']])}${sel('type',[['','All types'],...TYPES.map(t=>[t,t])])}${sel('sug',[['','All bets'],['f','Followed suggestion'],['o','Own call']])}</span>`,
+    h+=card(`History <span style="float:right;display:flex;gap:6px;text-transform:none;letter-spacing:0">${sel('eng',[['','All engines'],['prixm','Prixm'],['emerald','☘ Emerald']])}${sel('type',[['','All types'],...[...new Set([...TYPES,...LG.bets.map(b=>b.bet_type).filter(Boolean)])].map(t=>[t,t])])}${sel('sug',[['','All bets'],['f','Followed suggestion'],['o','Own call']])}</span>`,
       fl.length?tbl(['Date','Horse','Engine','Type','Stake','Price','Result','P&L','Sugg.'],fl.slice(0,200).map(b=>[esc(b.date.slice(5)),`<b>${esc(b.horse)}</b><div class="lg-sm">${esc(b.venue||'')} ${esc(b.time||'')}</div>`,b.engine==='emerald'?'<b class="rc-eng rc-eng-em">☘</b>':'<b class="rc-eng rc-eng-px">Prixm</b>',esc(b.bet_type),`${b.stake_u}u<div class="lg-sm">£${(b.stake_u*b.unit_gbp).toFixed(2)}</div>`,(+b.price||0).toFixed(2),
         `<b class="fit-badge ${b.result==='W'?'fit-s':b.result==='P'?'fit-q':b.result==='V'?'':'fit-u'}">${({W:'WON',P:'PLACED',L:'LOST',V:'VOID'})[b.result]||b.result}</b>`,`<b style="color:${pnlOf(b)>=0?'#15803d':'#dc2626'}">${uf(pnlOf(b))}</b><div class="lg-sm">${gbp(pnlOf(b)*(+b.unit_gbp||10))}</div>`,`<span class="lg-sm">${followed(b)?'✔ followed':b.suggested_u>0?b.suggested_u+'u':'own call'}</span>`])):'<div class="lg-sm">No settled bets for this filter.</div>');
     h+=`</div><div>`;
@@ -6214,7 +6372,7 @@ function showGuide(){
         <li><b>💡 Stake per pick</b> (Prixm / ☘ Emerald NAP · WIN · STRONG · PLACE): win chance = how that kind of pick has actually done in your logged results (confidence × gap × handicap), adjusted for ⭐ Golden, Verification and 🧭 track fit. Stake = <b>¼ Kelly</b> on the staking bank: bigger edge → bigger stake, outsiders stay small. Shown as a 💡 chip on race cards and runner rows; with no price yet it shows the price needed for each stake.</li>
         <li><b>No bet advised → left blank</b> (tight race, no value, Verification 🚫). Days with no bets are normal.</li>
         <li><b>Staking bank</b> = your starting bank (0 = a notional 100u) + settled P&amp;L. <b>Daily budget</b> = % of it; picks are funded strongest first and the day's strongest bet is always funded in full. Max 3u (5u only for ⭐ Golden + ✅ CONFIRMED); 3 losing days → ⅙ Kelly. ☘ Emerald / Silver / Bronze stakes are paper.</li>
-        <li>Open WIN / EW / PLACE / TOP N bets <b>settle automatically</b> when Fetch Results runs; LENGTH / ACCA / OTHER are settled by hand in the Ledger.</li>
+        <li>Open WIN / EW / PLACE / TOP N bets <b>settle automatically</b> when Fetch Results runs; <b>OTHER</b> opens the multiples — Double, Treble, Trixie, Patent, Yankee, Lucky 15/31/63, Canadian, Heinz, Super Heinz, Goliath (each-way optional) or CUSTOM; stake is per bet, they settle automatically too. The modal shows the <b>potential return</b> live (and Open bets shows it per bet). In the horse search use <b>↑ ↓</b> and <b>Enter</b>. <b>ACCA</b>: pick ACCA, then add 2+ horses (one per race) with a price each — the acca price is the legs multiplied, and it settles automatically once every leg has a result (non-runner leg = void). LENGTH / OTHER are settled by hand in the Ledger.</li>
         <li>Changing the unit only affects future bets. <b>Private</b>: stored in race_data.db (or this browser when the DB server is off), never published — the Ledger is hidden on the online (GitHub) version.</li>
       </ul>
     </div>
