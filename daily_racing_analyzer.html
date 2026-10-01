@@ -1122,28 +1122,23 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .m-run{background:var(--accent2);border-color:var(--accent2);color:#fff;font-weight:700;padding:7px 16px}
 .m-run:hover{background:#2563eb}
 select.m-btn{padding:5px 6px}
-.m-track{display:flex;flex-direction:column;gap:5px;margin-top:14px;background:#eaf3ea;border:1px solid #d6e9dc;border-radius:10px;padding:10px}
-.m-lane{display:flex;align-items:center;gap:8px}
-.m-no{flex:0 0 20px;text-align:right;font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums;font-weight:700}
-.m-silk{flex:0 0 20px;width:20px;height:20px;border-radius:50%;border:1px solid #111;background:#ddd center/cover no-repeat}
-.m-label{flex:0 0 160px;font-size:12.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.m-runway{position:relative;flex:1;height:28px;background:repeating-linear-gradient(90deg,#cfe6d3 0 18px,#c4dfc9 18px 20px);border-radius:4px;overflow:hidden}
-.m-rail{position:absolute;left:0;right:0;bottom:0;height:2px;background:#fff;opacity:.7}
-.m-finish{position:absolute;right:6%;top:0;bottom:0;width:5px;background:repeating-linear-gradient(180deg,#111 0 4px,#fff 4px 8px)}
-.m-horse{position:absolute;left:0;top:50%;transform:translateY(-50%) scaleX(-1);font-size:19px;line-height:1;transition-property:left;transition-timing-function:cubic-bezier(.25,.7,.4,1);will-change:left}
-.m-horse.running{left:var(--finish)}
-.m-score{flex:0 0 44px;text-align:right;font-size:11.5px;color:var(--muted);font-variant-numeric:tabular-nums;font-weight:600}
-.m-lead .m-label{color:var(--gold);font-weight:800}
-.m-lead .m-runway{outline:2px solid rgba(217,119,6,.45)}
-.m-lane.m-flash .m-runway{animation:mPulse 1s ease-in-out 2}
-@keyframes mPulse{0%,100%{box-shadow:0 0 6px 1px rgba(217,119,6,.35)}50%{box-shadow:0 0 16px 4px rgba(217,119,6,.75)}}
-.m-badge{flex:0 0 auto;font-size:11px;font-weight:800;color:var(--gold);white-space:nowrap;animation:mPop .35s ease}
-@keyframes mPop{0%{transform:scale(0)}70%{transform:scale(1.25)}100%{transform:scale(1)}}
+.mt-stage{position:relative;margin-top:14px;background:#f7faf7;border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.mt-stage svg{display:block;width:100%;max-width:880px;margin:0 auto;height:auto}
+.mt-pill{position:absolute;top:8px;background:#fff;border:1px solid var(--border);border-radius:14px;padding:2px 10px;font-size:11.5px;font-weight:700}
+.mt-winpill{top:auto;bottom:8px;left:50%;transform:translateX(-50%);color:var(--gold);border-color:rgba(217,119,6,.5);animation:mPop .35s ease}
+.mt-ring{opacity:0}
+.mt-win .mt-ring{animation:mtPulse 1s ease-in-out 3 forwards}
+@keyframes mtPulse{0%{opacity:.2}50%{opacity:1}100%{opacity:.85}}
+@keyframes mPop{0%{transform:translateX(-50%) scale(0)}70%{transform:translateX(-50%) scale(1.2)}100%{transform:translateX(-50%) scale(1)}}
+.mt-legend{display:flex;gap:6px 14px;flex-wrap:wrap;margin-top:10px;font-size:11.5px}
+.mt-leg{display:inline-flex;align-items:center;gap:5px}
+.mt-leg img,.mt-leg i{width:16px;height:16px;border-radius:50%;border:1px solid #111;display:inline-block;object-fit:cover}
+.mt-leg span{color:var(--muted)}
 .m-foot{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center;margin-top:10px}
 .m-note{font-size:11px;color:var(--muted)}
 .m-open{font:inherit;font-size:12px;font-weight:600;background:none;border:1px solid var(--accent2);color:var(--accent2);border-radius:6px;padding:5px 12px;cursor:pointer}
 .m-empty{color:var(--muted);padding:40px;text-align:center}
-@media(max-width:700px){#mView{padding:14px 16px!important}.m-label{flex-basis:92px}.m-score,.m-silk{display:none}.m-stats{gap:12px}}
+@media(max-width:700px){#mView{padding:14px 16px!important}.m-stats{gap:12px}.mt-legend{font-size:11px}}
 </style>
 <script src="results_history.js" onerror=""></script>
 <script src="daily_race_data.js" onerror=""></script>
@@ -1181,7 +1176,7 @@ select.m-btn{padding:5px 6px}
   <button class="tab-btn" id="tabWatchback" onclick="switchTab('watchback')">Watchback</button>
   <button class="tab-btn" id="tabEmerald" onclick="switchTab('emerald')" style="color:#0f766e">☘ Emerald</button>
   <button class="tab-btn vo-hide" id="tabLedger" onclick="switchTab('ledger')">💷 Ledger</button>
-  <button class="tab-btn" id="tabM" onclick="switchTab('m')" title="🐎 Race animation">🐎 M</button>
+  <button class="tab-btn" id="tabM" onclick="switchTab('m')" title="🐎 Race track animation">🐎 MT</button>
   <span id="dbStatusBadge" style="margin-left:auto;padding:0 12px;font-size:11px;color:var(--muted);align-self:center;display:none"></span>
 </div>
 
@@ -6223,12 +6218,12 @@ function showGuide(){
       </ul>
     </div>
 
-    <!-- 🐎 M TAB -->
+    <!-- 🐎 MT TAB -->
     <div class="guide-section" style="border-left-color:#d97706">
-      <h3><span class="gi">🐎</span> M — race animation</h3>
+      <h3><span class="gi">🐎</span> MT — race track animation</h3>
       <ul style="font-size:11.5px;margin:6px 0 0 16px;line-height:1.6">
-        <li>Top-level <b>🐎 M</b> tab: pick a venue chip and a race time (or ◀ ▶), then <b>▶ Run it</b>. Each runner gallops down its own lane; the 👑 leader flashes <b>🏆 WINNER</b>. Speed 0.5× / 1× / 2×.</li>
-        <li>Finishing order = the engine's predicted order (same as 🔮 Predict). Lane spacing comes from score gaps — <b>illustrative, not real margins</b>.</li>
+        <li>Top-level <b>🐎 MT</b> tab: pick a venue chip and a race time (or ◀ ▶), then <b>▶ Run it</b>. 🐎 horses run round the race's <b>own track</b> (left/right-handed, straight course, ▲ uphill finish) to the finish line; the winner gets a ring and <b>🏆 WINNER</b>. Speed 0.5× / 1× / 2×.</li>
+        <li>Finishing order = the engine's predicted order (same as 🔮 Predict). Early positions from the pace map + draw, gaps at the line from predicted lengths — <b>illustrative, not a real race</b>.</li>
         <li>Race header shows gap / score / confidence and the ⭐ / 🥈 / 🥉 badge. <b>Open race →</b> jumps to the full race view. Display only — never changes scores or segments.</li>
       </ul>
     </div>
@@ -10246,14 +10241,19 @@ function rpReplayHTML(){
 const RP_EARLY={FR:0,P:1.5,MD:4,HU:7};
 const rpSS=(a,b,x)=>{const k=Math.min(1,Math.max(0,(x-a)/(b-a)));return k*k*(3-2*k);};
 function rpColour(name){let h=0;for(const c of name)h=(h*31+c.charCodeAt(0))>>>0;return ['#15803d','#1d4ed8','#dc2626','#7c3aed','#0f766e','#ea580c','#be185d','#0369a1','#4d7c0f','#9333ea','#b45309','#334155'][h%12];}
-function rpReplayInit(order,race){
-  if(order&&race)window._rpReplay={order,race};
-  const R=window._rpReplay;const svg=document.getElementById('rpSvg');if(!R||!svg)return;
-  const race2=R.race,tp=getTrackProfile(race2.course)||{},df=race2.distance_f||8;
+// Track shape for a race — shared by the Predict replay and the 🐎 MT tab
+function rpTrackGeom(race){
+  const tp=getTrackProfile(race.course)||{},df=race.distance_f||8;
   const straightRace=tp.layout==='straight'||(tp.straight_course_f&&df<=tp.straight_course_f);
   const cx=320,cy=165,rx=250,ry=tp.layout==='tight_oval'||tp.layout==='circle'?120:110,cr=tp.layout==='tight_oval'||tp.layout==='circle'?100:70;
   const s=tp.direction==='L'?-1:1; // reverse-of-race direction from the post: RH races run clockwise
   const d=straightRace?`M ${cx} 40 L ${cx} 300`:`M ${cx} ${cy+ry} L ${cx+s*(rx-cr)} ${cy+ry} Q ${cx+s*rx} ${cy+ry} ${cx+s*rx} ${cy+ry-cr} L ${cx+s*rx} ${cy-ry+cr} Q ${cx+s*rx} ${cy-ry} ${cx+s*(rx-cr)} ${cy-ry} L ${cx-s*(rx-cr)} ${cy-ry} Q ${cx-s*rx} ${cy-ry} ${cx-s*rx} ${cy-ry+cr} L ${cx-s*rx} ${cy+ry-cr} Q ${cx-s*rx} ${cy+ry} ${cx-s*(rx-cr)} ${cy+ry} Z`;
+  return {tp,df,straightRace,cx,cy,d};
+}
+function rpReplayInit(order,race){
+  if(order&&race)window._rpReplay={order,race};
+  const R=window._rpReplay;const svg=document.getElementById('rpSvg');if(!R||!svg)return;
+  const race2=R.race,{tp,df,straightRace,cx,cy,d}=rpTrackGeom(race2);
   const runners=R.order.map(o=>o.runner),lens=rpPredictLengths(R.order,race2),fs=runners.length;
   const col=isIreland(race2.course)?'#10b981':'#3b82f6';
   svg.innerHTML=`<defs>${runners.map((r,i)=>`<clipPath id="rpcp${i}"><circle r="10"/></clipPath>`).join('')}</defs>
@@ -10309,14 +10309,16 @@ function rpRunRace(){
   tick();
 }
 
-/* ==================== 🐎 M TAB — lane race animation ====================
-   Brings back the old 🐎 lane slider as its own top-level tab (mockup: m_tab_main_mockup.html).
-   Order = rpBuildPredictedOrder() so it matches the Predict tab exactly. Lane spacing from score
-   gaps (illustrative, not real margins). Display-only — never writes to runners/races/scores/segments.
-   No commentary (user rule). Winner badge fires on a timer, not transitionend (hidden tabs never fire it). */
+/* ==================== 🐎 MT TAB — race track animation ====================
+   Own top-level tab (tab id tabM / switchTab('m')). 🐎 icons run round the race's own track —
+   same geometry as the Predict replay (rpTrackGeom), early positions from pace map + draw,
+   finish from predicted lengths (rpPredictLengths). Order = rpBuildPredictedOrder() so it matches
+   🔮 Predict exactly. Own SVG/state (mtSvg, M.run) so it never clashes with the Predict replay.
+   Display-only — never writes to runners/races/scores/segments. No commentary (user rule). */
 (function(){
-  const M={venue:'all',key:null,timer:null};
+  const M={venue:'all',key:null,run:null};
   const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const STYLE_LBL={FR:'front-runner',P:'prominent',MD:'mid-div',HU:'hold-up'};
   function races(){
     const out=[];if(!D||!D.venues)return out;
     Object.entries(D.venues).forEach(([vk,v])=>(v.races||[]).forEach((r,ri)=>{
@@ -10327,6 +10329,7 @@ function rpRunRace(){
     return out.sort((a,b)=>(a.race.time||'').localeCompare(b.race.time||'')||a.course.localeCompare(b.course));
   }
   const venuesOf=all=>[...new Set(all.map(x=>x.course))].sort();
+  const visible=all=>all.filter(x=>M.venue==='all'||x.course===M.venue);
   function segBadge(race){
     try{
       if(getGoldenFlags(race))return['⭐ GOLDEN','#fef3c7','#92400e'];
@@ -10335,14 +10338,70 @@ function rpRunRace(){
     }catch(e){}
     return null;
   }
-  function lanes(order){
-    const lead=order[0].score||0,gaps=order.map(r=>lead-(r.score||0)),mx=Math.max(...gaps,1);let prev=null;
-    return order.map((r,i)=>{let p=90-(gaps[i]/mx)*65;if(prev!=null)p=Math.min(p,prev-4);p=Math.max(p,8);prev=p;return{r,p,pos:i+1};});
+  function stop(){const R=M.run;if(R&&R.timer){R.timer.raf&&cancelAnimationFrame(R.timer.raf);R.timer.to&&clearTimeout(R.timer.to);R.timer=null;}}
+
+  function trackInit(race,order){ // order = [{runner,...}] from rpBuildPredictedOrder
+    const svg=document.getElementById('mtSvg');if(!svg)return;
+    const {tp,df,straightRace,cx,cy,d}=rpTrackGeom(race);
+    svg.innerHTML=`<path d="${d}" fill="none" stroke="#cfe6d3" stroke-width="56" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="${d}" fill="none" stroke="#bcd9c2" stroke-width="58" stroke-opacity=".5" stroke-dasharray="2 18"/>
+      <path id="mtPath" d="${d}" fill="none" stroke="#fff" stroke-width="1.5" stroke-dasharray="5 6"/>
+      <path id="mtHill" fill="none" stroke="#f59e0b" stroke-width="56" stroke-opacity=".2"/>
+      <text x="${cx}" y="${straightRace?324:cy+5}" font-size="${straightRace?11:14}" text-anchor="middle" fill="#9ca3af">${straightRace?'straight course':tp.direction==='L'?'↺ left-handed':tp.direction==='R'?'↻ right-handed':''}</text>
+      <g id="mtToks"></g>`;
+    const P=document.getElementById('mtPath'),PL=P.getTotalLength();
+    const circ=tp.circuit_f||12,Lrace=straightRace?PL:Math.min(PL*0.985,PL*df/circ);
+    const post=P.getPointAtLength(0);
+    svg.insertAdjacentHTML('beforeend',`<line x1="${post.x-(straightRace?32:0)}" y1="${post.y-(straightRace?0:32)}" x2="${post.x+(straightRace?32:0)}" y2="${post.y+(straightRace?0:32)}" stroke="#111" stroke-width="4" stroke-dasharray="4 4"/><text x="${post.x}" y="${post.y+(straightRace?-12:48)}" font-size="11" text-anchor="middle" fill="#111" font-weight="800">FINISH</text>`);
+    if((tp.uphill_finish||0)>=0.6){let hd='';const segLen=Lrace*Math.min(0.4,2/df);for(let i=0;i<=20;i++){const q=P.getPointAtLength(segLen*i/20);hd+=(i?' L ':'M ')+q.x+' '+q.y;}
+      document.getElementById('mtHill').setAttribute('d',hd);const h=P.getPointAtLength(segLen*0.6);svg.insertAdjacentHTML('beforeend',`<text x="${h.x}" y="${h.y-36}" font-size="11" fill="#b45309" font-weight="700" text-anchor="middle">▲ uphill</text>`);}
+    const pace=race.pace,styleOf=n=>{if(!pace)return null;for(const k of['FR','P','MD','HU'])if((pace[k]||[]).includes(n))return k;return null;};
+    const lens=rpPredictLengths(order,race),fs=order.length,layer=document.getElementById('mtToks');
+    const hs=fs>12?18:fs>8?21:24,k=hs/24; // smaller 🐎 in big fields
+    const toks=order.map((o,i)=>{
+      const r=o.runner,g=document.createElementNS('http://www.w3.org/2000/svg','g');
+      g.innerHTML=`<circle class="mt-ring" r="${17*k}" fill="rgba(217,119,6,.15)" stroke="#d97706" stroke-width="3"/>
+        <g class="mt-flip"><text font-size="${hs}" text-anchor="middle" y="${8*k}">🐎</text></g>
+        <circle cx="${11*k}" cy="${-12*k}" r="7" fill="${rpColour(r.name)}" stroke="#fff" stroke-width="1.5"/>
+        <text x="${11*k}" y="${-12*k+3}" font-size="8" font-weight="800" text-anchor="middle" fill="#fff">${esc(r.number||i+1)}</text>`;
+      layer.appendChild(g);
+      // no running style logged → space by predicted rank and stagger across the track, so the field never stacks into one 🐎
+      const st=styleOf(r.name),early=(st?RP_EARLY[st]:Math.min(7,i*0.8))+(r.draw&&fs>=8&&r.draw>fs*0.6?1:0);
+      const packed=st?(Math.min(early,4)/4)*1.2-0.6:((i%3)-1)*0.7;
+      return {r,g,flip:g.querySelector('.mt-flip'),st,early,packed,fin:lens[i],draw:r.draw,i,d:0,face:1};
+    });
+    M.run={P,Lrace,perLen:Lrace/(df*80)*16,df,rh:tp.direction!=='L',toks,lastOrder:'',timer:null};
+    document.getElementById('mtLegend').innerHTML=toks.map(o=>`<span class="mt-leg">${o.r.silk_url?`<img src="${esc(o.r.silk_url)}" alt="">`:`<i style="background:${rpColour(o.r.name)}"></i>`}${o.i===0?'👑 ':''}<b>${esc(o.r.number||o.i+1)}</b> ${esc(o.r.name)}${o.st?` <span>(${STYLE_LBL[o.st]}${o.draw?', draw '+esc(o.draw):''})</span>`:o.draw?` <span>(draw ${esc(o.draw)})</span>`:''}</span>`).join('');
+    frame(0);
   }
-  const visible=all=>all.filter(x=>M.venue==='all'||x.course===M.venue);
+
+  function frame(t){
+    const R=M.run;if(!R)return;const P=R.P,n=R.toks.length,PL=P.getTotalLength();
+    R.toks.forEach(o=>{
+      const lag=o.early*rpSS(0,0.2,t)+(o.fin-o.early)*rpSS(0.62,1,t);
+      const dist=Math.max(0,Math.min(PL,R.Lrace*(1-t)+lag*R.perLen));
+      const a=P.getPointAtLength(dist),b=P.getPointAtLength(Math.max(0,dist-2));
+      let tx=a.x-b.x,ty=a.y-b.y;const m=Math.hypot(tx,ty)||1;
+      const start=o.draw?((o.draw-1)/Math.max(1,n-1))*2-1:(o.i/Math.max(1,n-1))*2-1;
+      const late=(Math.min(o.fin,4)/4)*1.4-0.7;
+      let lat=start+(o.packed-start)*rpSS(0.05,0.3,t);lat=lat+(late-lat)*rpSS(0.7,0.95,t);
+      const off=lat*22*(R.rh?1:-1); // track is 56 wide — use most of it
+      o.g.setAttribute('transform',`translate(${(a.x-ty/m*off).toFixed(2)},${(a.y+tx/m*off).toFixed(2)})`);o.d=dist;
+      // 🐎 faces left by default — mirror it when travelling right (keep last facing on vertical stretches)
+      const vx=b.x-a.x;if(Math.abs(vx)>0.4){const f=vx>0?-1:1;if(f!==o.face){o.face=f;o.flip.setAttribute('transform',`scale(${f},1)`);}}
+    });
+    const ord=[...R.toks].sort((x,y)=>y.d-x.d),key=ord.map(o=>o.i).join();
+    if(key!==R.lastOrder){const L=document.getElementById('mtToks');if(L)ord.forEach(o=>L.appendChild(o.g));R.lastOrder=key;}
+    const done=t>=1;
+    R.toks[0].g.classList.toggle('mt-win',done);
+    const pe=document.getElementById('mtPhase');if(pe)pe.textContent=done?'🏁 Finish':t<0.12?'Start':t<0.45?'Early':t<0.62?'Mid-race':t<0.82?'Home turn':'Final furlongs';
+    const fe=document.getElementById('mtFur');if(fe){fe.textContent=done?'':`${Math.max(0,Math.ceil(R.df*(1-t)))}f to go`;fe.style.display=done?'none':'';}
+    const we=document.getElementById('mtWinner');if(we){we.style.display=done?'':'none';if(done)we.textContent=`🏆 WINNER — ${R.toks[0].r.name}`;}
+  }
+
   window.renderMTab=function(){
     const el=document.getElementById('mContent');if(!el)return;
-    clearTimeout(M.timer);
+    stop();
     const all=races();
     if(!all.length){el.innerHTML='<div class="m-empty">No races loaded — run Fetch Racecard first.</div>';return;}
     const venues=venuesOf(all);
@@ -10350,12 +10409,12 @@ function rpRunRace(){
     const vis=visible(all);
     const cur=vis.find(x=>x.key===M.key)||vis[0];M.key=cur.key;
     const {course,race}=cur,runners=(race.runners||[]).filter(x=>!x.non_runner);
-    let order;try{order=rpBuildPredictedOrder(runners,race).order.map(o=>o.runner);}catch(e){order=[...runners].sort((a,b)=>(b.score||0)-(a.score||0));}
+    let order;try{order=rpBuildPredictedOrder(runners,race).order;}catch(e){order=[...runners].sort((a,b)=>(b.score||0)-(a.score||0)).map(r=>({runner:r}));}
     const seg=segBadge(race),byScore=[...runners].sort((a,b)=>(b.score||0)-(a.score||0));
     const gap=byScore.length>1?((byScore[0].score||0)-(byScore[1].score||0)).toFixed(1):'—';
     el.innerHTML=`
-      <div class="m-title">🐎 M — Race Animation</div>
-      <div class="m-sub">Pick a race, hit Run it. Horses finish in the engine's predicted order (same as 🔮 Predict).</div>
+      <div class="m-title">🐎 MT — Race Track</div>
+      <div class="m-sub">Pick a race, hit Run it. Horses run the race's own track and finish in the engine's predicted order (same as 🔮 Predict).</div>
       <div class="m-chips">${['all',...venues].map((v,i)=>`<button class="m-chip ${M.venue===v?'on':''}" onclick="mTabVenue(${i})">${v==='all'?'All venues':esc(v)}</button>`).join('')}</div>
       <div class="m-times">${vis.map((x,i)=>`<button class="m-time ${x.key===M.key?'on':''}" style="--c:${getRaceBorderColor(x.race)}" onclick="mTabPick(${i})">${esc(x.race.time)}<small>${esc(x.course)}</small></button>`).join('')}</div>
       <div class="m-card" style="--c:${getRaceBorderColor(race)}">
@@ -10372,38 +10431,30 @@ function rpRunRace(){
             <button class="m-btn m-run" onclick="mRunRace()">▶ Run it</button>
           </div>
         </div>
-        <div class="m-track" id="mTrack">${lanes(order).map(t=>`<div class="m-lane ${t.pos===1?'m-lead':''}">
-            <span class="m-no">${esc(t.r.number||'')}</span>
-            <span class="m-silk" style="${t.r.silk_url?`background-image:url('${esc(t.r.silk_url)}')`:''}"></span>
-            <div class="m-label" title="${esc(t.r.name)}">${t.pos===1?'👑 ':''}${esc(t.r.name)}</div>
-            <div class="m-runway"><div class="m-rail"></div><div class="m-finish"></div>
-              <div class="m-horse ${t.pos===1?'m-leader':''}" style="--finish:${t.p}%" data-d="${(2.2+Math.random()*0.8).toFixed(2)}">🐎</div></div>
-            <span class="m-score">${(t.r.score||0).toFixed(1)}</span></div>`).join('')}</div>
-        <div class="m-foot"><span class="m-note">Illustrative only — lane spacing from predicted score gaps, not real finishing margins.</span>
+        <div class="mt-stage">
+          <svg id="mtSvg" viewBox="0 0 640 330"></svg>
+          <div id="mtPhase" class="mt-pill" style="left:8px">Ready</div>
+          <div id="mtFur" class="mt-pill" style="right:8px"></div>
+          <div id="mtWinner" class="mt-pill mt-winpill" style="display:none"></div>
+        </div>
+        <div id="mtLegend" class="mt-legend"></div>
+        <div class="m-foot"><span class="m-note">Illustrative — early positions from the pace map + draw, finish from predicted lengths. Not a real race.</span>
           <button class="m-open" onclick="mTabOpen()">Open race →</button></div>
       </div>`;
     const on=el.querySelector('.m-time.on');if(on)on.scrollIntoView({block:'nearest',inline:'center'});
+    try{trackInit(race,order);}catch(e){console.error('MT track init',e);}
   };
   // index-based handlers — venue names never go inside inline JS strings
   window.mTabVenue=function(i){M.venue=['all',...venuesOf(races())][i]||'all';M.key=null;window.renderMTab();};
   window.mTabPick=function(i){const x=visible(races())[i];if(x){M.key=x.key;window.renderMTab();}};
   window.mTabStep=function(d){const vis=visible(races()),n=vis[vis.findIndex(x=>x.key===M.key)+d];if(n){M.key=n.key;window.renderMTab();}};
-  window.mTabOpen=function(){const c=races().find(x=>x.key===M.key);if(!c)return;switchTab('races');openRace(c.vk,c.ri);};
+  window.mTabOpen=function(){stop();const c=races().find(x=>x.key===M.key);if(!c)return;switchTab('races');openRace(c.vk,c.ri);};
   window.mRunRace=function(){
-    const wrap=document.getElementById('mTrack');if(!wrap)return;
-    const sp=parseFloat((document.getElementById('mSpeed')||{}).value)||1,horses=wrap.querySelectorAll('.m-horse');
-    clearTimeout(M.timer);
-    horses.forEach(h=>{h.style.transitionProperty='none';h.classList.remove('running');}); // snap back to start
-    wrap.querySelectorAll('.m-lane').forEach(l=>l.classList.remove('m-flash'));
-    wrap.querySelectorAll('.m-badge').forEach(b=>b.remove());
-    void wrap.offsetWidth;
-    horses.forEach(h=>{h.style.removeProperty('transition-property');h.style.transitionDuration=(h.dataset.d/sp).toFixed(2)+'s';});
-    M.timer=setTimeout(()=>{ // setTimeout, not rAF — rAF pauses on background tabs
-      horses.forEach(h=>h.classList.add('running'));
-      const lead=wrap.querySelector('.m-leader');if(!lead)return;
-      M.timer=setTimeout(()=>{const lane=lead.closest('.m-lane');if(!lane)return;lane.classList.add('m-flash');
-        const b=document.createElement('span');b.className='m-badge';b.textContent='🏆 WINNER';lane.appendChild(b);},parseFloat(lead.style.transitionDuration)*1000+60);
-    },30);
+    const R=M.run;if(!R)return;stop();
+    const sp=parseFloat((document.getElementById('mSpeed')||{}).value)||1,dur=10000/sp,t0=performance.now();
+    // rAF when visible, setTimeout when hidden (rAF pauses on background tabs)
+    const tick=()=>{const t=Math.max(0,Math.min(1,(performance.now()-t0)/dur));frame(t);if(t<1&&M.run===R)R.timer=document.hidden?{to:setTimeout(tick,32)}:{raf:requestAnimationFrame(tick)};else R.timer=null;};
+    tick();
   };
 })();
 

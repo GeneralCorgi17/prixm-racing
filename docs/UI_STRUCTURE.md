@@ -19,7 +19,7 @@
   #ozzyView               ← Ozzy tab
   #goldenView             ← Golden dashboard tab
   #tracksView / #topFinishView / #watchbackView / #emeraldView / #ledgerView
-  #mView                  ← 🐎 M race animation tab
+  #mView                  ← 🐎 MT race track tab
   #modalContainer         ← Overlay modals (dynamically inserted)
   #betPanel               ← Right sidebar bet list (collapsible)
   #betFab                 ← Floating ticket button (bottom-right)
@@ -58,7 +58,7 @@ Right:
 | `tabWatchback` | Watchback | `switchTab('watchback')` |
 | `tabEmerald` | ☘ Emerald | `switchTab('emerald')` |
 | `tabLedger` | 💷 Ledger | `switchTab('ledger')` (hidden in VIEW_ONLY) |
-| `tabM` | 🐎 M | `switchTab('m')` → `renderMTab()` |
+| `tabM` | 🐎 MT | `switchTab('m')` → `renderMTab()` |
 | `dbStatusBadge` | — | `🟢 DB N races` or `🟡 JSON` — set during init(), margin-left:auto |
 
 **`switchTab(tab)`** — toggles `.active` class, shows/hides view divs, calls render function for the selected tab.
@@ -264,15 +264,15 @@ Racecard badge: `getSilverFlags(race)` + `renderSilverFlag(sf)` — global scope
 
 ---
 
-## 🐎 M Tab (`#mView` → `#mContent`)
+## 🐎 MT Tab (`#mView` → `#mContent`)
 
-Lane race animation (the old 🐎 slider, revived 2026-10-01). IIFE after the Predict replay code (search `🐎 M TAB`).
+Race track animation (label **🐎 MT**; ids stay `tabM` / `switchTab('m')`). IIFE after the Predict replay code (search `🐎 MT TAB`). Added 2026-10-01 as a straight-lane slider, switched to the track the same day.
 
-- Venue chips → race-time strip (border colour = `getRaceBorderColor`) → race card (⭐/🥈/🥉 via `getGoldenFlags`/`getSilverFlags`/`getBronzeFlags`, GAP/SCORE/CONF).
-- Order = `rpBuildPredictedOrder(runners, race).order` (same as 🔮 Predict). Lane finish % = 90 − gap/maxGap×65 (min 4% apart, floor 8%) — illustrative only.
-- `window.renderMTab()`, `mTabVenue(i)`, `mTabPick(i)`, `mTabStep(±1)`, `mTabOpen()` (→ `switchTab('races')` + `openRace(vk,ri)`), `mRunRace()` (CSS `left` transition, speed 0.5/1/2×; 🏆 WINNER fires on a timer, not `transitionend`).
-- State is module-local (`M.venue`, `M.key`) — not in `st`, not in localStorage. Display-only; excluded venues skipped via `isExcludedVenue`.
-- Mockups: `m_tab_main_mockup.html` (in-app look), `m_tab_mockup.html` (standalone).
+- Venue chips → race-time strip (border colour = `getRaceBorderColor`) → race card (⭐/🥈/🥉 via `getGoldenFlags`/`getSilverFlags`/`getBronzeFlags`, GAP/SCORE/CONF) → `#mtSvg` track stage (`#mtPhase`, `#mtFur`, `#mtWinner` pills) → `#mtLegend`.
+- Track shape from `rpTrackGeom(race)` (shared with the Predict replay `rpReplayInit`). 🐎 emoji tokens mirror to face travel direction; number badge colour = `rpColour(name)`.
+- Order = `rpBuildPredictedOrder(runners, race).order` (same as 🔮 Predict). Early positions from `race.pace` + draw (no style → predicted rank, staggered); finish gaps from `rpPredictLengths()`.
+- `window.renderMTab()`, `mTabVenue(i)`, `mTabPick(i)`, `mTabStep(±1)`, `mTabOpen()` (→ `switchTab('races')` + `openRace(vk,ri)`), `mRunRace()` (10s ÷ speed; rAF, setTimeout when hidden).
+- State is module-local (`M.venue`, `M.key`, `M.run`) — not in `st`, not in localStorage. Display-only; excluded venues skipped via `isExcludedVenue`.
 
 ---
 

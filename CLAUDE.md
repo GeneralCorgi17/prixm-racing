@@ -116,9 +116,9 @@ Tab id stays `tabTracks`/`switchTab('tracks')`. IIFE `window.renderTrackExplorer
 
 Replaced the 🐎 lane slider (`rpReplayInit`/`rpFrame`/`rpRunRace`): track-true SVG replay on the race's own track shape, silks from `silk_url`, early positions from pace map + draw, finish from predicted lengths; smoothstep maths, persistent nodes, rAF loop. **No commentary** (user rule). `rpPredictLengths()` = score gap × lengths-per-point learned from logged margins (Flat ≈0.19, AW ≈0.21, NH ≈0.5). `rpLengthPanelHTML()` = winning-distance bands per race type × gap band from logged results; **tight race gate** (`rpTightCheck`: gap < 8, top-2 BT win-chance diff < 8 pts, or Verification FLAGGED) → "No length bet suggestion" only. EV verdict only from a user-entered price — never pushes.
 
-## 🐎 M Tab — lane race animation (added 2026-10-01)
+## 🐎 MT Tab — race track animation (added 2026-10-01)
 
-Top-level tab `tabM` / `switchTab('m')` / `#mView` — revives the old 🐎 lane slider (removed from Predict 2026-09-30) as its own tab. IIFE `🐎 M TAB` right after the Predict replay code: `window.renderMTab()`, `mTabVenue/mTabPick/mTabStep/mTabOpen`, `mRunRace()`. Venue chips → race-time strip → race card (border colour, ⭐/🥈/🥉 badge, GAP/SCORE/CONF) → one lane per runner. Order = `rpBuildPredictedOrder()` (same as 🔮 Predict); lane finish % from score gaps (illustrative, not margins). 🏆 WINNER fires on a timer (not `transitionend` — hidden tabs never fire it). **No commentary** (user rule). Display-only, works in VIEW_ONLY. Mockups: `m_tab_main_mockup.html`, `m_tab_mockup.html`.
+Top-level tab labelled **🐎 MT** (ids unchanged: `tabM` / `switchTab('m')` / `#mView`). IIFE `🐎 MT TAB` right after the Predict replay code: `window.renderMTab()`, `mTabVenue/mTabPick/mTabStep/mTabOpen`, `mRunRace()`. Venue chips → race-time strip → race card (border colour, ⭐/🥈/🥉 badge, GAP/SCORE/CONF) → SVG of the race's **own track** (`rpTrackGeom(race)` — shared with the Predict replay) with 🐎 emoji runners (mirrored to face travel direction, number badge, smaller in 9+/13+ fields) → legend. Order = `rpBuildPredictedOrder()` (same as 🔮 Predict); early positions from pace map + draw (no style logged → spaced by predicted rank + staggered across the track), finish gaps from `rpPredictLengths()`. Own SVG/state (`mtSvg`, module-local `M.run`) so it never clashes with `window._rpReplay`. Winner gets a pulsing ring + 🏆 WINNER pill. **No commentary** (user rule). Display-only, works in VIEW_ONLY. Started as a straight-lane slider (mockups `m_tab_main_mockup.html`, `m_tab_mockup.html`), switched to the track the same day at user request.
 
 ## 💷 Ledger — money tracker + staking advisor
 
@@ -521,7 +521,7 @@ Irish venues also caught by `(IRE)` suffix check before list lookup.
 - **Horse watchlist** — track specific horses across race days
 - **Results logger** — fetches and logs race results
 - **Weight calibration** — self-tuning factor weights from logged results
-- **🐎 M tab** — lane race animation for any race on today's card (see 🐎 M Tab above)
+- **🐎 MT tab** — 🐎 horses run the race's own track for any race on today's card (see 🐎 MT Tab above)
 - **Golden Dashboard tab** — analytics: Golden (gap≥18 score≥74) + Silver (gap 10–<12 score≥72 Turf) + Bronze (gap 8–<10 score≥74 Good/GF) sections. Auto-polls every 60s.
 
 ## Code Style
