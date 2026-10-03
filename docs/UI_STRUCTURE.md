@@ -35,6 +35,7 @@ Right:
 - `#dataSourceBadge` — shows embedded / pasted
 - `📋 Load JSON` → `showPaste()`
 - `🗑 Clear Data` → `clearStoredData()` (hidden until data loaded)
+- `◐ Classic/Nothing` (`.nt-toggle`) → `toggleTheme()` — saves `localStorage.uiTheme`, reloads (see `docs/UI_THEMES.md`)
 - `❓ Guide` → `showGuide()`
 - `🧠 Ozzy` → `switchTab('ozzy')`
 - `📄 PDF` → `exportPDF()`
@@ -43,6 +44,10 @@ Right:
 - `#statusBar` — rendered by `renderStatusBar()` — shows ✓/⏳ for: Results / Picks / Calibrated / Threshold / PDF
 
 ---
+
+## 📱 Phone layout (≤700px)
+
+`<style id="phoneLayout">` + `📱 PHONE LAYOUT JS`. Header `.hdr-r` → ☰ sheet (`phMenu()`, `html.ph-menu-on`, `#phDate`, `.ph-burger`). `.tab-bar` hidden → `#phNav` (Races/Golden/Ledger|Emerald/MT/More) + `#phMore` sheet, built from the real `.tab-btn`s. Prixm Picks → swipe strip (`.d1-picks-list`). `.rtbl` rows → stacked cards. Mockup `phone_mockup.html`. See CLAUDE.md.
 
 ## Tab Bar (`.tab-bar`)
 
@@ -294,7 +299,9 @@ Spawned by: `showGuide()`, `showPaste()`, `runUnifiedCalibration()`, `submitPick
 
 ---
 
-## CSS Custom Properties (Dark Theme)
+## CSS Custom Properties
+
+> **Themes (2026-10-02):** `<html data-theme="nothing|classic">`. Classic vars = `:root` line 9 (light Editorial White: `--bg #f0ede8`, `--card #fff`, `--accent #15803d` …). ◐ Nothing overrides them in `<style id="themeNothing">` (`--bg #0a0a0a`, `--card2 #141414`, `--text #f5f2eb`, `--accent #c8b89a` …). Full lists in `docs/UI_THEMES.md`. The block below is the original (pre-light-theme) dark palette, kept for history.
 
 ```css
 --bg:      #0a0f1a   /* page background */
@@ -348,6 +355,7 @@ When server is live: `window._resultsHistory` set directly from DB, localStorage
 | `calibWeights_[profile]` | Per-profile FM weights (aw / turf_flat / nh) |
 | `ozzyMemory` | Ozzy convictions, stats, reflections, lessons, audit log |
 | `ozzyDailyBriefs_YYYY-MM-DD` | Ozzy pick analyses per date (API call cache) |
+| `uiTheme` | `'nothing'` (default) / `'classic'` — ◐ UI theme |
 
 ---
 

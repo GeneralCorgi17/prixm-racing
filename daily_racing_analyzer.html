@@ -1351,6 +1351,130 @@ html[data-theme="nothing"] svg text[fill="#6b7280"],html[data-theme="nothing"] s
   html[data-theme="nothing"] .venues-bar{row-gap:6px!important;column-gap:18px!important}
 }
 </style>
+<style id="phoneLayout">
+/* ==================== 📱 PHONE LAYOUT (2026-10-03) ====================
+   ≤700px only — the PC layout is untouched. Works in both themes (uses the vars).
+   Approved mockup: phone_mockup.html (option A — tabs at the bottom).
+   · Header → PRIXM + date + ☰. The header's buttons/badges (.hdr-r) become the ☰ sheet.
+   · Top tab bar hidden → #phNav bottom bar (Races / Golden / Ledger|Emerald / MT / More), built from the real .tab-btn's.
+   · Prixm Picks → swipe strip above the race cards; other sidebar panels below the cards.
+   · Runner table (.rtbl) → stacked runner cards. JS: 📱 PHONE LAYOUT JS block at file end. */
+#phNav,#phMore,.ph-burger,.ph-date{display:none}
+@media(max-width:700px){
+  html[data-theme] body{padding-bottom:calc(70px + env(safe-area-inset-bottom))}
+
+  /* ---- header ---- */
+  html[data-theme] .hdr{display:flex!important;flex-wrap:nowrap!important;align-items:center!important;justify-content:flex-start!important;gap:10px!important;padding:12px 14px!important;position:relative;z-index:1500}
+  html[data-theme] .hdr>div:first-child{flex:1;min-width:0}
+  html[data-theme] .hdr h1+div{display:none!important}
+  html[data-theme="classic"] .hdr h1{font-size:15px!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  html[data-theme="nothing"] .hdr h1::before{font-size:30px!important}
+  html[data-theme="nothing"] .hdr h1::after{display:none}
+  html[data-theme] .ph-date{display:block;font-size:12px;font-weight:700;color:var(--text);white-space:nowrap}
+  html[data-theme="nothing"] .ph-date{font-family:'Bebas Neue',sans-serif;font-weight:400;font-size:19px;letter-spacing:.05em}
+  html[data-theme] .ph-burger{display:flex;flex-direction:column;justify-content:center;align-items:center;gap:5px;width:42px;height:42px;flex:0 0 42px;background:none;border:1px solid var(--border);border-radius:0;cursor:pointer;position:relative;z-index:1601}
+  html[data-theme="classic"] .ph-burger{border-radius:8px}
+  html[data-theme] .ph-burger i{display:block;width:16px;height:1.5px;background:var(--text);transition:transform .25s,opacity .25s}
+  html.ph-menu-on .ph-burger i:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
+  html.ph-menu-on .ph-burger i:nth-child(2){opacity:0}
+  html.ph-menu-on .ph-burger i:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
+  html[data-theme="classic"] .hdr .nt-toggle{position:static!important}
+
+  /* ---- ☰ sheet = the header's own buttons/badges ---- */
+  html[data-theme] .hdr-r{position:fixed!important;inset:0!important;z-index:1600!important;background:var(--bg)!important;display:flex!important;flex-direction:column!important;flex-wrap:nowrap!important;align-items:stretch!important;gap:10px!important;padding:78px 16px calc(30px + env(safe-area-inset-bottom))!important;overflow-y:auto!important;transform:translateY(-102%);visibility:hidden;transition:transform .35s cubic-bezier(.2,.7,.2,1),visibility 0s .35s}
+  html.ph-menu-on .hdr-r{transform:none;visibility:visible;transition:transform .35s cubic-bezier(.2,.7,.2,1)}
+  html[data-theme] .hdr-r .vbtn{transition:background .2s,color .2s,border-color .2s!important;width:100%;min-height:50px;text-align:left;font-size:12px!important;padding:0 16px!important;display:flex;align-items:center;gap:8px}
+  html[data-theme] .hdr-r .date-b{order:-2;align-self:flex-start;font-size:20px!important}
+  html[data-theme] .hdr-r #lgChip{order:-1;align-self:flex-start}
+  html[data-theme] .hdr-r #statusDisp{font-size:11px!important}
+  html[data-theme] .hdr-r #statusBar{margin-left:0!important}
+  html[data-theme] .hdr-r .sb-wrap{flex-wrap:wrap}
+
+  /* ---- bottom nav ---- */
+  html[data-theme] .tab-bar{display:none!important}
+  html[data-theme] #phNav{display:grid;grid-template-columns:repeat(5,1fr);position:fixed;left:0;right:0;bottom:0;z-index:1400;background:var(--card);border-top:1px solid var(--border);padding-bottom:env(safe-area-inset-bottom)}
+  html[data-theme="nothing"] #phNav{background:rgba(10,10,10,.97);backdrop-filter:blur(6px)}
+  html[data-theme] .phn{background:none;border:none;height:60px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;font:inherit;font-size:9px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);position:relative;cursor:pointer}
+  html[data-theme="nothing"] .phn{font-weight:400;letter-spacing:.18em;font-size:8.5px}
+  html[data-theme] .phn .ic{font-size:18px;line-height:1;filter:grayscale(1);opacity:.6}
+  html[data-theme] .phn.on{color:var(--text)}
+  html[data-theme] .phn.on .ic{filter:none;opacity:1}
+  html[data-theme] .phn.on::before{content:'';position:absolute;top:-1px;left:22%;right:22%;height:2px;background:var(--accent)}
+  html[data-theme] #phMore{display:grid;grid-template-columns:1fr 1fr;gap:1px;position:fixed;left:0;right:0;bottom:calc(60px + env(safe-area-inset-bottom));z-index:1390;background:var(--border);border-top:1px solid var(--border);transform:translateY(105%);visibility:hidden;transition:transform .3s ease,visibility 0s .3s}
+  html.ph-more-on #phMore{transform:none;visibility:visible;transition:transform .3s ease}
+  html[data-theme] #phMore button{background:var(--card);border:none;min-height:54px;text-align:left;padding:0 16px;font:inherit;font-size:11px;font-weight:600;color:var(--text);cursor:pointer}
+  html[data-theme="nothing"] #phMore button{font-weight:400;letter-spacing:.16em;text-transform:uppercase;font-size:10px}
+  html[data-theme] #phMore button.on{color:var(--accent);box-shadow:inset 2px 0 0 var(--accent)}
+
+  /* floating buttons sit above the nav */
+  html[data-theme] .lg-fab{bottom:calc(72px + env(safe-area-inset-bottom))!important;right:74px!important}
+  html[data-theme] .bp-toggle-fab{bottom:calc(72px + env(safe-area-inset-bottom))!important;right:14px!important}
+  html[data-theme] [data-view-only]::after,[data-view-only]::after{bottom:calc(72px + env(safe-area-inset-bottom))!important}
+
+  /* ---- races: stats / venues / picks strip / cards ---- */
+  html[data-theme] .landing{padding:12px 14px!important}
+  html[data-theme] .d1-stats-strip{display:grid!important;grid-template-columns:repeat(4,1fr)!important}
+  html[data-theme] .d1-ss{min-width:0!important;padding:12px 10px!important}
+  html[data-theme] .d1-ss:last-child:nth-child(odd){grid-column:auto}
+  html[data-theme] .d1-ss:nth-child(n+5){display:none}
+  html[data-theme] .d1-ss-n{font-size:28px!important}
+  html[data-theme] .d1-ss-l{font-size:7.5px!important;letter-spacing:.14em!important}
+  html[data-theme] .venues-bar{flex-wrap:nowrap!important;overflow-x:auto;scrollbar-width:none;margin:0 -14px 10px!important;padding:0 14px 2px!important}
+  html[data-theme] .venues-bar::-webkit-scrollbar{display:none}
+  html[data-theme] .venues-bar .vbtn{flex:0 0 auto;min-height:40px;white-space:nowrap}
+  html[data-theme] .fsb-pill,html[data-theme] #fieldSizeBar .vbtn{min-height:38px}
+  html[data-theme] .d1-layout{display:flex!important;flex-direction:column!important;gap:14px!important}
+  html[data-theme] .d1-layout>div:first-child{order:1}
+  html[data-theme] .d1-aside{display:contents!important}
+  html[data-theme] .d1-aside>.d1-panel{order:2}
+  html[data-theme] .d1-aside>.d1-panel:first-child{order:0;margin:0 -14px}
+  html[data-theme] .d1-aside>.d1-panel:first-child .d1-panel-hdr{padding:12px 14px 10px!important}
+  html[data-theme] .d1-picks-list{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;gap:1px;background:var(--border)}
+  html[data-theme] .d1-picks-list::-webkit-scrollbar{display:none}
+  html[data-theme] .d1-picks-list>.d1-pick-card{flex:0 0 74%;scroll-snap-align:start;margin:0!important;border-radius:0!important}
+  html[data-theme] .landing .race-cards{grid-template-columns:1fr!important;margin:0 -14px}
+  html[data-theme="classic"] .landing .race-cards{margin:0;gap:10px!important}
+
+  /* ---- race detail ---- */
+  html[data-theme] .race-title{font-size:22px!important;line-height:1.1!important}
+  html[data-theme="nothing"] .race-title{font-size:34px!important;line-height:.95!important}
+  html[data-theme] .detail-view{padding:12px 14px 20px!important}
+  html[data-theme] .detail-tabs{overflow-x:auto;flex-wrap:nowrap;scrollbar-width:none}
+  html[data-theme] .detail-tabs::-webkit-scrollbar{display:none}
+  html[data-theme] .dtab{flex:0 0 auto;white-space:nowrap;min-height:42px}
+  /* runner table → stacked cards */
+  html[data-theme] .rtbl,html[data-theme] .rtbl tbody{display:block;width:100%}
+  html[data-theme] .rtbl thead{display:none}
+  html[data-theme] .rtbl tr.expandable{display:grid;grid-template-columns:30px minmax(0,1fr) auto;column-gap:10px;row-gap:4px;padding:12px 4px;border-bottom:1px solid var(--border);align-items:center}
+  html[data-theme] .rtbl tr.expandable>td{display:block;padding:0!important;border:none!important;min-width:0}
+  html[data-theme] .rtbl tr.expandable>td:nth-child(1){grid-column:1;grid-row:1/span 3;align-self:start;font-size:18px;padding-top:2px!important}
+  html[data-theme] .rtbl tr.expandable>td:nth-child(2){grid-column:2;grid-row:1}
+  html[data-theme] .rtbl tr.expandable>td:nth-child(9){grid-column:3;grid-row:1;text-align:right;white-space:nowrap}
+  html[data-theme] .rtbl tr.expandable>td:nth-child(3){grid-column:2;grid-row:2;font-size:11px}
+  html[data-theme] .rtbl tr.expandable>td:nth-child(11){grid-column:3;grid-row:2;text-align:right}
+  html[data-theme] .rtbl tr.expandable>td:nth-child(4),html[data-theme] .rtbl tr.expandable>td:nth-child(5),html[data-theme] .rtbl tr.expandable>td:nth-child(6),
+  html[data-theme] .rtbl tr.expandable>td:nth-child(7),html[data-theme] .rtbl tr.expandable>td:nth-child(8){display:none}
+  html[data-theme] .rtbl tr.expandable>td:nth-child(10),html[data-theme] .rtbl tr.expandable>td:nth-child(12){display:none}
+  html[data-theme] .rtbl tr.expandable>td:nth-child(2)>div:first-child{display:flex;flex-wrap:wrap;align-items:center;gap:5px;font-size:15px!important;line-height:1.25}
+  html[data-theme] .rtbl tr.expandable>td:nth-child(2)>div:first-child>button{order:5;min-height:34px;padding:0 12px!important;font-size:10px!important;margin:4px 0 0!important}
+  html[data-theme] .rtbl tr.expandable>td:nth-child(2)>div:first-child>button:first-of-type{margin-left:0!important}
+  html[data-theme] .rtbl tr.expandable>td:nth-child(2)>div:first-child::after{content:'';order:4;flex-basis:100%;height:0}
+  html[data-theme] .rtbl tr.expandable>td:nth-child(2)>div:nth-child(2){font-size:10.5px!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  html[data-theme] .rtbl tr.expandable .sbar{width:64px!important;display:inline-block}
+  html[data-theme] .rtbl tr.attr-reason-tr,html[data-theme] .rtbl tr.exp-row{display:block}
+  html[data-theme] .rtbl tr.attr-reason-tr>td,html[data-theme] .rtbl tr.exp-row>td{display:block;width:100%;padding:0!important}
+  html[data-theme] .rtbl tr.attr-reason-tr>td{padding:4px 4px 10px!important}
+  html[data-theme] .exp-inner{padding:12px 4px!important}
+  html[data-theme] .exp-inner [style*="grid-template-columns"]{grid-template-columns:1fr!important}
+
+  /* ---- other tabs: wide tables scroll inside their own box ---- */
+  html[data-theme] #perfView table,html[data-theme] #combosView table,html[data-theme] #trendsView table,html[data-theme] #goldenView table,
+  html[data-theme] #tracksView table,html[data-theme] #watchbackView table,html[data-theme] #emeraldView table,html[data-theme] #ledgerView table,
+  html[data-theme] #topFinishView table{display:block;overflow-x:auto;max-width:100%;-webkit-overflow-scrolling:touch}
+  html[data-theme] #perfView,html[data-theme] #combosView,html[data-theme] #trendsView,html[data-theme] #goldenView,html[data-theme] #tracksView,
+  html[data-theme] #watchbackView,html[data-theme] #emeraldView,html[data-theme] #ledgerView,html[data-theme] #topFinishView,html[data-theme] #mView{padding:14px 14px 24px!important}
+}
+</style>
 <script src="results_history.js" onerror=""></script>
 <script src="daily_race_data.js" onerror=""></script>
 <script src="weather_signal.js" onerror=""></script>
@@ -1375,6 +1499,7 @@ html[data-theme="nothing"] svg text[fill="#6b7280"],html[data-theme="nothing"] s
 <span style="color:var(--muted);font-size:12px" id="statusDisp"></span>
 <div id="statusBar" style="margin-left:4px"></div>
 </div>
+<span class="ph-date" id="phDate"></span><button class="ph-burger" onclick="phMenu()" aria-label="Menu"><i></i><i></i><i></i></button>
 </div>
 
 <div class="tab-bar">
@@ -1391,6 +1516,7 @@ html[data-theme="nothing"] svg text[fill="#6b7280"],html[data-theme="nothing"] s
   <button class="tab-btn" id="tabM" onclick="switchTab('m')" title="🐎 Race track animation">🐎 MT</button>
   <span id="dbStatusBadge" style="margin-left:auto;padding:0 12px;font-size:11px;color:var(--muted);align-self:center;display:none"></span>
 </div>
+<nav id="phNav" aria-label="Tabs"></nav><div id="phMore"></div>
 
 
 <div class="landing" id="landingView">
@@ -6509,7 +6635,7 @@ function showGuide(){
 
     <div class="guide-section info">
       <h3><span class="gi">◐</span> Look — Nothing / Classic</h3>
-      <p style="font-size:12px;color:var(--muted);margin:0">Two themes: <b>◐ Nothing</b> (dark, default) and <b>Classic</b> (the light Editorial White look). Switch with the ◐ button in the header — saved in this browser. Display only: scores, picks and P&amp;L never change.</p>
+      <p style="font-size:12px;color:var(--muted);margin:0">Two themes: <b>◐ Nothing</b> (dark, default) and <b>Classic</b> (the light Editorial White look). Switch with the ◐ button in the header (in the ☰ menu on phones) — saved in this browser. Display only: scores, picks and P&amp;L never change. On a phone the layout switches automatically: tabs at the bottom, ☰ menu, swipe picks, runner cards.</p>
     </div>
 
     <!-- QUICK START -->
@@ -7734,7 +7860,7 @@ function renderD1Sidebar(){
         <span class="d1-panel-title">Prixm Picks</span>
         <span class="d1-panel-date">${date}</span>
       </div>
-      ${picksHtml}
+      <div class="d1-picks-list">${picksHtml}</div>
     </div>
     ${Object.values(D.venues).some(v=>isIreland(v.course))?`<div class="d1-panel" style="border-color:var(--em-line)">
       <div class="d1-panel-hdr" style="background:var(--em-soft)">
@@ -13001,12 +13127,17 @@ window.toggleTheme=function(){
     el.style.setProperty(prop,val,'important');
   }
   function restore(el){const o=saved.get(el);if(!o)return;for(const p in o){const[v,pr]=o[p];if(v)el.style.setProperty(p,v,pr);else el.style.removeProperty(p);}saved.delete(el);}
+  // the theme's own palette (cream, sand, green, blue, gold, silver, red, emerald, amber) — intentional, never remap
+  const KEEP=new Set(['245,242,235','200,184,154','159,214,174','147,180,232','217,178,92','170,180,195','229,154,140','91,179,154','227,192,126','185,130,90']);
+  const keep=c=>KEEP.has(`${c.r},${c.g},${c.b}`);
+  // dark text sitting on a cream/sand surface (e.g. the Log bet button) must stay dark
+  function onKeptBg(el){for(let e=el,i=0;e&&i<6;e=e.parentElement,i++){const b=parse(getComputedStyle(e).backgroundColor);if(b&&b.a>.5)return keep(b);}return false;}
   function fix(el){
     if(SKIP.has(el.tagName)||el.closest('svg')||el.classList.contains('nt-cursor')||el.classList.contains('nt-ring')) return;
     const cs=getComputedStyle(el);
     // background
     const bg=parse(cs.backgroundColor);
-    if(bg&&bg.a>.04){
+    if(bg&&bg.a>.04&&!keep(bg)){
       const L=lum(bg);
       if(L>.55){const {h,s}=hsl(bg);
         const v=s<.32?(L>.78?`rgba(10,10,10,${bg.a})`:`rgba(20,20,20,${bg.a})`):`hsla(${Math.round(h)},${Math.round(Math.min(s,.5)*100)}%,${bg.a<.6?14:10}%,${Math.max(bg.a,.9)})`;
@@ -13015,12 +13146,12 @@ window.toggleTheme=function(){
     // light gradients (cards / strips)
     if(cs.backgroundImage&&cs.backgroundImage.includes('gradient')){
       const cols=(cs.backgroundImage.match(/rgba?\([^)]+\)/g)||[]).map(parse).filter(c=>c&&c.a>.3);
-      if(cols.length&&cols.every(c=>lum(c)>.55)) set(el,'background-image','none');
+      if(cols.length&&cols.every(c=>lum(c)>.55&&!keep(c))) set(el,'background-image','none');
     }
     // text
     const fg=parse(cs.color);
     if(fg){const L=lum(fg);
-      if(L<.3){const {h,s}=hsl(fg);
+      if(L<.3&&!onKeptBg(el)){const {h,s}=hsl(fg);
         const v=s<.2?(L<.03?'#f5f2eb':L<.12?'#d8d2c7':'#9a948a'):`hsl(${Math.round(h)},${Math.round(Math.min(s,.75)*100)}%,72%)`;
         set(el,'color',v);}
     }
@@ -13028,7 +13159,7 @@ window.toggleTheme=function(){
     for(const side of ['top','right','bottom','left']){
       if(parseFloat(cs[`border-${side}-width`]||cs.getPropertyValue(`border-${side}-width`))<=0) continue;
       const bc=parse(cs.getPropertyValue(`border-${side}-color`));
-      if(bc&&bc.a>.1&&lum(bc)>.5){const {h,s}=hsl(bc);
+      if(bc&&bc.a>.1&&lum(bc)>.5&&!keep(bc)){const {h,s}=hsl(bc);
         set(el,`border-${side}-color`,s<.32?'#262626':`hsl(${Math.round(h)},${Math.round(Math.min(s,.5)*100)}%,24%)`);}
     }
   }
@@ -13054,7 +13185,7 @@ window.toggleTheme=function(){
     // hover states that turn light: darken while hovered, undo on leave
     document.addEventListener('mouseover',e=>{const el=e.target.closest('*');if(!el||saved.has(el))return;
       requestAnimationFrame(()=>{const b=parse(getComputedStyle(el).backgroundColor);
-        if(b&&b.a>.04&&lum(b)>.55){fix(el);el.addEventListener('mouseleave',()=>restore(el),{once:true});}});},true);
+        if(b&&b.a>.04&&lum(b)>.55&&!keep(b)){fix(el);el.addEventListener('mouseleave',()=>restore(el),{once:true});}});},true);
     // custom cursor (mouse only)
     if(matchMedia('(pointer:fine)').matches){
       const c=document.createElement('div');c.className='nt-cursor';
@@ -13068,6 +13199,60 @@ window.toggleTheme=function(){
     }
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',start); else start();
+})();
+</script>
+<script>
+/* ==================== 📱 PHONE LAYOUT JS ====================
+   Bottom nav (#phNav) + "More" sheet (#phMore) are built from the real .tab-btn's and just
+   .click() them, so switchTab wiring, VIEW_ONLY hiding (.vo-hide) and active state stay the
+   single source of truth. ☰ toggles html.ph-menu-on (the header's .hdr-r becomes the sheet).
+   CSS: <style id="phoneLayout"> (≤700px). Mockup: phone_mockup.html. */
+(function(){
+  const html=document.documentElement;
+  const nav=document.getElementById('phNav'), more=document.getElementById('phMore');
+  if(!nav||!more) return;
+  const ICON={tabRaces:'🏇',tabGolden:'⭐',tabLedger:'💷',tabEmerald:'☘',tabM:'🐎'};
+  const label=b=>b.textContent.replace(/[^A-Za-z0-9&%' ]/g,'').replace(/\s+/g,' ').trim();
+  const shown=b=>getComputedStyle(b).display!=='none';
+  function build(){
+    const btns=[...document.querySelectorAll('.tab-bar .tab-btn')].filter(shown);
+    const byId=id=>btns.find(b=>b.id===id);
+    const main=['tabRaces','tabGolden',byId('tabLedger')?'tabLedger':'tabEmerald','tabM'].map(byId).filter(Boolean);
+    const rest=btns.filter(b=>!main.includes(b));
+    const restOn=rest.some(b=>b.classList.contains('active'));
+    nav.innerHTML=main.map(b=>`<button class="phn${b.classList.contains('active')?' on':''}" data-tab="${b.id}"><span class="ic">${ICON[b.id]||'•'}</span>${label(b)}</button>`).join('')
+      +`<button class="phn${restOn||html.classList.contains('ph-more-on')?' on':''}" data-more="1"><span class="ic">⋯</span>More</button>`;
+    more.innerHTML=rest.map(b=>`<button class="${b.classList.contains('active')?'on':''}" data-tab="${b.id}">${label(b)}</button>`).join('');
+  }
+  function go(id){
+    html.classList.remove('ph-more-on','ph-menu-on');
+    const b=document.getElementById(id); if(b) b.click();
+    window.scrollTo({top:0});
+    build();
+  }
+  nav.addEventListener('click',e=>{
+    const b=e.target.closest('button'); if(!b) return;
+    if(b.dataset.more){ html.classList.toggle('ph-more-on'); html.classList.remove('ph-menu-on'); build(); return; }
+    go(b.dataset.tab);
+  });
+  more.addEventListener('click',e=>{const b=e.target.closest('button[data-tab]'); if(b) go(b.dataset.tab);});
+  // ☰ menu
+  window.phMenu=function(){ html.classList.toggle('ph-menu-on'); html.classList.remove('ph-more-on'); build(); };
+  const hr=document.querySelector('.hdr-r');
+  if(hr) hr.addEventListener('click',e=>{ if(e.target.closest('button,a,[onclick]')) setTimeout(()=>html.classList.remove('ph-menu-on'),60); });
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape') html.classList.remove('ph-menu-on','ph-more-on'); });
+  // short date next to ☰ (mirrors #dateDisp)
+  const dd=document.getElementById('dateDisp'), pd=document.getElementById('phDate');
+  function syncDate(){
+    if(!dd||!pd) return;
+    const t=(dd.textContent||'').trim(), m=t.match(/^([A-Za-z]{3})[a-z]*,?\s+(\d{1,2})\s+([A-Za-z]{3})/);
+    pd.textContent=m?`${m[1]} ${m[2]} ${m[3]}`.toUpperCase():(/loading/i.test(t)?'':t);
+  }
+  if(dd) new MutationObserver(syncDate).observe(dd,{childList:true,characterData:true,subtree:true});
+  // keep nav in sync with tab changes / VIEW_ONLY
+  const tb=document.querySelector('.tab-bar');
+  if(tb) new MutationObserver(build).observe(tb,{attributes:true,attributeFilter:['class','style'],subtree:true});
+  build(); syncDate(); setTimeout(()=>{build();syncDate();},1200);
 })();
 </script>
 </body>
