@@ -760,7 +760,6 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 [data-view-only] .bet-btn{display:none!important}
 [data-view-only] .wl-track-btn{display:none!important}
 [data-view-only] #pdfExportBtn{display:none!important}
-[data-view-only] body::after,[data-view-only]::after{content:'👁 View Only';position:fixed;bottom:14px;right:14px;background:#1a1a1a;color:#666;font-size:10px;font-weight:700;padding:4px 10px;border-radius:20px;border:1px solid #2a2a2a;z-index:9999;pointer-events:none;letter-spacing:.5px}
 
 /* ===== PRIXM ANIMATIONS ===== */
 /* Landing page */
@@ -807,7 +806,6 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
   /* Score grid */
   .score-grid{grid-template-columns:1fr 1fr!important}
   /* View-only badge */
-  [data-view-only]::after{font-size:9px;padding:3px 8px;bottom:8px;right:8px}
 }
 @media(max-width:480px){
   .tab-btn{padding:9px 10px;font-size:11px}
@@ -1024,7 +1022,6 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .pl-launch{color:#fff!important}
 /* Performance tab: card backgrounds via var(--card) auto-adapt, but check inline dark */
 /* view-only badge */
-[data-view-only] body::after,[data-view-only]::after{background:#f3f4f6!important;color:#6b7280!important;border-color:#d1d5db!important}
 /* fieldSizeBar venue pill ON state (ID specificity > .landing class) */
 #fieldSizeBar .vbtn.on{background:#15803d!important;color:#fff!important;border-color:#15803d!important}
 #fieldSizeBar .vbtn:hover{border-color:#15803d!important;color:#15803d!important}
@@ -1409,7 +1406,6 @@ html[data-theme="nothing"] svg text[fill="#6b7280"],html[data-theme="nothing"] s
   /* floating buttons sit above the nav */
   html[data-theme] .lg-fab{bottom:calc(72px + env(safe-area-inset-bottom))!important;right:74px!important}
   html[data-theme] .bp-toggle-fab{bottom:calc(72px + env(safe-area-inset-bottom))!important;right:14px!important}
-  html[data-theme] [data-view-only]::after,[data-view-only]::after{bottom:calc(72px + env(safe-area-inset-bottom))!important}
 
   /* ---- races: stats / venues / picks strip / cards ---- */
   html[data-theme] .landing{padding:12px 14px!important}
