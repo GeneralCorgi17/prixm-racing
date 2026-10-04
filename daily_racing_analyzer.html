@@ -4580,27 +4580,52 @@ function settleLocal(){ // DB-less fallback: settle against logged results in me
     const o=betPnl(b,run.finish_pos,run.non_runner);if(!o)return;
     Object.assign(b,{result:o[0],pnl_u:Math.round(o[1]*10000)/10000,finish_pos:run.finish_pos,sp:run.sp,settled_at:new Date().toISOString().slice(0,19)});n++;
   });
-  if(n&&!LG.db)persistLocal();return n;
+  if(n)persistLocal();return n;
 }
+// localStorage ALWAYS keeps a full mirror of the ledger — a bet is never only in memory
 function persistLocal(){try{localStorage.setItem(LS_BETS,JSON.stringify(LG.bets));}catch(e){}}
+const isLocalId=id=>typeof id!=='number';
 async function load(){
   if(VIEW_ONLY)return;
-  try{const r=await fetch('http://localhost:7432/api/bets',{signal:AbortSignal.timeout(2500)});if(r.ok){LG.bets=await r.json();LG.db=true;}}catch(e){}
+  await connectDb();
   if(!LG.db){try{LG.bets=JSON.parse(localStorage.getItem(LS_BETS)||'[]');}catch(e){LG.bets=[];}}
   settleLocal();LG.loaded=true;refreshChrome();
+  // server off (or still starting)? keep checking — the moment it's up, unsaved bets are pushed into the DB
+  if(!window._lgRetry)window._lgRetry=setInterval(async()=>{if(LG.db&&!LG.bets.some(b=>isLocalId(b.id)))return;
+    const was=LG.db;await connectDb();if(LG.db&&!was){settleLocal();refreshChrome();toast('💷 Ledger: DB server connected — bets saved to the database');}},20000);
+}
+async function connectDb(){
+  try{const r=await fetch('http://localhost:7432/api/bets',{signal:AbortSignal.timeout(2500)});if(!r.ok)return;const dbBets=await r.json();
+    LG.db=true;const n=await syncLocalToDb(dbBets);LG.bets=dbBets.concat(n.pending);persistLocal();
+    if(n.pushed)toast(`💷 ${n.pushed} bet${n.pushed>1?'s':''} saved while the server was off — now in the database`);}catch(e){LG.db=false;}
+}
+// bets logged while the DB server was off (local id) are pushed into the DB; anything that fails stays pending, never dropped
+async function syncLocalToDb(dbBets){
+  let loc=[];try{loc=JSON.parse(localStorage.getItem(LS_BETS)||'[]');}catch(e){}
+  (LG.bets||[]).forEach(b=>{if(isLocalId(b.id)&&!loc.some(x=>x.id===b.id))loc.push(b);});
+  const pending=[];let pushed=0;
+  for(const b of loc){
+    if(!isLocalId(b.id)||dbBets.some(x=>x.created===b.created&&x.horse===b.horse))continue;
+    try{const {id,...nb}=b;const r=await fetch('http://localhost:7432/api/bets',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(nb)});const j=await r.json();
+      if(j.ok){nb.id=j.ids[0];dbBets.push(nb);pushed++;}else pending.push(b);}catch(e){pending.push(b);}
+  }
+  return{pending,pushed};
 }
 async function saveBet(b,quiet){
+  let saved=false;
   if(LG.db){
-    try{const r=await fetch('http://localhost:7432/api/bets',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)});const j=await r.json();if(j.ok){if(!b.id)b.id=j.ids[0];}}catch(e){LG.db=false;}
+    try{const {id,...nb}=b,body=isLocalId(id)?nb:b;   // a local id isn't a DB row yet → insert, not update
+      const r=await fetch('http://localhost:7432/api/bets',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});const j=await r.json();
+      if(j.ok){if(isLocalId(b.id))b.id=j.ids[0];saved=true;}else LG.db=false;}catch(e){LG.db=false;}
   }
   if(!b.id)b.id='L'+Date.now()+Math.random().toString(36).slice(2,6);
-  const i=LG.bets.findIndex(x=>x.id===b.id);if(i>=0)LG.bets[i]=b;else LG.bets.push(b);
-  if(!LG.db)persistLocal();
-  if(!quiet){settleLocal();refreshChrome();}
+  const i=LG.bets.findIndex(x=>x.id===b.id||(x.created===b.created&&x.horse===b.horse));if(i>=0)LG.bets[i]=b;else LG.bets.push(b);
+  persistLocal();
+    if(!quiet){settleLocal();refreshChrome();}
 }
 async function deleteBet(id){
   if(LG.db&&typeof id==='number'){try{await fetch('http://localhost:7432/api/bets/'+id,{method:'DELETE'});}catch(e){}}
-  LG.bets=LG.bets.filter(b=>b.id!==id);if(!LG.db)persistLocal();refreshChrome();
+  LG.bets=LG.bets.filter(b=>b.id!==id);persistLocal();refreshChrome();
 }
 
 // ── money maths ──
@@ -4727,7 +4752,7 @@ let M=null;
 function allRunners(){const out=[];if(!window.D||!D.venues)return out;Object.entries(D.venues).forEach(([vk,v])=>(v.races||[]).forEach((r,ri)=>(r.runners||[]).forEach(x=>out.push({vk,ri,name:x.name,course:v.course||vk,time:r.time,em:isIreland(v.course||vk)}))));return out;}
 function openModal(vk,ri,name,presetU){
   if(VIEW_ONLY)return;
-  M={c:(vk!=null&&name)?ctxFor(vk,ri,name):null,type:'WIN',unitMode:'gbp',places:null,legs:[],multi:null,ew:false};
+  M={c:(vk!=null&&name)?ctxFor(vk,ri,name):null,type:'WIN',unitMode:'gbp',places:null,legs:[],multi:null,ew:false,ewPl:null,ewFr:null};
   let el=document.getElementById('lgModal');if(!el){el=document.createElement('div');el.id='lgModal';document.body.appendChild(el);}
   el.innerHTML=`<div class="lg-ov" onclick="if(event.target===this)window.lgClose()"><div class="lg-modal" role="dialog" aria-label="Log a bet">
     <div class="lg-mh"><b>＋ Log a bet</b><button class="lg-x" onclick="window.lgClose()" aria-label="Close">✕</button></div>
@@ -4788,8 +4813,14 @@ function renderLegs(){
     <input placeholder="price" value="${esc(l.price_raw)}" aria-label="Leg price" oninput="window.lgLegPrice(${i},this.value)"><button class="lg-x" onclick="window.lgLegDel(${i})" aria-label="Remove leg">✕</button></div>`).join('')}</div>
     <div class="lg-sm" style="margin-top:4px">${M.type==='OTHER'&&!M.multi?'Pick the multiple type below (CUSTOM for anything else).':M.multi==='CUSTOM'&&M.type==='OTHER'?'Custom: add the horses (optional) and type the total price — settled by hand.':need?`${M.legs.length} / ${need} selections${M.legs.length<need?` — add ${need-M.legs.length} more`:' ✔'}`:M.legs.length<2?`Add ${M.legs.length?'at least one more horse':'2+ horses'} — each pick adds a leg (one per race).`:`${M.legs.length}-fold · leg prices optional — price = leg prices multiplied, or type the acca odds (e.g. a boost) in Price`}</div>`;
 }
-// typing in the Price box on an ACCA = your own acca odds (boost); clearing it goes back to leg prices × 
-window.lgPriceTyped=()=>{if(M&&M.type==='ACCA')M.accaTyped=!!document.getElementById('lgPrice').value.trim();};
+// typing in the Price box on an ACCA = your own acca odds (boost); once touched the box is never refilled — empty = leg prices ×
+window.lgPriceTyped=()=>{if(M&&M.type==='ACCA')M.accaTyped=true;};
+const legsProduct=()=>{const ps=M.legs.map(l=>parsePrice(l.price_raw));return M.legs.length>=2&&ps.every(Boolean)?ps.reduce((a,b)=>a*b,1):0;};
+// each-way terms: bookmaker default from field size, overridable in the modal (⅓/¼/⅕ odds, 2–8 places)
+const ewTerms=c=>{const t=placeTerms(c.fs,c.hcp);return{ew:t.ew,places:M.ewPl||t.places,frac:M.ewFr||t.frac,defPl:t.places,defFr:t.frac};};
+const fracLbl=f=>Math.abs(f-1/3)<0.001?'⅓':Math.abs(f-0.25)<0.001?'¼':Math.abs(f-0.2)<0.001?'⅕':Math.abs(f-1/6)<0.001?'⅙':(+f).toFixed(2);
+window.lgEwFr=v=>{M.ewFr=+v||null;window.lgUpd();};
+window.lgEwPl=v=>{M.ewPl=parseInt(v)||null;window.lgUpd();};
 window.lgLegPrice=(i,v)=>{if(M&&M.legs[i]){M.legs[i].price_raw=v;window.lgUpd();}};
 window.lgLegDel=i=>{M.legs.splice(i,1);renderLegs();window.lgUpd();};
 window.lgPick=i=>{const r=window._lgAc[i];window._lgAc=[];document.getElementById('lgAc').style.display='none';
@@ -4798,7 +4829,7 @@ window.lgPick=i=>{const r=window._lgAc[i];window._lgAc=[];document.getElementByI
     else if(fixedMulti()&&M.legs.length>=d.n)toast(`${M.multi} takes ${d.n} horses — remove one first`);
     else M.legs.push(legFrom(r.vk,r.ri,r.name));
     renderLegs();window.lgUpd();h.focus();return;}
-  M.c=ctxFor(r.vk,r.ri,r.name);document.getElementById('lgHorse').value=r.name;if(M.c&&M.c.price)document.getElementById('lgPrice').value=M.c.price.toFixed(2);window.lgUpd();};
+  M.c=ctxFor(r.vk,r.ri,r.name);M.ewPl=M.ewFr=null;document.getElementById('lgHorse').value=r.name;if(M.c&&M.c.price)document.getElementById('lgPrice').value=M.c.price.toFixed(2);window.lgUpd();};
 window.lgType=t=>{
   const was=multiMode(),to=t==='ACCA'||t==='OTHER';
   if(to&&!was&&M.c){M.legs=[legFrom(M.c.vk,M.c.ri,M.c.r.name)];M.c=null;document.getElementById('lgHorse').value='';document.getElementById('lgPrice').value='';}
@@ -4812,8 +4843,8 @@ const stakeU=()=>{const v=+(document.getElementById('lgStake')||{}).value||0;ret
 function modalPayout(pr){
   const su=stakeU(),unit=S().unit,g=x=>'£'+(x*unit).toFixed(2);if(!su)return null;
   const d=curDef();
-  if(d&&d.k==='ACCA'){if(M.legs.length<2||!pr)return null;
-    return{total:su,max:su*pr,rows:[],note:`${M.legs.length}-fold @ ${pr.toFixed(2)}${M.accaTyped?' (your acca odds)':''}`};}
+  if(d&&d.k==='ACCA'){const own=!!pr;pr=pr||legsProduct();if(M.legs.length<2||!pr)return null;
+    return{total:su,max:su*pr,rows:[],note:`${M.legs.length}-fold @ ${pr.toFixed(2)}${own&&M.accaTyped?' (your acca odds)':''}`};}
   if(d){
     const legs=M.legs.map(l=>({...l,price:parsePrice(l.price_raw)}));
     if(legs.length!==d.n||!legs.every(l=>l.price))return null;
@@ -4827,23 +4858,25 @@ function modalPayout(pr){
   }
   if(!pr)return null;
   const c=M.c;
-  if(M.type==='EW'&&c){const t=placeTerms(c.fs,c.hcp);if(!t.ew)return null;const h=su/2,pl=h*(1+(pr-1)*t.frac);
-    return{total:su,max:h*pr+pl,rows:[['Wins',g(h*pr+pl)],[`Places only (top ${t.places}, ${t.frac===0.25?'¼':'⅕'} odds)`,g(pl)]],note:`${g(h)} win + ${g(h)} place`};}
+  if(M.type==='EW'&&c){const t=ewTerms(c);if(!t.ew)return null;const h=su/2,pl=h*(1+(pr-1)*t.frac);
+    return{total:su,max:h*pr+pl,rows:[['Wins',g(h*pr+pl)],[`Places only (top ${t.places}, ${fracLbl(t.frac)} odds)`,g(pl)]],note:`${g(h)} win + ${g(h)} place`};}
   return{total:su,max:su*pr,rows:[],note:M.type==='WIN'?'If it wins':M.type==='PLACE'?'If it places':M.type==='TOP N'?`If it finishes in the top ${M.places||3}`:'At the price entered'};
 }
 window.lgUpd=()=>{
   if(!M)return;
   const fx=fixedMulti(),pEl=document.getElementById('lgPrice');
-  if(M.type==='ACCA'&&!M.accaTyped){const ps=M.legs.map(l=>parsePrice(l.price_raw));pEl.value=M.legs.length>=2&&ps.every(Boolean)?ps.reduce((a,b)=>a*b,1).toFixed(2):'';}
+  if(M.type==='ACCA'&&!M.accaTyped){const lp=legsProduct();pEl.value=lp?lp.toFixed(2):'';}
   if(fx)pEl.value='';
-  pEl.readOnly=fx;pEl.placeholder=fx?'from leg prices':M.type==='ACCA'?'acca odds e.g. 12/1':'e.g. 7/4';
+  const lp=M.type==='ACCA'?legsProduct():0;
+  pEl.readOnly=fx;pEl.placeholder=fx?'from leg prices':M.type==='ACCA'?(lp?`legs × = ${lp.toFixed(2)}`:'acca odds e.g. 12/1'):'e.g. 7/4';
   document.getElementById('lgStakeLbl').textContent=fx?'Stake per bet':'Stake';
   const c=M.c,su=stakeU(),pr=parsePrice(pEl.value),unit=S().unit;
   const sv=+document.getElementById('lgStake').value||0;
   document.getElementById('lgRace').innerHTML=c?`${esc(c.race.course)} ${esc(c.race.time)} · <b class="rc-eng ${c.em?'rc-eng-em':'rc-eng-px'}">${c.em?'☘ '+emeraldLabel():engineLabel()}</b>${c.cat?` <b class="fit-badge" style="background:#ede9fe;color:#6d28d9">${c.cat}</b>`:''}${c.seg==='golden'?' <b class="fit-badge" style="background:#fef3c7;color:#92400e">⭐ Golden</b>':''} · ${c.fs} runners${c.fit==='u'?' · <span class="fit-badge fit-u">❌ unsuited</span>':''}`:'';
   const pt=c?placeTerms(c.fs,c.hcp):null;
   if(c&&(M.type==='EW'||M.type==='PLACE'))M.places=pt.places;
-  document.getElementById('lgPlaces').innerHTML=M.type==='EW'?(pt&&pt.ew?`Each-way terms: ${pt.frac===0.25?'¼':'⅕'} odds, ${pt.places} places`:'<span style="color:#dc2626">No each-way on 4 runners or fewer</span>'):
+  const et=c?ewTerms(c):null;
+  document.getElementById('lgPlaces').innerHTML=M.type==='EW'?(!c?'Pick a horse to set each-way terms':et.ew?`Each-way terms: <select aria-label="Place odds fraction" onchange="window.lgEwFr(this.value)">${[1/3,0.25,0.2].map(f=>`<option value="${f}" ${Math.abs(f-et.frac)<0.001?'selected':''}>${fracLbl(f)} odds</option>`).join('')}</select> · <select aria-label="Places paid" onchange="window.lgEwPl(this.value)">${[2,3,4,5,6,7,8].map(n=>`<option value="${n}" ${n===et.places?'selected':''}>${n} places</option>`).join('')}</select> <span class="lg-sm">(standard ${fracLbl(et.defFr)}, ${et.defPl})</span>`:'<span style="color:#dc2626">No each-way on 4 runners or fewer</span>'):
     M.type==='TOP N'?`Pays if the horse finishes in the top <input id="lgN" type="number" min="1" max="10" value="${M.places||3}" style="width:52px" oninput="window.lgSetN(this.value)">`:M.type==='PLACE'&&pt?`Place: ${pt.places} places`:M.type==='ACCA'?'Settles automatically when every leg has a result (any loser = lost; a non-runner leg is void). Or settle by hand in the Ledger.':fx?'Settles automatically when every leg has a result: each winning combination pays; a non-runner leg is void (×1.0).':['LENGTH','OTHER'].includes(M.type)?'Settled by hand in the Ledger.':'';
   document.getElementById('lgConv').innerHTML=sv?(M.unitMode==='gbp'?`£${sv.toFixed(2)} = <b>${su.toFixed(2)}u</b> <span class="lg-sm">(1u = £${unit})</span>`:`${sv}u = <b>£${(sv*unit).toFixed(2)}</b>`)+(M.type==='EW'?` <span class="lg-sm">(half win · half place)</span>`:fx?' <span class="lg-sm">per bet</span>':''):'';
   document.getElementById('lgPriceConv').textContent=pr?`decimal ${pr.toFixed(2)} · implied ${(100/pr).toFixed(1)}%`:'';
@@ -4873,15 +4906,15 @@ window.lgSave=async()=>{
   const c=M&&M.c,su=stakeU(),prRaw=(document.getElementById('lgPrice')||{}).value,pr=parsePrice(prRaw),horse=c?c.r.name:document.getElementById('lgHorse').value.trim();
   if(!horse||!su||!pr){document.getElementById('lgSum').innerHTML='<span style="color:#dc2626">Pick a horse and enter a stake and price.</span>';return;}
   if(M.type==='EW'&&c&&!placeTerms(c.fs,c.hcp).ew){document.getElementById('lgSum').innerHTML='<span style="color:#dc2626">No each-way on 4 runners or fewer.</span>';return;}
-  const pt=c?placeTerms(c.fs,c.hcp):{places:0,frac:0};
+  const pt=c?(M.type==='EW'?ewTerms(c):placeTerms(c.fs,c.hcp)):{places:0,frac:0};
   const b={created:new Date().toISOString().slice(0,19),date:today(),venue:c?c.race.course:'',time:c?c.race.time:'',horse,engine:c?c.eng:'prixm',
     category:c&&c.cat||null,segment:c&&c.seg||null,bet_type:M.type,stake_u:Math.round(su*100)/100,unit_gbp:S().unit,price:pr,price_raw:prRaw,
     bookmaker:document.getElementById('lgBook').value,note:document.getElementById('lgNote').value||null,suggested_u:M.sug!=null?M.sug:null,
-    places:M.type==='EW'||M.type==='PLACE'?pt.places:M.type==='TOP N'?(M.places||3):null,ew_fraction:M.type==='EW'?pt.frac:null,field_size:c?c.fs:null,result:'O',source:'app'};
+    places:M.type==='EW'||M.type==='PLACE'?pt.places:M.type==='TOP N'?(M.places||3):null,ew_fraction:M.type==='EW'?Math.round(pt.frac*10000)/10000:null,field_size:c?c.fs:null,result:'O',source:'app'};
   await saveBet(b);
   try{if(c&&!isBetted(horse,c.race.time||'',c.race.course||'')){const l=loadBetList();l.push({horse,time:c.race.time,venue:c.race.course,score:c.r.score,betType:M.type==='TOP N'?'TOP '+(M.places||3):M.type});saveBetList(l);renderBetPanel();}}catch(e){}
   const msg=`Logged ${horse}: £${(b.stake_u*b.unit_gbp).toFixed(2)} @ ${pr.toFixed(2)} — returns up to £${(potReturnU(b)*b.unit_gbp).toFixed(2)}`;
-  window.lgClose();toast(msg);try{renderRaceCards();}catch(e){}
+  window.lgClose();toast(isLocalId(b.id)?msg+' · ⚠ DB server off — kept in this browser, moves to the DB when the server is on':msg);try{renderRaceCards();}catch(e){}
 };
 // ACCA, Trixie/Patent/… and CUSTOM (OTHER) — one bet row, legs as JSON, stake_u = total stake
 async function saveMulti(){
@@ -4889,7 +4922,7 @@ async function saveMulti(){
   const custom=M.type==='OTHER'&&!fixedMulti(),d=curDef(),ps=M.legs.map(l=>parsePrice(l.price_raw)),su=stakeU();
   if(M.type==='ACCA'&&M.legs.length<2)return err('An acca needs at least 2 horses.');
   if(fixedMulti()&&M.legs.length!==d.n)return err(`${M.multi} needs exactly ${d.n} horses.`);
-  const accaPr=M.type==='ACCA'?parsePrice(document.getElementById('lgPrice').value):0;
+  const accaPr=M.type==='ACCA'?(parsePrice(document.getElementById('lgPrice').value)||legsProduct()):0;
   if(M.type==='ACCA'&&!accaPr)return err('Enter the acca odds in Price (or a price for every leg).');
   if(!custom&&M.type!=='ACCA'&&!ps.every(Boolean))return err('Enter a price for every leg.');
   if(!su)return err('Enter a stake.');
@@ -4902,14 +4935,14 @@ async function saveMulti(){
   const type=custom?'OTHER':M.type==='ACCA'?'ACCA':M.multi+(M.ew?' EW':'');
   const b={created:new Date().toISOString().slice(0,19),date:today(),venue:srt[0]?srt[0].venue:'',time:srt[0]?srt[0].time:'',
     horse:legs.length?legs.map(l=>l.horse).join(' / '):typed,engine:legs.length&&legs.every(l=>l.engine==='emerald')?'emerald':'prixm',category:null,segment:null,
-    bet_type:type,stake_u:Math.round(total*100)/100,unit_gbp:S().unit,price:null,price_raw:custom||(M.type==='ACCA'&&M.accaTyped)?document.getElementById('lgPrice').value:legs.map(l=>l.price).join(' × '),
+    bet_type:type,stake_u:Math.round(total*100)/100,unit_gbp:S().unit,price:null,price_raw:custom||(M.type==='ACCA'&&M.accaTyped&&document.getElementById('lgPrice').value.trim())?document.getElementById('lgPrice').value:legs.map(l=>l.price).join(' × '),
     bookmaker:document.getElementById('lgBook').value,note:document.getElementById('lgNote').value||null,
     suggested_u:null,places:null,ew_fraction:null,field_size:null,legs:legs.length?JSON.stringify(legs):null,result:'O',source:'app'};
   // price = all-win return ÷ stake, so a manual "Won" settles at the full return
   b.price=custom?manualPr:M.type==='ACCA'?Math.round(accaPr*10000)/10000:Math.round(potReturnU(b)/b.stake_u*10000)/10000;
   await saveBet(b);
   const msg=`Logged ${type==='ACCA'?legs.length+'-fold acca':type}: £${(b.stake_u*b.unit_gbp).toFixed(2)} — returns up to £${(potReturnU(b)*b.unit_gbp).toFixed(2)}`;
-  window.lgClose();toast(msg);try{renderRaceCards();}catch(e){}
+  window.lgClose();toast(isLocalId(b.id)?msg+' · ⚠ DB server off — kept in this browser, moves to the DB when the server is on':msg);try{renderRaceCards();}catch(e){}
 }
 function toast(t){let el=document.getElementById('lgToast');if(!el){el=document.createElement('div');el.id='lgToast';el.className='lg-toast';document.body.appendChild(el);}el.textContent=t;el.classList.add('on');setTimeout(()=>el.classList.remove('on'),2400);}
 
@@ -4981,8 +5014,21 @@ function render(){
     h+=`</div><div>`;
     // curve
     let c=0;const pts=[0,...st.slice().sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time)).map(b=>c+=pnlOf(b))];
-    const mn=Math.min(...pts,0),mx=Math.max(...pts,0.5),W=380,Hh=140,X=i=>10+i*(W/Math.max(1,pts.length-1)),Y=v=>10+(mx-v)/((mx-mn)||1)*Hh;
-    h+=card('Bankroll curve (units)',pts.length>1?`<svg viewBox="0 0 400 170" style="width:100%;height:auto" role="img" aria-label="Cumulative profit in units"><line x1="10" x2="${W+10}" y1="${Y(0)}" y2="${Y(0)}" stroke="#d1d5db" stroke-dasharray="4 4"/><polyline fill="none" stroke="#15803d" stroke-width="2.5" points="${pts.map((v,i)=>X(i)+','+Y(v)).join(' ')}"/>${pts.map((v,i)=>`<circle cx="${X(i)}" cy="${Y(v)}" r="2.5" fill="${i&&v<pts[i-1]?'#dc2626':'#15803d'}"/>`).join('')}<text x="${W+8}" y="${Y(pts[pts.length-1])-6}" font-size="11" text-anchor="end" font-weight="700" fill="${pts[pts.length-1]>=0?'#15803d':'#dc2626'}">${uf(pts[pts.length-1])}</text></svg>`:'<div class="lg-sm">Settle a bet to start the curve.</div>');
+    // bankroll curve: padded plot area (labels never spill into the card title), y-axis +max / 0 / −min, end badge clamped inside
+    const dkT=document.documentElement.dataset.theme==='nothing',cUp=dkT?'#9fd6ae':'#15803d',cDn=dkT?'#e59a8c':'#dc2626',cGrid=dkT?'#2a2a2a':'#e5e0d8';
+    const mn=Math.min(...pts,0),mx=Math.max(...pts,0.5),VW=430,VH=200,PL=60,PR=58,PT=16,PB=24,W=VW-PL-PR,Hh=VH-PT-PB;
+    const X=i=>PL+i*(W/Math.max(1,pts.length-1)),Y=v=>PT+(mx-v)/((mx-mn)||1)*Hh,last=pts[pts.length-1],lc=last>=0?cUp:cDn;
+    const yTicks=[...new Set([mx,0,mn].map(v=>Math.round(v*100)/100))];
+    const curve=pts.length>1?`<svg viewBox="0 0 ${VW} ${VH}" style="width:100%;height:auto;display:block;overflow:hidden" role="img" aria-label="Cumulative profit in units: ${uf(last)} after ${pts.length-1} bets">
+      ${yTicks.map(v=>`<line x1="${PL}" x2="${PL+W}" y1="${Y(v)}" y2="${Y(v)}" stroke="${v===0?(dkT?'#5a564f':'#9ca3af'):cGrid}" stroke-width="1" ${v===0?'stroke-dasharray="4 4"':''}/><text x="${PL-6}" y="${Y(v)+4}" font-size="12" text-anchor="end" font-weight="${v===0?700:500}" style="fill:${v>0?cUp:v<0?cDn:'var(--muted)'}">${v===0?'0u':uf(v)}</text>`).join('')}
+      <polygon points="${X(0)},${Y(0)} ${pts.map((v,i)=>X(i)+','+Y(v)).join(' ')} ${X(pts.length-1)},${Y(0)}" fill="${lc}" opacity=".10"/>
+      <polyline fill="none" stroke="${lc}" stroke-width="2.5" stroke-linejoin="round" points="${pts.map((v,i)=>X(i)+','+Y(v)).join(' ')}"/>
+      ${pts.map((v,i)=>i?`<circle cx="${X(i)}" cy="${Y(v)}" r="3.2" fill="${v<pts[i-1]?cDn:cUp}"><title>Bet ${i}: ${uf(v-pts[i-1])} → ${uf(v)}</title></circle>`:'').join('')}
+      <rect x="${PL+W+6}" y="${Math.min(Math.max(Y(last)-11,2),VH-PB-20)}" width="${PR-8}" height="22" rx="${dkT?0:6}" fill="${lc}"/>
+      <text x="${PL+W+6+(PR-8)/2}" y="${Math.min(Math.max(Y(last)-11,2),VH-PB-20)+15.5}" font-size="13" font-weight="800" text-anchor="middle" fill="${dkT?'#0a0a0a':'#fff'}">${uf(last)}</text>
+      <text x="${PL}" y="${VH-6}" font-size="10.5" style="fill:var(--muted)">bet 1</text><text x="${PL+W}" y="${VH-6}" font-size="10.5" text-anchor="end" style="fill:var(--muted)">bet ${pts.length-1}</text>
+    </svg>`:'';
+    h+=card(`Bankroll curve (units)${pts.length>1?` <span style="float:right;text-transform:none;letter-spacing:0;font-size:13px;font-weight:800;color:${lc}">${uf(last)}</span>`:''}`,pts.length>1?`<div style="clear:both">${curve}</div>`:'<div class="lg-sm">Settle a bet to start the curve.</div>');
     const grp=(k,f)=>{const g={};st.forEach(b=>{(g[f(b)]=g[f(b)]||[]).push(b);});return Object.entries(g).map(([n,bs])=>{const s=bs.reduce((a,b)=>a+(+b.stake_u||0),0),p=bs.reduce((a,b)=>a+pnlOf(b),0);return [`${k}: <b>${esc(n)}</b>`,bs.length,`<b style="color:${p>=0?'#15803d':'#dc2626'}">${uf(p)}</b>`,s?(p/s*100).toFixed(0)+'%':'—'];});};
     h+=card('Breakdown',st.length?tbl(['Group','Bets','P&L','ROI'],[...grp('Engine',b=>b.engine==='emerald'?'☘ Emerald':'Prixm'),...grp('Type',b=>b.bet_type),...grp('Stake',b=>followed(b)?'followed suggestion':'own call')]):'<div class="lg-sm">—</div>');
     const g=segSR('golden');
@@ -4997,7 +5043,7 @@ function render(){
   }catch(e){el.innerHTML=`<div style="padding:20px;color:#dc2626;background:#fef2f2;border:1px solid #fecaca;border-radius:8px"><b>Ledger error:</b> ${esc(e.message)}</div>`;console.error('Ledger',e);}
 }
 const followed=b=>b.suggested_u>0&&Math.abs((+b.suggested_u)-(+b.stake_u))<0.01;
-const tbl=(head,rows)=>`<div style="overflow-x:auto"><table class="lg-tbl"><tr>${head.map(x=>`<th>${x}</th>`).join('')}</tr>${rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</table></div>`;
+const tbl=(head,rows)=>`<div style="overflow-x:auto;clear:both"><table class="lg-tbl"><tr>${head.map(x=>`<th>${x}</th>`).join('')}</tr>${rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</table></div>`;
 window.lgSet=(k,v)=>{const s=S();const n=parseFloat(v);s[k]=k==='mode'?v:(isNaN(n)?DEF[k]:n);saveS(s);refreshChrome();render();};
 window.lgFilter=(k,v)=>{F[k]=v;render();};
 window.lgSettle=async(id,res)=>{const b=LG.bets.find(x=>x.id===id);if(!b)return;const pnl=res==='W'?b.stake_u*(b.price-1):res==='L'?-b.stake_u:0;Object.assign(b,{result:res,pnl_u:Math.round(pnl*10000)/10000,settled_at:new Date().toISOString().slice(0,19)});await saveBet(b);};
@@ -6364,9 +6410,9 @@ function rejectUnifiedCalibration(){
 }
 
 /* ==================== VENUE EXCLUSION ==================== */
-const EXCLUDED_VENUES=['happy valley','sha tin','meydan','abu dhabi','bahrain','hanshin','chukyo','fukushima','nakayama','tokyo','niigata','kyoto','rosehill','flemington','morphettville','eagle farm','doomben','hawkesbury','ascot aus','gold coast','northam','scone','sunshine coast','caulfield','turffontein','scottsville','greyville','oaklawn park','gulfstream park','keeneland','aqueduct','santa anita','del mar','belmont park','belmont at the big a','churchill downs','laurel park','lone star park','percy warner','middleburg','great meadow','woodbine','saratoga','hipodromo','ciudad jardim','monterrico','gavea','palermo','san isidro','saint cloud','chantilly','auteuil','compiegne','toulouse','bordeaux','les landes','nantes','vichy','le lion','la teste de buch','san siro','munich','dusseldorf','krefeld','hoppegarten','dortmund','baden baden','cologne','koln','firenze','randwick','free to air','scoop','worldwide stakes','world pool','bro park'];
-// Longchamp unhidden from display (2026-07-13) — but still excluded from all picks/flags/analysis via isLongchamp() below.
-// Deauville unhidden from display (2026-08-16) — but still excluded from all picks/flags/analysis via isDeauville() below.
+const EXCLUDED_VENUES=['happy valley','sha tin','meydan','abu dhabi','bahrain','hanshin','chukyo','fukushima','nakayama','tokyo','niigata','kyoto','rosehill','flemington','morphettville','eagle farm','doomben','hawkesbury','ascot aus','gold coast','northam','scone','sunshine coast','caulfield','turffontein','scottsville','greyville','oaklawn park','gulfstream park','keeneland','aqueduct','santa anita','del mar','belmont park','belmont at the big a','churchill downs','laurel park','lone star park','percy warner','middleburg','great meadow','woodbine','saratoga','hipodromo','ciudad jardim','monterrico','gavea','palermo','san isidro','san siro','munich','dusseldorf','krefeld','hoppegarten','dortmund','baden baden','cologne','koln','firenze','randwick','free to air','scoop','worldwide stakes','world pool','bro park'];
+// French racing unhidden from display (Longchamp 2026-07-13, Deauville 2026-08-16, all of France 2026-10-04) —
+// but still excluded from all picks/flags/analysis via isFrance() below.
 function filterExcludedVenues(data){
   if(!data||!data.venues) return data;
   const filtered={...data,venues:{}};
@@ -7994,8 +8040,7 @@ function getTop10Picks(data,engine){
     const vName=(venue.course||vk).toLowerCase().replace(/-/g,' ');
     if(EXCLUDED_VENUES.some(ex=>vName.includes(ex))) return;
     if(em!==isIreland(venue.course||vk)) return; // Prixm = UK only; ☘ Emerald = Irish only
-    if(isLongchamp(venue.course||vk)) return; // display only — excluded from picks/analysis
-    if(isDeauville(venue.course||vk)) return; // display only — excluded from picks/analysis
+    if(isFrance(venue.course||vk)) return; // display only — excluded from picks/analysis
     venue.races.forEach((race,ri)=>{
       if(!race.runners||!race.runners.length) return;
       const sorted=[...race.runners].sort((a,b)=>b.score-a.score);
@@ -8716,7 +8761,7 @@ function ordinal(n){const s=['th','st','nd','rd'];const v=n%100;return n+(s[(v-2
 function isExcludedVenue(venue){
   if(!venue) return false;
   const v=(venue+'').toLowerCase().replace(/-/g,' ');
-  return EXCLUDED_VENUES.some(ex=>v.includes(ex))||v.includes('longchamp')||v.includes('deauville');
+  return EXCLUDED_VENUES.some(ex=>v.includes(ex))||isFrance(venue);
 }
 function analyzePicksPerformance(picks,hist,dateOverride){
   // Analyze how picks performed: wins, places, factor patterns
@@ -9225,8 +9270,8 @@ function splitEngineHistory(){
   const badge=document.getElementById('dbStatusBadge');
   if(badge&&badge.style.display!=='none'&&emer.length) badge.textContent=badge.textContent.replace(/(\d+) races/,`${uk.length} UK · ☘ ${emer.length} IRE`);
 }
-function isLongchamp(course){return(course||'').toLowerCase().replace(/-/g,' ').includes('longchamp');}
-function isDeauville(course){return(course||'').toLowerCase().replace(/-/g,' ').includes('deauville');}
+// France = display only (race cards / race view / MT / Predict). Never in picks, flags, results or analysis.
+function isFrance(course){const v=(course||'').toLowerCase();if(v.includes('(fr)'))return true;const n=v.replace(/-/g,' ');return['longchamp','deauville','saint cloud','chantilly','auteuil','compiegne','toulouse','bordeaux','les landes','nantes','vichy','le lion','la teste de buch','craon','maisons laffitte','clairefontaine','cagnes','fontainebleau','strasbourg','lyon parilly','salon de provence'].some(t=>n.includes(t));}
 function getRaceBorderColor(r){const ire=isIreland(r.course),hcp=r.handicap||/handicap/i.test(r.race_name||'');if(ire&&hcp)return'#f87171';if(ire)return'#10b981';if(hcp)return'#f59e0b';return'#3b82f6';}
 
 /* ==================== TRACK PROFILE DATABASE (improvement.md Feature 4 → 🗺 Track Explorer) ====================
@@ -9303,8 +9348,7 @@ function renderTrackProfileSection(runner, race){
 
 function getGoldenFlags(race){
   if(isIreland(race.course)) return null;
-  if(isLongchamp(race.course)) return null;
-  if(isDeauville(race.course)) return null;
+  if(isFrance(race.course)) return null;
   if(race.handicap===true||/handicap/i.test(race.race_name||'')) return null;
   if(!race.runners||race.runners.length<2) return null;
   const sorted=[...race.runners].sort((a,b)=>b.score-a.score);
@@ -9351,8 +9395,7 @@ function renderGoldenFlag(gf){
 
 function getSilverFlags(race){
   if(isIreland(race.course)) return null;
-  if(isLongchamp(race.course)) return null;
-  if(isDeauville(race.course)) return null;
+  if(isFrance(race.course)) return null;
   if(race.handicap===true||/handicap/i.test(race.race_name||'')) return null;
   if(!race.runners||race.runners.length<2) return null;
   if(/^standard/i.test(race.going||'')) return null; // AW excluded
@@ -9382,8 +9425,7 @@ function renderSilverFlag(sf){
 
 function getBronzeFlags(race){
   if(isIreland(race.course)) return null;
-  if(isLongchamp(race.course)) return null;
-  if(isDeauville(race.course)) return null;
+  if(isFrance(race.course)) return null;
   if(race.handicap===true||/handicap/i.test(race.race_name||'')) return null;
   if(!race.runners||race.runners.length<2) return null;
   const going=(race.going||'').toLowerCase().replace(/[\s-]+/g,'');
