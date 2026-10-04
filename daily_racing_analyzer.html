@@ -4553,6 +4553,9 @@ function multiPnl(b,runs){
   if(d.k==='ACCA'&&runs.some(r=>r&&!r.non_runner&&r.finish_pos!==1))return['L',-u];
   if(runs.some(r=>!r))return null;
   if(runs.every(r=>r.non_runner))return['V',0];
+  if(d.k==='ACCA'){const nr=runs.some(r=>r.non_runner);
+    if(!nr&&+b.price>0)return['W',u*(+b.price-1)];   // all won → the acca odds you logged (incl. boosts)
+    if(nr&&!legs.every(l=>+l.price>0))return null; } // non-runner but no leg prices → settle by hand
   const wf=i=>runs[i].non_runner?1:runs[i].finish_pos===1?(+legs[i].price||1):0;
   const pf=i=>runs[i].non_runner?1:(runs[i].finish_pos&&legs[i].places&&runs[i].finish_pos<=legs[i].places)?legPlace(legs[i]):0;
   const ret=multiReturn(legs.length,d,u/multiBets(d),wf,pf),pnl=ret-u;
@@ -4561,6 +4564,7 @@ function multiPnl(b,runs){
 // potential return (units) if everything wins / places
 function potReturnU(b){
   const u=+b.stake_u||0,pr=+b.price||0,legs=legsOf(b),d=multiDef(b.bet_type,legs.length);
+  if(d&&d.k==='ACCA'&&pr>0)return u*pr; // acca odds as logged (boosts / no leg prices)
   if(d&&legs.length===d.n)return multiReturn(legs.length,d,u/multiBets(d),i=>+legs[i].price||1,i=>legPlace(legs[i]));
   if(b.bet_type==='EW'){const h=u/2;return h*pr+h*(1+(pr-1)*(+b.ew_fraction||0.2));}
   return u*pr;
@@ -4731,7 +4735,7 @@ function openModal(vk,ri,name,presetU){
       <div class="lg-f"><label id="lgHLbl">Horse (today's runners, both engines)</label><input id="lgHorse" autocomplete="off" placeholder="Start typing…" role="combobox" aria-autocomplete="list" aria-controls="lgAc" oninput="window.lgSearch(this.value)" onkeydown="window.lgKey(event)"><div id="lgAc" class="lg-ac" role="listbox"></div><div id="lgRace" class="lg-sm"></div><div id="lgLegs"></div></div>
       <div class="lg-f"><label>Bet type</label><div class="lg-seg" id="lgType">${TYPES.map(t=>`<button data-t="${t}" class="${t==='WIN'?'on':''}" onclick="window.lgType('${t}')">${t}</button>`).join('')}</div><div id="lgSub"></div><div id="lgPlaces" class="lg-sm"></div></div>
       <div class="lg-row"><div class="lg-f"><label id="lgStakeLbl">Stake</label><div class="lg-stake"><input id="lgStake" type="number" step="0.5" min="0" placeholder="5" oninput="window.lgUpd()"><button data-u="gbp" class="on" onclick="window.lgUnit('gbp')">£</button><button data-u="u" onclick="window.lgUnit('u')">u</button></div><div id="lgConv" class="lg-sm"></div></div>
-        <div class="lg-f"><label>Price (7/4 or 2.75)</label><input id="lgPrice" placeholder="e.g. 7/4" oninput="window.lgUpd()"><div id="lgPriceConv" class="lg-sm"></div></div></div>
+        <div class="lg-f"><label>Price (7/4 or 2.75)</label><input id="lgPrice" placeholder="e.g. 7/4" oninput="window.lgPriceTyped();window.lgUpd()"><div id="lgPriceConv" class="lg-sm"></div></div></div>
       <div class="lg-row"><div class="lg-f"><label>Bookmaker</label><select id="lgBook">${['Bet365','Betfair Exchange','Paddy Power','William Hill','Sky Bet','Betfred','Other'].map(x=>`<option>${x}</option>`).join('')}</select></div>
         <div class="lg-f"><label>Note (optional)</label><input id="lgNote" placeholder="e.g. took early price"></div></div>
       <div id="lgPay"></div><div id="lgAdv"></div></div>
@@ -4782,8 +4786,10 @@ function renderLegs(){
   const d=curDef(),need=fixedMulti()?d.n:0;
   el.innerHTML=`<div class="lg-legs">${M.legs.map((l,i)=>`<div class="lg-leg"><b>${i+1}.</b> <span><b>${esc(l.horse)}</b> <span class="lg-sm">${esc(l.venue)} ${esc(l.time)}${l.em?' · ☘':''}</span>${l.hcp?' <span class="fit-badge fit-q" title="Handicap race">⚠ hcp</span>':''}</span>
     <input placeholder="price" value="${esc(l.price_raw)}" aria-label="Leg price" oninput="window.lgLegPrice(${i},this.value)"><button class="lg-x" onclick="window.lgLegDel(${i})" aria-label="Remove leg">✕</button></div>`).join('')}</div>
-    <div class="lg-sm" style="margin-top:4px">${M.type==='OTHER'&&!M.multi?'Pick the multiple type below (CUSTOM for anything else).':M.multi==='CUSTOM'&&M.type==='OTHER'?'Custom: add the horses (optional) and type the total price — settled by hand.':need?`${M.legs.length} / ${need} selections${M.legs.length<need?` — add ${need-M.legs.length} more`:' ✔'}`:M.legs.length<2?`Add ${M.legs.length?'at least one more horse':'2+ horses'} — each pick adds a leg (one per race).`:`${M.legs.length}-fold · price = all leg prices multiplied`}</div>`;
+    <div class="lg-sm" style="margin-top:4px">${M.type==='OTHER'&&!M.multi?'Pick the multiple type below (CUSTOM for anything else).':M.multi==='CUSTOM'&&M.type==='OTHER'?'Custom: add the horses (optional) and type the total price — settled by hand.':need?`${M.legs.length} / ${need} selections${M.legs.length<need?` — add ${need-M.legs.length} more`:' ✔'}`:M.legs.length<2?`Add ${M.legs.length?'at least one more horse':'2+ horses'} — each pick adds a leg (one per race).`:`${M.legs.length}-fold · leg prices optional — price = leg prices multiplied, or type the acca odds (e.g. a boost) in Price`}</div>`;
 }
+// typing in the Price box on an ACCA = your own acca odds (boost); clearing it goes back to leg prices × 
+window.lgPriceTyped=()=>{if(M&&M.type==='ACCA')M.accaTyped=!!document.getElementById('lgPrice').value.trim();};
 window.lgLegPrice=(i,v)=>{if(M&&M.legs[i]){M.legs[i].price_raw=v;window.lgUpd();}};
 window.lgLegDel=i=>{M.legs.splice(i,1);renderLegs();window.lgUpd();};
 window.lgPick=i=>{const r=window._lgAc[i];window._lgAc=[];document.getElementById('lgAc').style.display='none';
@@ -4797,7 +4803,7 @@ window.lgType=t=>{
   const was=multiMode(),to=t==='ACCA'||t==='OTHER';
   if(to&&!was&&M.c){M.legs=[legFrom(M.c.vk,M.c.ri,M.c.r.name)];M.c=null;document.getElementById('lgHorse').value='';document.getElementById('lgPrice').value='';}
   if(!to&&was&&M.legs.length){const l=M.legs[0];M.c=ctxFor(l.vk,l.ri,l.horse);document.getElementById('lgHorse').value=l.horse;document.getElementById('lgPrice').value=l.price_raw||'';M.legs=[];}
-  M.type=t;if(t!=='OTHER'){M.multi=null;M.ew=false;}
+  M.type=t;M.accaTyped=false;if(t!=='OTHER'){M.multi=null;M.ew=false;}
   renderSub();renderLegs();
   document.querySelectorAll('#lgType button').forEach(b=>b.classList.toggle('on',b.dataset.t===t));window.lgUpd();};
 window.lgUnit=u=>{const inp=document.getElementById('lgStake');const v=+inp.value,unit=S().unit;if(v&&u!==M.unitMode)inp.value=u==='u'?+(v/unit).toFixed(2):+(v*unit).toFixed(2);M.unitMode=u;document.querySelectorAll('.lg-stake button').forEach(b=>b.classList.toggle('on',b.dataset.u===u));window.lgUpd();};
@@ -4806,6 +4812,8 @@ const stakeU=()=>{const v=+(document.getElementById('lgStake')||{}).value||0;ret
 function modalPayout(pr){
   const su=stakeU(),unit=S().unit,g=x=>'£'+(x*unit).toFixed(2);if(!su)return null;
   const d=curDef();
+  if(d&&d.k==='ACCA'){if(M.legs.length<2||!pr)return null;
+    return{total:su,max:su*pr,rows:[],note:`${M.legs.length}-fold @ ${pr.toFixed(2)}${M.accaTyped?' (your acca odds)':''}`};}
   if(d){
     const legs=M.legs.map(l=>({...l,price:parsePrice(l.price_raw)}));
     if(legs.length!==d.n||!legs.every(l=>l.price))return null;
@@ -4826,9 +4834,9 @@ function modalPayout(pr){
 window.lgUpd=()=>{
   if(!M)return;
   const fx=fixedMulti(),pEl=document.getElementById('lgPrice');
-  if(M.type==='ACCA'){const ps=M.legs.map(l=>parsePrice(l.price_raw));pEl.value=M.legs.length>=2&&ps.every(Boolean)?ps.reduce((a,b)=>a*b,1).toFixed(2):'';}
+  if(M.type==='ACCA'&&!M.accaTyped){const ps=M.legs.map(l=>parsePrice(l.price_raw));pEl.value=M.legs.length>=2&&ps.every(Boolean)?ps.reduce((a,b)=>a*b,1).toFixed(2):'';}
   if(fx)pEl.value='';
-  pEl.readOnly=M.type==='ACCA'||fx;pEl.placeholder=fx?'from leg prices':'e.g. 7/4';
+  pEl.readOnly=fx;pEl.placeholder=fx?'from leg prices':M.type==='ACCA'?'acca odds e.g. 12/1':'e.g. 7/4';
   document.getElementById('lgStakeLbl').textContent=fx?'Stake per bet':'Stake';
   const c=M.c,su=stakeU(),pr=parsePrice(pEl.value),unit=S().unit;
   const sv=+document.getElementById('lgStake').value||0;
@@ -4881,7 +4889,9 @@ async function saveMulti(){
   const custom=M.type==='OTHER'&&!fixedMulti(),d=curDef(),ps=M.legs.map(l=>parsePrice(l.price_raw)),su=stakeU();
   if(M.type==='ACCA'&&M.legs.length<2)return err('An acca needs at least 2 horses.');
   if(fixedMulti()&&M.legs.length!==d.n)return err(`${M.multi} needs exactly ${d.n} horses.`);
-  if(!custom&&!ps.every(Boolean))return err('Enter a price for every leg.');
+  const accaPr=M.type==='ACCA'?parsePrice(document.getElementById('lgPrice').value):0;
+  if(M.type==='ACCA'&&!accaPr)return err('Enter the acca odds in Price (or a price for every leg).');
+  if(!custom&&M.type!=='ACCA'&&!ps.every(Boolean))return err('Enter a price for every leg.');
   if(!su)return err('Enter a stake.');
   const legs=M.legs.map((l,i)=>({venue:l.venue,time:l.time,horse:l.horse,price:ps[i]||null,engine:l.em?'emerald':'prixm',places:l.places,frac:l.frac}));
   const typed=document.getElementById('lgHorse').value.trim(),manualPr=parsePrice(document.getElementById('lgPrice').value);
@@ -4892,11 +4902,11 @@ async function saveMulti(){
   const type=custom?'OTHER':M.type==='ACCA'?'ACCA':M.multi+(M.ew?' EW':'');
   const b={created:new Date().toISOString().slice(0,19),date:today(),venue:srt[0]?srt[0].venue:'',time:srt[0]?srt[0].time:'',
     horse:legs.length?legs.map(l=>l.horse).join(' / '):typed,engine:legs.length&&legs.every(l=>l.engine==='emerald')?'emerald':'prixm',category:null,segment:null,
-    bet_type:type,stake_u:Math.round(total*100)/100,unit_gbp:S().unit,price:null,price_raw:custom?document.getElementById('lgPrice').value:legs.map(l=>l.price).join(' × '),
+    bet_type:type,stake_u:Math.round(total*100)/100,unit_gbp:S().unit,price:null,price_raw:custom||(M.type==='ACCA'&&M.accaTyped)?document.getElementById('lgPrice').value:legs.map(l=>l.price).join(' × '),
     bookmaker:document.getElementById('lgBook').value,note:document.getElementById('lgNote').value||null,
     suggested_u:null,places:null,ew_fraction:null,field_size:null,legs:legs.length?JSON.stringify(legs):null,result:'O',source:'app'};
   // price = all-win return ÷ stake, so a manual "Won" settles at the full return
-  b.price=custom?manualPr:Math.round(potReturnU(b)/b.stake_u*10000)/10000;
+  b.price=custom?manualPr:M.type==='ACCA'?Math.round(accaPr*10000)/10000:Math.round(potReturnU(b)/b.stake_u*10000)/10000;
   await saveBet(b);
   const msg=`Logged ${type==='ACCA'?legs.length+'-fold acca':type}: £${(b.stake_u*b.unit_gbp).toFixed(2)} — returns up to £${(potReturnU(b)*b.unit_gbp).toFixed(2)}`;
   window.lgClose();toast(msg);try{renderRaceCards();}catch(e){}
@@ -4963,7 +4973,9 @@ function render(){
     h+=card('Open bets',openRows.length?tbl(['Bet','Type','Stake','Price','To return','Settle',''],openRows):'<div class="lg-sm">No open bets.</div>');
     const fl=st.filter(b=>(!F.eng||b.engine===F.eng)&&(!F.type||b.bet_type===F.type)&&(!F.sug||(F.sug==='f'?followed(b):!followed(b)))).sort((a,b)=>(b.date+b.time).localeCompare(a.date+a.time));
     const sel=(k,opts)=>`<select onchange="window.lgFilter('${k}',this.value)" style="padding:3px 6px;border:1px solid var(--border);border-radius:6px;font-size:11.5px">${opts.map(([v,l])=>`<option value="${v}" ${F[k]===v?'selected':''}>${l}</option>`).join('')}</select>`;
-    h+=card(`History <span style="float:right;display:flex;gap:6px;text-transform:none;letter-spacing:0">${sel('eng',[['','All engines'],['prixm','Prixm'],['emerald','☘ Emerald']])}${sel('type',[['','All types'],...[...new Set([...TYPES,...LG.bets.map(b=>b.bet_type).filter(Boolean)])].map(t=>[t,t])])}${sel('sug',[['','All bets'],['f','Followed suggestion'],['o','Own call']])}</span>`,
+    // History spans the full width under both columns (was squeezed into the left column)
+    let histCard='';
+    histCard+=card(`History <span style="float:right;display:flex;gap:6px;text-transform:none;letter-spacing:0">${sel('eng',[['','All engines'],['prixm','Prixm'],['emerald','☘ Emerald']])}${sel('type',[['','All types'],...[...new Set([...TYPES,...LG.bets.map(b=>b.bet_type).filter(Boolean)])].map(t=>[t,t])])}${sel('sug',[['','All bets'],['f','Followed suggestion'],['o','Own call']])}</span>`,
       fl.length?tbl(['Date','Horse','Engine','Type','Stake','Price','Result','P&L','Sugg.'],fl.slice(0,200).map(b=>[esc(b.date.slice(5)),`<b>${esc(b.horse)}</b><div class="lg-sm">${esc(b.venue||'')} ${esc(b.time||'')}</div>`,b.engine==='emerald'?'<b class="rc-eng rc-eng-em">☘</b>':'<b class="rc-eng rc-eng-px">Prixm</b>',esc(b.bet_type),`${b.stake_u}u<div class="lg-sm">£${(b.stake_u*b.unit_gbp).toFixed(2)}</div>`,(+b.price||0).toFixed(2),
         `<b class="fit-badge ${b.result==='W'?'fit-s':b.result==='P'?'fit-q':b.result==='V'?'':'fit-u'}">${({W:'WON',P:'PLACED',L:'LOST',V:'VOID'})[b.result]||b.result}</b>`,`<b style="color:${pnlOf(b)>=0?'#15803d':'#dc2626'}">${uf(pnlOf(b))}</b><div class="lg-sm">${gbp(pnlOf(b)*(+b.unit_gbp||10))}</div>`,`<span class="lg-sm">${followed(b)?'✔ followed':b.suggested_u>0?b.suggested_u+'u':'own call'}</span>`])):'<div class="lg-sm">No settled bets for this filter.</div>');
     h+=`</div><div>`;
@@ -4980,7 +4992,7 @@ function render(){
       <b>3 · Daily budget</b> — ${set.pct}% of today's staking bank. Picks are funded strongest first; the day's strongest bet is always funded in full.<br>
       <b>4 · Guards</b> — tight race or Verification 🚫 → no bet (left blank) · 3 losing days → ⅙ Kelly until a winning day · ☘ Emerald / Silver / Bronze stakes are paper and never use the budget.<br>
       <b>Staking bank</b> — ${set.bank>0?'your starting bank':'notional 100u (no starting bank set)'} + settled P&amp;L = £${effBank().toFixed(0)}.</div>`);
-    h+=`</div></div>`;
+    h+=`</div></div>`+histCard;
     el.innerHTML=h;
   }catch(e){el.innerHTML=`<div style="padding:20px;color:#dc2626;background:#fef2f2;border:1px solid #fecaca;border-radius:8px"><b>Ledger error:</b> ${esc(e.message)}</div>`;console.error('Ledger',e);}
 }
