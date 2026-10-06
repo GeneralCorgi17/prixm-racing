@@ -1175,7 +1175,6 @@ select.m-btn{padding:5px 6px}
    Every rule is scoped to html[data-theme="nothing"] — Classic is untouched.
    Toggle: ◐ button in the header (toggleTheme, localStorage.uiTheme).
    Inline/hard-coded light colours are remapped by ntRemap() (NOTHING THEME JS block).
-   Reference mockups: nothing_style_mockup.html / nothing_style_landing_mockup.html.
    Full context + revert steps: docs/UI_THEMES.md */
 /* Classic: keep the ◐ switch out of the header flow so the Classic layout is unchanged */
 html[data-theme="classic"] .hdr{position:relative}
@@ -1376,7 +1375,7 @@ html[data-theme="nothing"] svg text[fill="#6b7280"],html[data-theme="nothing"] s
 <style id="phoneLayout">
 /* ==================== 📱 PHONE LAYOUT (2026-10-03) ====================
    ≤700px only — the PC layout is untouched. Works in both themes (uses the vars).
-   Approved mockup: phone_mockup.html (option A — tabs at the bottom).
+   Option A — tabs at the bottom.
    · Header → PRIXM + date + ☰. The header's buttons/badges (.hdr-r) become the ☰ sheet.
    · Top tab bar hidden → #phNav bottom bar (Races / Golden / Ledger|Emerald / MT / More), built from the real .tab-btn's.
    · Prixm Picks → swipe strip above the race cards; other sidebar panels below the cards.
@@ -10118,8 +10117,7 @@ function toggleConnDropdown(id){
 document.addEventListener('click',e=>{if(!e.target.closest('.conn-flag'))document.querySelectorAll('.conn-dropdown.open').forEach(d=>d.classList.remove('open'));});
 
 /* ==================== ATTRIBUTE HIGHLIGHT FILTER ====================
-   Validated via standalone mockup (attribute_filter_mockup.html). Race-level chip filter —
-   click an attribute to highlight runners in THIS race that carry it. Every attribute reuses
+   Race-level chip filter — click an attribute to highlight runners in THIS race that carry it. Every attribute reuses
    an existing engine signal (CDP, RPR divergence, track profile draw bias, watchback, momentum,
    connection change) — no new score/data model. Display + highlight only: never touches
    predicted_score, gap, or segment classification. */
@@ -10522,8 +10520,7 @@ function renderCrossTab(runners,race,vk){
 
 /* ==================== PREDICT TAB ====================
    Race Predictor — full predicted finishing order with narrative reasoning, RacingPost-verdict
-   style, distinct from MAIN's score table. Validated as a standalone mockup (race_predictor_mockup.html)
-   before folding in here; this version reuses the app's real analyzeRaceContext/buildCDP/calcMomentum/
+   style, distinct from MAIN's score table. Reuses the app's real analyzeRaceContext/buildCDP/calcMomentum/
    buildWeatherFlag/getTrackProfile instead of the mockup's duplicated standalone copies.
    Soft/display-only, same as Weather/Track Profile/Watchback — never touches predicted_score or segment. */
 const RP_MOM_SCORE={HOT:2,IMPROVING:1,STEADY:0,DECLINING:-1,COLD:-2,UNKNOWN:0};
@@ -10936,7 +10933,7 @@ function rpRunRace(){
 }
 
 /* 🐎 MT race simulation — galloping horses (silk-print jockeys) on the race's own track.
-   Inline copy for the 🐎 MT tab (mockup engine file: mt_sim.js — keep in sync). Display-only: reads runners, never writes back.
+   Engine for the 🐎 MT tab (the only copy). Display-only: reads runners, never writes back.
    API:  MTSim.render(svg, {race, order:[{runner}], lens:[lengths behind], styles:{name:'FR'|'P'|'MD'|'HU'},
                             geom:{straight, d, df, circ, rh}, onTick(info)})  → Promise
          MTSim.run(speed)  ·  MTSim.stop()
@@ -11121,8 +11118,7 @@ function rpRunRace(){
 
 /* ==================== 🐎 MT TAB — race track simulation ====================
    Own top-level tab (tab id tabM / switchTab('m')). Galloping horses with silk-print jockeys run the
-   race's own track (rpTrackGeom — shared with the Predict replay). Engine = MTSim below (mockups:
-   mt_main_mockup.html + mt_sim.js — this inline copy is the source of truth for the app).
+   race's own track (rpTrackGeom — shared with the Predict replay). Engine = MTSim below (the only copy).
    Order = rpBuildPredictedOrder(), gaps at the line = rpPredictLengths() (same as 🔮 Predict); early
    positions from the pace map + draw (no style → predicted rank); mid-race surges are for show and
    always settle into the predicted finish. Display-only — never writes to runners/races/scores/segments.
@@ -13336,7 +13332,7 @@ window.toggleTheme=function(){
    Bottom nav (#phNav) + "More" sheet (#phMore) are built from the real .tab-btn's and just
    .click() them, so switchTab wiring, VIEW_ONLY hiding (.vo-hide) and active state stay the
    single source of truth. ☰ toggles html.ph-menu-on (the header's .hdr-r becomes the sheet).
-   CSS: <style id="phoneLayout"> (≤700px). Mockup: phone_mockup.html. */
+   CSS: <style id="phoneLayout"> (≤700px). */
 (function(){
   const html=document.documentElement;
   const nav=document.getElementById('phNav'), more=document.getElementById('phMore');
