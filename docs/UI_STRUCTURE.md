@@ -47,7 +47,7 @@ Right:
 
 ## 📱 Phone layout (≤700px)
 
-`<style id="phoneLayout">` + `📱 PHONE LAYOUT JS`. Header `.hdr-r` → ☰ sheet (`phMenu()`, `html.ph-menu-on`, `#phDate`, `.ph-burger`). `.tab-bar` hidden → `#phNav` (Races/Golden/Ledger|Emerald/MT/More) + `#phMore` sheet, built from the real `.tab-btn`s. Prixm Picks → swipe strip (`.d1-picks-list`). `.rtbl` rows → stacked cards. Mockup `phone_mockup.html`. See CLAUDE.md.
+`<style id="phoneLayout">` + `📱 PHONE LAYOUT JS`. Header `.hdr-r` → ☰ sheet (`phMenu()`, `html.ph-menu-on`, `#phDate`, `.ph-burger`). `.tab-bar` hidden → `#phNav` (Races/Golden/Ledger|Emerald/MT/More) + `#phMore` sheet, built from the real `.tab-btn`s. Prixm Picks → swipe strip (`.d1-picks-list`). `.rtbl` rows → stacked cards. See CLAUDE.md.
 
 ## Tab Bar (`.tab-bar`)
 
@@ -280,7 +280,7 @@ Race track simulation (label **🐎 MT**; ids stay `tabM` / `switchTab('m')`). I
 - Horse = SVG with JS-posed legs (keyframed gallop), coat from `runner.colour`, jockey shirt = silk `<pattern>`; colours parsed from the silk SVG (CORS `*`).
 - `window.renderMTab()`, `mTabVenue(i)`, `mTabPick(i)`, `mTabStep(±1)`, `mTabOpen()` (→ `switchTab('races')` + `openRace(vk,ri)`), `mRunRace()`.
 - State is module-local — not in `st`, not in localStorage. Display-only; excluded venues skipped via `isExcludedVenue`.
-- Mockups: `mt_main_mockup.html` + `mt_sim.js` (engine copy), `mt_horse_mockup.html` (design picker).
+- The inline `MTSim` block is the only copy of the engine (mockup files removed 2026-10-06).
 
 ---
 

@@ -34,9 +34,7 @@ Both run off the same code. Nothing changes data, scores, segments, picks or P&L
 
 **Out of scope (stay light on purpose):** the PDF/print export documents (they open as their own documents with their own `<style>`), plus canvas-drawn charts if any are added later.
 
-**Reference mockups:**
-- `nothing_style_mockup.html`: app-style mockup, the approved design.
-- `nothing_style_landing_mockup.html`: first landing-page take.
+**Reference:** (the mockup files were removed 2026-10-06 once the theme was live)
 - Source site: https://getnothing.club (palette `#0a0a0a / #f5f2eb / #1a1a1a / #3a3a3a / #c8b89a`, grain overlay, custom cursor, fadeUp/reveal, 1px-gap hairline grids, brutalist button hover).
 
 ---

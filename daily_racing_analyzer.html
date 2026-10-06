@@ -6340,7 +6340,8 @@ function rescoreRunnerWithWeights(runner,newW){
     const cap=newW[f]!==undefined?newW[f]:(fmFor(bd)[f]?fmFor(bd)[f].mx:10);
     total+=Math.min(bd[f]||0,cap);
   });
-  return total;
+  // ☘ Emerald factors carry 1 decimal — round so float error (68.99999…) never reaches the UI
+  return Math.round(total*10)/10;
 }
 
 function rescoreTodayWithWeights(newW,profile){
