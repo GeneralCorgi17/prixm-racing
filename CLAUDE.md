@@ -523,7 +523,7 @@ Irish venues also caught by `(IRE)` suffix check before list lookup.
 ## Key UI Features
 
 - **Race card view** with expandable runner details (score breakdown, CDP, momentum, probabilities)
-- **Race card border colors** — 9px left border on each card indicates country + handicap type:
+- **Race card colour stripe** — thin 3px left stripe (`.landing .rc::before`, colour via `--rc-bc` from `getRaceBorderColor()`) indicates country + handicap type (was a 5px border, which the Nothing theme hid; changed 2026-10-06):
   - 🔵 Blue `#3b82f6` — England, Non-Handicap
   - 🟡 Amber `#f59e0b` — England, Handicap
   - 🟢 Green `#10b981` — Ireland, Non-Handicap
@@ -536,6 +536,7 @@ Irish venues also caught by `(IRE)` suffix check before list lookup.
 - **Silver flag** — `🥈 SILVER` banner on qualifying race cards (gap 10–<12, score≥72, UK NH, Turf) via `getSilverFlags()` / `renderSilverFlag()`
 - **Bronze flag** — `🥉 BRONZE` banner on qualifying race cards (gap 8–<10, score≥74, UK NH, Good/GF) via `getBronzeFlags()` / `renderBronzeFlag()`
 - **DB status badge** — `#dbStatusBadge` in tab bar: `🟢 DB N races` (server live) or `🟡 JSON` (fallback)
+- **🎯 Top pick card + silks** (race view, 2026-10-06) — `renderTopPickCard()` in the shared detail header (all tabs): silk, connections, score/gap/win chance (`calcCompetitiveProb`)/price, "why it's on top" lines from `tpcGroups()` (six factor groups as % of max) + CDP + track fit + RPR/OR; no data → line omitted. Runner rows show the jockey silk (`.rsilk`). Display only. Mockup: `race_view_additions_mockup.html`.
 - **Prixm Picks** — Design C layout: accent bar, category dot+label, horse name, bet chip, edge bar with % fill, reasoning tags
 - **Personal bet tracker** — BET button per runner, bet type selection (EW/WIN/TOP N), export as PNG
 - **Combination tracker** — horse+jockey, horse+trainer, jockey+trainer combos from results history

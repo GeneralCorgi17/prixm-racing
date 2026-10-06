@@ -136,7 +136,7 @@ Each card shows: venue + time, race metadata (distance / going / type / field si
 
 Click → `openRace(venueKey, raceIdx)` → opens detail view.
 
-Race card left border color (9px):
+Race card left stripe (3px `::before`, colour from `getRaceBorderColor()` passed as `--rc-bc` inline; was a 5px border until 2026-10-06):
 - Blue `#3b82f6` — England non-handicap
 - Amber `#f59e0b` — England handicap
 - Green `#10b981` — Ireland non-handicap
@@ -150,10 +150,12 @@ Opens on race card click. Back button → `goBack()` → returns to landing.
 
 **Renderer:** `renderDetail()`
 
+Shared header (all tabs): race title → meta chips → pace box → **🎯 Top pick card** (`renderTopPickCard()`, `.tpc`: silk, jockey · trainer, confidence, score/gap/win chance/price, "why it's on top" lines — strongest/weakest of six groups via `tpcGroups()`, biggest edge over 2nd, CDP, track fit, RPR vs OR; no data → line omitted) → summary strip → tabs.
+
 Two sub-tabs (`.dtab`):
 
 ### Main tab (`detailTab='main'`)
-- Runners table (`.rtbl`) — all runners sorted by score
+- Runners table (`.rtbl`) — all runners sorted by score; jockey silk (`.rsilk`, from `silk_url`) floats left of the horse name
 - Expandable rows (`.exp-row`) — 14-factor score breakdown per runner
 - Variable grid (`.vtg`) — tick boxes for factor scores
 
@@ -385,7 +387,9 @@ When server is live: `window._resultsHistory` set directly from DB, localStorage
 | `renderWatchlistPanel()` | Watched horses grid |
 | `toggleBetPanel()` | Show/hide bet sidebar |
 | `toggleBet(horse, time, venue, score)` | Add/remove bet from list |
-| `getRaceBorderColor(r)` | 9px left border color by country+handicap type |
+| `getRaceBorderColor(r)` | Country+handicap colour — race card stripe (`--rc-bc`), race title border, MT tab |
+| `renderTopPickCard(runners,race)` | 🎯 Top pick card at the top of the race view (all detail tabs) |
+| `tpcGroups(r)` | Folds a runner's factors into six groups (% of max) for the top pick card's "why" lines |
 | `getGoldenFlags(race)` | Returns golden flag data if race qualifies (gap≥18, score≥74, UK NH) |
 | `renderGoldenFlag(gf)` | Renders `⭐ GOLDEN` banner HTML for race card |
 | `getSilverFlags(race)` | Returns silver flag data if race qualifies (gap 10–12, score≥72, UK NH, Turf) |

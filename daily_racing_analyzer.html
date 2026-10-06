@@ -166,6 +166,26 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 
 /* Summary strip */
 .sumstrip{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+/* Runner silks + 🎯 top pick card (race view) */
+.rsilk{width:30px;height:30px;object-fit:contain;float:left;margin:1px 9px 0 0;border-radius:6px;background:var(--card2);border:1px solid var(--border);padding:1px}
+.tpc{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px 18px;margin:14px 0 16px;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:22px;align-items:start}
+.tpc-lab{font-size:10.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;display:flex;justify-content:space-between;gap:8px}
+.tpc-id{display:flex;gap:14px;align-items:center}
+.tpc-id img{width:62px;height:62px;object-fit:contain;border-radius:10px;background:var(--card2);border:1px solid var(--border);padding:3px;flex:none}
+.tpc-name{font-size:24px;font-weight:800;line-height:1.1;color:var(--text)}
+.tpc-sub{font-size:12.5px;color:var(--muted);margin-top:3px}
+.tpc-conf{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.06em;padding:2px 8px;border-radius:5px;border:1px solid var(--accent);color:var(--accent);margin-top:6px}
+.tpc-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:14px}
+.tpc-stats>div{background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:9px 10px}
+.tpc-stats b{display:block;font-size:22px;line-height:1.1;color:var(--text)}
+.tpc-stats small{font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.tpc-bar{height:5px;border-radius:3px;background:var(--border);margin-top:6px;overflow:hidden}.tpc-bar i{display:block;height:100%;background:var(--accent)}
+.tpc-why{display:grid;gap:7px;font-size:13px;color:var(--text)}
+.tpc-why>div{display:flex;gap:8px;align-items:flex-start;line-height:1.4}
+.tpc-i{flex:none;width:18px;height:18px;border-radius:5px;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:800}
+.tpc-i.p{background:color-mix(in srgb,var(--accent) 22%,transparent);color:var(--accent)}
+.tpc-i.n{background:color-mix(in srgb,var(--danger) 22%,transparent);color:var(--danger)}
+@media(max-width:900px){.tpc{grid-template-columns:minmax(0,1fr);gap:14px}.tpc-stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .ss{background:var(--card);border-radius:8px;padding:10px 16px;text-align:center;border:1px solid var(--border);min-width:100px}
 .ss .sv{font-size:22px;font-weight:700}
 .ss .sl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
@@ -861,7 +881,9 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .landing .race-cards{display:grid!important;grid-template-columns:repeat(3,1fr);gap:10px;padding:2px}
 @media(max-width:1100px){.landing .race-cards{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:680px){.landing .race-cards{grid-template-columns:1fr}}
-.landing .rc{background:#fff;border:1px solid #e5e0d8;border-radius:10px;padding:0;max-height:none;overflow:visible;cursor:pointer;display:flex;flex-direction:column;box-shadow:0 1px 4px rgba(0,0,0,.07)}
+.landing .rc{background:#fff;border:1px solid #e5e0d8;border-radius:10px;padding:0;max-height:none;overflow:visible;cursor:pointer;display:flex;flex-direction:column;box-shadow:0 1px 4px rgba(0,0,0,.07);position:relative}
+/* Country/handicap stripe — thin 3px left edge, colour from getRaceBorderColor() via --rc-bc */
+.landing .rc::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--rc-bc,transparent);border-radius:10px 0 0 10px;pointer-events:none;z-index:1}
 .landing .rc:hover{border-color:#b7dfc9;box-shadow:0 3px 12px rgba(0,0,0,.10);transform:translateY(-1px)}
 .landing .rc.rc-gold{background:#fef9f0;border-color:#f5d68a}
 .landing .rc.rc-silver{background:#f8f9ff;border-color:#c8d0e8}
@@ -1239,7 +1261,10 @@ html[data-theme="nothing"] .fsb-drop{background:#111!important;border:1px solid 
 /* ---------- race cards: hairline grid ---------- */
 html[data-theme="nothing"] .landing .race-cards{gap:1px!important;background:#1a1a1a;border:1px solid #1a1a1a}
 html[data-theme="nothing"] .landing .rc{background:#0a0a0a!important;border:none!important;border-radius:0!important;box-shadow:none!important;transform:none!important;transition:background .3s!important}
-html[data-theme="nothing"] .landing .rc[style*="border-left"]{border-left-width:2px!important;border-left-style:solid!important}
+html[data-theme="nothing"] .landing .rc::before{border-radius:0}
+html[data-theme="nothing"] .tpc-name,html[data-theme="nothing"] .tpc-stats b{font-family:'Bebas Neue',sans-serif;font-weight:400;letter-spacing:.03em}
+html[data-theme="nothing"] .tpc-name{font-size:30px}html[data-theme="nothing"] .tpc-stats b{font-size:28px}
+html[data-theme="nothing"] .tpc,html[data-theme="nothing"] .tpc-stats>div{border-radius:0}
 html[data-theme="nothing"] .landing .rc:hover{background:#141414!important}
 html[data-theme="nothing"] .landing .rc.rc-gold{background:linear-gradient(180deg,rgba(217,178,92,.08),transparent 45%) #0a0a0a!important;box-shadow:inset 0 2px 0 #d9b25c!important}
 html[data-theme="nothing"] .landing .rc.rc-silver{background:linear-gradient(180deg,rgba(170,180,195,.08),transparent 45%) #0a0a0a!important;box-shadow:inset 0 2px 0 #aab4c3!important}
@@ -6751,7 +6776,7 @@ function showGuide(){
       <ul style="font-size:11.5px;margin:6px 0 0 16px;line-height:1.6">
         <li><b>Race replay</b> runs on the race's own track shape, with real silks. Early positions come from the pace map + draw; the finish order and gaps come from the predicted lengths. No commentary.</li>
         <li><b>Predicted finish · lengths</b> — score gaps converted to beaten lengths using how scores have translated into real margins in logged results (Flat / AW / Jumps).</li>
-        <li><b>📏 Length bet</b> — winning-distance chances (&lt;1L · 1–3L · 3–6L · 6L+) from logged results for this race type and gap. <b>Tight race</b> (gap &lt; 8, top-2 win chance within 8 pts, or Verification 🚫) → "No length bet suggestion", nothing else. Enter the bookmaker's price to get EV; it only says <b>value</b> when your price beats the fair price.</li>
+        <li><b>📏 Length bet</b> — winning-distance chances (&lt;1L · 1–3L · 3–6L · 6L+) from logged results for this race type and gap. <b>Tight race</b> (gap &lt; 8, top-2 win chance within 8 pts, or Verification 🚫) → "No length bet suggestion", nothing else. Below that, a table of the lines bookmakers offer — <b>Under 1L · Over 1L · Over 2L … Over 6L</b> plus your own "Over x L" — each with its own chance, fair price and price box. Type the price next to whichever line(s) your bookmaker offers; each is checked on its own ("Over 2L" = more than 2 lengths, exactly 2L loses). Switch between <b>Any winner</b> (winning-distance market) and <b>Top pick to win by</b>. It only says <b>value</b> when your price beats the fair price.</li>
       </ul>
     </div>
 
@@ -6845,7 +6870,8 @@ function showGuide(){
           </div>
         </div>
       </div>
-      <p>Inside a race: <b>runner table</b> sorted by score, <b>14-square variable grid</b> per horse (green/amber/red ticks), <b>confidence badges</b>, click any row to expand full factor breakdown + finish probabilities.</p>
+      <p>Each card has a thin coloured stripe down its left edge: <b style="color:#3b82f6">blue</b> UK non-handicap · <b style="color:#f59e0b">amber</b> UK handicap · <b style="color:#10b981">green</b> Ireland · <b style="color:#f87171">red</b> Ireland handicap.</p>
+      <p>Inside a race: a <b>🎯 Top pick card</b> at the top (silk, jockey · trainer, score, gap to 2nd, win chance, price, and "why it's on top" lines from the horse's own data — strongest/weakest areas, biggest edge over the 2nd, CDP, track fit, RPR vs OR; a line with no data is left out). Then the <b>runner table</b> sorted by score with each horse's <b>jockey silk</b>, <b>14-square variable grid</b> per horse (green/amber/red ticks), <b>confidence badges</b>, click any row to expand full factor breakdown + finish probabilities. Display only — nothing here changes scores or picks.</p>
     </div>
 
     <!-- SCORING ENGINE -->
@@ -9606,7 +9632,7 @@ function renderRaceCards(){
     const _uIcon=ru=>ru&&ru.track_fit&&ru.track_fit.verdict==='u'?` <span class="rc-fit-u" title="🧭 Unsuited to this track — open the race for the reasons">❌</span>`:'';
     const _topU=top&&sortedR[0]&&sortedR[0].track_fit&&sortedR[0].track_fit.verdict==='u'?sortedR[0]:null;
     const _topUReason=_topU?(_topU.track_fit.checks.filter(c=>c[0]==='❌'&&c[4]==='valid').map(c=>c[1]).slice(0,2).join(' · ')||'track demands'):'';
-    return `<div class="rc ${cardExtraCls} ${xaCls}" id="${cardId}" data-seg="${dataSeg}" style="border-left:5px solid ${getRaceBorderColor(r)}" onclick="openRace('${r.venueKey}',${r.raceIdx}).catch(e=>console.error('openRace error:',e))">
+    return `<div class="rc ${cardExtraCls} ${xaCls}" id="${cardId}" data-seg="${dataSeg}" style="--rc-bc:${getRaceBorderColor(r)}" onclick="openRace('${r.venueKey}',${r.raceIdx}).catch(e=>console.error('openRace error:',e))">
   <div class="rc-ch">
     <div>
       <span class="rc-card-time">${r.time}</span>
@@ -9679,6 +9705,45 @@ async function openRace(vk,ri){st._scrollY=window.scrollY;st.openRace={vk,ri};st
 async function goBack(){st.openRace=null;await render();if(st._scrollY!=null){window.scrollTo(0,st._scrollY);st._scrollY=null;}}
 function switchDetailTab(tab){st.detailTab=tab;st.h2hPair=null;renderDetail().catch(e=>console.error('renderDetail error:',e));}
 
+/* ==================== 🎯 TOP PICK CARD (race view, added 2026-10-06) ====================
+   Sits above the summary strip on every detail tab. Silk, name, connections, score / gap / win
+   chance / price, plus "why it's on top" lines built from the horse's own data — a line with no
+   data behind it is left out. Display only: never changes score, gap, segment or picks.
+   Groups = the 14 factors (+ Emerald's 3) folded into six, each as % of its maximum. */
+const TPC_GROUPS=[['Ability',['form','rating']],['Connections',['trainer','jockey','stable_power']],['Conditions',['going','distance','course','track_fit']],
+  ['Fitness',['fitness','age']],['Class & weight',['class','weight']],['Draw & kit',['draw','draw_bias','headgear','spotlight']]];
+function tpcGroups(r){
+  const bd=r.score_breakdown||{},fm=fmFor(bd);
+  return TPC_GROUPS.map(([n,fs])=>{let v=0,m=0;fs.forEach(f=>{if(bd[f]!=null&&fm[f]){v+=bd[f];m+=fm[f].mx;}});return{n,p:m?Math.min(100,v/m*100):null};});
+}
+function renderTopPickCard(runners,race){
+  const sorted=runners.filter(x=>x.score!=null).sort((a,b)=>b.score-a.score);if(!sorted.length)return'';
+  const t=sorted[0],s2=sorted[1];
+  const gap=s2?Math.round((t.score-s2.score)*10)/10:null;
+  let win=null;try{win=calcCompetitiveProb(t.score,sorted.map(x=>x.score||0),1);}catch(e){}
+  const g=tpcGroups(t),g2=s2?tpcGroups(s2):null,ok=g.filter(x=>x.p!=null).sort((a,b)=>b.p-a.p);
+  const why=[];
+  if(ok.length>=2)why.push(['p','✓',`Strongest on <b>${ok[0].n.toLowerCase()}</b> (${ok[0].p.toFixed(0)}%) and <b>${ok[1].n.toLowerCase()}</b> (${ok[1].p.toFixed(0)}%)`]);
+  if(g2){const d=g.map((x,i)=>({n:x.n,d:(x.p||0)-(g2[i].p||0)})).sort((a,b)=>b.d-a.d)[0];if(d.d>0)why.push(['p','✓',`Biggest edge over ${s2.name}: <b>${d.n.toLowerCase()}</b> (+${d.d.toFixed(0)} pts)`]);}
+  const lo=ok[ok.length-1];if(lo&&lo.p<45)why.push(['n','!',`Weakest on <b>${lo.n.toLowerCase()}</b> (${lo.p.toFixed(0)}%)`]);
+  try{const c=buildCDP(t,race);if(c&&c.total){const good=c.proven>=Math.ceil(c.total/2);why.push([good?'p':'n',good?'✓':'!',`CDP: <b>${c.proven}/${c.total} proven</b> (class · distance · going · course)`]);}}catch(e){}
+  if(t.track_fit&&t.track_fit.verdict==='s')why.push(['p','✓','Track fit: <b>suits</b> this course']);
+  if(t.track_fit&&t.track_fit.verdict==='u')why.push(['n','!','Track fit: <b>unsuited</b> to this course']);
+  try{const d=rprDivergenceFlag(t.ofr,t.rpr);if(d){const up=d.icon==='⬆️';why.push([up?'p':'n',up?'✓':'!',`RPR ${t.rpr} vs OR ${t.ofr}`]);}}catch(e){}
+  return `<div class="tpc">
+    <div><div class="tpc-lab"><span>Top pick</span>${race.handicap?'<span>Handicap</span>':''}</div>
+      <div class="tpc-id">${t.silk_url?`<img src="${t.silk_url}" alt="" onerror="this.style.visibility='hidden'">`:''}<div style="min-width:0"><div class="tpc-name">${t.name}</div>
+        <div class="tpc-sub">${t.jockey||''} · ${t.trainer||''}</div>${t.confidence?`<span class="tpc-conf">${t.confidence}</span>`:''}</div></div>
+      <div class="tpc-stats">
+        <div><b>${t.score}</b><small>Score /${MAX_SCORE}</small><div class="tpc-bar"><i style="width:${Math.min(100,t.score/MAX_SCORE*100)}%"></i></div></div>
+        ${gap!=null?`<div><b>${gap}</b><small>Gap to 2nd</small></div>`:''}
+        ${win!=null?`<div><b>${win}%</b><small>Win chance</small></div>`:''}
+        ${t.price?`<div><b>${t.price}</b><small>Price</small></div>`:''}
+      </div></div>
+    ${why.length?`<div><div class="tpc-lab"><span>Why it's on top</span></div><div class="tpc-why">${why.map(([c,i,txt])=>`<div><span class="tpc-i ${c}">${i}</span><span>${txt}</span></div>`).join('')}</div></div>`:''}
+  </div>`;
+}
+
 async function renderDetail(){
   const {vk,ri}=st.openRace;
   const venue=D.venues[vk];if(!venue)return;
@@ -9716,6 +9781,7 @@ async function renderDetail(){
     ${getTrackProfile(race.course)?`<button class="vbtn" style="font-size:11px;padding:3px 10px" onclick="openTrackExplorer('${(race.course||'').replace(/'/g,"\\'")}','prof')">🗺 ${getTrackProfile(race.course).name} track profile →</button>`:''}
   </div>
   ${renderPaceBox(race)}
+  ${renderTopPickCard(runners,race)}
   <div class="sumstrip">
     <div class="ss"><div class="sv">${runners.length}</div><div class="sl">Runners</div></div>
     <div class="ss"><div class="sv" style="color:#059669">${topPicks}</div><div class="sl">Top Picks</div></div>
@@ -10273,7 +10339,7 @@ function renderMainTab(runners,race,vk,ri){
     const hrsBadge=bhrs?`<span class="ban-hrs-badge">🚫 HORSE</span>`:'';
     let rows=`<tr class="${rowCl} expandable" style="${attrRowStyle}" onclick="toggleExp('${r.name.replace(/'/g,"\\'")}')">
       <td style="font-weight:700;color:var(--muted)">${r.number||'—'}</td>
-      <td><div style="font-weight:700;font-size:14px"><button class="wl-track-btn ${isWatched(r.name)?'tracked':''}" onclick="event.stopPropagation();toggleWatch('${r.name.replace(/'/g,"\\'")}','${(race.course||'').replace(/'/g,"\\'")}','${(race.name||'').replace(/'/g,"\\'")}')" title="${isWatched(r.name)?'Remove from watchlist':'Add to watchlist'}">${isWatched(r.name)?'TRACKING':'TRACK'}</button><button class="bet-btn ${isBetted(r.name,race.time||'',race.course||'')?'betting':''}" onclick="event.stopPropagation();toggleBet('${r.name.replace(/'/g,"\\'")}','${(race.time||'').replace(/'/g,"\\'")}','${(race.course||'').replace(/'/g,"\\'")}',${r.score||0})">${isBetted(r.name,race.time||'',race.course||'')?'BETTING':'BET'}</button><button class="cmpsel-btn${st.compareSelect.has(r.name)?' on':''}" id="cmpsel_${r.name.replace(/[^a-zA-Z0-9]/g,'_')}" onclick="event.stopPropagation();hcmpToggle('${r.name.replace(/'/g,"\\'")}')" title="Add to compare">${st.compareSelect.has(r.name)?'✓':'+CMP'}</button>${r.name}${hrsBadge}${rankBadge(r.name)}${getRunnerComboBadges(r)}${getCourseSpecialistBadge(r,race)}${getWatchbackBadge(r,race)}${r.price?`<span class="price-dec">${parseFloat(r.price).toFixed(2)}</span>`:''}</div><div style="font-size:11px;color:var(--muted)">${jkyHtml} · ${r.trainer||'?'} ${getConnectionChangeBadge(r)}</div></td>
+      <td>${r.silk_url?`<img class="rsilk" src="${r.silk_url}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">`:''}<div style="font-weight:700;font-size:14px"><button class="wl-track-btn ${isWatched(r.name)?'tracked':''}" onclick="event.stopPropagation();toggleWatch('${r.name.replace(/'/g,"\\'")}','${(race.course||'').replace(/'/g,"\\'")}','${(race.name||'').replace(/'/g,"\\'")}')" title="${isWatched(r.name)?'Remove from watchlist':'Add to watchlist'}">${isWatched(r.name)?'TRACKING':'TRACK'}</button><button class="bet-btn ${isBetted(r.name,race.time||'',race.course||'')?'betting':''}" onclick="event.stopPropagation();toggleBet('${r.name.replace(/'/g,"\\'")}','${(race.time||'').replace(/'/g,"\\'")}','${(race.course||'').replace(/'/g,"\\'")}',${r.score||0})">${isBetted(r.name,race.time||'',race.course||'')?'BETTING':'BET'}</button><button class="cmpsel-btn${st.compareSelect.has(r.name)?' on':''}" id="cmpsel_${r.name.replace(/[^a-zA-Z0-9]/g,'_')}" onclick="event.stopPropagation();hcmpToggle('${r.name.replace(/'/g,"\\'")}')" title="Add to compare">${st.compareSelect.has(r.name)?'✓':'+CMP'}</button>${r.name}${hrsBadge}${rankBadge(r.name)}${getRunnerComboBadges(r)}${getCourseSpecialistBadge(r,race)}${getWatchbackBadge(r,race)}${r.price?`<span class="price-dec">${parseFloat(r.price).toFixed(2)}</span>`:''}</div><div style="font-size:11px;color:var(--muted)">${jkyHtml} · ${r.trainer||'?'} ${getConnectionChangeBadge(r)}</div></td>
       <td>${formHtml(r.form)}${(()=>{const m=calcMomentum(r.form);return m.label!=='UNKNOWN'?` <span class="mom ${m.cls}" title="${m.tip}" style="padding:1px 4px;font-size:8px;vertical-align:middle">${m.icon}</span>`:'';})()}</td>
       <td style="font-weight:600">${r.age||'?'}</td>
       <td style="font-weight:600">${r.rpr||'—'}${(()=>{const d=rprDivergenceFlag(r.ofr,r.rpr);return d?` <span title="${d.tooltip.replace(/"/g,'&quot;')}" style="cursor:help">${d.icon}</span>`:'';})()}</td>
@@ -10705,7 +10771,7 @@ function rpLenModel(){
     const top=res.reduce((a,b)=>b.predicted_score>a.predicted_score?b:a);
     const eng=isEmeraldRace(r)?'ire':'uk',g=rpGroup(r),gb=gap>=10?'hi':'lo';
     const band=mg<1?0:mg<3?1:mg<6?2:3;
-    [eng+':'+g+':'+gb,'any:'+g+':'+gb].forEach(key=>{const b=(m.bands[key]=m.bands[key]||{any:[0,0,0,0],top:[0,0,0,0],n:0,nTop:0});b.any[band]++;b.n++;if(top.finish_pos===1){b.top[band]++;b.nTop++;}});
+    [eng+':'+g+':'+gb,'any:'+g+':'+gb].forEach(key=>{const b=(m.bands[key]=m.bands[key]||{any:[0,0,0,0],top:[0,0,0,0],n:0,nTop:0,mAny:[],mTop:[]});b.any[band]++;b.n++;b.mAny.push(mg);if(top.finish_pos===1){b.top[band]++;b.nTop++;b.mTop.push(mg);}});
     if(top.finish_pos===1&&gap>=1)(ratios[g]=ratios[g]||[]).push(mg/gap);
   });
   Object.entries(ratios).forEach(([g,a])=>{a.sort((x,y)=>x-y);m.k[g]=a[Math.floor(a.length/2)]||0.15;});
@@ -10742,17 +10808,15 @@ function rpLengthPanelHTML(order,race,runners){
     if(!B||B.n<60){body=`<div style="font-size:12px;color:var(--muted);margin-top:8px">Not enough logged margins for this race type yet.</div>`;}
     else{
       const pct=B.any.map(x=>x/B.n*100),best=pct.indexOf(Math.max(...pct));
-      window._rpLenCtx={p:pct[best]/100,label:RP_BANDS[best]};
+      const top=order[0].runner,pw=calcCompetitiveProb(top.score,runners.map(r=>r.score||0),1)/100;
+      window._rpLenCtx={any:B.mAny,top:B.nTop>=40?B.mTop:null,pw,topName:top.name,subj:'any',prices:{}};
       const gl={flat:'Flat',aw:'All-weather',nh:'Jumps'}[g];
       body=`<div style="font-size:11.5px;color:var(--muted);margin:8px 0 4px">Winning distance (any winner) · <b>${gl} · gap ${gb==='hi'?'≥ 10':'< 10'}</b> · ${B.n} logged races (${src})</div>
         ${pct.map((p,i)=>`<div style="display:grid;grid-template-columns:62px 1fr 44px 70px;gap:8px;align-items:center;font-size:12.5px;margin:4px 0;${i===best?'font-weight:700':''}"><span>${RP_BANDS[i]}</span><div style="height:12px;background:var(--card2);border-radius:6px;overflow:hidden"><i style="display:block;height:100%;width:${p}%;background:${i===best?'#15803d':'#3b82f6'}"></i></div><span>${p.toFixed(0)}%</span><span style="text-align:right;color:var(--muted)">fair ${(100/Math.max(p,0.1)).toFixed(2)}</span></div>`).join('')}
-        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:10px;font-size:12.5px">Price for <b>${RP_BANDS[best]}</b> <input id="rpLenPrice" type="number" step="0.05" min="1.01" placeholder="e.g. 3.5" oninput="rpLenVerdict()" style="width:84px;padding:5px 8px;border:1px solid var(--border);border-radius:6px;font:inherit"><span style="font-size:11px;color:var(--muted)">(decimal — bookmaker's winning-distance market)</span></div>
-        <div id="rpLenVerdict"></div>`;
-      if(B.nTop>=40){
-        const top=order[0].runner,pw=calcCompetitiveProb(top.score,runners.map(r=>r.score||0),1)/100;
-        const rows=[1,2,3].map(i=>{const cum=B.top.slice(i).reduce((a,b)=>a+b,0)/B.nTop,pr=pw*cum*100;return `<tr><td style="padding:4px 8px;border-bottom:1px solid var(--border)">${top.name} to win by ${['','1L','3L','6L'][i]}+</td><td style="padding:4px 8px;border-bottom:1px solid var(--border)">${pr.toFixed(1)}%</td><td style="padding:4px 8px;border-bottom:1px solid var(--border)">${(100/Math.max(pr,0.1)).toFixed(2)}</td></tr>`;}).join('');
-        body+=`<details style="margin-top:10px"><summary style="cursor:pointer;font-size:12px;font-weight:700">Top pick + margin (only where a bookmaker offers "to win by X lengths")</summary><table style="width:100%;border-collapse:collapse;font-size:12px;margin-top:6px"><tr><th style="text-align:left;padding:4px 8px;font-size:10px;color:var(--muted)">BET</th><th style="text-align:left;padding:4px 8px;font-size:10px;color:var(--muted)">CHANCE</th><th style="text-align:left;padding:4px 8px;font-size:10px;color:var(--muted)">FAIR PRICE</th></tr>${rows}</table></details>`;
-      }
+        <div style="margin-top:12px;font-size:12.5px;font-weight:700">Your bookmaker's lines</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin:6px 0;font-size:12px">${[['any','Any winner — winning distance'],...(B.nTop>=40?[['top',top.name+' to win by']]:[])].map(([k,l])=>`<button data-rplsubj="${k}" onclick="rpLenSubj('${k}')" style="padding:4px 10px;border:1px solid var(--border);border-radius:14px;font:inherit;cursor:pointer;background:var(--card2)">${l}</button>`).join('')}</div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:4px">Type the decimal price next to <b>whichever line</b> your bookmaker offers (one or several). Each line is checked on its own. "Over 2L" = wins by more than 2 lengths — exactly 2L loses.</div>
+        <div id="rpLenLines"></div>`;
     }
   }
   setTimeout(()=>{try{rpLenVerdict();}catch(e){}},0);
@@ -10761,16 +10825,32 @@ function rpLengthPanelHTML(order,race,runners){
       <div style="font-size:11px;color:var(--muted);margin-top:6px">Beaten lengths = score gap × lengths-per-point learned from logged results for ${({flat:'Flat',aw:'all-weather',nh:'jumps'})[rpGroup(race)]} races.</div></div>
     <div><div style="font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700;margin-bottom:6px">📏 Length bet · race check</div>${gate}${body}</div></div>`;
 }
-function rpLenVerdict(){
-  const el=document.getElementById('rpLenVerdict'),c=window._rpLenCtx;if(!el||!c)return;
-  const inp=document.getElementById('rpLenPrice');const pr=inp?parseFloat(inp.value):NaN,fair=1/c.p;
-  const box=(bg,bd,col,t)=>`<div style="background:${bg};border:1px solid ${bd};color:${col};border-radius:9px;padding:9px 12px;font-size:13px;margin-top:8px">${t}</div>`;
-  if(!pr||pr<=1){el.innerHTML=box('#fffbeb','#fde68a','#78350f',`No suggestion until you enter a price. Only worth it at <b>${fair.toFixed(2)}</b> or bigger.`);return;}
-  const ev=(c.p*pr-1)*100;
-  el.innerHTML=ev>5?box('#f0fdf4','#bbf7d0','#14532d',`✅ <b>Value.</b> EV +${ev.toFixed(1)}% at ${pr}. Small stake only (0.5u) — margin bets are volatile.`)
-    :ev>-3?box('#fffbeb','#fde68a','#78350f',`⚖️ <b>Marginal.</b> EV ${ev.toFixed(1)}%. Skip unless the price is ${(fair*1.05).toFixed(2)}+.`)
-    :box('#fef2f2','#fecaca','#7f1d1d',`🚫 <b>No bet.</b> EV ${ev.toFixed(1)}% — price below the fair ${fair.toFixed(2)}.`);
+// Length lines: chance = share of logged margins past the line (any winner), or
+// top-pick win chance × share of margins past the line when the top pick won.
+const RP_LINES=[['u',1],['o',1],['o',2],['o',3],['o',4],['o',5],['o',6]];
+function rpLenChance(c,dir,x){
+  const arr=c.subj==='top'?c.top:c.any;if(!arr||!arr.length||!(x>0))return null;
+  const f=arr.filter(m=>dir==='u'?m<x:m>x).length/arr.length;
+  return c.subj==='top'?c.pw*f:f;
 }
+function rpLenSubj(s){const c=window._rpLenCtx;if(!c)return;c.subj=s;rpLenVerdict();}
+function rpLenVerdict(){
+  const el=document.getElementById('rpLenLines'),c=window._rpLenCtx;if(!el||!c)return;
+  document.querySelectorAll('[data-rplsubj]').forEach(b=>{const on=b.dataset.rplsubj===c.subj;b.style.background=on?'#15803d':'var(--card2)';b.style.color=on?'#fff':'';b.style.borderColor=on?'#15803d':'';});
+  const cx=c.prices['cx']||'';
+  const lines=[...RP_LINES,['o',parseFloat(cx)||null,true]];
+  const td='padding:5px 6px;border-bottom:1px solid var(--border)';
+  el.innerHTML=`<table style="width:100%;border-collapse:collapse;font-size:12.5px"><tr>${['LINE','CHANCE','FAIR','YOUR PRICE','VERDICT'].map(h=>`<th style="text-align:left;padding:4px 6px;font-size:10px;color:var(--muted)">${h}</th>`).join('')}</tr>${lines.map(([dir,x,custom])=>{
+    const key=c.subj+':'+(custom?'c':dir+x),p=x?rpLenChance(c,dir,x):null,fair=p?1/p:null;
+    const lbl=custom?`Over <input type="number" step="0.5" min="0.5" value="${cx}" placeholder="x" data-rplkey="cx" oninput="window._rpLenCtx.prices.cx=this.value;rpLenRow(this)" style="width:46px;padding:3px 5px;border:1px solid var(--border);border-radius:5px;font:inherit"> L`:(dir==='u'?'Under ':'Over ')+x+'L';
+    const pr=parseFloat(c.prices[key]);let v='<span style="color:var(--muted)">enter price</span>';
+    if(p==null)v=custom?'<span style="color:var(--muted)">set line</span>':'—';
+    else if(pr>1){const ev=(p*pr-1)*100;v=ev>5?`<b style="color:#15803d">✅ Value +${ev.toFixed(0)}% · 0.5u</b>`:ev>-3?`<b style="color:#b45309">⚖️ Marginal ${ev.toFixed(0)}%</b>`:`<b style="color:#dc2626">🚫 No bet ${ev.toFixed(0)}%</b>`;}
+    return `<tr><td style="${td};white-space:nowrap">${c.subj==='top'?'Wins by ':''}${lbl}</td><td style="${td}">${p==null?'—':(p*100).toFixed(1)+'%'}</td><td style="${td}">${fair?fair.toFixed(2):'—'}</td><td style="${td}"><input type="number" step="0.05" min="1.01" value="${c.prices[key]||''}" placeholder="e.g. 3.5" data-rplkey="${key}" oninput="window._rpLenCtx.prices['${key}']=this.value;rpLenRow(this)" style="width:74px;padding:3px 6px;border:1px solid var(--border);border-radius:5px;font:inherit"></td><td style="${td}">${v}</td></tr>`;}).join('')}</table>
+    <div style="font-size:11px;color:var(--muted);margin-top:6px">Value only when your price beats the fair price by 5%+. Small stakes — margin bets are volatile.</div>`;
+}
+// Re-render but keep focus in the price box being typed in.
+function rpLenRow(inp){const k=inp.dataset.rplkey,pos=inp.selectionStart;rpLenVerdict();const n=document.querySelector(`[data-rplkey="${k}"]`);if(n){n.focus();try{n.setSelectionRange(pos,pos);}catch(e){}}}
 
 // ── replay ──
 function rpReplayHTML(){
