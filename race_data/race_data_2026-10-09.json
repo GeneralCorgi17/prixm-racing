@@ -87,7 +87,7 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "2/4 placed on galloping tracks",
+                    "3/4 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ]
@@ -152,7 +152,7 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "2/2 placed on galloping tracks",
+                    "2/2 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ]
@@ -224,7 +224,7 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "4/5 placed on galloping tracks",
+                    "4/5 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ]
@@ -289,7 +289,7 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "1/2 placed on galloping tracks",
+                    "1/2 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ]
@@ -347,6 +347,18 @@
                 "top_6": 58,
                 "top_8": 70,
                 "top_10": 82
+              },
+              "track_fit": {
+                "verdict": "s",
+                "checks": [
+                  [
+                    "\u2705",
+                    "Wide, galloping track",
+                    "2/3 placed or within 2L on galloping tracks",
+                    "gallop_record_good",
+                    "valid"
+                  ]
+                ]
               }
             },
             {
@@ -407,7 +419,7 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "3/3 placed on galloping tracks",
+                    "3/3 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ]
@@ -537,14 +549,14 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "3/5 placed on galloping tracks",
+                    "3/5 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ],
                   [
                     "\u2705",
                     "Uphill finish",
-                    "1/2 placed on uphill finishes",
+                    "1/2 placed or within 2L on uphill finishes",
                     "uphill_record_good",
                     "valid"
                   ]
@@ -609,7 +621,7 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "1/2 placed on galloping tracks",
+                    "2/2 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ]
@@ -727,7 +739,7 @@
                   [
                     "\u2705",
                     "Uphill finish",
-                    "1/2 placed on uphill finishes",
+                    "1/2 placed or within 2L on uphill finishes",
                     "uphill_record_good",
                     "valid"
                   ]
@@ -799,7 +811,7 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "1/2 placed on galloping tracks",
+                    "1/2 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ]
@@ -864,14 +876,14 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "3/6 placed on galloping tracks",
+                    "3/6 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ],
                   [
                     "\u2705",
                     "Uphill finish",
-                    "3/4 placed on uphill finishes",
+                    "3/4 placed or within 2L on uphill finishes",
                     "uphill_record_good",
                     "valid"
                   ]
@@ -956,14 +968,14 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "3/4 placed on galloping tracks",
+                    "4/4 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ],
                   [
                     "\u2705",
                     "Uphill finish",
-                    "2/3 placed on uphill finishes",
+                    "3/3 placed or within 2L on uphill finishes",
                     "uphill_record_good",
                     "valid"
                   ]
@@ -1028,14 +1040,14 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "2/4 placed on galloping tracks",
+                    "2/4 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ],
                   [
                     "\u2705",
                     "Uphill finish",
-                    "2/3 placed on uphill finishes",
+                    "2/3 placed or within 2L on uphill finishes",
                     "uphill_record_good",
                     "valid"
                   ]
@@ -1100,14 +1112,14 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "4/5 placed on galloping tracks",
+                    "4/5 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ],
                   [
                     "\u2705",
                     "Uphill finish",
-                    "3/4 placed on uphill finishes",
+                    "3/4 placed or within 2L on uphill finishes",
                     "uphill_record_good",
                     "valid"
                   ]
@@ -1225,8 +1237,15 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "2/4 placed on galloping tracks",
+                    "3/4 placed or within 2L on galloping tracks",
                     "gallop_record_good",
+                    "valid"
+                  ],
+                  [
+                    "\u2705",
+                    "Uphill finish",
+                    "1/2 placed or within 2L on uphill finishes",
+                    "uphill_record_good",
                     "valid"
                   ]
                 ]
@@ -1290,7 +1309,7 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "2/3 placed on galloping tracks",
+                    "2/3 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ]
@@ -1514,7 +1533,7 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "1/2 placed on galloping tracks",
+                    "2/2 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ]
@@ -1632,7 +1651,7 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "2/3 placed on galloping tracks",
+                    "2/3 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ]
@@ -1856,14 +1875,14 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "2/3 placed on galloping tracks",
+                    "3/3 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ],
                   [
                     "\u2705",
                     "Uphill finish",
-                    "2/3 placed on uphill finishes",
+                    "3/3 placed or within 2L on uphill finishes",
                     "uphill_record_good",
                     "valid"
                   ]
@@ -1948,7 +1967,7 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "3/5 placed on galloping tracks",
+                    "3/5 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ]
@@ -2066,7 +2085,7 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "1/2 placed on galloping tracks",
+                    "1/2 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ]
@@ -2310,7 +2329,7 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "3/3 placed on galloping tracks",
+                    "3/3 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ]
@@ -2375,14 +2394,14 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "2/2 placed on galloping tracks",
+                    "2/2 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ],
                   [
                     "\u2705",
                     "Uphill finish",
-                    "2/2 placed on uphill finishes",
+                    "2/2 placed or within 2L on uphill finishes",
                     "uphill_record_good",
                     "valid"
                   ]
@@ -2447,7 +2466,7 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "2/2 placed on galloping tracks",
+                    "2/2 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ]
@@ -2618,14 +2637,14 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "6/6 placed on galloping tracks",
+                    "6/6 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ],
                   [
                     "\u2705",
                     "Uphill finish",
-                    "3/3 placed on uphill finishes",
+                    "3/3 placed or within 2L on uphill finishes",
                     "uphill_record_good",
                     "valid"
                   ]
@@ -2816,7 +2835,7 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "2/5 placed on galloping tracks",
+                    "3/5 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ]
@@ -2881,14 +2900,14 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "3/6 placed on galloping tracks",
+                    "4/6 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ],
                   [
                     "\u2705",
                     "Uphill finish",
-                    "3/6 placed on uphill finishes",
+                    "4/6 placed or within 2L on uphill finishes",
                     "uphill_record_good",
                     "valid"
                   ]
@@ -2953,7 +2972,7 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "4/5 placed on galloping tracks",
+                    "4/5 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ]
@@ -3011,6 +3030,25 @@
                 "top_6": 66,
                 "top_8": 80,
                 "top_10": 93
+              },
+              "track_fit": {
+                "verdict": "s",
+                "checks": [
+                  [
+                    "\u2705",
+                    "Wide, galloping track",
+                    "3/3 placed or within 2L on galloping tracks",
+                    "gallop_record_good",
+                    "valid"
+                  ],
+                  [
+                    "\u2705",
+                    "Uphill finish",
+                    "2/2 placed or within 2L on uphill finishes",
+                    "uphill_record_good",
+                    "valid"
+                  ]
+                ]
               }
             },
             {
@@ -3124,15 +3162,8 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "2/3 placed on galloping tracks",
+                    "2/3 placed or within 2L on galloping tracks",
                     "gallop_record_good",
-                    "valid"
-                  ],
-                  [
-                    "\u2705",
-                    "Uphill finish",
-                    "1/2 placed on uphill finishes",
-                    "uphill_record_good",
                     "valid"
                   ]
                 ]
@@ -3196,7 +3227,7 @@
                   [
                     "\u2705",
                     "Uphill finish",
-                    "1/2 placed on uphill finishes",
+                    "1/2 placed or within 2L on uphill finishes",
                     "uphill_record_good",
                     "valid"
                   ]
@@ -3261,7 +3292,7 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "3/5 placed on galloping tracks",
+                    "3/5 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ]
@@ -3379,14 +3410,14 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "4/4 placed on galloping tracks",
+                    "4/4 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ],
                   [
                     "\u2705",
                     "Uphill finish",
-                    "2/2 placed on uphill finishes",
+                    "2/2 placed or within 2L on uphill finishes",
                     "uphill_record_good",
                     "valid"
                   ]
@@ -3524,7 +3555,7 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "2/2 placed on galloping tracks",
+                    "2/2 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ]
@@ -3589,14 +3620,14 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "2/3 placed on galloping tracks",
+                    "2/3 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ],
                   [
                     "\u2705",
                     "Uphill finish",
-                    "1/2 placed on uphill finishes",
+                    "1/2 placed or within 2L on uphill finishes",
                     "uphill_record_good",
                     "valid"
                   ]
@@ -3714,14 +3745,14 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "2/3 placed on galloping tracks",
+                    "2/3 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ],
                   [
                     "\u2705",
                     "Uphill finish",
-                    "2/2 placed on uphill finishes",
+                    "2/2 placed or within 2L on uphill finishes",
                     "uphill_record_good",
                     "valid"
                   ]
@@ -3786,14 +3817,14 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "3/3 placed on galloping tracks",
+                    "3/3 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ],
                   [
                     "\u2705",
                     "Uphill finish",
-                    "3/3 placed on uphill finishes",
+                    "3/3 placed or within 2L on uphill finishes",
                     "uphill_record_good",
                     "valid"
                   ]
@@ -3957,18 +3988,6 @@
                 "top_6": 54,
                 "top_8": 65,
                 "top_10": 77
-              },
-              "track_fit": {
-                "verdict": "s",
-                "checks": [
-                  [
-                    "\u2705",
-                    "Uphill finish",
-                    "1/2 placed on uphill finishes",
-                    "uphill_record_good",
-                    "valid"
-                  ]
-                ]
               }
             },
             {
@@ -4135,14 +4154,14 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "2/4 placed on galloping tracks",
+                    "2/4 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ],
                   [
                     "\u2705",
                     "Uphill finish",
-                    "2/3 placed on uphill finishes",
+                    "2/3 placed or within 2L on uphill finishes",
                     "uphill_record_good",
                     "valid"
                   ]
@@ -4386,7 +4405,7 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "3/4 placed on galloping tracks",
+                    "3/4 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ]
@@ -4451,7 +4470,7 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "3/5 placed on galloping tracks",
+                    "3/5 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ]
@@ -4516,7 +4535,7 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "3/5 placed on galloping tracks",
+                    "3/5 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ]
@@ -4581,7 +4600,7 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "2/2 placed on galloping tracks",
+                    "2/2 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ]
@@ -4699,7 +4718,7 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "1/2 placed on galloping tracks",
+                    "1/2 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ]
@@ -4817,7 +4836,7 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "1/2 placed on galloping tracks",
+                    "1/2 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ]
@@ -4988,7 +5007,7 @@
                   [
                     "\u2705",
                     "Uphill finish",
-                    "1/2 placed on uphill finishes",
+                    "1/2 placed or within 2L on uphill finishes",
                     "uphill_record_good",
                     "valid"
                   ]
@@ -5106,14 +5125,14 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "2/3 placed on galloping tracks",
+                    "2/3 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ],
                   [
                     "\u2705",
                     "Uphill finish",
-                    "1/2 placed on uphill finishes",
+                    "1/2 placed or within 2L on uphill finishes",
                     "uphill_record_good",
                     "valid"
                   ]
@@ -5410,7 +5429,7 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "2/4 placed on galloping tracks",
+                    "2/4 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ]
@@ -5475,7 +5494,7 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "2/4 placed on galloping tracks",
+                    "2/4 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ]
@@ -5540,7 +5559,7 @@
                   [
                     "\u2705",
                     "Uphill finish",
-                    "1/2 placed on uphill finishes",
+                    "1/2 placed or within 2L on uphill finishes",
                     "uphill_record_good",
                     "valid"
                   ]
@@ -5605,14 +5624,14 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "2/3 placed on galloping tracks",
+                    "2/3 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ],
                   [
                     "\u2705",
                     "Uphill finish",
-                    "2/3 placed on uphill finishes",
+                    "2/3 placed or within 2L on uphill finishes",
                     "uphill_record_good",
                     "valid"
                   ]
@@ -5730,14 +5749,14 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "5/7 placed on galloping tracks",
+                    "5/7 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ],
                   [
                     "\u2705",
                     "Uphill finish",
-                    "3/3 placed on uphill finishes",
+                    "3/3 placed or within 2L on uphill finishes",
                     "uphill_record_good",
                     "valid"
                   ]
@@ -5855,7 +5874,7 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "1/2 placed on galloping tracks",
+                    "1/2 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ]
@@ -5920,14 +5939,14 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "3/7 placed on galloping tracks",
+                    "3/7 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ],
                   [
                     "\u2705",
                     "Uphill finish",
-                    "3/4 placed on uphill finishes",
+                    "3/4 placed or within 2L on uphill finishes",
                     "uphill_record_good",
                     "valid"
                   ]
@@ -6098,7 +6117,7 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "3/5 placed on galloping tracks",
+                    "3/5 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ]
@@ -6269,7 +6288,7 @@
                   [
                     "\u2705",
                     "Uphill finish",
-                    "1/2 placed on uphill finishes",
+                    "1/2 placed or within 2L on uphill finishes",
                     "uphill_record_good",
                     "valid"
                   ]
@@ -6497,14 +6516,14 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "3/4 placed on galloping tracks",
+                    "3/4 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ],
                   [
                     "\u2705",
                     "Left-handed",
-                    "8/8 placed left-handed",
+                    "8/8 placed or within 2L left-handed",
                     "direction_good",
                     "valid"
                   ]
@@ -6569,7 +6588,7 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "2/3 placed on galloping tracks",
+                    "2/3 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ]
@@ -6641,14 +6660,14 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "4/6 placed on galloping tracks",
+                    "5/6 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ],
                   [
                     "\u2705",
                     "Left-handed",
-                    "4/4 placed left-handed",
+                    "4/4 placed or within 2L left-handed",
                     "direction_good",
                     "valid"
                   ]
@@ -6713,7 +6732,7 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "1/2 placed on galloping tracks",
+                    "1/2 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ]
@@ -6831,7 +6850,7 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "3/5 placed on galloping tracks",
+                    "3/5 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ]
@@ -6896,7 +6915,7 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "5/8 placed on galloping tracks",
+                    "5/8 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ]
@@ -7014,14 +7033,14 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "2/4 placed on galloping tracks",
+                    "2/4 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ],
                   [
                     "\u2705",
                     "Left-handed",
-                    "3/5 placed left-handed",
+                    "3/5 placed or within 2L left-handed",
                     "direction_good",
                     "valid"
                   ]
@@ -7079,6 +7098,18 @@
                 "top_6": 45,
                 "top_8": 54,
                 "top_10": 63
+              },
+              "track_fit": {
+                "verdict": "s",
+                "checks": [
+                  [
+                    "\u2705",
+                    "Wide, galloping track",
+                    "2/4 placed or within 2L on galloping tracks",
+                    "gallop_record_good",
+                    "valid"
+                  ]
+                ]
               }
             },
             {
@@ -7146,8 +7177,15 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "3/6 placed on galloping tracks",
+                    "4/6 placed or within 2L on galloping tracks",
                     "gallop_record_good",
+                    "valid"
+                  ],
+                  [
+                    "\u2705",
+                    "Left-handed",
+                    "2/3 placed or within 2L left-handed",
+                    "direction_good",
                     "valid"
                   ]
                 ]
@@ -7329,7 +7367,7 @@
                   [
                     "\u2705",
                     "Left-handed",
-                    "2/4 placed left-handed",
+                    "2/4 placed or within 2L left-handed",
                     "direction_good",
                     "valid"
                   ]
@@ -7626,7 +7664,7 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "3/5 placed on galloping tracks",
+                    "3/5 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ]
@@ -7691,7 +7729,7 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "1/2 placed on galloping tracks",
+                    "1/2 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ]
@@ -7749,6 +7787,18 @@
                 "top_6": 51,
                 "top_8": 61,
                 "top_10": 71
+              },
+              "track_fit": {
+                "verdict": "s",
+                "checks": [
+                  [
+                    "\u2705",
+                    "Wide, galloping track",
+                    "3/3 placed or within 2L on galloping tracks",
+                    "gallop_record_good",
+                    "valid"
+                  ]
+                ]
               }
             },
             {
@@ -7809,7 +7859,7 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "2/3 placed on galloping tracks",
+                    "2/3 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ]
@@ -7980,7 +8030,7 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "2/3 placed on galloping tracks",
+                    "2/3 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ]
@@ -8363,7 +8413,7 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "3/6 placed on galloping tracks",
+                    "3/6 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ]
@@ -8448,7 +8498,7 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "1/2 placed on galloping tracks",
+                    "1/2 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ]
@@ -8513,7 +8563,7 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "3/4 placed on galloping tracks",
+                    "3/4 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ]
@@ -8578,14 +8628,14 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "2/3 placed on galloping tracks",
+                    "2/3 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ],
                   [
                     "\u2705",
                     "Left-handed",
-                    "4/4 placed left-handed",
+                    "4/4 placed or within 2L left-handed",
                     "direction_good",
                     "valid"
                   ]
@@ -8703,7 +8753,7 @@
                   [
                     "\u2705",
                     "Left-handed",
-                    "2/4 placed left-handed",
+                    "2/4 placed or within 2L left-handed",
                     "direction_good",
                     "valid"
                   ]
@@ -8768,7 +8818,7 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "1/2 placed on galloping tracks",
+                    "1/2 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ]
@@ -8833,14 +8883,14 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "2/4 placed on galloping tracks",
+                    "2/4 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ],
                   [
                     "\u2705",
                     "Left-handed",
-                    "2/5 placed left-handed",
+                    "2/5 placed or within 2L left-handed",
                     "direction_good",
                     "valid"
                   ]
@@ -8905,14 +8955,14 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "4/5 placed on galloping tracks",
+                    "4/5 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ],
                   [
                     "\u2705",
                     "Left-handed",
-                    "3/4 placed left-handed",
+                    "3/4 placed or within 2L left-handed",
                     "direction_good",
                     "valid"
                   ]
@@ -8977,8 +9027,15 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "2/3 placed on galloping tracks",
+                    "2/3 placed or within 2L on galloping tracks",
                     "gallop_record_good",
+                    "valid"
+                  ],
+                  [
+                    "\u2705",
+                    "Left-handed",
+                    "2/3 placed or within 2L left-handed",
+                    "direction_good",
                     "valid"
                   ]
                 ]
@@ -9042,7 +9099,7 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "2/3 placed on galloping tracks",
+                    "2/3 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ]
@@ -9419,7 +9476,7 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "3/5 placed on galloping tracks",
+                    "3/5 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ]
@@ -9491,7 +9548,7 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "1/2 placed on galloping tracks",
+                    "1/2 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ]
@@ -9621,7 +9678,7 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "1/2 placed on galloping tracks",
+                    "2/2 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ]
@@ -9742,6 +9799,13 @@
                     "Drawn 2 of 9 \u2014 low stalls place 1.5\u00d7 average (178 runs)",
                     "draw_good",
                     "valid"
+                  ],
+                  [
+                    "\u2705",
+                    "Wide, galloping track",
+                    "2/4 placed or within 2L on galloping tracks",
+                    "gallop_record_good",
+                    "valid"
                   ]
                 ]
               }
@@ -9811,7 +9875,7 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "3/4 placed on galloping tracks",
+                    "3/4 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ]
@@ -9876,7 +9940,7 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "3/6 placed on galloping tracks",
+                    "3/6 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ]
@@ -10033,7 +10097,7 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "3/7 placed on galloping tracks",
+                    "3/7 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ]
@@ -10105,7 +10169,7 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "1/2 placed on galloping tracks",
+                    "1/2 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ]
@@ -10295,7 +10359,7 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "2/3 placed on galloping tracks",
+                    "2/3 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ]
@@ -10367,7 +10431,7 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "5/9 placed on galloping tracks",
+                    "5/9 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ]
@@ -10492,7 +10556,7 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "2/5 placed on galloping tracks",
+                    "3/5 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ]
@@ -10557,7 +10621,7 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "3/5 placed on galloping tracks",
+                    "3/5 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ]
@@ -10629,7 +10693,7 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "1/2 placed on galloping tracks",
+                    "1/2 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ]
@@ -10896,7 +10960,7 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "3/7 placed on galloping tracks",
+                    "4/7 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ]
@@ -11115,13 +11179,20 @@
                 "top_10": 61
               },
               "track_fit": {
-                "verdict": "u",
+                "verdict": "q",
                 "checks": [
                   [
                     "\u274c",
                     "Draw matters at 5f here",
                     "Drawn 13 of 18 \u2014 high stalls place 0.6\u00d7 average (178 runs)",
                     "draw_bad",
+                    "valid"
+                  ],
+                  [
+                    "\u2705",
+                    "Wide, galloping track",
+                    "5/12 placed or within 2L on galloping tracks",
+                    "gallop_record_good",
                     "valid"
                   ]
                 ]
@@ -11251,6 +11322,18 @@
                 "top_6": 43,
                 "top_8": 50,
                 "top_10": 57
+              },
+              "track_fit": {
+                "verdict": "s",
+                "checks": [
+                  [
+                    "\u2705",
+                    "Wide, galloping track",
+                    "2/3 placed or within 2L on galloping tracks",
+                    "gallop_record_good",
+                    "valid"
+                  ]
+                ]
               }
             },
             {
@@ -11311,7 +11394,7 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "4/7 placed on galloping tracks",
+                    "4/7 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ]
@@ -11376,7 +11459,7 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "3/5 placed on galloping tracks",
+                    "4/5 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ]
@@ -11441,7 +11524,7 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "1/2 placed on galloping tracks",
+                    "1/2 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ]
@@ -11499,6 +11582,18 @@
                 "top_6": 41,
                 "top_8": 48,
                 "top_10": 56
+              },
+              "track_fit": {
+                "verdict": "s",
+                "checks": [
+                  [
+                    "\u2705",
+                    "Wide, galloping track",
+                    "2/3 placed or within 2L on galloping tracks",
+                    "gallop_record_good",
+                    "valid"
+                  ]
+                ]
               }
             },
             {
@@ -11612,7 +11707,7 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "3/4 placed on galloping tracks",
+                    "3/4 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ]
@@ -11995,7 +12090,7 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "4/9 placed on galloping tracks",
+                    "4/9 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ]
@@ -12457,7 +12552,7 @@
                   [
                     "\u2705",
                     "Left-handed",
-                    "3/3 placed left-handed",
+                    "3/3 placed or within 2L left-handed",
                     "direction_good",
                     "valid"
                   ]
@@ -13960,7 +14055,7 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "2/2 placed on galloping tracks",
+                    "2/2 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ]
@@ -14078,7 +14173,7 @@
                   [
                     "\u2705",
                     "Left-handed",
-                    "3/3 placed left-handed",
+                    "3/3 placed or within 2L left-handed",
                     "direction_good",
                     "valid"
                   ]
@@ -14143,7 +14238,7 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "1/2 placed on galloping tracks",
+                    "1/2 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ]
@@ -14254,6 +14349,18 @@
                 "top_6": 48,
                 "top_8": 58,
                 "top_10": 67
+              },
+              "track_fit": {
+                "verdict": "s",
+                "checks": [
+                  [
+                    "\u2705",
+                    "Left-handed",
+                    "3/5 placed or within 2L left-handed",
+                    "direction_good",
+                    "valid"
+                  ]
+                ]
               }
             },
             {
@@ -14473,7 +14580,7 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "1/2 placed on galloping tracks",
+                    "1/2 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ]
@@ -14644,7 +14751,7 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "1/2 placed on galloping tracks",
+                    "1/2 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ]
@@ -14994,7 +15101,7 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "2/2 placed on galloping tracks",
+                    "2/2 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ]
@@ -15218,7 +15325,7 @@
                   [
                     "\u2705",
                     "Left-handed",
-                    "3/4 placed left-handed",
+                    "3/4 placed or within 2L left-handed",
                     "direction_good",
                     "valid"
                   ]
@@ -15283,7 +15390,7 @@
                   [
                     "\u2705",
                     "Wide, galloping track",
-                    "2/2 placed on galloping tracks",
+                    "2/2 placed or within 2L on galloping tracks",
                     "gallop_record_good",
                     "valid"
                   ]
@@ -15580,7 +15687,7 @@
                   [
                     "\u2705",
                     "Left-handed",
-                    "4/8 placed left-handed",
+                    "4/8 placed or within 2L left-handed",
                     "direction_good",
                     "valid"
                   ]
@@ -17328,7 +17435,7 @@
                   [
                     "\u2705",
                     "Left-handed",
-                    "2/3 placed left-handed",
+                    "2/3 placed or within 2L left-handed",
                     "direction_good",
                     "valid"
                   ]
@@ -18534,7 +18641,7 @@
                   [
                     "\u2705",
                     "Sharp, turning track",
-                    "2/2 placed on sharp tracks",
+                    "2/2 placed or within 2L on sharp tracks",
                     "sharp_record_good",
                     "valid"
                   ],
@@ -18555,14 +18662,14 @@
                   [
                     "\u2705",
                     "Uphill finish",
-                    "2/3 placed on uphill finishes",
+                    "2/3 placed or within 2L on uphill finishes",
                     "uphill_record_good",
                     "valid"
                   ],
                   [
                     "\u2705",
                     "Right-handed",
-                    "2/3 placed right-handed",
+                    "2/3 placed or within 2L right-handed",
                     "direction_good",
                     "valid"
                   ]
@@ -18866,7 +18973,7 @@
                   [
                     "\u2705",
                     "Uphill finish",
-                    "1/2 placed on uphill finishes",
+                    "1/2 placed or within 2L on uphill finishes",
                     "uphill_record_good",
                     "valid"
                   ]
@@ -19660,7 +19767,7 @@
                   [
                     "\u2705",
                     "Sharp, turning track",
-                    "1/2 placed on sharp tracks",
+                    "1/2 placed or within 2L on sharp tracks",
                     "sharp_record_good",
                     "valid"
                   ]
@@ -20137,14 +20244,14 @@
                   [
                     "\u2705",
                     "Uphill finish",
-                    "2/3 placed on uphill finishes",
+                    "2/3 placed or within 2L on uphill finishes",
                     "uphill_record_good",
                     "valid"
                   ],
                   [
                     "\u2705",
                     "Right-handed",
-                    "2/3 placed right-handed",
+                    "2/3 placed or within 2L right-handed",
                     "direction_good",
                     "valid"
                   ]
@@ -20521,7 +20628,7 @@
                   [
                     "\u2705",
                     "Sharp, turning track",
-                    "1/2 placed on sharp tracks",
+                    "1/2 placed or within 2L on sharp tracks",
                     "sharp_record_good",
                     "valid"
                   ]
@@ -21370,7 +21477,7 @@
                   [
                     "\u2705",
                     "Uphill finish",
-                    "1/2 placed on uphill finishes",
+                    "1/2 placed or within 2L on uphill finishes",
                     "uphill_record_good",
                     "valid"
                   ],
@@ -21462,7 +21569,7 @@
                   [
                     "\u2705",
                     "Uphill finish",
-                    "1/2 placed on uphill finishes",
+                    "1/2 placed or within 2L on uphill finishes",
                     "uphill_record_good",
                     "valid"
                   ]
@@ -21554,7 +21661,7 @@
                   [
                     "\u2705",
                     "Uphill finish",
-                    "1/2 placed on uphill finishes",
+                    "1/2 placed or within 2L on uphill finishes",
                     "uphill_record_good",
                     "valid"
                   ]
@@ -21712,7 +21819,7 @@
                   [
                     "\u2705",
                     "Sharp, turning track",
-                    "1/2 placed on sharp tracks",
+                    "1/2 placed or within 2L on sharp tracks",
                     "sharp_record_good",
                     "valid"
                   ]
@@ -22063,14 +22170,14 @@
                   [
                     "\u2705",
                     "Sharp, turning track",
-                    "2/2 placed on sharp tracks",
+                    "2/2 placed or within 2L on sharp tracks",
                     "sharp_record_good",
                     "valid"
                   ],
                   [
                     "\u2705",
                     "Uphill finish",
-                    "2/2 placed on uphill finishes",
+                    "2/2 placed or within 2L on uphill finishes",
                     "uphill_record_good",
                     "valid"
                   ]
@@ -22374,7 +22481,7 @@
                   [
                     "\u2705",
                     "Right-handed",
-                    "2/3 placed right-handed",
+                    "2/3 placed or within 2L right-handed",
                     "direction_good",
                     "valid"
                   ]
@@ -22836,7 +22943,7 @@
                   [
                     "\u2705",
                     "Sharp, turning track",
-                    "1/2 placed on sharp tracks",
+                    "1/2 placed or within 2L on sharp tracks",
                     "sharp_record_good",
                     "valid"
                   ],
@@ -26003,7 +26110,7 @@
                   [
                     "\u2705",
                     "Sharp, turning track",
-                    "2/2 placed on sharp tracks",
+                    "2/2 placed or within 2L on sharp tracks",
                     "sharp_record_good",
                     "valid"
                   ],
@@ -26017,7 +26124,7 @@
                   [
                     "\u2705",
                     "Left-handed",
-                    "2/3 placed left-handed",
+                    "2/3 placed or within 2L left-handed",
                     "direction_good",
                     "valid"
                   ]
@@ -26248,7 +26355,7 @@
                   [
                     "\u2705",
                     "Sharp, turning track",
-                    "1/2 placed on sharp tracks",
+                    "1/2 placed or within 2L on sharp tracks",
                     "sharp_record_good",
                     "valid"
                   ]
@@ -26852,7 +26959,7 @@
                   [
                     "\u2705",
                     "Left-handed",
-                    "3/3 placed left-handed",
+                    "3/3 placed or within 2L left-handed",
                     "direction_good",
                     "valid"
                   ]
@@ -27083,7 +27190,7 @@
                   [
                     "\u2705",
                     "Left-handed",
-                    "2/3 placed left-handed",
+                    "2/3 placed or within 2L left-handed",
                     "direction_good",
                     "valid"
                   ]
@@ -29063,7 +29170,7 @@
                   [
                     "\u2705",
                     "Sharp, turning track",
-                    "1/2 placed on sharp tracks",
+                    "1/2 placed or within 2L on sharp tracks",
                     "sharp_record_good",
                     "valid"
                   ]
@@ -29262,7 +29369,7 @@
                   [
                     "\u2705",
                     "Sharp, turning track",
-                    "1/2 placed on sharp tracks",
+                    "1/2 placed or within 2L on sharp tracks",
                     "sharp_record_good",
                     "valid"
                   ]
@@ -29767,7 +29874,7 @@
                   [
                     "\u2705",
                     "Sharp, turning track",
-                    "1/2 placed on sharp tracks",
+                    "1/2 placed or within 2L on sharp tracks",
                     "sharp_record_good",
                     "valid"
                   ],
@@ -30293,14 +30400,14 @@
                   [
                     "\u2705",
                     "Sharp, turning track",
-                    "1/2 placed on sharp tracks",
+                    "1/2 placed or within 2L on sharp tracks",
                     "sharp_record_good",
                     "valid"
                   ],
                   [
                     "\u2705",
                     "Left-handed",
-                    "2/5 placed left-handed",
+                    "2/5 placed or within 2L left-handed",
                     "direction_good",
                     "valid"
                   ],
@@ -30676,16 +30783,16 @@
           "pace": {
             "FR": [],
             "P": [
-              "Master Garvey",
-              "Timandi"
+              "Timandi",
+              "Master Garvey"
             ],
             "MD": [
               "Doctor Grace",
               "Jazz Forever"
             ],
             "HU": [
-              "Captain Hanley",
               "Colugo",
+              "Captain Hanley",
               "Zitkala Sa",
               "Star Mind"
             ],
@@ -35749,7 +35856,7 @@
                   [
                     "\u2705",
                     "Right-handed",
-                    "3/3 placed right-handed",
+                    "3/3 placed or within 2L right-handed",
                     "direction_good",
                     "valid"
                   ]
@@ -36755,7 +36862,7 @@
                   [
                     "\u2705",
                     "Right-handed",
-                    "2/3 placed right-handed",
+                    "2/3 placed or within 2L right-handed",
                     "direction_good",
                     "valid"
                   ]

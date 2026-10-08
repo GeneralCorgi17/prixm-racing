@@ -186,6 +186,24 @@ def places_for(field):
     return 1 if field <= 4 else 2 if field <= 7 else 3 if field <= 15 else 4
 
 
+# A record run counts as "good" when placed OR beaten no more than this far (validated 2026-10-08:
+# same/better lift than placed-only with ~10-15% more horses covered — scratch test, see memory)
+CLOSE_LENGTHS = 2.0
+_BTN_WORDS = {'nse': .05, 'shd': .1, 'sh': .1, 'hd': .2, 'snk': .25, 'nk': .3, 'dht': 0.0, 'dh': 0.0, 'dist': 30.0}
+_BTN_FRAC = {'½': .5, '¼': .25, '¾': .75}
+
+
+def parse_btn_gap(s):
+    """RP 'distance_beaten' (lengths behind the horse in front: '2½', 'nk', 'hd') → float, None if unparseable."""
+    s = (s or '').strip().lower()
+    if s in _BTN_WORDS:
+        return _BTN_WORDS[s]
+    m = re.fullmatch(r'(\d+)?\s*([½¼¾])?', s)
+    if not m or not (m.group(1) or m.group(2)):
+        return None
+    return float(m.group(1) or 0) + _BTN_FRAC.get(m.group(2) or '', 0.0)
+
+
 _WEAK = re.compile(r'\b(weakened|faded|tired|no extra|found little|lost place)\b')
 _STRONG = re.compile(r'\b(stayed on|ran on|kept on|finished strongly|stayed on well|ran on well)\b')
 
@@ -207,16 +225,26 @@ class HistoryIndex:
             field = race.get('field_size') or len([r for r in race.get('results', []) if not r.get('non_runner')])
             pl = places_for(field)
             df = race.get('distance_f')
+            # Cumulative lengths behind the winner (distance_beaten is the gap to the horse in front)
+            btn, cum = {}, 0.0
+            for r in sorted((r for r in race.get('results', []) if not r.get('non_runner') and r.get('finish_pos')),
+                            key=lambda r: r['finish_pos']):
+                if r['finish_pos'] > 1 and cum is not None:
+                    g = parse_btn_gap(r.get('distance_beaten'))
+                    cum = None if g is None else cum + g
+                btn[id(r)] = cum
             for r in race.get('results', []):
                 if r.get('non_runner'):
                     continue
                 pos = r.get('finish_pos')
                 won = pos == 1
                 placed = bool(pos and pos <= pl)
+                b = btn.get(id(r))
                 comment = r.get('run_comment') or ''
                 self.runs[norm_horse(r.get('name'))].append({
                     'date': date, 'track': tk, 'going': going_cat(race.get('going')), 'dist': df,
                     'pos': pos, 'won': won, 'placed': placed, 'field': field,
+                    'good': placed or (b is not None and b <= CLOSE_LENGTHS),
                     'style': r.get('run_style') or classify_run_style(comment), 'comment': comment.lower(),
                     'nh': any(x in (race.get('race_type') or '').lower() for x in ('hurdle', 'chase', 'nh flat', 'bumper')),
                 })
@@ -352,7 +380,7 @@ def horse_profile(runs):
 
     def rec(pred):
         rs = [r for r in runs if (t := tp.get(r['track']) or get_track(r['track'])) and pred(t)]
-        return (sum(r['placed'] for r in rs), len(rs))
+        return (sum(r['good'] for r in rs), len(rs))   # good = placed or beaten ≤ CLOSE_LENGTHS
     p['sharp'] = rec(lambda t: t.get('sharpness', 0) >= 0.65)
     p['gallop'] = rec(lambda t: t.get('sharpness', 1) <= 0.35)
     p['uphill'] = rec(lambda t: t.get('uphill_finish', 0) >= 0.6)
@@ -479,9 +507,9 @@ def cross_analysis(runner, race, track, hist, before, pace, draw_info=None, raw=
         s_pl, s_n = prof.get('sharp', (0, 0))
         g_pl, g_n = prof.get('gallop', (0, 0))
         if s_n >= 2 and s_pl / s_n >= 0.4:
-            add('✅', 'Sharp, turning track', f'{s_pl}/{s_n} placed on sharp tracks', 'sharp_record_good')
+            add('✅', 'Sharp, turning track', f'{s_pl}/{s_n} placed or within 2L on sharp tracks', 'sharp_record_good')
         elif s_n >= 2 and s_pl == 0 and g_n >= 2 and g_pl / g_n >= 0.4:
-            add('❌', 'Sharp, turning track', f'Galloping type: 0/{s_n} placed on sharp tracks, {g_pl}/{g_n} on galloping', 'sharp_galloper_bad')
+            add('❌', 'Sharp, turning track', f'Galloping type: 0/{s_n} placed or within 2L on sharp tracks, {g_pl}/{g_n} on galloping', 'sharp_galloper_bad')
         if prof.get('style') == 'HU':
             a, b = prof['style_n']
             add('❌', 'Tight bends, short straight — hold-up horses struggle', f'Held up in {a} of last {b} runs', 'sharp_holdup_bad')
@@ -491,7 +519,7 @@ def cross_analysis(runner, race, track, hist, before, pace, draw_info=None, raw=
     elif sharp <= 0.3 and (track.get('straight_f') or 0) >= 4:
         g_pl, g_n = prof.get('gallop', (0, 0))
         if g_n >= 2 and g_pl / g_n >= 0.4:
-            add('✅', 'Wide, galloping track', f'{g_pl}/{g_n} placed on galloping tracks', 'gallop_record_good')
+            add('✅', 'Wide, galloping track', f'{g_pl}/{g_n} placed or within 2L on galloping tracks', 'gallop_record_good')
     # 3. Uphill finish vs stamina
     if track.get('uphill_finish', 0) >= 0.6:
         if prof.get('comment_n'):
@@ -503,9 +531,9 @@ def cross_analysis(runner, race, track, hist, before, pace, draw_info=None, raw=
         # Record comparisons need a contrast: 0/3 uphill means little if the horse never places anywhere
         up, lv = prof.get('uphill', (0, 0)), prof.get('level', (0, 0))
         if up[1] >= 2 and rate(up) >= 0.5 and (lv[1] < 2 or rate(up) >= rate(lv)):
-            add('✅', 'Uphill finish', f'{up[0]}/{up[1]} placed on uphill finishes', 'uphill_record_good')
+            add('✅', 'Uphill finish', f'{up[0]}/{up[1]} placed or within 2L on uphill finishes', 'uphill_record_good')
         elif up[1] >= 3 and up[0] == 0 and lv[1] >= 2 and rate(lv) >= 0.4:
-            add('❌', 'Uphill finish', f'0/{up[1]} placed on uphill finishes, {lv[0]}/{lv[1]} on level tracks', 'uphill_record_bad')
+            add('❌', 'Uphill finish', f'0/{up[1]} placed or within 2L on uphill finishes, {lv[0]}/{lv[1]} on level tracks', 'uphill_record_bad')
     # 4. Direction (only when the race actually goes round a bend)
     dirn = track.get('direction')
     if dirn in ('L', 'R') and turning:
@@ -513,9 +541,9 @@ def cross_analysis(runner, race, track, hist, before, pace, draw_info=None, raw=
         label = 'Left-handed' if dirn == 'L' else 'Right-handed'
         way = 'left-handed' if dirn == 'L' else 'right-handed'
         if same[1] >= 3 and rate(same) >= 0.4 and (other[1] < 2 or rate(same) >= rate(other)):
-            add('✅', label, f'{same[0]}/{same[1]} placed {way}', 'direction_good')
+            add('✅', label, f'{same[0]}/{same[1]} placed or within 2L {way}', 'direction_good')
         elif same[1] >= 3 and same[0] == 0 and other[1] >= 2 and rate(other) >= 0.4:
-            add('❌', label, f'0/{same[1]} placed {way}, {other[0]}/{other[1]} the other way', 'direction_bad')
+            add('❌', label, f'0/{same[1]} placed or within 2L {way}, {other[0]}/{other[1]} the other way', 'direction_bad')
     # 5. Pace
     if pace and prof.get('style') == 'HU' and pace['fr_count'] <= 1:
         add('⚠️', 'Hold-up horses need a strong pace', f"Only {pace['fr_count']} front-runner in the field", 'pace_holdup_bad')

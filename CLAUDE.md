@@ -104,7 +104,7 @@ Irish races (26 tracks, ROI + Northern Ireland — `IRE_TRACKS` in `scripts/resu
 
 ## 🧭 Horse × Track Cross Analysis + Pace Map (both engines)
 
-`cross_analysis()` / `pace_map()` in `engine/emerald_engine.py` → `runner.track_fit = {verdict:'s'|'q'|'u'|null, checks:[[icon, demand, horse, key, 'valid'|'unproven']]}`, `race.pace = {FR,P,MD,HU,fr_count,verdict}`. Inputs: RP in-running comments (`run_comment` → `run_style` FR/P/MD/HU via `classify_run_style()` in results_fetcher, captured from 2026-09-30), record on sharp/galloping/uphill/L/R tracks (contrast required — "0/3 uphill" alone never flags), today's draw vs logged draw stats per track+trip.
+`cross_analysis()` / `pace_map()` in `engine/emerald_engine.py` → `runner.track_fit = {verdict:'s'|'q'|'u'|null, checks:[[icon, demand, horse, key, 'valid'|'unproven']]}`, `race.pace = {FR,P,MD,HU,fr_count,verdict}`. Inputs: RP in-running comments (`run_comment` → `run_style` FR/P/MD/HU via `classify_run_style()` in results_fetcher, captured from 2026-09-30), record on sharp/galloping/uphill/L/R tracks — a run counts if placed OR beaten ≤ `CLOSE_LENGTHS` (2L, cumulative from `distance_beaten` via `parse_btn_gap()`, added 2026-10-08) (contrast required — "0/3 uphill" alone never flags), today's draw vs logged draw stats per track+trip.
 - **Self-validating**: `scripts/validate_track_fit.py` (runs after every Fetch Results, ~5s) measures each check key's placed-rate lift vs score-rank expectation. `valid` (n ≥ 40, lift ≥ 5% right way) → counts toward the verdict; `unproven` → detail row only; `refuted` → dropped. 2026-09-30: ❌ UNSUITED −16%, ✅ SUITS +11%; direction ❌ and static low-draw ❌ refuted.
 - **No-data = blank** (user rule): no evidence → no badge/row. Race cards show only ❌ (+ "Top pick unsuited" strip); ✅/⚠ in race view (`renderTrackFitBox`, `fitBadge`, `renderPaceBox`) and Track Explorer. Sidebar pick tags: ❌ only.
 - Prixm: display-only, never changes score/gap/segment. Emerald: validated checks feed `track_fit`.
@@ -497,7 +497,7 @@ Irish venues also caught by `(IRE)` suffix check before list lookup.
 1. **Fetch racecard** → `scripts/racecard_fetcher.py` or `scripts/racecard_fetcher_api.py` → writes `daily_race_data.json` + `race_data/race_data_YYYY-MM-DD.json`
 2. **View in UI** → `Start App.bat` starts `scripts/db_server.py` + opens `daily_racing_analyzer.html`
 3. **After racing** → `scripts/results_fetcher.py` scrapes results, matches predictions, dual-writes `results_history.json` + `race_data.db`
-4. **Calibration** → UI's calibration engine reads results history, adjusts FM weights per profile (aw/turf_flat/nh)
+4. **Calibration** → UI's calibration engine reads results history, adjusts FM weights per profile (aw/turf_flat/nh). Next recalibration per surface needs `PRIXM_RECAL_STEP` (5000) new races. `calibrations.json` (server) is the source of truth: on load it is merged with `localStorage.calibHistory` (anything saved while the server was off gets pushed back) and each profile's latest applied weights are re-derived into `calibWeights_*`.
 5. **Qualifying Excel** → `Export Qualifying.bat` → `scripts/qualifying_exporter.py` → rebuilds `output/qualifying_picks.xlsx`
 
 ## localStorage Keys (Main UI)

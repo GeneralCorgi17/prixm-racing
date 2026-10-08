@@ -1882,6 +1882,8 @@ function syncVersionFromCalibrations(hist){
   });
   try{localStorage.setItem('analysisVersion',String(v));}catch(e){}
 }
+// Prixm: new races per surface needed before the next recalibration (first calibration needs 50)
+const PRIXM_RECAL_STEP=5000;
 function weightsChanged(proposals,history){
   // Returns true if ANY profile's proposed weights differ from current stored weights
   if(!proposals||!proposals.length) return false;
@@ -5976,7 +5978,7 @@ async function renderPerformance(){
     // Race count cards + unified calibration button with dynamic gating
     const totalRaces=(s.pc.aw||0)+(s.pc.turf_flat||0)+(s.pc.nh||0);
     const hist=window._resultsHistory;
-    const MIN_NEW_RACES=1000; // new races per surface needed to unlock recalibration
+    const MIN_NEW_RACES=PRIXM_RECAL_STEP; // new races per surface needed to unlock recalibration
     const MIN_FIRST=50; // first calibration threshold
     // Per-surface status: {count, lastCalRaces, newSince, canCalibrate, everCalibrated}
     const surfaceStatus=['aw','turf_flat','nh'].map(p=>{
@@ -6275,7 +6277,7 @@ async function runUnifiedCalibration(){
   if(!history){try{history=await fetch('results_history.json?t='+Date.now()).then(r=>r.json());}catch(e){}}
   if(!history){alert('No history data');return;}
   const pLabels={aw:'All-Weather',turf_flat:'Turf Flat',nh:'National Hunt'};
-  const MIN_NEW=1000,MIN_FIRST=50;
+  const MIN_NEW=PRIXM_RECAL_STEP,MIN_FIRST=50;
   const results=[];
   ['aw','turf_flat','nh'].forEach(p=>{
     const raceCount=(history.races||[]).filter(r=>r.profile===p).length;
@@ -6602,14 +6604,37 @@ async function load(){
   // Restore calibrations: server file (most reliable) then localStorage fallback
   if(window._resultsHistory){
     let calibLoaded=false;
+    let localCal=[];
+    try{const c=localStorage.getItem('calibHistory');if(c){const p=JSON.parse(c);if(Array.isArray(p))localCal=p;}}catch(e){}
     try{
       const cr=await fetch('http://localhost:7432/api/calibrations',{signal:AbortSignal.timeout(1500)});
-      if(cr.ok){const ca=await cr.json();if(Array.isArray(ca)&&ca.length){window._resultsHistory.calibrations=ca;calibLoaded=true;}}
+      if(cr.ok){const ca=await cr.json();if(Array.isArray(ca)){
+        // Merge, don't overwrite: a calibration saved while the server was off lives only in localStorage
+        const key=x=>[x.date,x.profile,x.races_used,x.applied].join('|');
+        const seen=new Set(ca.map(key));
+        const missing=localCal.filter(x=>!seen.has(key(x)));
+        const merged=[...ca,...missing].sort((a,b)=>(a.date||'').localeCompare(b.date||''));
+        if(merged.length){window._resultsHistory.calibrations=merged;calibLoaded=true;}
+        if(missing.length){
+          try{localStorage.setItem('calibHistory',JSON.stringify(merged));}catch(e){}
+          fetch('http://localhost:7432/api/calibrations',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(merged)}).catch(()=>{});
+        }
+      }}
     }catch(e){}
-    if(!calibLoaded){
-      try{const c=localStorage.getItem('calibHistory');if(c)window._resultsHistory.calibrations=JSON.parse(c);}catch(e){}
-    }
+    if(!calibLoaded&&localCal.length) window._resultsHistory.calibrations=localCal;
     try{const w=localStorage.getItem('calibWeightProfiles');if(w)window._resultsHistory.weight_profiles=JSON.parse(w);}catch(e){}
+    // Calibrations are the source of truth for weights: re-derive each profile's latest applied weights
+    // so a cleared/other browser still scores with the calibrated weights (applied below via applyCalibratedWeightsToData)
+    try{
+      const wp=window._resultsHistory.weight_profiles=window._resultsHistory.weight_profiles||{};
+      const latest={};
+      (window._resultsHistory.calibrations||[]).filter(c=>c.applied&&c.new_weights).forEach(c=>{if(!latest[c.profile]||(c.date||'')>=(latest[c.profile].date||''))latest[c.profile]=c;});
+      Object.entries(latest).forEach(([prf,c])=>{
+        try{localStorage.setItem('calibWeights_'+prf,JSON.stringify(c.new_weights));}catch(e){}
+        if(!/^ire_/.test(prf)) wp[prf]=c.new_weights;
+      });
+      try{localStorage.setItem('calibWeightProfiles',JSON.stringify(wp));}catch(e){}
+    }catch(e){}
     // Force re-render Performance tab if already open (race condition: opened before calibrations loaded)
     try{const pv=document.getElementById('perfView');if(pv&&pv.style.display==='block')renderPerformance();}catch(e){}
   }
