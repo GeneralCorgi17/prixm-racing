@@ -217,6 +217,13 @@ Bronze section lives below Silver in the Golden tab (HR divider). Shows: SR, ROI
 
 ---
 
+## 🎯 Prime Format (display only, added 2026-10-11)
+
+The most accurate **pre-race** format from a full results analysis (5,532 scored UK races, 2,640 rule combinations of race type/distance/field/gap/score/going/class, found on Apr–Jul, confirmed on unseen Aug–Oct): **UK · non-handicap · ≤5 runners · gap ≥12** → 134 races, top pick won 58.2% (Aug–Oct 61.5%; Golden 49% on the same months). On the archived racecards (no hindsight) 126 races, 57.9%. ROI at SP ≈ −3% — accuracy, not profit; betting still needs price > fair (Ledger EV).
+- `getPrimeFlags(race)` / `isUKTrack(course)` (GB rows of `track_profiles.js`) / `PRIME_STATS` / `primeInfoHTML()` / `showPrimeInfo()` in `daily_racing_analyzer.html` (search `PRIME FORMAT`). Badge `🎯 Prime` on race cards (`.rc-sg-prime`, both themes), a line in `renderTopPickCard`, header **🎯 Prime** button (next to ❓ Guide) + a Guide section with the same text.
+- "Top pick is favourite" was rejected: on SP it looked like 57–60%, but that's hindsight (late money); the card price at fetch time gave ~38%. Distance (best: 1m–11f, jumps 2m–2m1f), going, class add nothing once field + gap are set.
+- Never changes scores, gaps, segments or P&L. `PRIME_STATS` is a static snapshot — re-run the analysis to refresh.
+
 ## Scoring Engine
 
 14 weighted factors with configurable max scores:
@@ -488,6 +495,8 @@ Current list (results_fetcher + HTML):
 - **Meta**: free to air, scoop, worldwide stakes, world pool
 
 Venue matching uses lowercase substring. Hyphens normalized to spaces in `results_fetcher.py` (`normalize_venue()`).
+
+**UK whitelist (2026-10-11)**: the blacklist alone let 85 US/Japan/NZ/German/Turkish races (Saratoga, Del Mar, Kentucky Downs, Kokura, Veliefendi…) into Prixm history. `results_fetcher.is_excluded()` now also excludes anything that isn't a known UK track (`is_uk()` → GB rows of `TRACKS` in `scripts/build_track_profiles.py`) or Irish (`is_ireland()`); unknown names without a country code print `[SKIP] … add it to build_track_profiles.py if it is UK`. HTML mirror: `isExcludedVenue()` + `isUKTrack()`. One-off cleanup of the leaked rows: `python scripts/clean_foreign_races.py --apply` (dry run without the flag; backs up to `backups/`). A new UK track must be added to `build_track_profiles.py` or its results are skipped.
 Irish venues also caught by `(IRE)` suffix check before list lookup.
 
 **France = display only (2026-10-04; was Longchamp 2026-07-13 + Deauville 2026-08-16)**: all French venues shown on race cards. HTML: French names removed from `EXCLUDED_VENUES`; `isFrance(course)` (`(FR)` suffix or known French track) re-excludes them from `getTop10Picks`, `getGoldenFlags`/`getSilverFlags`/`getBronzeFlags`, `isExcludedVenue`. Racecards: RP scraper takes the French meetings RP features in `raceCards.meetings` (big days only, e.g. Longchamp) **plus** everyday French cards from RP's `meetings.byDate` index via `_french_from_day_index()` (2026-10-06) — RP only fills that index for the **current day**. **PMU fallback** (2026-10-06): `fetch_pmu_french()` in `racecard_fetcher.py` reads PMU's public programme feed (`online.turfinfo.api.pmu.fr`, unofficial, no key — published a day ahead) and adds any French **gallop** meeting (PLAT/HAIE/STEEPLECHASE/CROSS; trotting skipped) that RP's list doesn't have, so the night-before fetch now includes French cards. Runners mapped to RP's runner fields (form from PMU `musique`, kg→lbs, blinkers, PNG silks); no RPR/TS/OR/trainer RTF/prices, so their scores are rough — display only anyway. Races carry `source:'pmu'`, `race_id:'pmu-DATE-RnCn'`. Any PMU error is caught and the fetch carries on. API fetcher region `gb,ire,fr`. Results: `results_fetcher.is_excluded()` includes `is_france()` so French races never enter races/runners/results_history; `fetch_ledger_only_results()` stores every French result (+ any excluded race with an open bet) in the Ledger-only `bet_results` table, used solely to settle bets. 12 French races that had leaked into Prixm history (Craon/Lyon/Clairefontaine/Salon/Strasbourg) were moved to `bet_results` 2026-10-04.

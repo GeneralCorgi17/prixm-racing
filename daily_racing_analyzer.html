@@ -920,6 +920,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .landing .rc .rc-p2-bar{height:4px;background:#c9c3bb;border-radius:2px;overflow:hidden;margin-bottom:4px}
 .landing .rc .rc-p2-fill{display:block;height:100%;background:#9ca3af;border-radius:2px}
 .landing .rc .rc-segbadge{font-size:9px;font-weight:700;padding:3px 8px;border-radius:20px;white-space:nowrap;display:inline-block}
+.landing .rc .rc-sg-prime{background:#ecfeff;color:#155e75;border:1px solid #a5f3fc}
 .landing .rc .rc-sg-gold{background:#fef3c7;color:#b45309;border:1px solid #fde68a}
 .landing .rc .rc-sg-silver{background:#f1f5f9;color:#475569;border:1px solid #cbd5e1}
 .landing .rc .rc-sg-bronze{background:#fff7ed;color:#92400e;border:1px solid #fed7aa}
@@ -1300,6 +1301,7 @@ html[data-theme="nothing"] .landing .rc .rc-segbadge,html[data-theme="nothing"] 
 html[data-theme="nothing"] .landing .rc .rc-sg-gold{color:#d9b25c!important;border:1px solid #d9b25c!important}
 html[data-theme="nothing"] .landing .rc .rc-sg-silver{color:#aab4c3!important;border:1px solid #aab4c3!important}
 html[data-theme="nothing"] .landing .rc .rc-sg-bronze{color:#b9825a!important;border:1px solid #b9825a!important}
+html[data-theme="nothing"] .landing .rc .rc-sg-prime{color:#7fb8c4!important;border:1px solid #7fb8c4!important}
 html[data-theme="nothing"] .rc-eng-em{color:#5bb39a!important;border:1px solid #24453b!important}
 html[data-theme="nothing"] .rc-eng-px{color:#7d786f!important;border:1px solid #2a2a2a!important}
 html[data-theme="nothing"] .landing .rc .rc-logged{color:#9fd6ae!important;border:1px solid #24382a!important}
@@ -1513,6 +1515,7 @@ html[data-theme="nothing"] svg text[fill="#6b7280"],html[data-theme="nothing"] s
 <button class="vbtn" id="clearDataBtn" onclick="clearStoredData().catch(e=>console.error('clearStoredData error:',e))" style="font-size:11px;display:none" title="Clear stored data and revert to sample">🗑 Clear Data</button>
 <button class="vbtn nt-toggle" onclick="toggleTheme()" style="font-size:11px" title="Switch UI theme (Nothing dark / Classic light)">◐ <span id="ntThemeLbl">Theme</span></button>
 <button class="vbtn" onclick="showGuide()" style="font-size:11px" title="How to use this tool">❓ Guide</button>
+<button class="vbtn" onclick="showPrimeInfo()" style="font-size:11px" title="🎯 Prime — the most accurate race format">🎯 Prime</button>
 <button class="vbtn" id="pdfExportBtn" onclick="showMainExportModal()" style="font-size:11px;border-color:var(--accent2);color:var(--accent2)" title="Export daily report as PDF">📄 PDF</button>
 <span id="lgChip" class="lg-chip vo-hide" style="display:none" onclick="switchTab('ledger')" title="Open the 💷 Ledger"></span>
 <span class="date-b" id="dateDisp">Loading...</span>
@@ -6440,7 +6443,7 @@ function rejectUnifiedCalibration(){
 }
 
 /* ==================== VENUE EXCLUSION ==================== */
-const EXCLUDED_VENUES=['happy valley','sha tin','meydan','abu dhabi','bahrain','hanshin','chukyo','fukushima','nakayama','tokyo','niigata','kyoto','rosehill','flemington','morphettville','eagle farm','doomben','hawkesbury','ascot aus','gold coast','northam','scone','sunshine coast','caulfield','turffontein','scottsville','greyville','oaklawn park','gulfstream park','keeneland','aqueduct','santa anita','del mar','belmont park','belmont at the big a','churchill downs','laurel park','lone star park','percy warner','middleburg','great meadow','woodbine','saratoga','hipodromo','ciudad jardim','monterrico','gavea','palermo','san isidro','san siro','munich','dusseldorf','krefeld','hoppegarten','dortmund','baden baden','cologne','koln','firenze','randwick','free to air','scoop','worldwide stakes','world pool','bro park'];
+const EXCLUDED_VENUES=['happy valley','sha tin','meydan','abu dhabi','bahrain','hanshin','chukyo','fukushima','nakayama','tokyo','niigata','kyoto','rosehill','flemington','morphettville','eagle farm','doomben','hawkesbury','ascot aus','gold coast','northam','scone','sunshine coast','caulfield','turffontein','scottsville','greyville','oaklawn park','gulfstream park','keeneland','aqueduct','santa anita','del mar','belmont park','belmont at the big a','churchill downs','laurel park','lone star park','percy warner','middleburg','great meadow','woodbine','saratoga','hipodromo','ciudad jardim','monterrico','gavea','palermo','san isidro','san siro','munich','dusseldorf','krefeld','hoppegarten','dortmund','baden baden','cologne','koln','firenze','randwick','free to air','scoop','worldwide stakes','world pool','bro park','hamburg','hanover','veliefendi','la zarzuela','kokura','sapporo','hakodate','ellerslie','hastings (nz)','monmouth park','colonial downs','kentucky downs','delaware park','parx','penn national','prairie meadows','presque isle','remington park','mountaineer','thistledown','los alamitos','century mile','club hipico'];
 // French racing unhidden from display (Longchamp 2026-07-13, Deauville 2026-08-16, all of France 2026-10-04) —
 // but still excluded from all picks/flags/analysis via isFrance() below.
 function filterExcludedVenues(data){
@@ -6759,6 +6762,12 @@ function showGuide(){
       <p style="margin-top:6px;font-size:11px"><b>Morning:</b> Load today's data → check Top 10 picks (BET vs SKIP tags) → download PDF for offline use.<br>
       <b>After racing:</b> Log results for each race → hit Submit Pick Results → system auto-calibrates for tomorrow.<br>
       <b>Status bar</b> (top-right) turns all-green when a day's pipeline is complete.</p>
+    </div>
+
+    <!-- 🎯 PRIME FORMAT -->
+    <div class="guide-section" style="border-left-color:#0e7490">
+      <h3><span class="gi">🎯</span> Prime — the most accurate format</h3>
+      ${primeInfoHTML()}
     </div>
 
     <!-- ☘ EMERALD ENGINE -->
@@ -8094,6 +8103,7 @@ function getTop10Picks(data,engine){
     const vName=(venue.course||vk).toLowerCase().replace(/-/g,' ');
     if(EXCLUDED_VENUES.some(ex=>vName.includes(ex))) return;
     if(em!==isIreland(venue.course||vk)) return; // Prixm = UK only; ☘ Emerald = Irish only
+    if(!em&&isExcludedVenue(venue.course||vk)) return; // UK whitelist — no foreign cards in Prixm picks
     if(isFrance(venue.course||vk)) return; // display only — excluded from picks/analysis
     venue.races.forEach((race,ri)=>{
       if(!race.runners||!race.runners.length) return;
@@ -8815,7 +8825,9 @@ function ordinal(n){const s=['th','st','nd','rd'];const v=n%100;return n+(s[(v-2
 function isExcludedVenue(venue){
   if(!venue) return false;
   const v=(venue+'').toLowerCase().replace(/-/g,' ');
-  return EXCLUDED_VENUES.some(ex=>v.includes(ex))||isFrance(venue);
+  if(EXCLUDED_VENUES.some(ex=>v.includes(ex))||isFrance(venue)) return true;
+  // whitelist (2026-10-11): not a known UK or Irish track → foreign (US/Japan/NZ… leaked past the blacklist)
+  return Object.keys(window._trackProfiles||{}).length>0&&!isIreland(venue)&&!isUKTrack(venue);
 }
 function analyzePicksPerformance(picks,hist,dateOverride){
   // Analyze how picks performed: wins, places, factor patterns
@@ -9508,6 +9520,53 @@ function renderBronzeFlag(bf){
   return `<div class="bronze-flag"><span class="bf-label">🥉 BRONZE</span><span class="gf-sep">·</span><span class="gf-chip gf-ok">Gap ${bf.gapBand}</span><span class="${scoreCls}">Score ${bf.scoreBand}</span><span class="gf-reason">${reason}</span></div>`;
 }
 
+/* ==================== 🎯 PRIME FORMAT (display only) ====================
+   The most accurate PRE-RACE format in the full results analysis (2026-10-11, 5,532 scored UK races,
+   2,640 rule combinations, found on Apr–Jul and confirmed on unseen Aug–Oct):
+   UK · non-handicap · 5 runners or fewer · gap ≥12  →  134 races, 58.2% win (unseen Aug–Oct 61.5%).
+   "Top pick is favourite" looked even better on SP but that's hindsight (late money) — the card price
+   at fetch time only gave ~38%, so it's left out. Accuracy ≠ profit: ROI at SP ≈ −3%.
+   Never changes scores, gaps, segments or P&L. */
+const PRIME_STATS={races:134,win:58.2,place:67.2,roi:-3.3,trainWin:56.1,testRaces:52,testWin:61.5,perWeek:5,asOf:'2026-10-11'};
+function isUKTrack(course){
+  const tp=window._trackProfiles||{};const k=normalizeTrackKey(course).replace(/^great /,'');if(!k)return false;
+  return Object.keys(tp).some(t=>tp[t].country==='GB'&&(k===t||k.startsWith(t+' ')||t.startsWith(k+' ')));
+}
+function getPrimeFlags(race){
+  if(!race||isIreland(race.course)||isFrance(race.course)||!isUKTrack(race.course)) return null;
+  if(race.handicap===true||race.handicap==='True'||/handicap/i.test(race.race_name||'')) return null;
+  const rs=(race.runners||[]).filter(x=>!x.non_runner&&x.score!=null);
+  if(rs.length<2||rs.length>5) return null;
+  const s=[...rs].sort((a,b)=>b.score-a.score);
+  const gap=Math.round((s[0].score-s[1].score)*10)/10;if(gap<12) return null;
+  return{gap,field:rs.length,horse:s[0].name,score:s[0].score};
+}
+function primeInfoHTML(){
+  const S=PRIME_STATS,box='padding:8px;border:1px solid var(--border);border-radius:6px;text-align:center',big='font-size:18px;font-weight:700',sm='font-size:10px;color:var(--muted)';
+  return `<p style="margin:0 0 8px">The race format where Prixm's top pick wins most often, using only what's known <b>before</b> the race. Found by testing 2,640 combinations of race type, distance, field size, gap, score, going and class on <b>5,532 scored UK races</b> (Apr–Oct 2026): found on Apr–Jul, then confirmed on Aug–Oct races it had never seen.</p>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:6px;margin:8px 0">
+    <div style="${box}"><div style="${big}">${S.win}%</div><div style="${sm}">top pick won (${S.races} races)</div></div>
+    <div style="${box}"><div style="${big}">${S.testWin}%</div><div style="${sm}">on unseen Aug–Oct (${S.testRaces})</div></div>
+    <div style="${box}"><div style="${big}">${S.place}%</div><div style="${sm}">placed</div></div>
+    <div style="${box}"><div style="${big}">~${S.perWeek}</div><div style="${sm}">races a week</div></div>
+  </div>
+  <p style="margin:8px 0 4px"><b>All three must be true</b> (UK races only):</p>
+  <ul style="margin:0 0 8px;padding-left:18px;font-size:12px">
+    <li><b>Non-handicap</b> — the top pick wins 36% of non-handicaps vs 22% of handicaps</li>
+    <li><b>5 runners or fewer</b> — the most accurate field size (41% vs 18% in fields of 13+)</li>
+    <li><b>Gap ≥ 12</b> between Prixm's top pick and the 2nd</li>
+  </ul>
+  <p style="margin:8px 0 4px"><b>How it compares</b> (top pick win %, unseen Aug–Oct): 🎯 Prime ${S.testWin}% · ⭐ Golden 49% · all non-handicaps 36% · all races 26%.</p>
+  <p style="margin:8px 0 4px;font-size:12px"><b>Tested and left out:</b> distance (1m–11f and jumps 2m–2m1f are the best trips, but add nothing once field and gap are set), going, class, race type. <b>"Top pick is the favourite"</b> looked even better on SP, but that's hindsight: late money moves to winners. With the card price you see when you bet, it dropped to about 38%.</p>
+  <p style="margin:8px 0 4px;color:#b45309"><b>⚠ Accurate ≠ profitable.</b> Small fields with a clear top pick are usually short prices the market already rates. Level stakes at SP returned about <b>${S.roi}%</b>. Use Prime to know <i>who wins</i>; only bet when the price is bigger than fair (the 💷 Ledger's EV check). Small fields pay win only (2–4 runners) or 2 places (5).</p>
+  <p style="margin:8px 0 0;font-size:11px;color:var(--muted)">Shown as a <b>🎯 Prime</b> badge on race cards and a line in the race view's top-pick card. Display only: never changes scores, gaps, segments or P&amp;L. Stats as of ${S.asOf}.</p>`;
+}
+function showPrimeInfo(){
+  document.getElementById('modalContainer').innerHTML=`<div class="modal-bg" onclick="if(event.target===this)closeModal()"><div class="modal" style="max-width:680px">
+    <button class="mclose" onclick="closeModal()">&times;</button>
+    <h2 style="margin-bottom:8px">🎯 Prime — the most accurate format</h2>${primeInfoHTML()}</div></div>`;
+}
+
 function getBanFlag(race){
   if(!race.runners||!race.runners.length) return null;
   const bl=loadBanList();
@@ -9638,7 +9697,8 @@ function renderRaceCards(){
     const logged=hist&&hist.races&&hist.races.some(h=>(h.date+h.venue+h.time)===dupKey);
     const rCombos=comboByRace[r.venueKey+'_'+r.raceIdx]||[];
     const _gf=getGoldenFlags(r),_sf=getSilverFlags(r),_bf=getBronzeFlags(r),_ban=getBanFlag(r);
-    const segBadge=_gf?`<span class="rc-segbadge rc-sg-gold">⭐ Golden</span>`:_sf?`<span class="rc-segbadge rc-sg-silver">🥈 Silver</span>`:_bf?`<span class="rc-segbadge rc-sg-bronze">🥉 Bronze</span>`:'';
+    const segBadge=(_gf?`<span class="rc-segbadge rc-sg-gold">⭐ Golden</span>`:_sf?`<span class="rc-segbadge rc-sg-silver">🥈 Silver</span>`:_bf?`<span class="rc-segbadge rc-sg-bronze">🥉 Bronze</span>`:'')
+      +(getPrimeFlags(r)?`<span class="rc-segbadge rc-sg-prime" title="🎯 Prime: non-handicap · ≤5 runners · gap ≥12. Top pick won ~58% historically. Header 🎯 Prime button for details">🎯 Prime</span>`:'');
     const sortedR=r.runners?[...r.runners].sort((a,b)=>b.score-a.score):[];
     const second=sortedR[1];
     const gap=second&&sortedR[0]?Math.round((sortedR[0].score-second.score)*10)/10:0;
@@ -9751,6 +9811,7 @@ function renderTopPickCard(runners,race){
   let win=null;try{win=calcCompetitiveProb(t.score,sorted.map(x=>x.score||0),1);}catch(e){}
   const g=tpcGroups(t),g2=s2?tpcGroups(s2):null,ok=g.filter(x=>x.p!=null).sort((a,b)=>b.p-a.p);
   const why=[];
+  try{if(getPrimeFlags(race))why.push(['p','🎯','<b>Prime format</b>: non-handicap · ≤5 runners · gap ≥12 (top pick won ~58% historically)']);}catch(e){}
   if(ok.length>=2)why.push(['p','✓',`Strongest on <b>${ok[0].n.toLowerCase()}</b> (${ok[0].p.toFixed(0)}%) and <b>${ok[1].n.toLowerCase()}</b> (${ok[1].p.toFixed(0)}%)`]);
   if(g2){const d=g.map((x,i)=>({n:x.n,d:(x.p||0)-(g2[i].p||0)})).sort((a,b)=>b.d-a.d)[0];if(d.d>0)why.push(['p','✓',`Biggest edge over ${s2.name}: <b>${d.n.toLowerCase()}</b> (+${d.d.toFixed(0)} pts)`]);}
   const lo=ok[ok.length-1];if(lo&&lo.p<45)why.push(['n','!',`Weakest on <b>${lo.n.toLowerCase()}</b> (${lo.p.toFixed(0)}%)`]);

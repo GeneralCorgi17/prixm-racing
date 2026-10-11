@@ -37,6 +37,7 @@ Right:
 - `🗑 Clear Data` → `clearStoredData()` (hidden until data loaded)
 - `◐ Classic/Nothing` (`.nt-toggle`) → `toggleTheme()` — saves `localStorage.uiTheme`, reloads (see `docs/UI_THEMES.md`)
 - `❓ Guide` → `showGuide()`
+- `🎯 Prime` → `showPrimeInfo()` — modal describing the 🎯 Prime format (`primeInfoHTML()`, same text as the Guide's Prime section)
 - `🧠 Ozzy` → `switchTab('ozzy')`
 - `📄 PDF` → `exportPDF()`
 - `#dateDisp` — date badge
@@ -141,6 +142,8 @@ Race card left stripe (3px `::before`, colour from `getRaceBorderColor()` passed
 - Amber `#f59e0b` — England handicap
 - Green `#10b981` — Ireland non-handicap
 - Red `#f87171` — Ireland handicap
+
+Segment badges (top-right of card): ⭐ Golden / 🥈 Silver / 🥉 Bronze + **🎯 Prime** (`.rc-sg-prime`, from `getPrimeFlags(race)`; can sit alongside a segment badge). The race view's top-pick card (`renderTopPickCard`) adds a 🎯 "Prime format" line.
 
 ---
 
