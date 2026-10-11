@@ -4382,7 +4382,7 @@ window.openTrackExplorer=function(course,sub){
    Calibration reuses _calibrateProfile() on Emerald's own 16 factors; versions are separate from Prixm. */
 (function(){
 'use strict';
-const EM_REAL_MIN=300, EM_RECAL_STEP=300;
+const EM_REAL_MIN=300, EM_RECAL_STEP=3000; // 2026-10-11: first + every later recalibration needs 3000 races per profile
 const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 let _proposals=null;
 const emRaces=()=>((window._emeraldHistory&&window._emeraldHistory.races)||[]).filter(r=>(r.results||[]).some(x=>x.score_breakdown&&'stable_power' in x.score_breakdown));
@@ -4434,9 +4434,9 @@ function render(target){
     // calibration
     const calN=((window._emeraldHistory&&window._emeraldHistory.calibrations)||[]).filter(c=>c.applied);
     const lastN=p=>{const c=calN.filter(x=>x.profile===p).sort((a,b)=>(b.date||'').localeCompare(a.date||''))[0];return c?(c.races_used||0):0;};
-    const calRows=['ire_flat','ire_nh'].map(p=>{const n=byProf[p].length,need=lastN(p)?lastN(p)+EM_RECAL_STEP:50;const pct=Math.min(100,n/need*100);
+    const calRows=['ire_flat','ire_nh'].map(p=>{const n=byProf[p].length,need=lastN(p)?lastN(p)+EM_RECAL_STEP:EM_RECAL_STEP;const pct=Math.min(100,n/need*100);
       return `<div style="font-size:13px;margin-top:8px"><b>${p}</b> <span style="color:var(--muted)">· ${n} races${lastN(p)?` · last calibrated on ${lastN(p)}`:''}</span></div><div style="height:9px;background:var(--card2);border-radius:5px;overflow:hidden;margin:5px 0 2px"><i style="display:block;height:100%;width:${pct}%;background:var(--em2)"></i></div><div style="font-size:11px;color:var(--muted)">${n>=need?'Ready to calibrate':`${need-n} more races before ${lastN(p)?'the next':'the first'} calibration`}</div>`;}).join('');
-    const ready=['ire_flat','ire_nh'].some(p=>byProf[p].length>=(lastN(p)?lastN(p)+EM_RECAL_STEP:50));
+    const ready=['ire_flat','ire_nh'].some(p=>byProf[p].length>=(lastN(p)?lastN(p)+EM_RECAL_STEP:EM_RECAL_STEP));
     let prop='';
     if(_proposals&&_proposals.length){
       prop=`<div style="margin-top:10px">${tbl(['Profile','Races','Top-pick placed: now → proposed','Weight changes'],_proposals.map(r=>[r.profile,r.races,`${r.oldPct}% → <b style="color:${r.newPct>=r.oldPct?'#15803d':'#dc2626'}">${r.newPct}%</b>`,Object.keys(r.newW).filter(f=>r.oldW[f]!==r.newW[f]).map(f=>`${f} ${r.oldW[f]}→${r.newW[f]}`).join(' · ')||'no change']))}
@@ -4479,7 +4479,7 @@ window._emRunCal=function(){
   const byProf=p=>emRaces().filter(r=>r.profile===p).length;
   const cal=((window._emeraldHistory&&window._emeraldHistory.calibrations)||[]).filter(c=>c.applied);
   const last=p=>{const c=cal.filter(x=>x.profile===p).sort((a,b)=>(b.date||'').localeCompare(a.date||''))[0];return c?(c.races_used||0):0;};
-  _proposals=['ire_flat','ire_nh'].filter(p=>byProf(p)>=(last(p)?last(p)+EM_RECAL_STEP:50)).map(p=>_calibrateProfile(window._emeraldHistory,p)).filter(Boolean);
+  _proposals=['ire_flat','ire_nh'].filter(p=>byProf(p)>=(last(p)?last(p)+EM_RECAL_STEP:EM_RECAL_STEP)).map(p=>_calibrateProfile(window._emeraldHistory,p)).filter(Boolean);
   if(!_proposals.length)_proposals=null;
   render();
 };
@@ -4531,7 +4531,7 @@ function renderXaValidationCard(engine){
 (function(){
 'use strict';
 const LS_BETS='ledgerBets',LS_SET='ledgerSettings';
-const DEF={unit:10,bank:0,mode:'engine',pct:5,max:5}; // start bank £0 → Kelly sizes from a notional 100u bank + running P&L
+const DEF={unit:3,bank:0,mode:'engine',pct:5,max:5}; // start bank £0 → Kelly sizes from a notional 100u bank + running P&L
 const TYPES=['WIN','EW','PLACE','TOP N','LENGTH','ACCA','OTHER'];
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const LG={bets:[],db:false,loaded:false};
@@ -4613,6 +4613,8 @@ function persistLocal(){try{localStorage.setItem(LS_BETS,JSON.stringify(LG.bets)
 const isLocalId=id=>typeof id!=='number';
 async function load(){
   if(VIEW_ONLY)return;
+  // one-time ledger reset 2026-10-11: wipe the local mirror (DB cleared server-side), 1u = £3
+  try{if(localStorage.getItem('ledgerResetAt')!=='2026-10-11'){localStorage.removeItem(LS_BETS);saveS({...DEF});localStorage.setItem('ledgerResetAt','2026-10-11');}}catch(e){}
   await connectDb();
   if(!LG.db){try{LG.bets=JSON.parse(localStorage.getItem(LS_BETS)||'[]');}catch(e){LG.bets=[];}}
   settleLocal();LG.loaded=true;refreshChrome();
