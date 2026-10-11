@@ -5545,9 +5545,10 @@ window.xaClearStaleCache=xaClearStaleCache;
 /* ==================== PROFILE CLASSIFIER ==================== */
 // ☘ Emerald calibration profiles for Irish races (Dundalk AW sits in ire_flat — see results_fetcher.classify_profile)
 function classifyEmeraldProfile(race){return /hurdle|chase|nh flat|bumper/i.test((race&&(race.race_type||race.type))||'')?'ire_nh':'ire_flat';}
-function classifyProfile(surface,raceType){
+function classifyProfile(surface,raceType,course){
   const rt=(raceType||'').toLowerCase(),s=(surface||'').toLowerCase();
-  if(s==='aw'||s==='all-weather') return 'aw';
+  // racecards have no surface field → callers pass the going; AW going is "Standard"/"Standard To Slow|Fast" (fixed 2026-10-11)
+  if(s==='aw'||s==='all-weather'||s.startsWith('standard')||/\(aw\)/i.test(course||'')) return 'aw';
   if(['hurdle','chase','nh flat','bumper'].some(x=>rt.includes(x))) return 'nh';
   return 'turf_flat';
 }
@@ -6356,7 +6357,7 @@ function rescoreTodayWithWeights(newW,profile){
   Object.values(D.venues).forEach(venue=>{
     venue.races.forEach(race=>{
       // Check if this race matches the calibrated profile
-      const rp=isIreland(race.course)?classifyEmeraldProfile(race):classifyProfile(race.surface||race.going||'',race.race_type||race.type||'');
+      const rp=isIreland(race.course)?classifyEmeraldProfile(race):classifyProfile(race.surface||race.going||'',race.race_type||race.type||'',race.course||venue.course);
       if(rp!==profile&&!(profile==='all'&&!isIreland(race.course))) return; // Prixm weights never touch ☘ Irish races
       race.runners.forEach(runner=>{
         if(!runner.score_breakdown) return;
@@ -6498,7 +6499,7 @@ function applyCalibratedWeightsToData(data){
       Object.values(data.venues).forEach(venue=>{
         venue.races.forEach(race=>{
           const ire=isIreland(race.course||venue.course);
-          const rp=ire?classifyEmeraldProfile(race):classifyProfile(race.surface||race.going||'',race.race_type||race.type||'');
+          const rp=ire?classifyEmeraldProfile(race):classifyProfile(race.surface||race.going||'',race.race_type||race.type||'',race.course||venue.course);
           if(rp!==prf) return;
           race.runners.forEach(runner=>{
             if(!runner.score_breakdown) return;

@@ -22,6 +22,9 @@ desktop.ini
 
 # Generated JS wrappers — keep results_history.js (needed by GitHub Pages fallback)
 daily_race_data.js
+weather_signal.js
+weather_signal.json
+weather_cache.json
 
 # R
 .Rhistory
@@ -30,6 +33,7 @@ daily_race_data.js
 race_data.db
 race_data.db-wal
 race_data.db-shm
+bets_journal.jsonl
 
 # Excel output — local only
 output/
@@ -48,3 +52,11 @@ ozzy_memory.json
 
 # Claude config
 .claude/
+node_modules/
+
+# Secrets — never commit the OpenWeatherMap key (improvement.md Feature 2)
+scripts/weather_api_key.txt
+
+# One-off racecard fetches (Fetch One-Off.bat)
+one_off/
+backups/

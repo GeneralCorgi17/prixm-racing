@@ -71,7 +71,7 @@ def classify_profile(surface, race_type):
     surface_str = str(surface).lower()
     race_type_str = str(race_type).lower()
 
-    if 'aw' in surface_str or 'all-weather' in surface_str:
+    if 'aw' in surface_str or 'all-weather' in surface_str or surface_str.startswith('standard'):
         return 'aw'
 
     nh_keywords = ['hurdle', 'chase', 'nh flat', 'bumper']
