@@ -532,6 +532,8 @@ Irish venues also caught by `(IRE)` suffix check before list lookup.
 ## Key UI Features
 
 - **Race card view** with expandable runner details (score breakdown, CDP, momentum, probabilities)
+- **Runner-table header tooltips** (2026-10-13) — hover #/Horse/Form/Age/RPR/Wt/Dr/Last/Score/vs Avg/Confidence/Variable Check → what it means + why it matters. `RTBL_TIPS` + `data-thtip` attr (`thSort(label,key,tip)`), one floating `#thTip` div (fixed position, theme vars). PC only (phone hides the thead).
+- **Browser/mouse Back closes the race view** (2026-10-13) — `openRace()` pushes a `history` entry `{prixmRace:{vk,ri}}`, `popstate` → `closeRaceView()` (Forward re-opens). ← Back to Races (`goBack()`) uses `history.back()` so both stay in sync.
 - **Race card colour stripe** — thin 3px left stripe (`.landing .rc::before`, colour via `--rc-bc` from `getRaceBorderColor()`) indicates country + handicap type (was a 5px border, which the Nothing theme hid; changed 2026-10-06):
   - 🔵 Blue `#3b82f6` — England, Non-Handicap
   - 🟡 Amber `#f59e0b` — England, Handicap

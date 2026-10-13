@@ -9822,8 +9822,17 @@ function renderRaceCards(){
   else _doRender();
 }
 
-async function openRace(vk,ri){st._scrollY=window.scrollY;st.openRace={vk,ri};st.expanded=null;st.detailTab='main';st.h2hPair=null;st.compareSelect=new Set();await render();window.scrollTo(0,0)}
-async function goBack(){st.openRace=null;await render();if(st._scrollY!=null){window.scrollTo(0,st._scrollY);st._scrollY=null;}}
+// Browser/mouse Back closes the race view: openRace pushes a history entry, popstate closes (or Forward re-opens) it.
+async function openRace(vk,ri,fromHistory){
+  if(!fromHistory){try{const s={prixmRace:{vk,ri}};if(st.openRace&&history.state&&history.state.prixmRace)history.replaceState(s,'');else history.pushState(s,'');st._raceHist=true;}catch(e){}}
+  if(!st.openRace)st._scrollY=window.scrollY;st.openRace={vk,ri};st.expanded=null;st.detailTab='main';st.h2hPair=null;st.compareSelect=new Set();await render();window.scrollTo(0,0)}
+async function closeRaceView(){st.openRace=null;await render();if(st._scrollY!=null){window.scrollTo(0,st._scrollY);st._scrollY=null;}}
+async function goBack(){if(st._raceHist&&history.state&&history.state.prixmRace){history.back();return;}await closeRaceView();}
+window.addEventListener('popstate',e=>{
+  const r=e.state&&e.state.prixmRace;
+  if(r){if(D&&D.venues&&D.venues[r.vk]&&D.venues[r.vk].races[r.ri])openRace(r.vk,r.ri,true).catch(err=>console.error('openRace error:',err));}
+  else if(st.openRace)closeRaceView().catch(err=>console.error('closeRaceView error:',err));
+});
 function switchDetailTab(tab){st.detailTab=tab;st.h2hPair=null;renderDetail().catch(e=>console.error('renderDetail error:',e));}
 
 /* ==================== 🎯 TOP PICK CARD (race view, added 2026-10-06) ====================
@@ -10431,12 +10440,12 @@ function renderMainTab(runners,race,vk,ri){
   </div>
   ${renderAttrFilterBar(runners, attrMap)}
   <table class="rtbl"><thead><tr>
-    ${thSort('#','number')}${thSort('Horse','score')}${thSort('Form','form')}
-    ${thSort('Age','age')}${thSort('RPR','rpr')}
-    ${thSort('Wt','weight')}
-    <th>Dr</th><th>Last</th>
-    ${thSort('Score','score')}<th>vs Avg</th>
-    <th>Confidence</th><th>Variable Check</th>
+    ${thSort('#','number',RTBL_TIPS.num)}${thSort('Horse','score',RTBL_TIPS.horse)}${thSort('Form','form',RTBL_TIPS.form)}
+    ${thSort('Age','age',RTBL_TIPS.age)}${thSort('RPR','rpr',RTBL_TIPS.rpr)}
+    ${thSort('Wt','weight',RTBL_TIPS.wt)}
+    <th data-thtip="${RTBL_TIPS.dr}">Dr</th><th data-thtip="${RTBL_TIPS.last}">Last</th>
+    ${thSort('Score','score',RTBL_TIPS.score.replace('MAXS',MAX_SCORE))}<th data-thtip="${RTBL_TIPS.vsavg}">vs Avg</th>
+    <th data-thtip="${RTBL_TIPS.conf}">Confidence</th><th data-thtip="${RTBL_TIPS.vcheck}">Variable Check</th>
   </tr></thead><tbody>
   ${runners.map((r,i)=>{
     const conf=r.confidence||'MODERATE';
@@ -11577,11 +11586,34 @@ function showH2HDetail(name1,name2){
   </div>`;
 }
 
-function thSort(label,key){
+function thSort(label,key,tip){
   const isActive=st.sort===key;
   const arrow=isActive?(st.sortDir===-1?'▼':'▲'):'';
-  return `<th onclick="doSort('${key}')" style="${isActive?'color:var(--accent)':''}">${label} ${arrow}</th>`;
+  return `<th onclick="doSort('${key}')" style="${isActive?'color:var(--accent)':''}"${tip?` data-thtip="${tip.replace(/"/g,'&quot;')}"`:''}>${label} ${arrow}</th>`;
 }
+// Runner-table column help: what each column means + why it matters (hover a header). Display only.
+const RTBL_TIPS={
+  num:`<b>#</b> — Saddlecloth number. Just the horse’s ID on the racecard; it has no effect on the race.`,
+  horse:`<b>Horse</b> — Name, jockey · trainer, and badges (rank in this race, combos, course form, last-run quality, price). Click the header to sort by score.`,
+  form:`<b>Form</b> — Recent finishing positions, latest on the right (1–9, 0 = 10th+, P = pulled up, F = fell, U = unseated, / = new season, - = gap). <b>Why it matters:</b> the biggest single factor in the score (max 20) — consistent recent top-3s mean the horse is in good shape.`,
+  age:`<b>Age</b> — Horse’s age in years. <b>Why it matters:</b> 3–5yo Flat horses and 6–9yo jumpers are usually at their peak; very young horses are still improving, older ones often in decline.`,
+  rpr:`<b>RPR</b> — Racing Post Rating: the best level of performance the horse has shown, in lbs. <b>Why it matters:</b> the quickest way to see who has run the fastest race. Higher than the rest = has already proven it can beat this field. ⬆️/⬇️ = RPR is 10+ above/below the official rating (OR).`,
+  wt:`<b>Wt</b> — Weight carried (st-lb). <b>Why it matters:</b> extra weight slows a horse — roughly 1 length per 1–3 lbs depending on trip. In handicaps the best horse carries the most to even it out; in non-handicaps, lower weight is an edge.`,
+  dr:`<b>Dr</b> — Draw: the starting stall (Flat only; blank over jumps). <b>Why it matters:</b> at tight or sharp tracks (Chester, Beverley, Epsom) and in big sprint fields, a low or high draw can be worth several lengths — check the Track Explorer for this course’s bias.`,
+  last:`<b>Last</b> — Days since the horse last ran. <b>Why it matters:</b> ~14–60 days is ideal fitness. Under 7 days risks tiredness (“bounce”); 90+ days can mean rustiness — unless the trainer does well with fresh horses.`,
+  score:`<b>Score</b> — Prixm’s total out of MAXS across all 14 factors (☘ Emerald on Irish races). <b>Why it matters:</b> the top score is the pick, and the gap to the 2nd decides Golden/Silver/Bronze/Prime.`,
+  vsavg:`<b>vs Avg</b> — How far this horse’s score is above (+) or below (−) the field average. <b>Why it matters:</b> shows how much it stands out from this field, not just its raw score.`,
+  conf:`<b>Confidence</b> — Prixm’s tier (TOP PICK / STRONG / SOLID / MODERATE) from score and gap, plus 🧭 track-fit and 💷 Ledger stake chips. <b>Why it matters:</b> TOP PICK/STRONG have the best historical strike rate.`,
+  vcheck:`<b>Variable Check</b> — One tick per scoring factor: green = strong (≥70% of its max), amber = marginal, red = weak. <b>Why it matters:</b> a quick view of <i>where</i> the score comes from — a high score with many red ticks rests on just a few factors.`
+};
+(function(){
+  let tip=null;
+  function el(){if(!tip){tip=document.createElement('div');tip.id='thTip';tip.style.cssText='position:fixed;z-index:9999;max-width:280px;padding:8px 10px;font-size:11.5px;line-height:1.45;border-radius:6px;pointer-events:none;display:none;text-transform:none;letter-spacing:normal;font-weight:400;background:var(--card,#fff);color:var(--text,#111);border:1px solid var(--border,#ccc);box-shadow:0 4px 14px rgba(0,0,0,.25)';document.body.appendChild(tip);}return tip;}
+  document.addEventListener('mouseover',e=>{const th=e.target.closest&&e.target.closest('[data-thtip]');const t=el();if(!th){t.style.display='none';return;}
+    t.innerHTML=th.getAttribute('data-thtip');t.style.display='block';const r=th.getBoundingClientRect(),w=t.offsetWidth,h=t.offsetHeight;
+    let x=Math.min(Math.max(8,r.left),window.innerWidth-w-8),y=r.bottom+6;if(y+h>window.innerHeight-8)y=r.top-h-6;t.style.left=x+'px';t.style.top=y+'px';});
+  window.addEventListener('scroll',()=>{if(tip)tip.style.display='none';},true);
+})();
 
 function doSort(key){
   if(st.sort===key)st.sortDir*=-1;
