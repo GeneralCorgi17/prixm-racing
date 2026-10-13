@@ -1511,8 +1511,6 @@ html[data-theme="nothing"] svg text[fill="#6b7280"],html[data-theme="nothing"] s
 </div>
 <div class="hdr-r">
 <span id="dataSourceBadge" style="font-size:11px;padding:4px 10px;border-radius:12px;font-weight:600;display:none"></span>
-<button class="vbtn vo-hide" onclick="showPaste()" style="font-size:11px" title="Load fresh JSON data">📋 Load JSON</button>
-<button class="vbtn" id="clearDataBtn" onclick="clearStoredData().catch(e=>console.error('clearStoredData error:',e))" style="font-size:11px;display:none" title="Clear stored data and revert to sample">🗑 Clear Data</button>
 <button class="vbtn nt-toggle" onclick="toggleTheme()" style="font-size:11px" title="Switch UI theme (Nothing dark / Classic light)">◐ <span id="ntThemeLbl">Theme</span></button>
 <button class="vbtn" onclick="showGuide()" style="font-size:11px" title="How to use this tool">❓ Guide</button>
 <button class="vbtn" onclick="showPrimeInfo()" style="font-size:11px" title="🎯 Prime — the most accurate race format">🎯 Prime</button>
@@ -1679,11 +1677,9 @@ html[data-theme="nothing"] svg text[fill="#6b7280"],html[data-theme="nothing"] s
     <div class="hcmp-body" id="hcmpBody"></div>
   </div>
 </div>
-<div id="betPanel" class="bet-panel collapsed"></div>
-<button id="betFab" class="bp-toggle-fab" onclick="toggleBetPanel()">🎫<span class="fab-badge">0</span></button>
 
 <script>
-let D=null, st={venue:'all', fieldFilter:new Set(), comboFilter:false, raceTypeFilter:'all', engineFilter:'all', fitFilter:'all', raceCodeFilter:'all', confidenceFilter:'all', gapFilter:new Set(), hideBanned:false, openRace:null, sort:'score', sortDir:-1, expanded:null, detailTab:'main', h2hPair:null, compareSelect:new Set(), xaVenue:null, attrFilter:{active:new Set(), logic:'OR'}};
+let D=null, st={venue:'all', fieldFilter:new Set(), comboFilter:false, raceTypeFilter:'all', engineFilter:'all', fitFilter:'all', primeFilter:false, raceCodeFilter:'all', confidenceFilter:'all', gapFilter:new Set(), hideBanned:false, openRace:null, sort:'score', sortDir:-1, expanded:null, detailTab:'main', h2hPair:null, compareSelect:new Set(), xaVenue:null, attrFilter:{active:new Set(), logic:'OR'}};
 
 // ==================== PER-DAY DATA STATUS TRACKER ====================
 function getDayStatus(date){
@@ -4792,8 +4788,8 @@ function openModal(vk,ri,name,presetU){
       <div class="lg-f"><label>Bet type</label><div class="lg-seg" id="lgType">${TYPES.map(t=>`<button data-t="${t}" class="${t==='WIN'?'on':''}" onclick="window.lgType('${t}')">${t}</button>`).join('')}</div><div id="lgSub"></div><div id="lgPlaces" class="lg-sm"></div></div>
       <div class="lg-row"><div class="lg-f"><label id="lgStakeLbl">Stake</label><div class="lg-stake"><input id="lgStake" type="number" step="0.5" min="0" placeholder="5" oninput="window.lgUpd()"><button data-u="gbp" class="on" onclick="window.lgUnit('gbp')">£</button><button data-u="u" onclick="window.lgUnit('u')">u</button></div><div id="lgConv" class="lg-sm"></div></div>
         <div class="lg-f"><label>Price (7/4 or 2.75)</label><input id="lgPrice" placeholder="e.g. 7/4" oninput="window.lgPriceTyped();window.lgUpd()"><div id="lgPriceConv" class="lg-sm"></div></div></div>
-      <div class="lg-row"><div class="lg-f"><label>Bookmaker</label><select id="lgBook">${['Bet365','Betfair Exchange','Paddy Power','William Hill','Sky Bet','Betfred','Other'].map(x=>`<option>${x}</option>`).join('')}</select></div>
-        <div class="lg-f"><label>Note (optional)</label><input id="lgNote" placeholder="e.g. took early price"></div></div>
+      <div class="lg-row"><div class="lg-f"><label>Bookmaker</label><select id="lgBook">${['William Hill','Bet365','Betfair Exchange','Paddy Power','Sky Bet','Betfred','Other'].map(x=>`<option>${x}</option>`).join('')}</select></div>
+        </div>
       <div id="lgPay"></div><div id="lgAdv"></div></div>
     <div class="lg-mf"><span id="lgSum" class="lg-sm"></span><div style="display:flex;gap:6px"><button class="vbtn" id="lgUseSug" style="display:none"></button><button class="vbtn" style="background:#15803d;color:#fff;border-color:#15803d" onclick="window.lgSave()">Save bet</button></div></div>
   </div></div>`;
@@ -4940,7 +4936,7 @@ window.lgSave=async()=>{
   const pt=c?(M.type==='EW'?ewTerms(c):placeTerms(c.fs,c.hcp)):{places:0,frac:0};
   const b={created:new Date().toISOString().slice(0,19),date:today(),venue:c?c.race.course:'',time:c?c.race.time:'',horse,engine:c?c.eng:'prixm',
     category:c&&c.cat||null,segment:c&&c.seg||null,bet_type:M.type,stake_u:Math.round(su*100)/100,unit_gbp:S().unit,price:pr,price_raw:prRaw,
-    bookmaker:document.getElementById('lgBook').value,note:document.getElementById('lgNote').value||null,suggested_u:M.sug!=null?M.sug:null,
+    bookmaker:document.getElementById('lgBook').value,note:null,suggested_u:M.sug!=null?M.sug:null,
     places:M.type==='EW'||M.type==='PLACE'?pt.places:M.type==='TOP N'?(M.places||3):null,ew_fraction:M.type==='EW'?Math.round(pt.frac*10000)/10000:null,field_size:c?c.fs:null,result:'O',source:'app'};
   await saveBet(b);
   try{if(c&&!isBetted(horse,c.race.time||'',c.race.course||'')){const l=loadBetList();l.push({horse,time:c.race.time,venue:c.race.course,score:c.r.score,betType:M.type==='TOP N'?'TOP '+(M.places||3):M.type});saveBetList(l);renderBetPanel();}}catch(e){}
@@ -4967,7 +4963,7 @@ async function saveMulti(){
   const b={created:new Date().toISOString().slice(0,19),date:today(),venue:srt[0]?srt[0].venue:'',time:srt[0]?srt[0].time:'',
     horse:legs.length?legs.map(l=>l.horse).join(' / '):typed,engine:legs.length&&legs.every(l=>l.engine==='emerald')?'emerald':'prixm',category:null,segment:null,
     bet_type:type,stake_u:Math.round(total*100)/100,unit_gbp:S().unit,price:null,price_raw:custom||(M.type==='ACCA'&&M.accaTyped&&document.getElementById('lgPrice').value.trim())?document.getElementById('lgPrice').value:legs.map(l=>l.price).join(' × '),
-    bookmaker:document.getElementById('lgBook').value,note:document.getElementById('lgNote').value||null,
+    bookmaker:document.getElementById('lgBook').value,note:null,
     suggested_u:null,places:null,ew_fraction:null,field_size:null,legs:legs.length?JSON.stringify(legs):null,result:'O',source:'app'};
   // price = all-win return ÷ stake, so a manual "Won" settles at the full return
   b.price=custom?manualPr:M.type==='ACCA'?Math.round(accaPr*10000)/10000:Math.round(potReturnU(b)/b.stake_u*10000)/10000;
@@ -6752,7 +6748,7 @@ function showGuide(){
     <div class="guide-section" style="border-left-color:#ef4444">
       <h3><span class="gi">🚀</span> Quick Start — Your Daily Workflow</h3>
       <div class="guide-flow">
-        <span class="gf-step">1. Load JSON</span><span class="gf-arrow">→</span>
+        <span class="gf-step">1. Fetch Racecard</span><span class="gf-arrow">→</span>
         <span class="gf-step">2. Review Picks</span><span class="gf-arrow">→</span>
         <span class="gf-step">3. Export PDF</span><span class="gf-arrow">→</span>
         <span class="gf-step">4. Go to Track</span><span class="gf-arrow">→</span>
@@ -6882,8 +6878,7 @@ function showGuide(){
     <div class="guide-section">
       <h3><span class="gi">📥</span> Loading Race Data</h3>
       <ul>
-        <li>Click <b>"Load JSON"</b> in the header → paste JSON from <code>fetch_daily_races.py</code></li>
-        <li>Or place <code>daily_race_data.json</code> alongside this HTML for auto-load</li>
+        <li>Run <b>Fetch Racecard.bat</b> (or the API version) → today's card loads automatically from <code>daily_race_data.json</code></li>
         <li>Switch between dates via the <b>day bar</b> at the top</li>
       </ul>
       <p style="margin-top:6px"><b>Auto-excluded:</b> Happy Valley and Hexham venues are filtered out.</p>
@@ -7122,7 +7117,6 @@ function showGuide(){
         <div style="background:var(--bg);padding:4px 8px;border-radius:4px"><code>pdfExportLog</code> — PDF export timestamps</div>
         <div style="background:var(--bg);padding:4px 8px;border-radius:4px"><code>calibWeights_*</code> — UI calibrated weights</div>
       </div>
-      <p><b>"Clear"</b> in header removes race data only. Results, calibration, and combos persist separately.</p>
     </div>
 
     <!-- FILES -->
@@ -8002,11 +7996,10 @@ async function render(){
   const dd=document.getElementById('dateDisp'),sd=document.getElementById('statusDisp');
   // Data source indicator
   const badge=document.getElementById('dataSourceBadge');
-  const clearBtn=document.getElementById('clearDataBtn');
   const src=window._dataSource||'sample';
-  if(src==='stored'){badge.textContent='YOUR DATA';badge.style.background='rgba(16,185,129,.2)';badge.style.color='var(--accent)';badge.style.display='inline-block';clearBtn.style.display='inline-block';}
-  else if(src==='file'){badge.textContent='FROM FILE';badge.style.background='rgba(59,130,246,.2)';badge.style.color='var(--accent2)';badge.style.display='inline-block';clearBtn.style.display='inline-block';}
-  else{badge.textContent='SAMPLE DATA';badge.style.background='rgba(245,158,11,.15)';badge.style.color='var(--warn)';badge.style.display='inline-block';clearBtn.style.display='none';}
+  if(src==='stored'){badge.textContent='YOUR DATA';badge.style.background='rgba(16,185,129,.2)';badge.style.color='var(--accent)';badge.style.display='inline-block';}
+  else if(src==='file'){badge.textContent='FROM FILE';badge.style.background='rgba(59,130,246,.2)';badge.style.color='var(--accent2)';badge.style.display='inline-block';}
+  else{badge.textContent='SAMPLE DATA';badge.style.background='rgba(245,158,11,.15)';badge.style.color='var(--warn)';badge.style.display='inline-block';}
 
   if(!D||!D.venues||!Object.keys(D.venues).length){
     dd.textContent=D?.date||'—';sd.textContent='No data';
@@ -9133,6 +9126,7 @@ function setComboFilter(v){st.comboFilter=st.comboFilter===v?false:v;renderRaceC
 function filterRaceType(t){st.raceTypeFilter=st.raceTypeFilter===t?'all':t;renderRaceCards();renderFieldSizeBar()}
 function filterEngine(e){st.engineFilter=st.engineFilter===e?'all':e;renderRaceCards();renderFieldSizeBar()}
 function filterFit(f){st.fitFilter=st.fitFilter===f?'all':f;renderRaceCards();renderFieldSizeBar()}
+function filterPrime(){st.primeFilter=!st.primeFilter;renderRaceCards();renderFieldSizeBar()}
 
 const FIELD_BRACKETS=[
   {key:'all',label:'All',min:0,max:999},
@@ -9168,7 +9162,7 @@ function filterRaceCode(c){st.raceCodeFilter=st.raceCodeFilter===c?'all':c;rende
 
 let _fsbPillOpen=null;
 function fsbToggle(key){_fsbPillOpen=_fsbPillOpen===key?null:key;renderFieldSizeBar();}
-function fsbClearAll(){_fsbPillOpen=null;st.fieldFilter.clear();st.gapFilter.clear();st.raceTypeFilter='all';st.raceCodeFilter='all';st.confidenceFilter='all';st.comboFilter=false;st.engineFilter='all';st.fitFilter='all';renderVenueBar();renderRaceCards();renderFieldSizeBar();}
+function fsbClearAll(){_fsbPillOpen=null;st.fieldFilter.clear();st.gapFilter.clear();st.raceTypeFilter='all';st.raceCodeFilter='all';st.confidenceFilter='all';st.comboFilter=false;st.engineFilter='all';st.fitFilter='all';st.primeFilter=false;renderVenueBar();renderRaceCards();renderFieldSizeBar();}
 (function(){document.addEventListener('click',function(e){if(_fsbPillOpen&&!e.target.closest('#fieldSizeBar')){_fsbPillOpen=null;renderFieldSizeBar();}});})();
 
 function renderFieldSizeBar(){
@@ -9181,7 +9175,7 @@ function renderFieldSizeBar(){
   const confCounts={'TOP PICK':0,'STRONG':0,'SOLID':0,'MODERATE':0};
   const gapCounts={tight:0,competitive:0,clear:0};
   const rcCounts={};
-  const engCounts={prixm:0,emerald:0};let topUCount=0;
+  const engCounts={prixm:0,emerald:0};let topUCount=0,primeCount=0;
   let total=0;
   venues.forEach(vk=>{
     const v=D.venues[vk];if(!v)return;
@@ -9199,6 +9193,7 @@ function renderFieldSizeBar(){
       }else gapCounts.tight++;
       const rt=(r.race_type||'Unknown').trim();rcCounts[rt]=(rcCounts[rt]||0)+1;
       engCounts[ire?'emerald':'prixm']++;
+      try{if(getPrimeFlags(r))primeCount++;}catch(e){}
       if(r.runners&&r.runners.length){const t0=[...r.runners].sort((a,b)=>b.score-a.score)[0];if(t0&&t0.track_fit&&t0.track_fit.verdict==='u')topUCount++;}
     });
   });
@@ -9304,7 +9299,9 @@ function renderFieldSizeBar(){
     <div class="fsb-chip${st.fitFilter==='topU'?' on':''}" onclick="filterFit('topU')">❌ Top pick unsuited (${topUCount})</div>
     <div class="fsb-chip${st.fitFilter==='hideU'?' on':''}" onclick="filterFit('hideU')">Hide races where top pick is ❌ (${total-topUCount})</div>
   </div>${fitActive?clearRow("filterFit(st.fitFilter)"):''}`;
-  const anyActive=fsActive||gapActive||rtActive||codeActive||confActive||!!st.comboFilter||engActive||fitActive;
+  // ── Dropdown: 🎯 Prime (non-hcap · ≤5 runners · gap ≥12) ──
+  const primeActive=!!st.primeFilter;
+  const anyActive=fsActive||gapActive||rtActive||codeActive||confActive||!!st.comboFilter||engActive||fitActive||primeActive;
   el.innerHTML=`<div class="fsb-bar">
     ${engCounts.emerald?pill('engine',engActive?(st.engineFilter==='emerald'?'☘ Emerald':'Prixm'):'Engine',engActive,0,engDrop):''}
     ${pill('field','Field Size',fsActive,fsActive?st.fieldFilter.size:0,fsDrop)}
@@ -9312,6 +9309,7 @@ function renderFieldSizeBar(){
     ${pill('rtype',rtActive?(rtSel?.short||'Race Type'):'Race Type',rtActive,0,rtDrop)}
     ${showCode?pill('code',codeActive?st.raceCodeFilter:'Code',codeActive,0,codeDrop):''}
     ${pill('conf',confActive?(confSel?.label||'Confidence'):'Confidence',confActive,0,confDrop,true)}
+    <div class="fsb-pill${primeActive?' active':''}" onclick="event.stopPropagation();_fsbPillOpen=null;filterPrime()" title="${primeActive?'Click to show all races':'Show only 🎯 Prime races: UK · non-handicap · ≤5 runners · gap ≥12 (top pick won ~58% historically)'}"><span>🎯 Prime</span><span class="fsb-badge">${primeCount}</span></div>
     ${topUCount||fitActive?pill('fit',fitActive?(st.fitFilter==='topU'?'❌ Unsuited':'Hide ❌'):'🧭 Track fit',fitActive,0,fitDrop,true):''}
     ${comboN&&comboDrop?pill('combo','🔥 Combo',!!st.comboFilter,0,comboDrop,true):''}
     ${bc&&bannedDrop?pill('banned','🚫 Banned',hiding,bc,bannedDrop,true):''}
@@ -9541,6 +9539,39 @@ function getPrimeFlags(race){
   const gap=Math.round((s[0].score-s[1].score)*10)/10;if(gap<12) return null;
   return{gap,field:rs.length,horse:s[0].name,score:s[0].score};
 }
+// 🎯 Since found — live record of the SAME fixed rule (getPrimeFlags) on races logged from PRIME_STATS.asOf on.
+// Reads window._resultsHistory (UK) fresh each time, so it grows with every Fetch Results. PRIME_STATS stays untouched.
+function primeSinceFound(){
+  const hist=window._resultsHistory,out=[];
+  if(!hist||!hist.races) return out;
+  hist.races.forEach(r=>{
+    if(!r.date||r.date<PRIME_STATS.asOf||!r.results) return;
+    const flag=getPrimeFlags({course:r.venue,handicap:r.handicap,race_name:r.race_name,
+      runners:r.results.map(x=>({name:x.name,score:x.predicted_score,non_runner:x.non_runner}))});
+    if(!flag) return;
+    const top=r.results.find(x=>x.name===flag.horse);if(!top||!top.finish_pos) return;
+    const fs=flag.field,won=top.finish_pos===1;
+    out.push({date:r.date,time:r.time,venue:r.venue,horse:flag.horse,gap:flag.gap,pos:top.finish_pos,won,
+      placed:top.finish_pos<=getPlaceLimit(fs),sp:top.sp||null});
+  });
+  return out.sort((a,b)=>(b.date+b.time).localeCompare(a.date+a.time));
+}
+function primeSinceFoundHTML(){
+  const L=primeSinceFound(),S=PRIME_STATS,box='padding:8px;border:1px solid var(--border);border-radius:6px;text-align:center',big='font-size:18px;font-weight:700',sm='font-size:10px;color:var(--muted)';
+  const head=`<hr style="border:none;border-top:1px solid var(--border);margin:14px 0 10px"><p style="margin:0 0 6px"><b>📈 Since found</b> <span style="font-size:11px;color:var(--muted)">— same rule, races logged from ${S.asOf} on (none of these were used to find it). Updates after every Fetch Results; the numbers above never change.</span></p>`;
+  if(!L.length) return head+`<p style="margin:0;font-size:12px;color:var(--muted)">No Prime races resulted yet.</p>`;
+  const n=L.length,w=L.filter(x=>x.won).length,pl=L.filter(x=>x.placed).length,withSp=L.filter(x=>x.sp>0);
+  const roi=withSp.length?Math.round((withSp.reduce((a,x)=>a+(x.won?x.sp-1:-1),0)/withSp.length)*1000)/10:null;
+  const pc=v=>Math.round(v/n*1000)/10;
+  const rows=L.slice(0,15).map(x=>`<tr><td>${x.date.slice(5)} ${x.time}</td><td>${x.venue}</td><td>${x.horse}</td><td style="text-align:right">${x.gap}</td><td style="text-align:center;font-weight:700;color:${x.won?'#10b981':x.placed?'#f59e0b':'#ef4444'}">${x.pos}</td><td style="text-align:right">${x.sp?x.sp:''}</td></tr>`).join('');
+  return head+`<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:6px;margin:8px 0">
+    <div style="${box}"><div style="${big}">${pc(w)}%</div><div style="${sm}">top pick won (${w}/${n})</div></div>
+    <div style="${box}"><div style="${big}">${pc(pl)}%</div><div style="${sm}">placed (${pl}/${n})</div></div>
+    ${roi!=null?`<div style="${box}"><div style="${big}">${roi>0?'+':''}${roi}%</div><div style="${sm}">ROI at SP (${withSp.length})</div></div>`:''}
+  </div>${n<30?`<p style="margin:0 0 6px;font-size:11px;color:var(--muted)">Small sample (${n}) — needs ~30+ races before it says much vs the ${S.win}% base.</p>`:''}
+  <div style="overflow-x:auto"><table style="width:100%;font-size:11px;border-collapse:collapse"><thead><tr style="color:var(--muted);text-align:left"><th>Race</th><th>Venue</th><th>Top pick</th><th style="text-align:right">Gap</th><th style="text-align:center">Pos</th><th style="text-align:right">SP</th></tr></thead><tbody>${rows}</tbody></table></div>
+  ${n>15?`<p style="margin:4px 0 0;font-size:10px;color:var(--muted)">Latest 15 of ${n} shown.</p>`:''}`;
+}
 function primeInfoHTML(){
   const S=PRIME_STATS,box='padding:8px;border:1px solid var(--border);border-radius:6px;text-align:center',big='font-size:18px;font-weight:700',sm='font-size:10px;color:var(--muted)';
   return `<p style="margin:0 0 8px">The race format where Prixm's top pick wins most often, using only what's known <b>before</b> the race. Found by testing 2,640 combinations of race type, distance, field size, gap, score, going and class on <b>5,532 scored UK races</b> (Apr–Oct 2026): found on Apr–Jul, then confirmed on Aug–Oct races it had never seen.</p>
@@ -9559,7 +9590,7 @@ function primeInfoHTML(){
   <p style="margin:8px 0 4px"><b>How it compares</b> (top pick win %, unseen Aug–Oct): 🎯 Prime ${S.testWin}% · ⭐ Golden 49% · all non-handicaps 36% · all races 26%.</p>
   <p style="margin:8px 0 4px;font-size:12px"><b>Tested and left out:</b> distance (1m–11f and jumps 2m–2m1f are the best trips, but add nothing once field and gap are set), going, class, race type. <b>"Top pick is the favourite"</b> looked even better on SP, but that's hindsight: late money moves to winners. With the card price you see when you bet, it dropped to about 38%.</p>
   <p style="margin:8px 0 4px;color:#b45309"><b>⚠ Accurate ≠ profitable.</b> Small fields with a clear top pick are usually short prices the market already rates. Level stakes at SP returned about <b>${S.roi}%</b>. Use Prime to know <i>who wins</i>; only bet when the price is bigger than fair (the 💷 Ledger's EV check). Small fields pay win only (2–4 runners) or 2 places (5).</p>
-  <p style="margin:8px 0 0;font-size:11px;color:var(--muted)">Shown as a <b>🎯 Prime</b> badge on race cards and a line in the race view's top-pick card. Display only: never changes scores, gaps, segments or P&amp;L. Stats as of ${S.asOf}.</p>`;
+  <p style="margin:8px 0 0;font-size:11px;color:var(--muted)">Shown as a <b>🎯 Prime</b> badge on race cards and a line in the race view's top-pick card. Display only: never changes scores, gaps, segments or P&amp;L. Stats as of ${S.asOf}.</p>`+primeSinceFoundHTML();
 }
 function showPrimeInfo(){
   document.getElementById('modalContainer').innerHTML=`<div class="modal-bg" onclick="if(event.target===this)closeModal()"><div class="modal" style="max-width:680px">
@@ -9623,6 +9654,8 @@ function renderRaceCards(){
   // 🧭 Track-fit filter — only ever acts on ❌ UNSUITED (validated verdicts)
   if(st.fitFilter==='topU') races=races.filter(r=>{const t=r.runners&&[...r.runners].sort((a,b)=>b.score-a.score)[0];return t&&t.track_fit&&t.track_fit.verdict==='u';});
   else if(st.fitFilter==='hideU') races=races.filter(r=>{const t=r.runners&&[...r.runners].sort((a,b)=>b.score-a.score)[0];return !(t&&t.track_fit&&t.track_fit.verdict==='u');});
+  // 🎯 Prime filter — races with a Prime spot (getPrimeFlags)
+  if(st.primeFilter) races=races.filter(r=>{try{return !!getPrimeFlags(r);}catch(e){return false;}});
   // Apply race code filter (Flat/Hurdle/Chase)
   if(st.raceCodeFilter&&st.raceCodeFilter!=='all'){
     races=races.filter(r=>(r.race_type||'').trim()===st.raceCodeFilter);
@@ -13402,17 +13435,7 @@ window.toggleTheme=function(){
     document.addEventListener('mouseover',e=>{const el=e.target.closest('*');if(!el||saved.has(el))return;
       requestAnimationFrame(()=>{const b=parse(getComputedStyle(el).backgroundColor);
         if(b&&b.a>.04&&lum(b)>.55&&!keep(b)){fix(el);el.addEventListener('mouseleave',()=>restore(el),{once:true});}});},true);
-    // custom cursor (mouse only)
-    if(matchMedia('(pointer:fine)').matches){
-      const c=document.createElement('div');c.className='nt-cursor';
-      const r=document.createElement('div');r.className='nt-ring';
-      document.body.append(c,r);document.documentElement.classList.add('nt-cur');
-      let mx=-100,my=-100,rx=-100,ry=-100;
-      document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;c.style.transform=`translate(${mx-4}px,${my-4}px)`;},{passive:true});
-      (function loop(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;r.style.transform=`translate(${rx-16}px,${ry-16}px)`;requestAnimationFrame(loop);})();
-      const HOT='a,button,[onclick],.rc,.vbtn,.tab-btn,.dtab,.prixm-pick,input,select,label';
-      document.addEventListener('mouseover',e=>{r.classList.toggle('big',!!e.target.closest(HOT));},{passive:true});
-    }
+    // custom cursor removed 2026-10-13 (user wants the normal system cursor)
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',start); else start();
 })();
