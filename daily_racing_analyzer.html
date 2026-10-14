@@ -1090,6 +1090,11 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 
 /* 💷 Ledger */
 .lg-fab{position:fixed;right:88px;bottom:22px;background:#15803d;color:#fff;border:none;border-radius:26px;padding:12px 18px;font:inherit;font-weight:800;font-size:13.5px;box-shadow:0 6px 20px rgba(21,128,61,.35);cursor:pointer;z-index:900;display:flex;gap:7px;align-items:center}
+/* PC: collapsed ＋ at rest so it never covers the card/table; full label on hover/focus (2026-10-14) */
+@media(min-width:701px){html body .lg-fab.lg-fab{padding:8px 13px!important;opacity:.55}
+html body .lg-fab.lg-fab .lgf-x{display:none}
+html body .lg-fab.lg-fab:hover,html body .lg-fab.lg-fab:focus-visible{opacity:1;padding:12px 18px!important}
+html body .lg-fab.lg-fab:hover .lgf-x,html body .lg-fab.lg-fab:focus-visible .lgf-x{display:inline-flex;gap:7px;align-items:center}}
 .lg-fab small{font-weight:600;opacity:.85;font-size:10.5px}.lg-fab .kbd{background:rgba(255,255,255,.2);border-radius:4px;padding:0 5px;font-size:10px}
 .lg-chip{font-size:12px;font-weight:700;padding:5px 12px;border-radius:14px;background:#f0fdf4;border:1px solid #bbf7d0;color:#15803d;cursor:pointer;white-space:nowrap}
 .lg-ov{position:fixed;inset:0;background:rgba(17,24,39,.45);display:flex;align-items:flex-start;justify-content:center;z-index:2000;padding:40px 12px;overflow:auto}
@@ -1579,7 +1584,7 @@ html[data-theme="nothing"] svg text[fill="#6b7280"],html[data-theme="nothing"] s
 <div id="emeraldView" style="display:none;padding:20px 28px;max-width:1200px;margin:0 auto"><div id="emeraldContent">Loading...</div></div>
 <div id="ledgerView" class="vo-hide" style="display:none;padding:20px 28px 90px;max-width:1200px;margin:0 auto"><div id="ledgerContent">Loading...</div></div>
 <div id="mView" style="display:none;padding:20px 28px;max-width:1300px;margin:0 auto"><div id="mContent">Loading...</div></div>
-<button id="lgFab" class="lg-fab vo-hide" onclick="window.lgOpen&&window.lgOpen()" title="Log a bet (shortcut: B)">＋ Log bet <small id="lgFabSub"></small><span class="kbd">B</span></button>
+<button id="lgFab" class="lg-fab vo-hide" onclick="window.lgOpen&&window.lgOpen()" title="Log a bet (shortcut: B)">＋<span class="lgf-x"> Log bet <small id="lgFabSub"></small><span class="kbd">B</span></span></button>
 
 <div id="modalContainer"></div>
 <div class="hs-overlay" id="hsOverlay" onclick="if(event.target===this)hsClose()">
@@ -4547,6 +4552,11 @@ function placeTerms(fs,hcp){if(!fs||fs<=4)return{places:1,frac:0,ew:false};if(fs
 function betPnl(b,pos,nr){
   const t=(b.bet_type||'').toUpperCase(),u=+b.stake_u||0,pr=+b.price||0,pl=+b.places||0;
   if(nr)return['V',0];
+  if(b.free_bet){const placed=!!(pos&&pl&&pos<=pl); // free bet: stake never returned → winnings only, a loser costs 0
+    if(t==='WIN')return pos===1?['W',u*(pr-1)]:['L',0];
+    if(t==='EW'){const f=+b.ew_fraction||0.2,h=u/2;return[pos===1?'W':placed?'P':'L',(pos===1?h*(pr-1):0)+(placed?h*(pr-1)*f:0)];}
+    if(t==='PLACE'||t==='TOP N')return pl?(placed?['W',u*(pr-1)]:['L',0]):null;
+    return null;}
   if(t==='WIN')return pos===1?['W',u*(pr-1)]:['L',-u];
   if(t==='EW'){const f=+b.ew_fraction||0.2,h=u/2,win=pos===1?h*(pr-1):-h,plc=(pos&&pl&&pos<=pl)?h*(pr-1)*f:-h;return[pos===1?'W':(pos&&pl&&pos<=pl)?'P':'L',win+plc];}
   if(t==='PLACE'||t==='TOP N'){if(!pl)return null;return (pos&&pos<=pl)?['W',u*(pr-1)]:['L',-u];}
@@ -4575,7 +4585,8 @@ const legPlace=l=>1+((+l.price||1)-1)*(+l.frac||0);
 // settle: all legs resulted → winning combos pay (non-runner leg ×1.0); any ACCA loser settles early as lost
 function multiPnl(b,runs){
   const legs=legsOf(b),d=multiDef(b.bet_type,legs.length);if(!d||legs.length!==d.n)return null;const u=+b.stake_u||0;
-  if(d.k==='ACCA'&&runs.some(r=>r&&!r.non_runner&&r.finish_pos!==1))return['L',-u];
+  const free=!!b.free_bet;
+  if(d.k==='ACCA'&&runs.some(r=>r&&!r.non_runner&&r.finish_pos!==1))return['L',free?0:-u];
   if(runs.some(r=>!r))return null;
   if(runs.every(r=>r.non_runner))return['V',0];
   if(d.k==='ACCA'){const nr=runs.some(r=>r.non_runner);
@@ -4583,11 +4594,16 @@ function multiPnl(b,runs){
     if(nr&&!legs.every(l=>+l.price>0))return null; } // non-runner but no leg prices → settle by hand
   const wf=i=>runs[i].non_runner?1:runs[i].finish_pos===1?(+legs[i].price||1):0;
   const pf=i=>runs[i].non_runner?1:(runs[i].finish_pos&&legs[i].places&&runs[i].finish_pos<=legs[i].places)?legPlace(legs[i]):0;
+  if(free){const ln=u/multiBets(d),gw=x=>x>0?ln*(x-1):0; // free bet: each winning line pays winnings only
+    const won=combosOf(legs.length,d.sizes).reduce((a,c)=>a+gw(c.reduce((m,i)=>m*wf(i),1))+(d.ew?gw(c.reduce((m,i)=>m*pf(i),1)):0),0);
+    return[won>0?'W':'L',won];}
   const ret=multiReturn(legs.length,d,u/multiBets(d),wf,pf),pnl=ret-u;
   return[ret<=0?'L':pnl>0?'W':'P',pnl];
 }
 // potential return (units) if everything wins / places
-function potReturnU(b){
+// free bet: return = winnings only (stake isn't returned)
+function potReturnU(b){const r=potReturnRaw(b);return b.free_bet?Math.max(0,r-(+b.stake_u||0)):r;}
+function potReturnRaw(b){
   const u=+b.stake_u||0,pr=+b.price||0,legs=legsOf(b),d=multiDef(b.bet_type,legs.length);
   if(d&&d.k==='ACCA'&&pr>0)return u*pr; // acca odds as logged (boosts / no leg prices)
   if(d&&legs.length===d.n)return multiReturn(legs.length,d,u/multiBets(d),i=>+legs[i].price||1,i=>legPlace(legs[i]));
@@ -4660,7 +4676,8 @@ const settled=()=>LG.bets.filter(b=>b.result&&b.result!=='O');
 const plU=()=>settled().reduce((a,b)=>a+pnlOf(b),0);
 const plGBP=()=>settled().reduce((a,b)=>a+pnlOf(b)*(+b.unit_gbp||10),0);
 const bankNow=()=>S().bank+plGBP();
-const todayU=()=>LG.bets.filter(b=>b.date===today()).reduce((a,b)=>a+(+b.stake_u||0),0);
+const ownU=b=>b.free_bet?0:(+b.stake_u||0); // stake that was your money (free bets = 0)
+const todayU=()=>LG.bets.filter(b=>b.date===today()&&!b.free_bet).reduce((a,b)=>a+(+b.stake_u||0),0);
 function brakeOn(){const days={};settled().forEach(b=>{days[b.date]=(days[b.date]||0)+pnlOf(b);});const last=Object.keys(days).sort().slice(-3);return last.length===3&&last.every(d=>days[d]<0);}
 
 // ── segment strike rates, live from logged results (Golden = real money; Silver/Bronze paper) ──
@@ -4779,7 +4796,7 @@ let M=null;
 function allRunners(){const out=[];if(!window.D||!D.venues)return out;Object.entries(D.venues).forEach(([vk,v])=>(v.races||[]).forEach((r,ri)=>(r.runners||[]).forEach(x=>out.push({vk,ri,name:x.name,course:v.course||vk,time:r.time,em:isIreland(v.course||vk)}))));return out;}
 function openModal(vk,ri,name,presetU){
   if(VIEW_ONLY)return;
-  M={c:(vk!=null&&name)?ctxFor(vk,ri,name):null,type:'WIN',unitMode:'gbp',places:null,legs:[],multi:null,ew:false,ewPl:null,ewFr:null};
+  M={c:(vk!=null&&name)?ctxFor(vk,ri,name):null,type:'WIN',unitMode:'gbp',places:null,legs:[],multi:null,ew:false,ewPl:null,ewFr:null,free:false};
   let el=document.getElementById('lgModal');if(!el){el=document.createElement('div');el.id='lgModal';document.body.appendChild(el);}
   el.innerHTML=`<div class="lg-ov" onclick="if(event.target===this)window.lgClose()"><div class="lg-modal" role="dialog" aria-label="Log a bet">
     <div class="lg-mh"><b>＋ Log a bet</b><button class="lg-x" onclick="window.lgClose()" aria-label="Close">✕</button></div>
@@ -4789,6 +4806,7 @@ function openModal(vk,ri,name,presetU){
       <div class="lg-row"><div class="lg-f"><label id="lgStakeLbl">Stake</label><div class="lg-stake"><input id="lgStake" type="number" step="0.5" min="0" placeholder="5" oninput="window.lgUpd()"><button data-u="gbp" class="on" onclick="window.lgUnit('gbp')">£</button><button data-u="u" onclick="window.lgUnit('u')">u</button></div><div id="lgConv" class="lg-sm"></div></div>
         <div class="lg-f"><label>Price (7/4 or 2.75)</label><input id="lgPrice" placeholder="e.g. 7/4" oninput="window.lgPriceTyped();window.lgUpd()"><div id="lgPriceConv" class="lg-sm"></div></div></div>
       <div class="lg-row"><div class="lg-f"><label>Bookmaker</label><select id="lgBook">${['William Hill','Bet365','Betfair Exchange','Paddy Power','Sky Bet','Betfred','Other'].map(x=>`<option>${x}</option>`).join('')}</select></div>
+        <div class="lg-f"><label>&nbsp;</label><label class="lg-chk" style="margin-top:6px"><input type="checkbox" id="lgFree" onchange="window.lgFree(this.checked)"> 🎁 Free bet</label><div class="lg-sm">stake not returned · lose = £0</div></div>
         </div>
       <div id="lgPay"></div><div id="lgAdv"></div></div>
     <div class="lg-mf"><span id="lgSum" class="lg-sm"></span><div style="display:flex;gap:6px"><button class="vbtn" id="lgUseSug" style="display:none"></button><button class="vbtn" style="background:#15803d;color:#fff;border-color:#15803d" onclick="window.lgSave()">Save bet</button></div></div>
@@ -4908,8 +4926,9 @@ window.lgUpd=()=>{
   document.getElementById('lgConv').innerHTML=sv?(M.unitMode==='gbp'?`£${sv.toFixed(2)} = <b>${su.toFixed(2)}u</b> <span class="lg-sm">(1u = £${unit})</span>`:`${sv}u = <b>£${(sv*unit).toFixed(2)}</b>`)+(M.type==='EW'?` <span class="lg-sm">(half win · half place)</span>`:fx?' <span class="lg-sm">per bet</span>':''):'';
   document.getElementById('lgPriceConv').textContent=pr?`decimal ${pr.toFixed(2)} · implied ${(100/pr).toFixed(1)}%`:'';
   const P=modalPayout(pr),g=x=>'£'+(x*unit).toFixed(2);
+  if(P&&M.free){P.max=Math.max(0,P.max-P.total);P.rows=P.rows.map(r=>[r[0],r[1]+' (incl. stake)']);P.note='🎁 free bet, stake not returned · '+P.note;}
   document.getElementById('lgPay').innerHTML=P?`<div class="lg-pay"><div class="big"><span class="lg-sm" style="color:#166534;font-weight:700">POTENTIAL RETURN${P.rows.length>1&&M.type!=='EW'?' (all win)':''}</span><b>${g(P.max)}</b></div>
-    <div class="lg-sm">Total stake ${g(P.total)} (${P.total.toFixed(2)}u) · profit <b style="color:#15803d">${g(P.max-P.total)}</b> · ${esc(P.note)}</div>
+    <div class="lg-sm">${M.free?`Free bet ${g(P.total)}, costs you nothing · profit <b style="color:#15803d">${g(P.max)}</b>`:`Total stake ${g(P.total)} (${P.total.toFixed(2)}u) · profit <b style="color:#15803d">${g(P.max-P.total)}</b>`} · ${esc(P.note)}</div>
     ${P.rows.length?`<table>${P.rows.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join('')}</table>`:''}</div>`
     :`<div class="lg-pay off lg-sm">Potential return shows here once the horse${multiMode()?'s':''}, stake and price${multiMode()?'s':''} are in.</div>`;
   let adv='';const btn=document.getElementById('lgUseSug');btn.style.display='none';
@@ -4921,12 +4940,13 @@ window.lgUpd=()=>{
       if(su>s.u*1.5)adv+=`<div class="lg-adv lg-w">⚠ Your stake (${su.toFixed(2)}u) is well above the suggestion.</div>`;}
     M.sug=s.u;}
   const tot=P?P.total:su;
-  if(tot&&!(c&&c.em)&&!(multiMode()&&M.legs.length&&M.legs.every(l=>l.em))&&realTodayU()+tot>dailyBudgetU())adv+=`<div class="lg-adv lg-w">⚠ This takes today to ${(realTodayU()+tot).toFixed(1)}u — over today's ${dailyBudgetU()}u budget.</div>`;
+  if(tot&&!M.free&&!(c&&c.em)&&!(multiMode()&&M.legs.length&&M.legs.every(l=>l.em))&&realTodayU()+tot>dailyBudgetU())adv+=`<div class="lg-adv lg-w">⚠ This takes today to ${(realTodayU()+tot).toFixed(1)}u — over today's ${dailyBudgetU()}u budget.</div>`;
   document.getElementById('lgAdv').innerHTML=adv;
   const label=M.type==='OTHER'&&M.multi&&M.multi!=='CUSTOM'?M.multi+(M.ew?' EW':''):M.type==='ACCA'?(M.legs.length>=2?M.legs.length+'-fold acca':''):M.type;
   const h=multiMode()?label:c?c.r.name+' · '+M.type:'';
   document.getElementById('lgSum').textContent=h&&P?`${h} · stake ${g(P.total)} · returns up to ${g(P.max)}`:'';
 };
+window.lgFree=v=>{M.free=!!v;window.lgUpd();};
 window.lgSetN=v=>{M.places=Math.max(1,parseInt(v)||1);window.lgUpd();};
 window.lgSave=async()=>{
   if(M&&multiMode())return saveMulti();
@@ -4937,10 +4957,10 @@ window.lgSave=async()=>{
   const b={created:new Date().toISOString().slice(0,19),date:today(),venue:c?c.race.course:'',time:c?c.race.time:'',horse,engine:c?c.eng:'prixm',
     category:c&&c.cat||null,segment:c&&c.seg||null,bet_type:M.type,stake_u:Math.round(su*100)/100,unit_gbp:S().unit,price:pr,price_raw:prRaw,
     bookmaker:document.getElementById('lgBook').value,note:null,suggested_u:M.sug!=null?M.sug:null,
-    places:M.type==='EW'||M.type==='PLACE'?pt.places:M.type==='TOP N'?(M.places||3):null,ew_fraction:M.type==='EW'?Math.round(pt.frac*10000)/10000:null,field_size:c?c.fs:null,result:'O',source:'app'};
+    places:M.type==='EW'||M.type==='PLACE'?pt.places:M.type==='TOP N'?(M.places||3):null,ew_fraction:M.type==='EW'?Math.round(pt.frac*10000)/10000:null,field_size:c?c.fs:null,result:'O',source:'app',free_bet:M.free?1:0};
   await saveBet(b);
   try{if(c&&!isBetted(horse,c.race.time||'',c.race.course||'')){const l=loadBetList();l.push({horse,time:c.race.time,venue:c.race.course,score:c.r.score,betType:M.type==='TOP N'?'TOP '+(M.places||3):M.type});saveBetList(l);renderBetPanel();}}catch(e){}
-  const msg=`Logged ${horse}: £${(b.stake_u*b.unit_gbp).toFixed(2)} @ ${pr.toFixed(2)} — returns up to £${(potReturnU(b)*b.unit_gbp).toFixed(2)}`;
+  const msg=`Logged ${horse}${b.free_bet?' (🎁 free bet)':''}: £${(b.stake_u*b.unit_gbp).toFixed(2)} @ ${pr.toFixed(2)} — returns up to £${(potReturnU(b)*b.unit_gbp).toFixed(2)}`;
   window.lgClose();toast(isLocalId(b.id)?msg+' · ⚠ DB server off — kept in this browser, moves to the DB when the server is on':msg);try{renderRaceCards();}catch(e){}
 };
 // ACCA, Trixie/Patent/… and CUSTOM (OTHER) — one bet row, legs as JSON, stake_u = total stake
@@ -4964,9 +4984,9 @@ async function saveMulti(){
     horse:legs.length?legs.map(l=>l.horse).join(' / '):typed,engine:legs.length&&legs.every(l=>l.engine==='emerald')?'emerald':'prixm',category:null,segment:null,
     bet_type:type,stake_u:Math.round(total*100)/100,unit_gbp:S().unit,price:null,price_raw:custom||(M.type==='ACCA'&&M.accaTyped&&document.getElementById('lgPrice').value.trim())?document.getElementById('lgPrice').value:legs.map(l=>l.price).join(' × '),
     bookmaker:document.getElementById('lgBook').value,note:null,
-    suggested_u:null,places:null,ew_fraction:null,field_size:null,legs:legs.length?JSON.stringify(legs):null,result:'O',source:'app'};
+    suggested_u:null,places:null,ew_fraction:null,field_size:null,legs:legs.length?JSON.stringify(legs):null,result:'O',source:'app',free_bet:M.free?1:0};
   // price = all-win return ÷ stake, so a manual "Won" settles at the full return
-  b.price=custom?manualPr:M.type==='ACCA'?Math.round(accaPr*10000)/10000:Math.round(potReturnU(b)/b.stake_u*10000)/10000;
+  b.price=custom?manualPr:M.type==='ACCA'?Math.round(accaPr*10000)/10000:Math.round(potReturnRaw(b)/b.stake_u*10000)/10000;
   await saveBet(b);
   const msg=`Logged ${type==='ACCA'?legs.length+'-fold acca':type}: £${(b.stake_u*b.unit_gbp).toFixed(2)} — returns up to £${(potReturnU(b)*b.unit_gbp).toFixed(2)}`;
   window.lgClose();toast(isLocalId(b.id)?msg+' · ⚠ DB server off — kept in this browser, moves to the DB when the server is on':msg);try{renderRaceCards();}catch(e){}
@@ -4976,7 +4996,7 @@ function toast(t){let el=document.getElementById('lgToast');if(!el){el=document.
 // ── Ledger tab ──
 const F={eng:'',type:'',sug:''};
 function dailyBudgetU(){const s=S();return floorHalf(effBank()*s.pct/100/s.unit);}
-function realTodayU(){return LG.bets.filter(b=>b.date===today()&&b.engine!=='emerald').reduce((a,b)=>a+(+b.stake_u||0),0);}
+function realTodayU(){return LG.bets.filter(b=>b.date===today()&&b.engine!=='emerald'&&!b.free_bet).reduce((a,b)=>a+(+b.stake_u||0),0);}
 function planRows(){
   const out=[];if(!window.D||!D.venues)return out;
   [false,true].forEach(em=>todaysPicks(em).forEach(p=>{const c=ctxFor(p.venueKey,p.raceIdx,p.horse);if(c){const s=suggest(c);if(s.kind!=='none')out.push({p,c,s});}}));
@@ -4998,9 +5018,9 @@ function render(){
   if(VIEW_ONLY){el.innerHTML='';return;}
   try{
     const set=S(),st=settled(),open=LG.bets.filter(b=>b.result==='O');
-    const staked=st.reduce((a,b)=>a+(+b.stake_u||0),0),won=st.filter(b=>b.result==='W'||b.result==='P').length;
+    const staked=st.reduce((a,b)=>a+ownU(b),0),won=st.filter(b=>b.result==='W'||b.result==='P'||(b.result==='C'&&pnlOf(b)>0)).length;
     let run=0,peak=0,dd=0;st.slice().sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time)).forEach(b=>{run+=pnlOf(b);peak=Math.max(peak,run);dd=Math.min(dd,run-peak);});
-    const openU=open.reduce((a,b)=>a+(+b.stake_u||0),0);
+    const openU=open.reduce((a,b)=>a+ownU(b),0);
     const card=(t,b)=>`<div class="lg-card"><div class="lg-ch">${t}</div>${b}</div>`;
     const kpi=(l,v,s)=>`<div class="lg-kpi"><span>${l}</span><b>${v}</b><small>${s}</small></div>`;
     let h=`<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px"><div style="font-size:18px;font-weight:800">💷 Ledger</div><div class="lg-sm">${LG.db?'🟢 saved in race_data.db':'🟡 DB server off — saved in this browser only'} · private, never published</div><button class="vbtn" style="margin-left:auto;background:#15803d;color:#fff;border-color:#15803d" onclick="window.lgOpen()">＋ Log bet</button></div>`;
@@ -5010,7 +5030,7 @@ function render(){
       <div class="lg-f"><label>Staking style</label><select onchange="window.lgSet('mode',this.value)"><option value="engine" ${set.mode==='engine'?'selected':''}>Engine-scaled (tiers + ¼ Kelly)</option><option value="flat" ${set.mode==='flat'?'selected':''}>Flat 1u</option></select></div>
       <div class="lg-f"><label>Daily budget (% of bank)</label><input type="number" step="0.5" min="0" value="${set.pct}" onchange="window.lgSet('pct',this.value)"></div>
       <div class="lg-f"><label>Max single (u)</label><input type="number" step="0.5" value="${set.max}" onchange="window.lgSet('max',this.value)"></div></div>`);
-    h+=`<div class="lg-kpis">${kpi('Bank now',gbp(bankNow()),set.bank>0?'start £'+set.bank:'P&amp;L since start (£0)')}${kpi('Staking bank','£'+effBank().toFixed(0),set.bank>0?'start + P&amp;L':'notional 100u + P&amp;L')}${kpi('P&amp;L',`<span style="color:${plU()>=0?'#15803d':'#dc2626'}">${uf(plU())}</span>`,gbp(plGBP()))}${kpi('ROI',staked?`<span style="color:${plU()>=0?'#15803d':'#dc2626'}">${(plU()/staked*100).toFixed(1)}%</span>`:'—',staked.toFixed(1)+'u staked')}${kpi('Strike rate',st.length?(won/st.length*100).toFixed(0)+'%':'—',`${won}/${st.length} bets`)}${kpi('Open exposure',openU.toFixed(1)+'u','£'+open.reduce((a,b)=>a+(+b.stake_u||0)*(+b.unit_gbp||10),0).toFixed(2)+' at risk')}${kpi('Max drawdown',`<span style="color:#dc2626">${uf(dd)}</span>`,brakeOn()?'🟠 brake ON':'brake off')}</div>`;
+    h+=`<div class="lg-kpis">${kpi('Bank now',gbp(bankNow()),set.bank>0?'start £'+set.bank:'P&amp;L since start (£0)')}${kpi('Staking bank','£'+effBank().toFixed(0),set.bank>0?'start + P&amp;L':'notional 100u + P&amp;L')}${kpi('P&amp;L',`<span style="color:${plU()>=0?'#15803d':'#dc2626'}">${uf(plU())}</span>`,gbp(plGBP()))}${kpi('ROI',staked?`<span style="color:${plU()>=0?'#15803d':'#dc2626'}">${(plU()/staked*100).toFixed(1)}%</span>`:'—',staked.toFixed(1)+'u staked')}${kpi('Strike rate',st.length?(won/st.length*100).toFixed(0)+'%':'—',`${won}/${st.length} bets`)}${kpi('Open exposure',openU.toFixed(1)+'u','£'+open.reduce((a,b)=>a+ownU(b)*(+b.unit_gbp||10),0).toFixed(2)+' at risk')}${kpi('Max drawdown',`<span style="color:#dc2626">${uf(dd)}</span>`,brakeOn()?'🟠 brake ON':'brake off')}</div>`;
     const plan=planRows();
     const realGo=plan.filter(o=>o.s.kind==='go'&&o.u>0);
     const planHtml=(realGo.length?'':'<div class="lg-adv lg-z" style="margin-bottom:8px">😌 <b>No bets advised today.</b> Nothing has enough value (or prices aren\'t in yet). That\'s a fine outcome; the budget carries over.</div>')+plan.map(o=>{const logged=LG.bets.some(b=>b.date===today()&&norm(b.horse)===norm(o.p.horse));
@@ -5025,19 +5045,19 @@ function render(){
     h+=`<div class="lg-two"><div>`;
     h+=card('💡 Today\'s staking plan <span class="lg-sm" style="text-transform:none;letter-spacing:0;font-weight:400">— Prixm + ☘ Emerald picks, strongest first</span>',planHtml+`<div style="margin-top:10px;font-size:12px"><b>Planned ${planned.toFixed(1)}u${planned>budget?' (strongest bet over-rides the budget)':''} · today's budget ${budget}u (${set.pct}% of £${effBank().toFixed(0)} staking bank${set.bank>0?'':' — notional 100u, no start bank set'})</b></div><div class="lg-cap"><i style="width:${Math.min(100,planned/Math.max(0.5,budget)*100)}%"></i></div><div class="lg-sm">No bet advised → left out. Prices not in yet → the price you'd need for each stake.</div>`);
     const openRows=open.slice().sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time)).map(b=>{const lg=legsOf(b),md=multiDef(b.bet_type,lg.length),manual=['LENGTH','OTHER'].includes(b.bet_type)||!!md;const idq=typeof b.id==='number'?b.id:`'${b.id}'`;
-      const ret=potReturnU(b)*(+b.unit_gbp||10);
-      return [lg.length?`${esc(b.date.slice(5))} <b>${b.bet_type==='ACCA'?lg.length+'-fold':esc(b.bet_type)}</b>${lg.map(l=>`<div class="lg-sm"><b style="color:var(--text)">${esc(l.horse)}</b> ${esc(l.venue)} ${esc(l.time)}${l.price?' @ '+(+l.price).toFixed(2):''}</div>`).join('')}`:`${esc(b.date.slice(5))} <b>${esc(b.horse)}</b><div class="lg-sm">${esc(b.venue)} ${esc(b.time)}</div>`,esc(b.bet_type),`${b.stake_u}u<div class="lg-sm">£${(b.stake_u*b.unit_gbp).toFixed(2)}</div>`,md?'<span class="lg-sm">legs</span>':(+b.price).toFixed(2),
-        `<b style="color:#15803d">£${ret.toFixed(2)}</b><div class="lg-sm">+£${(ret-b.stake_u*(+b.unit_gbp||10)).toFixed(2)}</div>`,
+      const ret=potReturnU(b)*(+b.unit_gbp||10),fb=b.free_bet?' <b class="fit-badge" style="background:#fef3c7;color:#92400e">🎁 free</b>':'';
+      return [lg.length?`${esc(b.date.slice(5))} <b>${b.bet_type==='ACCA'?lg.length+'-fold':esc(b.bet_type)}</b>${lg.map(l=>`<div class="lg-sm"><b style="color:var(--text)">${esc(l.horse)}</b> ${esc(l.venue)} ${esc(l.time)}${l.price?' @ '+(+l.price).toFixed(2):''}</div>`).join('')}`:`${esc(b.date.slice(5))} <b>${esc(b.horse)}</b><div class="lg-sm">${esc(b.venue)} ${esc(b.time)}</div>`,esc(b.bet_type)+fb,`${b.stake_u}u<div class="lg-sm">£${(b.stake_u*b.unit_gbp).toFixed(2)}</div>`,md?'<span class="lg-sm">legs</span>':(+b.price).toFixed(2),
+        `<b style="color:#15803d">£${ret.toFixed(2)}</b><div class="lg-sm">${b.free_bet?'winnings only':'+£'+(ret-b.stake_u*(+b.unit_gbp||10)).toFixed(2)}</div>`,
         manual?`${md?'<div class="lg-sm">auto when all legs are in · or</div>':''}<button class="vbtn lg-mini" onclick="window.lgSettle(${idq},'W')">Won</button> <button class="vbtn lg-mini" onclick="window.lgSettle(${idq},'L')">Lost</button> <button class="vbtn lg-mini" onclick="window.lgSettle(${idq},'V')">Void</button>`:'<span class="lg-sm">auto on Fetch Results</span>',
-        `<button class="vbtn lg-mini" title="Delete" onclick="window.lgDel(${idq})">🗑</button>`];});
+        `<span style="white-space:nowrap"><button class="vbtn lg-mini" title="Cash out: enter the cash you got back" onclick="window.lgCashOpen(${idq})">💰 Cash out</button> <button class="vbtn lg-mini" title="Edit (wrong horse / price / stake)" onclick="window.lgEdit(${idq})">✏️ Edit</button> <button class="vbtn lg-mini" title="Delete" onclick="window.lgDel(${idq})">🗑</button></span>`];});
     h+=card('Open bets',openRows.length?tbl(['Bet','Type','Stake','Price','To return','Settle',''],openRows):'<div class="lg-sm">No open bets.</div>');
     const fl=st.filter(b=>(!F.eng||b.engine===F.eng)&&(!F.type||b.bet_type===F.type)&&(!F.sug||(F.sug==='f'?followed(b):!followed(b)))).sort((a,b)=>(b.date+b.time).localeCompare(a.date+a.time));
     const sel=(k,opts)=>`<select onchange="window.lgFilter('${k}',this.value)" style="padding:3px 6px;border:1px solid var(--border);border-radius:6px;font-size:11.5px">${opts.map(([v,l])=>`<option value="${v}" ${F[k]===v?'selected':''}>${l}</option>`).join('')}</select>`;
     // History spans the full width under both columns (was squeezed into the left column)
     let histCard='';
     histCard+=card(`History <span style="float:right;display:flex;gap:6px;text-transform:none;letter-spacing:0">${sel('eng',[['','All engines'],['prixm','Prixm'],['emerald','☘ Emerald']])}${sel('type',[['','All types'],...[...new Set([...TYPES,...LG.bets.map(b=>b.bet_type).filter(Boolean)])].map(t=>[t,t])])}${sel('sug',[['','All bets'],['f','Followed suggestion'],['o','Own call']])}</span>`,
-      fl.length?tbl(['Date','Horse','Engine','Type','Stake','Price','Result','P&L','Sugg.'],fl.slice(0,200).map(b=>[esc(b.date.slice(5)),`<b>${esc(b.horse)}</b><div class="lg-sm">${esc(b.venue||'')} ${esc(b.time||'')}</div>`,b.engine==='emerald'?'<b class="rc-eng rc-eng-em">☘</b>':'<b class="rc-eng rc-eng-px">Prixm</b>',esc(b.bet_type),`${b.stake_u}u<div class="lg-sm">£${(b.stake_u*b.unit_gbp).toFixed(2)}</div>`,(+b.price||0).toFixed(2),
-        `<b class="fit-badge ${b.result==='W'?'fit-s':b.result==='P'?'fit-q':b.result==='V'?'':'fit-u'}">${({W:'WON',P:'PLACED',L:'LOST',V:'VOID'})[b.result]||b.result}</b>`,`<b style="color:${pnlOf(b)>=0?'#15803d':'#dc2626'}">${uf(pnlOf(b))}</b><div class="lg-sm">${gbp(pnlOf(b)*(+b.unit_gbp||10))}</div>`,`<span class="lg-sm">${followed(b)?'✔ followed':b.suggested_u>0?b.suggested_u+'u':'own call'}</span>`])):'<div class="lg-sm">No settled bets for this filter.</div>');
+      fl.length?tbl(['Date','Horse','Engine','Type','Stake','Price','Result','P&L','Sugg.',''],fl.slice(0,200).map(b=>{const idq=typeof b.id==='number'?b.id:`'${b.id}'`;return[esc(b.date.slice(5)),`<b>${esc(b.horse)}</b><div class="lg-sm">${esc(b.venue||'')} ${esc(b.time||'')}</div>`,b.engine==='emerald'?'<b class="rc-eng rc-eng-em">☘</b>':'<b class="rc-eng rc-eng-px">Prixm</b>',esc(b.bet_type)+(b.free_bet?' <b class="fit-badge" style="background:#fef3c7;color:#92400e">🎁 free</b>':''),`${b.stake_u}u<div class="lg-sm">£${(b.stake_u*b.unit_gbp).toFixed(2)}</div>`,(+b.price||0).toFixed(2),
+        `<b class="fit-badge ${b.result==='W'?'fit-s':b.result==='P'||b.result==='C'?'fit-q':b.result==='V'?'':'fit-u'}">${({W:'WON',P:'PLACED',L:'LOST',V:'VOID',C:'CASHED OUT'})[b.result]||b.result}</b>${b.result==='C'&&b.cashout_gbp!=null?`<div class="lg-sm">got £${(+b.cashout_gbp).toFixed(2)}</div>`:''}`,`<b style="color:${pnlOf(b)>=0?'#15803d':'#dc2626'}">${uf(pnlOf(b))}</b><div class="lg-sm">${gbp(pnlOf(b)*(+b.unit_gbp||10))}</div>`,`<span class="lg-sm">${followed(b)?'✔ followed':b.suggested_u>0?b.suggested_u+'u':'own call'}</span>`,`<button class="vbtn lg-mini" title="Edit (wrong horse / price / stake)" onclick="window.lgEdit(${idq})">✏️ Edit</button>`];})):'<div class="lg-sm">No settled bets for this filter.</div>');
     h+=`</div><div>`;
     // curve
     let c=0;const pts=[0,...st.slice().sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time)).map(b=>c+=pnlOf(b))];
@@ -5056,7 +5076,7 @@ function render(){
       <text x="${PL}" y="${VH-6}" font-size="10.5" style="fill:var(--muted)">bet 1</text><text x="${PL+W}" y="${VH-6}" font-size="10.5" text-anchor="end" style="fill:var(--muted)">bet ${pts.length-1}</text>
     </svg>`:'';
     h+=card(`Bankroll curve (units)${pts.length>1?` <span style="float:right;text-transform:none;letter-spacing:0;font-size:13px;font-weight:800;color:${lc}">${uf(last)}</span>`:''}`,pts.length>1?`<div style="clear:both">${curve}</div>`:'<div class="lg-sm">Settle a bet to start the curve.</div>');
-    const grp=(k,f)=>{const g={};st.forEach(b=>{(g[f(b)]=g[f(b)]||[]).push(b);});return Object.entries(g).map(([n,bs])=>{const s=bs.reduce((a,b)=>a+(+b.stake_u||0),0),p=bs.reduce((a,b)=>a+pnlOf(b),0);return [`${k}: <b>${esc(n)}</b>`,bs.length,`<b style="color:${p>=0?'#15803d':'#dc2626'}">${uf(p)}</b>`,s?(p/s*100).toFixed(0)+'%':'—'];});};
+    const grp=(k,f)=>{const g={};st.forEach(b=>{(g[f(b)]=g[f(b)]||[]).push(b);});return Object.entries(g).map(([n,bs])=>{const s=bs.reduce((a,b)=>a+ownU(b),0),p=bs.reduce((a,b)=>a+pnlOf(b),0);return [`${k}: <b>${esc(n)}</b>`,bs.length,`<b style="color:${p>=0?'#15803d':'#dc2626'}">${uf(p)}</b>`,s?(p/s*100).toFixed(0)+'%':'—'];});};
     h+=card('Breakdown',st.length?tbl(['Group','Bets','P&L','ROI'],[...grp('Engine',b=>b.engine==='emerald'?'☘ Emerald':'Prixm'),...grp('Type',b=>b.bet_type),...grp('Stake',b=>followed(b)?'followed suggestion':'own call')]):'<div class="lg-sm">—</div>');
     const g=segSR('golden');
     h+=card('How the stake is worked out',`<div style="font-size:12.5px;line-height:1.6">
@@ -5073,7 +5093,71 @@ const followed=b=>b.suggested_u>0&&Math.abs((+b.suggested_u)-(+b.stake_u))<0.01;
 const tbl=(head,rows)=>`<div style="overflow-x:auto;clear:both"><table class="lg-tbl"><tr>${head.map(x=>`<th>${x}</th>`).join('')}</tr>${rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</table></div>`;
 window.lgSet=(k,v)=>{const s=S();const n=parseFloat(v);s[k]=k==='mode'?v:(isNaN(n)?DEF[k]:n);saveS(s);refreshChrome();render();};
 window.lgFilter=(k,v)=>{F[k]=v;render();};
-window.lgSettle=async(id,res)=>{const b=LG.bets.find(x=>x.id===id);if(!b)return;const pnl=res==='W'?b.stake_u*(b.price-1):res==='L'?-b.stake_u:0;Object.assign(b,{result:res,pnl_u:Math.round(pnl*10000)/10000,settled_at:new Date().toISOString().slice(0,19)});await saveBet(b);};
+window.lgSettle=async(id,res)=>{const b=LG.bets.find(x=>x.id===id);if(!b)return;const pnl=res==='W'?b.stake_u*(b.price-1):res==='L'?(b.free_bet?0:-b.stake_u):0;Object.assign(b,{result:res,pnl_u:Math.round(pnl*10000)/10000,settled_at:new Date().toISOString().slice(0,19)});await saveBet(b);};
+// small Ledger form (Cash out / Edit) in the same modal shell as Log a bet
+function miniModal(title,body,onSave){let el=document.getElementById('lgModal');if(!el){el=document.createElement('div');el.id='lgModal';document.body.appendChild(el);}
+  el.innerHTML=`<div class="lg-ov" onclick="if(event.target===this)window.lgClose()"><div class="lg-modal" role="dialog" aria-label="${esc(title)}"><div class="lg-mh"><b>${title}</b><button class="lg-x" onclick="window.lgClose()" aria-label="Close">✕</button></div>
+    <div class="lg-mb">${body}</div><div class="lg-mf"><span id="lgSum" class="lg-sm"></span><button class="vbtn" style="background:#15803d;color:#fff;border-color:#15803d" onclick="window._lgMiniSave()">Save</button></div></div></div>`;
+  window._lgMiniSave=onSave;}
+const betLine=b=>`<b>${esc(b.horse)}</b> <span class="lg-sm">${esc(b.venue||'')} ${esc(b.time||'')} · ${esc(b.bet_type)} · £${(b.stake_u*b.unit_gbp).toFixed(2)} @ ${(+b.price||0).toFixed(2)}${b.free_bet?' · 🎁 free bet':''}</span>`;
+// 💰 cash out: type the cash you got back → P&L = cash − stake (free bet: the cash is all profit)
+window.lgCashOpen=id=>{const b=LG.bets.find(x=>x.id===id);if(!b)return;const stake=b.stake_u*b.unit_gbp;
+  miniModal('💰 Cash out',`<div>${betLine(b)}</div>
+    <div class="lg-f"><label>Cash you got back (£)</label><input id="lgCash" type="number" step="0.01" min="0" placeholder="e.g. 7.40" oninput="window._lgCashUpd()"></div><div id="lgCashPl" class="lg-sm"></div>`,async()=>{
+    const v=parseFloat(document.getElementById('lgCash').value);if(isNaN(v)||v<0){document.getElementById('lgSum').innerHTML='<span style="color:#dc2626">Enter the cash you got back.</span>';return;}
+    const pnl=(b.free_bet?v:v-stake)/b.unit_gbp;
+    Object.assign(b,{result:'C',cashout_gbp:Math.round(v*100)/100,pnl_u:Math.round(pnl*10000)/10000,settled_at:new Date().toISOString().slice(0,19)});
+    await saveBet(b);window.lgClose();toast(`Cashed out ${b.horse}: £${v.toFixed(2)} back · ${gbp(pnl*b.unit_gbp)}`);});
+  window._lgCashUpd=()=>{const v=parseFloat(document.getElementById('lgCash').value),el=document.getElementById('lgCashPl');if(isNaN(v)){el.textContent='';return;}const p=b.free_bet?v:v-stake;
+    el.innerHTML=`P&amp;L <b style="color:${p>=0?'#15803d':'#dc2626'}">${gbp(p)}</b> (${uf(p/b.unit_gbp)})${b.free_bet?', free bet so all of it is profit':` · stake was £${stake.toFixed(2)}`}`;};
+  setTimeout(()=>{const f=document.getElementById('lgCash');f&&f.focus();},30);};
+// ✏ edit: fix a wrong horse / price / stake / type. A settled bet goes back to open so it re-settles on the new
+// details (auto types on the next results check; manual types → Won/Lost again). A cash-out keeps its cash amount.
+window.lgEdit=id=>{const b=LG.bets.find(x=>x.id===id);if(!b)return;const legs=legsOf(b),md=multiDef(b.bet_type,legs.length),unit=+b.unit_gbp||S().unit;
+  const fixedM=md&&md.k!=='ACCA',runs=allRunners();
+  const dl=`<datalist id="lgEdDl">${runs.map(r=>`<option value="${esc(r.name)}">${esc(r.course)} ${esc(r.time)}</option>`).join('')}</datalist>`;
+  const body=legs.length?`<div class="lg-f"><label>Selections (horse · course · time · price)</label>${legs.map((l,i)=>`<div class="lg-row" style="margin-bottom:6px"><div class="lg-f" style="flex:2"><input class="lgEdLegH" list="lgEdDl" value="${esc(l.horse)}" aria-label="Leg ${i+1} horse" oninput="window._lgEdPick(this,${i})"></div><div class="lg-f"><input class="lgEdLegV" value="${esc(l.venue)}" aria-label="Leg ${i+1} course"></div><div class="lg-f" style="min-width:70px;flex:.6"><input class="lgEdLegT" value="${esc(l.time)}" aria-label="Leg ${i+1} time"></div><div class="lg-f" style="min-width:70px;flex:.6"><input class="lgEdLegP" value="${l.price?(+l.price).toFixed(2):''}" placeholder="price" aria-label="Leg ${i+1} price"></div></div>`).join('')}</div>`
+    :`<div class="lg-f"><label>Horse <span style="text-transform:none;font-weight:400">(pick from today's runners or type)</span></label><input id="lgEdH" list="lgEdDl" value="${esc(b.horse)}" oninput="window._lgEdPick(this,-1)"></div>
+      <div class="lg-row"><div class="lg-f"><label>Course</label><input id="lgEdV" value="${esc(b.venue||'')}"></div><div class="lg-f"><label>Time</label><input id="lgEdT" value="${esc(b.time||'')}"></div></div>
+      <div class="lg-row"><div class="lg-f"><label>Bet type</label><select id="lgEdType">${['WIN','EW','PLACE','TOP N','LENGTH','OTHER'].map(t=>`<option ${t===b.bet_type?'selected':''}>${t}</option>`).join('')}</select></div>
+        <div class="lg-f"><label>Places paid</label><input id="lgEdPl" type="number" min="1" max="10" value="${b.places||''}" placeholder="EW/PLACE/TOP N"></div>
+        <div class="lg-f"><label>EW terms</label><select id="lgEdFr">${[[1/3,'⅓'],[0.25,'¼'],[0.2,'⅕']].map(([f,l])=>`<option value="${f}" ${Math.abs((+b.ew_fraction||0.2)-f)<0.001?'selected':''}>${l} odds</option>`).join('')}</select></div></div>`;
+  miniModal('✏ Edit bet',`${dl}${body}
+    <div class="lg-row"><div class="lg-f"><label>${fixedM?'Total stake':'Stake'} (£)</label><input id="lgEdS" type="number" step="0.01" min="0" value="${(b.stake_u*unit).toFixed(2)}"></div>
+      <div class="lg-f"><label>${fixedM?'Price (from leg prices)':legs.length?'Acca odds (blank = legs ×)':'Price (7/4 or 2.75)'}</label><input id="lgEdP" value="${fixedM?'':esc(b.price_raw&&!/×/.test(b.price_raw)?b.price_raw:b.price?(+b.price).toFixed(2):'')}" ${fixedM?'readonly placeholder="from leg prices"':''}></div></div>
+    <div class="lg-row"><div class="lg-f"><label>Bookmaker</label><input id="lgEdB" value="${esc(b.bookmaker||'')}"></div><div class="lg-f"><label>&nbsp;</label><label class="lg-chk" style="margin-top:6px"><input type="checkbox" id="lgEdFree" ${b.free_bet?'checked':''}> 🎁 Free bet</label></div></div>
+    ${b.result&&b.result!=='O'?`<div class="lg-adv lg-z">This bet is settled (${({W:'won',P:'placed',L:'lost',V:'void',C:'cashed out'})[b.result]||b.result}). ${b.result==='C'?'Saving keeps the cash-out and re-works the P&amp;L.':'Saving puts it back to <b>open</b> so it re-settles on the new details.'}</div>`:''}`,async()=>{
+    const err=t=>{document.getElementById('lgSum').innerHTML=`<span style="color:#dc2626">${t}</span>`;};
+    const sg=parseFloat(document.getElementById('lgEdS').value);if(!(sg>0))return err('Enter the stake.');
+    const nb={...b,stake_u:Math.round(sg/unit*10000)/10000,bookmaker:document.getElementById('lgEdB').value.trim()||null,free_bet:document.getElementById('lgEdFree').checked?1:0};
+    if(!legs.length){
+      const horse=document.getElementById('lgEdH').value.trim(),prRaw=document.getElementById('lgEdP').value.trim(),pr=parsePrice(prRaw),t=document.getElementById('lgEdType').value;
+      if(!horse||!pr)return err('Enter the horse and price.');
+      const pl=parseInt(document.getElementById('lgEdPl').value)||null,needPl=['EW','PLACE','TOP N'].includes(t);
+      if(needPl&&!pl)return err('Enter the places paid.');
+      Object.assign(nb,{horse,venue:document.getElementById('lgEdV').value.trim(),time:document.getElementById('lgEdT').value.trim(),bet_type:t,price:pr,price_raw:prRaw,
+        places:needPl?pl:null,ew_fraction:t==='EW'?Math.round(+document.getElementById('lgEdFr').value*10000)/10000:null});
+    }else{
+      const q=c=>[...document.querySelectorAll(c)],H=q('.lgEdLegH'),V=q('.lgEdLegV'),T=q('.lgEdLegT'),Pp=q('.lgEdLegP');
+      const nl=legs.map((l,i)=>({...l,horse:H[i].value.trim(),venue:V[i].value.trim(),time:T[i].value.trim(),price:parsePrice(Pp[i].value)||null}));
+      if(nl.some(l=>!l.horse))return err('Every selection needs a horse.');
+      if(fixedM&&!nl.every(l=>l.price))return err('Enter a price for every leg.');
+      const srt=nl.slice().sort((a,c)=>String(a.time).localeCompare(String(c.time)));
+      Object.assign(nb,{legs:JSON.stringify(nl),horse:nl.map(l=>l.horse).join(' / '),venue:srt[0].venue,time:srt[0].time});
+      if(fixedM){nb.price=Math.round(potReturnRaw(nb)/nb.stake_u*10000)/10000;nb.price_raw=nl.map(l=>l.price).join(' × ');}
+      else{const prRaw=document.getElementById('lgEdP').value.trim(),pr=parsePrice(prRaw)||(nl.length>=2&&nl.every(l=>l.price)?nl.reduce((a,l)=>a*l.price,1):0);
+        if(!pr)return err('Enter the price (or a price for every leg).');nb.price=Math.round(pr*10000)/10000;nb.price_raw=prRaw||nl.map(l=>l.price).join(' × ');}
+    }
+    if(nb.result==='C'&&nb.cashout_gbp!=null)nb.pnl_u=Math.round(((nb.free_bet?+nb.cashout_gbp:+nb.cashout_gbp-nb.stake_u*unit)/unit)*10000)/10000;
+    else if(nb.result&&nb.result!=='O')Object.assign(nb,{result:'O',pnl_u:null,finish_pos:null,sp:null,settled_at:null});
+    Object.assign(b,nb);await saveBet(b);window.lgClose();
+    if(LG.db){await connectDb();settleLocal();refreshChrome();} // pick up the server's re-settle
+    toast(`Updated ${b.horse}${b.result==='O'?' · open, re-settles on the new details':''}`);try{renderRaceCards();}catch(e){}});
+  // picking a horse from today's runners fills its course + time
+  window._lgEdPick=(inp,i)=>{const r=runs.find(x=>x.name===inp.value);if(!r)return;
+    if(i<0){document.getElementById('lgEdV').value=r.course;document.getElementById('lgEdT').value=r.time;}
+    else{document.querySelectorAll('.lgEdLegV')[i].value=r.course;document.querySelectorAll('.lgEdLegT')[i].value=r.time;}};
+};
 window.lgDel=async id=>{const b=LG.bets.find(x=>x.id===id);if(b&&confirm(`Delete this bet on ${b.horse}?`))await deleteBet(id);};
 window.lgOpen=(vk,ri,name,u)=>openModal(vk,ri,name,u);
 window.renderLedger=render;
