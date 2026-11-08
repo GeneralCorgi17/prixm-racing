@@ -1,14 +1,14 @@
 {
- "generated": "2026-11-08T10:52:24",
+ "generated": "2026-11-08T22:51:36",
  "since": "2026-06-01",
  "min_n": 40,
  "min_lift": 0.05,
  "checks": {
   "gallop_record_good": {
-   "n": 3745,
-   "placed": 0.3599,
+   "n": 3747,
+   "placed": 0.3598,
    "expected": 0.3316,
-   "lift": 0.0856
+   "lift": 0.085
   },
   "draw_bad": {
    "n": 3075,
@@ -23,40 +23,40 @@
    "lift": 0.0598
   },
   "uphill_record_good": {
-   "n": 1314,
-   "placed": 0.3767,
-   "expected": 0.3373,
-   "lift": 0.1167
+   "n": 1326,
+   "placed": 0.3771,
+   "expected": 0.3378,
+   "lift": 0.1162
   },
   "direction_good": {
-   "n": 3752,
-   "placed": 0.3777,
-   "expected": 0.3473,
-   "lift": 0.0875
+   "n": 3756,
+   "placed": 0.3775,
+   "expected": 0.3474,
+   "lift": 0.0868
   },
   "uphill_stayer_good": {
-   "n": 230,
-   "placed": 0.3739,
-   "expected": 0.3169,
-   "lift": 0.1798
+   "n": 237,
+   "placed": 0.3755,
+   "expected": 0.3175,
+   "lift": 0.1827
   },
   "pace_holdup_bad": {
-   "n": 443,
-   "placed": 0.246,
-   "expected": 0.2615,
-   "lift": -0.0591
+   "n": 452,
+   "placed": 0.2478,
+   "expected": 0.262,
+   "lift": -0.0542
   },
   "uphill_weakener_bad": {
-   "n": 465,
-   "placed": 0.2667,
-   "expected": 0.2751,
-   "lift": -0.0306
+   "n": 473,
+   "placed": 0.2643,
+   "expected": 0.2752,
+   "lift": -0.0397
   },
   "sharp_record_good": {
    "n": 979,
    "placed": 0.4178,
    "expected": 0.3547,
-   "lift": 0.178
+   "lift": 0.1779
   },
   "draw_static_low_good": {
    "n": 122,
@@ -80,13 +80,13 @@
    "n": 27,
    "placed": 0.2593,
    "expected": 0.2878,
-   "lift": -0.0992
+   "lift": -0.0991
   },
   "sharp_handy_good": {
-   "n": 164,
-   "placed": 0.3415,
-   "expected": 0.3001,
-   "lift": 0.1377
+   "n": 173,
+   "placed": 0.341,
+   "expected": 0.2993,
+   "lift": 0.1395
   },
   "sharp_holdup_bad": {
    "n": 192,
@@ -98,57 +98,57 @@
    "n": 51,
    "placed": 0.5098,
    "expected": 0.3161,
-   "lift": 0.6128
+   "lift": 0.6129
   },
   "uphill_record_bad": {
    "n": 15,
    "placed": 0.5333,
    "expected": 0.3043,
-   "lift": 0.7524
+   "lift": 0.7526
   },
   "direction_bad": {
    "n": 159,
    "placed": 0.3208,
    "expected": 0.2866,
-   "lift": 0.1192
+   "lift": 0.1193
   },
   "pace_lone_leader_good": {
-   "n": 29,
-   "placed": 0.2069,
-   "expected": 0.2778,
-   "lift": -0.2553
+   "n": 28,
+   "placed": 0.1786,
+   "expected": 0.2821,
+   "lift": -0.367
   }
  },
  "verdicts": {
   "none": {
-   "n": 32699,
-   "placed": 0.2836,
+   "n": 32853,
+   "placed": 0.2837,
    "expected": 0.2904,
-   "lift": -0.0231
+   "lift": -0.0228
   },
   "prixm:none": {
-   "n": 27953,
-   "placed": 0.2884,
-   "expected": 0.2933,
-   "lift": -0.0168
+   "n": 28049,
+   "placed": 0.2885,
+   "expected": 0.2934,
+   "lift": -0.0165
   },
   "s": {
-   "n": 10028,
-   "placed": 0.354,
+   "n": 10049,
+   "placed": 0.3538,
    "expected": 0.3249,
-   "lift": 0.0897
+   "lift": 0.0887
   },
   "prixm:s": {
-   "n": 9220,
+   "n": 9224,
    "placed": 0.3555,
-   "expected": 0.3263,
-   "lift": 0.0895
+   "expected": 0.3264,
+   "lift": 0.0892
   },
   "q": {
-   "n": 2805,
-   "placed": 0.2745,
+   "n": 2814,
+   "placed": 0.2747,
    "expected": 0.2901,
-   "lift": -0.0539
+   "lift": -0.0531
   },
   "prixm:q": {
    "n": 2207,
@@ -160,7 +160,7 @@
    "n": 696,
    "placed": 0.2356,
    "expected": 0.2768,
-   "lift": -0.1488
+   "lift": -0.1487
   },
   "prixm:u": {
    "n": 614,
@@ -169,28 +169,28 @@
    "lift": -0.1662
   },
   "emerald:none": {
-   "n": 4746,
-   "placed": 0.2556,
-   "expected": 0.2729,
-   "lift": -0.0635
+   "n": 4804,
+   "placed": 0.2558,
+   "expected": 0.2728,
+   "lift": -0.0623
   },
   "emerald:s": {
-   "n": 808,
-   "placed": 0.3366,
-   "expected": 0.3082,
-   "lift": 0.0924
+   "n": 825,
+   "placed": 0.3345,
+   "expected": 0.3088,
+   "lift": 0.0834
   },
   "emerald:q": {
-   "n": 598,
-   "placed": 0.2525,
-   "expected": 0.2648,
-   "lift": -0.0465
+   "n": 607,
+   "placed": 0.2537,
+   "expected": 0.2651,
+   "lift": -0.0431
   },
   "emerald:u": {
    "n": 82,
    "placed": 0.2439,
-   "expected": 0.2435,
-   "lift": 0.0018
+   "expected": 0.2434,
+   "lift": 0.0019
   }
  }
 }
