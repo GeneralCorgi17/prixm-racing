@@ -112,6 +112,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .rtbl tr.top-pick-row{background:rgba(5,150,105,.08)}
 .rtbl tr.strong-row{background:rgba(13,148,136,.05)}
 .rtbl tr.expandable{cursor:pointer}
+.ph-agewt{display:none} /* phone runner cards only — PC has the Age/Wt columns */
 .rtbl tr.attr-dim{opacity:.32;transition:opacity .2s}
 
 /* Confidence badge */
@@ -854,7 +855,9 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .d1-ss.amb .d1-ss-n{color:#d97706}
 /* 2-col layout */
 .d1-layout{display:grid;grid-template-columns:1fr 280px;gap:16px;align-items:start;max-width:1200px;margin:0 auto}
-.d1-aside{position:sticky;top:10px;display:flex;flex-direction:column;gap:12px}
+.d1-aside{position:sticky;top:calc(var(--stickyTop,0px) + 10px);display:flex;flex-direction:column;gap:12px;max-height:calc(100vh - var(--stickyTop,0px) - 20px);overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;padding-right:3px}
+.d1-aside>*{flex-shrink:0}
+/* sidebar scrolls on its own (Prixm + ☘ Emerald picks reachable without scrolling the race cards); --stickyTop = sticky tab bar height (Nothing theme), set by JS */
 .d1-panel{background:#fff;border:1px solid #e5e0d8;border-radius:10px;overflow:hidden}
 .d1-panel-hdr{padding:11px 14px;border-bottom:1px solid #e5e0d8;display:flex;align-items:center;justify-content:space-between}
 .d1-panel-title{font-size:10px;font-weight:800;color:#374151;text-transform:uppercase;letter-spacing:.8px}
@@ -878,10 +881,10 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .d1-pl-val.up{color:#15803d}
 .d1-pl-val.down{color:#dc2626}
 /* race list rows */
-.landing .race-cards{display:grid!important;grid-template-columns:repeat(3,1fr);gap:10px;padding:2px}
-@media(max-width:1100px){.landing .race-cards{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:680px){.landing .race-cards{grid-template-columns:1fr}}
-.landing .rc{background:#fff;border:1px solid #e5e0d8;border-radius:10px;padding:0;max-height:none;overflow:visible;cursor:pointer;display:flex;flex-direction:column;box-shadow:0 1px 4px rgba(0,0,0,.07);position:relative}
+.landing .race-cards{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));grid-auto-rows:1fr;gap:10px;padding:2px} /* minmax(0,…) = long names can't widen a column; auto-rows 1fr = every card the same height */
+@media(max-width:1100px){.landing .race-cards{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:680px){.landing .race-cards{grid-template-columns:minmax(0,1fr);grid-auto-rows:auto}}
+.landing .rc{background:#fff;border:1px solid #e5e0d8;border-radius:10px;padding:0;max-height:none;overflow:visible;cursor:pointer;display:flex;flex-direction:column;min-width:0;box-shadow:0 1px 4px rgba(0,0,0,.07);position:relative}
 /* Country/handicap stripe — thin 3px left edge, colour from getRaceBorderColor() via --rc-bc */
 .landing .rc::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--rc-bc,transparent);border-radius:10px 0 0 10px;pointer-events:none;z-index:1}
 .landing .rc:hover{border-color:#b7dfc9;box-shadow:0 3px 12px rgba(0,0,0,.10);transform:translateY(-1px)}
@@ -1459,7 +1462,7 @@ html[data-theme="nothing"] svg text[fill="#6b7280"],html[data-theme="nothing"] s
   html[data-theme] .d1-picks-list{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;gap:1px;background:var(--border)}
   html[data-theme] .d1-picks-list::-webkit-scrollbar{display:none}
   html[data-theme] .d1-picks-list>.d1-pick-card{flex:0 0 74%;scroll-snap-align:start;margin:0!important;border-radius:0!important}
-  html[data-theme] .landing .race-cards{grid-template-columns:1fr!important;margin:0 -14px}
+  html[data-theme] .landing .race-cards{grid-template-columns:minmax(0,1fr)!important;grid-auto-rows:auto!important;margin:0 -14px}
   html[data-theme="classic"] .landing .race-cards{margin:0;gap:10px!important}
 
   /* ---- race detail ---- */
@@ -1478,6 +1481,7 @@ html[data-theme="nothing"] svg text[fill="#6b7280"],html[data-theme="nothing"] s
   html[data-theme] .rtbl tr.expandable>td:nth-child(2){grid-column:2;grid-row:1}
   html[data-theme] .rtbl tr.expandable>td:nth-child(9){grid-column:3;grid-row:1;text-align:right;white-space:nowrap}
   html[data-theme] .rtbl tr.expandable>td:nth-child(3){grid-column:2;grid-row:2;font-size:11px}
+  html[data-theme] .rtbl .ph-agewt{display:inline;color:var(--muted);font-weight:600;white-space:nowrap}
   html[data-theme] .rtbl tr.expandable>td:nth-child(11){grid-column:3;grid-row:2;text-align:right}
   html[data-theme] .rtbl tr.expandable>td:nth-child(4),html[data-theme] .rtbl tr.expandable>td:nth-child(5),html[data-theme] .rtbl tr.expandable>td:nth-child(6),
   html[data-theme] .rtbl tr.expandable>td:nth-child(7),html[data-theme] .rtbl tr.expandable>td:nth-child(8){display:none}
@@ -1556,6 +1560,8 @@ html[data-theme="nothing"] svg text[fill="#6b7280"],html[data-theme="nothing"] s
     <div class="race-cards" id="raceCards"></div>
   </div>
   <div class="d1-aside" id="d1Aside"></div>
+<script>(function(){function f(){const tb=document.querySelector('.tab-bar');const h=tb&&getComputedStyle(tb).position==='sticky'?tb.offsetHeight:0;document.documentElement.style.setProperty('--stickyTop',h+'px');}
+window.addEventListener('load',f);window.addEventListener('resize',f);setTimeout(f,0);})();</script>
 </div>
 </div>
 
@@ -1684,7 +1690,7 @@ html[data-theme="nothing"] svg text[fill="#6b7280"],html[data-theme="nothing"] s
 </div>
 
 <script>
-let D=null, st={venue:'all', fieldFilter:new Set(), comboFilter:false, raceTypeFilter:'all', engineFilter:'all', fitFilter:'all', primeFilter:false, raceCodeFilter:'all', confidenceFilter:'all', gapFilter:new Set(), hideBanned:false, openRace:null, sort:'score', sortDir:-1, expanded:null, detailTab:'main', h2hPair:null, compareSelect:new Set(), xaVenue:null, attrFilter:{active:new Set(), logic:'OR'}};
+let D=null, st={venue:'all', fieldFilter:new Set(), comboFilter:false, raceTypeFilter:'all', engineFilter:'all', fitFilter:'all', primeFilter:false, regionFilter:new Set(), raceCodeFilter:'all', confidenceFilter:'all', gapFilter:new Set(), hideBanned:false, openRace:null, sort:'score', sortDir:-1, expanded:null, detailTab:'main', h2hPair:null, compareSelect:new Set(), xaVenue:null, attrFilter:{active:new Set(), logic:'OR'}};
 
 // ==================== PER-DAY DATA STATUS TRACKER ====================
 function getDayStatus(date){
@@ -4536,7 +4542,7 @@ function renderXaValidationCard(engine){
 'use strict';
 const LS_BETS='ledgerBets',LS_SET='ledgerSettings';
 const DEF={unit:3,bank:0,mode:'engine',pct:5,max:5}; // start bank £0 → Kelly sizes from a notional 100u bank + running P&L
-const TYPES=['WIN','EW','PLACE','TOP N','LENGTH','ACCA','OTHER'];
+const TYPES=['WIN','EW','PLACE','TOP N','LENGTH','ACCA']; // ACCA opens its own sub-chips: n-fold ACCA / Double … Goliath / CUSTOM (stored as 'OTHER')
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const LG={bets:[],db:false,loaded:false};
 const S=()=>{try{return Object.assign({},DEF,JSON.parse(localStorage.getItem(LS_SET)||'{}'));}catch(e){return {...DEF};}};
@@ -4793,6 +4799,8 @@ function refreshChrome(){
 
 // ── quick-log modal ──
 let M=null;
+// number boxes: plain text + decimal keypad (type=number loses the caret, reads '3.' as empty and fights deletes). Keeps digits + one dot (+ '/' for fractional odds), comma → dot.
+window.numClean=(el,frac)=>{const v=el.value;let c=v.replace(/,/g,'.').replace(frac?/[^0-9./]/g:/[^0-9.]/g,'');const i=c.indexOf('.');if(i>=0)c=c.slice(0,i+1)+c.slice(i+1).replace(/\./g,'');if(c!==v){const p=Math.max(0,(el.selectionStart||c.length)-(v.length-c.length));el.value=c;try{el.setSelectionRange(p,p);}catch(e){}}};
 function allRunners(){const out=[];if(!window.D||!D.venues)return out;Object.entries(D.venues).forEach(([vk,v])=>(v.races||[]).forEach((r,ri)=>(r.runners||[]).forEach(x=>out.push({vk,ri,name:x.name,course:v.course||vk,time:r.time,em:isIreland(v.course||vk)}))));return out;}
 function openModal(vk,ri,name,presetU){
   if(VIEW_ONLY)return;
@@ -4803,8 +4811,8 @@ function openModal(vk,ri,name,presetU){
     <div class="lg-mb">
       <div class="lg-f"><label id="lgHLbl">Horse (today's runners, both engines)</label><input id="lgHorse" autocomplete="off" placeholder="Start typing…" role="combobox" aria-autocomplete="list" aria-controls="lgAc" oninput="window.lgSearch(this.value)" onkeydown="window.lgKey(event)"><div id="lgAc" class="lg-ac" role="listbox"></div><div id="lgRace" class="lg-sm"></div><div id="lgLegs"></div></div>
       <div class="lg-f"><label>Bet type</label><div class="lg-seg" id="lgType">${TYPES.map(t=>`<button data-t="${t}" class="${t==='WIN'?'on':''}" onclick="window.lgType('${t}')">${t}</button>`).join('')}</div><div id="lgSub"></div><div id="lgPlaces" class="lg-sm"></div></div>
-      <div class="lg-row"><div class="lg-f"><label id="lgStakeLbl">Stake</label><div class="lg-stake"><input id="lgStake" type="number" step="0.5" min="0" placeholder="5" oninput="window.lgUpd()"><button data-u="gbp" class="on" onclick="window.lgUnit('gbp')">£</button><button data-u="u" onclick="window.lgUnit('u')">u</button></div><div id="lgConv" class="lg-sm"></div></div>
-        <div class="lg-f"><label>Price (7/4 or 2.75)</label><input id="lgPrice" placeholder="e.g. 7/4" oninput="window.lgPriceTyped();window.lgUpd()"><div id="lgPriceConv" class="lg-sm"></div></div></div>
+      <div class="lg-row"><div class="lg-f"><label id="lgStakeLbl">Stake</label><div class="lg-stake"><input id="lgStake" type="text" inputmode="decimal" autocomplete="off" placeholder="5" oninput="window.numClean(this);window.lgUpd()"><button data-u="gbp" class="on" onclick="window.lgUnit('gbp')">£</button><button data-u="u" onclick="window.lgUnit('u')">u</button></div><div id="lgConv" class="lg-sm"></div></div>
+        <div class="lg-f"><label>Price (7/4 or 2.75)</label><input id="lgPrice" type="text" inputmode="decimal" autocomplete="off" placeholder="e.g. 7/4" oninput="window.numClean(this,1);window.lgPriceTyped();window.lgUpd()"><div id="lgPriceConv" class="lg-sm"></div></div></div>
       <div class="lg-row"><div class="lg-f"><label>Bookmaker</label><select id="lgBook">${['William Hill','Bet365','Betfair Exchange','Paddy Power','Sky Bet','Betfred','Other'].map(x=>`<option>${x}</option>`).join('')}</select></div>
         <div class="lg-f"><label>&nbsp;</label><label class="lg-chk" style="margin-top:6px"><input type="checkbox" id="lgFree" onchange="window.lgFree(this.checked)"> 🎁 Free bet</label><div class="lg-sm">stake not returned · lose = £0</div></div>
         </div>
@@ -4843,10 +4851,11 @@ function legFrom(vk,ri,name){const race=D.venues[vk].races[ri],run=(race.runners
     hcp,em:isIreland(race.course||D.venues[vk].course||vk),places:pt.places,frac:pt.frac};}
 function renderSub(){
   const el=document.getElementById('lgSub');if(!el)return;
-  el.innerHTML=M.type!=='OTHER'?'':`<div class="lg-sub"><div class="lg-sm" style="margin-bottom:5px">Multiple bet — pick the type, then add exactly that many horses</div><div class="lg-seg">${MULTI.map(m=>`<button class="${M.multi===m.k?'on':''}" onclick="window.lgMulti('${m.k}')">${m.k}<small>${m.n} sel · ${multiBets({n:m.n,sizes:m.s})} bets</small></button>`).join('')}<button class="${M.multi==='CUSTOM'?'on':''}" onclick="window.lgMulti('CUSTOM')">CUSTOM</button></div>
+  el.innerHTML=!multiMode()?'':`<div class="lg-sub"><div class="lg-sm" style="margin-bottom:5px">Acca / multiple — ACCA = any number of legs; the others take exactly that many horses</div><div class="lg-seg"><button class="${M.type==='ACCA'?'on':''}" onclick="window.lgMulti('ACCA')">ACCA<small>2+ sel · 1 bet</small></button>${MULTI.map(m=>`<button class="${M.multi===m.k?'on':''}" onclick="window.lgMulti('${m.k}')">${m.k}<small>${m.n} sel · ${multiBets({n:m.n,sizes:m.s})} bets</small></button>`).join('')}<button class="${M.multi==='CUSTOM'?'on':''}" onclick="window.lgMulti('CUSTOM')">CUSTOM</button></div>
     ${fixedMulti()?`<label class="lg-chk"><input type="checkbox" ${M.ew?'checked':''} onchange="window.lgEW(this.checked)"> Each-way (doubles the bets)</label>`:''}</div>`;
 }
-window.lgMulti=k=>{M.multi=k;const d=curDef();if(d&&M.legs.length>d.n)M.legs.length=d.n;if(k==='CUSTOM')M.ew=false;renderSub();renderLegs();window.lgUpd();};
+window.lgMulti=k=>{if(k==='ACCA'){M.type='ACCA';M.multi=null;M.ew=false;M.accaTyped=false;renderSub();renderLegs();window.lgUpd();return;}
+  M.type='OTHER';M.accaTyped=false;M.multi=k;const d=curDef();if(d&&M.legs.length>d.n)M.legs.length=d.n;if(k==='CUSTOM')M.ew=false;renderSub();renderLegs();window.lgUpd();};
 window.lgEW=v=>{M.ew=!!v;window.lgUpd();};
 function renderLegs(){
   const el=document.getElementById('lgLegs');if(!el)return;const on=multiMode();
@@ -4855,7 +4864,7 @@ function renderLegs(){
   if(!on){el.innerHTML='';return;}
   const d=curDef(),need=fixedMulti()?d.n:0;
   el.innerHTML=`<div class="lg-legs">${M.legs.map((l,i)=>`<div class="lg-leg"><b>${i+1}.</b> <span><b>${esc(l.horse)}</b> <span class="lg-sm">${esc(l.venue)} ${esc(l.time)}${l.em?' · ☘':''}</span>${l.hcp?' <span class="fit-badge fit-q" title="Handicap race">⚠ hcp</span>':''}</span>
-    <input placeholder="price" value="${esc(l.price_raw)}" aria-label="Leg price" oninput="window.lgLegPrice(${i},this.value)"><button class="lg-x" onclick="window.lgLegDel(${i})" aria-label="Remove leg">✕</button></div>`).join('')}</div>
+    <input type="text" inputmode="decimal" autocomplete="off" placeholder="price" value="${esc(l.price_raw)}" aria-label="Leg price" oninput="window.numClean(this,1);window.lgLegPrice(${i},this.value)"><button class="lg-x" onclick="window.lgLegDel(${i})" aria-label="Remove leg">✕</button></div>`).join('')}</div>
     <div class="lg-sm" style="margin-top:4px">${M.type==='OTHER'&&!M.multi?'Pick the multiple type below (CUSTOM for anything else).':M.multi==='CUSTOM'&&M.type==='OTHER'?'Custom: add the horses (optional) and type the total price — settled by hand.':need?`${M.legs.length} / ${need} selections${M.legs.length<need?` — add ${need-M.legs.length} more`:' ✔'}`:M.legs.length<2?`Add ${M.legs.length?'at least one more horse':'2+ horses'} — each pick adds a leg (one per race).`:`${M.legs.length}-fold · leg prices optional — price = leg prices multiplied, or type the acca odds (e.g. a boost) in Price`}</div>`;
 }
 // typing in the Price box on an ACCA = your own acca odds (boost); once touched the box is never refilled — empty = leg prices ×
@@ -4921,8 +4930,9 @@ window.lgUpd=()=>{
   const pt=c?placeTerms(c.fs,c.hcp):null;
   if(c&&(M.type==='EW'||M.type==='PLACE'))M.places=pt.places;
   const et=c?ewTerms(c):null;
+  if(document.activeElement&&document.activeElement.id==='lgN'){}else // don't rebuild the TOP N box while typing in it
   document.getElementById('lgPlaces').innerHTML=M.type==='EW'?(!c?'Pick a horse to set each-way terms':et.ew?`Each-way terms: <select aria-label="Place odds fraction" onchange="window.lgEwFr(this.value)">${[1/3,0.25,0.2].map(f=>`<option value="${f}" ${Math.abs(f-et.frac)<0.001?'selected':''}>${fracLbl(f)} odds</option>`).join('')}</select> · <select aria-label="Places paid" onchange="window.lgEwPl(this.value)">${[2,3,4,5,6,7,8].map(n=>`<option value="${n}" ${n===et.places?'selected':''}>${n} places</option>`).join('')}</select> <span class="lg-sm">(standard ${fracLbl(et.defFr)}, ${et.defPl})</span>`:'<span style="color:#dc2626">No each-way on 4 runners or fewer</span>'):
-    M.type==='TOP N'?`Pays if the horse finishes in the top <input id="lgN" type="number" min="1" max="10" value="${M.places||3}" style="width:52px" oninput="window.lgSetN(this.value)">`:M.type==='PLACE'&&pt?`Place: ${pt.places} places`:M.type==='ACCA'?'Settles automatically when every leg has a result (any loser = lost; a non-runner leg is void). Or settle by hand in the Ledger.':fx?'Settles automatically when every leg has a result: each winning combination pays; a non-runner leg is void (×1.0).':['LENGTH','OTHER'].includes(M.type)?'Settled by hand in the Ledger.':'';
+    M.type==='TOP N'?`Pays if the horse finishes in the top <input id="lgN" type="text" inputmode="numeric" autocomplete="off" placeholder="3" value="${M.nRaw!=null?M.nRaw:(M.places||3)}" style="width:52px" oninput="this.value=this.value.replace(/[^0-9]/g,'');window.lgSetN(this.value)">`:M.type==='PLACE'&&pt?`Place: ${pt.places} places`:M.type==='ACCA'?'Settles automatically when every leg has a result (any loser = lost; a non-runner leg is void). Or settle by hand in the Ledger.':fx?'Settles automatically when every leg has a result: each winning combination pays; a non-runner leg is void (×1.0).':['LENGTH','OTHER'].includes(M.type)?'Settled by hand in the Ledger.':'';
   document.getElementById('lgConv').innerHTML=sv?(M.unitMode==='gbp'?`£${sv.toFixed(2)} = <b>${su.toFixed(2)}u</b> <span class="lg-sm">(1u = £${unit})</span>`:`${sv}u = <b>£${(sv*unit).toFixed(2)}</b>`)+(M.type==='EW'?` <span class="lg-sm">(half win · half place)</span>`:fx?' <span class="lg-sm">per bet</span>':''):'';
   document.getElementById('lgPriceConv').textContent=pr?`decimal ${pr.toFixed(2)} · implied ${(100/pr).toFixed(1)}%`:'';
   const P=modalPayout(pr),g=x=>'£'+(x*unit).toFixed(2);
@@ -4947,7 +4957,7 @@ window.lgUpd=()=>{
   document.getElementById('lgSum').textContent=h&&P?`${h} · stake ${g(P.total)} · returns up to ${g(P.max)}`:'';
 };
 window.lgFree=v=>{M.free=!!v;window.lgUpd();};
-window.lgSetN=v=>{M.places=Math.max(1,parseInt(v)||1);window.lgUpd();};
+window.lgSetN=v=>{M.nRaw=v;M.places=parseInt(v)>0?Math.min(10,parseInt(v)):3;window.lgUpd();}; // empty box stays empty while typing (counts as 3)
 window.lgSave=async()=>{
   if(M&&multiMode())return saveMulti();
   const c=M&&M.c,su=stakeU(),prRaw=(document.getElementById('lgPrice')||{}).value,pr=parsePrice(prRaw),horse=c?c.r.name:document.getElementById('lgHorse').value.trim();
@@ -5103,7 +5113,7 @@ const betLine=b=>`<b>${esc(b.horse)}</b> <span class="lg-sm">${esc(b.venue||'')}
 // 💰 cash out: type the cash you got back → P&L = cash − stake (free bet: the cash is all profit)
 window.lgCashOpen=id=>{const b=LG.bets.find(x=>x.id===id);if(!b)return;const stake=b.stake_u*b.unit_gbp;
   miniModal('💰 Cash out',`<div>${betLine(b)}</div>
-    <div class="lg-f"><label>Cash you got back (£)</label><input id="lgCash" type="number" step="0.01" min="0" placeholder="e.g. 7.40" oninput="window._lgCashUpd()"></div><div id="lgCashPl" class="lg-sm"></div>`,async()=>{
+    <div class="lg-f"><label>Cash you got back (£)</label><input id="lgCash" type="text" inputmode="decimal" autocomplete="off" placeholder="e.g. 7.40" oninput="window.numClean(this);window._lgCashUpd()"></div><div id="lgCashPl" class="lg-sm"></div>`,async()=>{
     const v=parseFloat(document.getElementById('lgCash').value);if(isNaN(v)||v<0){document.getElementById('lgSum').innerHTML='<span style="color:#dc2626">Enter the cash you got back.</span>';return;}
     const pnl=(b.free_bet?v:v-stake)/b.unit_gbp;
     Object.assign(b,{result:'C',cashout_gbp:Math.round(v*100)/100,pnl_u:Math.round(pnl*10000)/10000,settled_at:new Date().toISOString().slice(0,19)});
@@ -5120,10 +5130,10 @@ window.lgEdit=id=>{const b=LG.bets.find(x=>x.id===id);if(!b)return;const legs=le
     :`<div class="lg-f"><label>Horse <span style="text-transform:none;font-weight:400">(pick from today's runners or type)</span></label><input id="lgEdH" list="lgEdDl" value="${esc(b.horse)}" oninput="window._lgEdPick(this,-1)"></div>
       <div class="lg-row"><div class="lg-f"><label>Course</label><input id="lgEdV" value="${esc(b.venue||'')}"></div><div class="lg-f"><label>Time</label><input id="lgEdT" value="${esc(b.time||'')}"></div></div>
       <div class="lg-row"><div class="lg-f"><label>Bet type</label><select id="lgEdType">${['WIN','EW','PLACE','TOP N','LENGTH','OTHER'].map(t=>`<option ${t===b.bet_type?'selected':''}>${t}</option>`).join('')}</select></div>
-        <div class="lg-f"><label>Places paid</label><input id="lgEdPl" type="number" min="1" max="10" value="${b.places||''}" placeholder="EW/PLACE/TOP N"></div>
+        <div class="lg-f"><label>Places paid</label><input id="lgEdPl" type="text" inputmode="numeric" autocomplete="off" value="${b.places||''}" placeholder="EW/PLACE/TOP N" oninput="this.value=this.value.replace(/[^0-9]/g,'')"></div>
         <div class="lg-f"><label>EW terms</label><select id="lgEdFr">${[[1/3,'⅓'],[0.25,'¼'],[0.2,'⅕']].map(([f,l])=>`<option value="${f}" ${Math.abs((+b.ew_fraction||0.2)-f)<0.001?'selected':''}>${l} odds</option>`).join('')}</select></div></div>`;
   miniModal('✏ Edit bet',`${dl}${body}
-    <div class="lg-row"><div class="lg-f"><label>${fixedM?'Total stake':'Stake'} (£)</label><input id="lgEdS" type="number" step="0.01" min="0" value="${(b.stake_u*unit).toFixed(2)}"></div>
+    <div class="lg-row"><div class="lg-f"><label>${fixedM?'Total stake':'Stake'} (£)</label><input id="lgEdS" type="text" inputmode="decimal" autocomplete="off" value="${(b.stake_u*unit).toFixed(2)}" oninput="window.numClean(this)"></div>
       <div class="lg-f"><label>${fixedM?'Price (from leg prices)':legs.length?'Acca odds (blank = legs ×)':'Price (7/4 or 2.75)'}</label><input id="lgEdP" value="${fixedM?'':esc(b.price_raw&&!/×/.test(b.price_raw)?b.price_raw:b.price?(+b.price).toFixed(2):'')}" ${fixedM?'readonly placeholder="from leg prices"':''}></div></div>
     <div class="lg-row"><div class="lg-f"><label>Bookmaker</label><input id="lgEdB" value="${esc(b.bookmaker||'')}"></div><div class="lg-f"><label>&nbsp;</label><label class="lg-chk" style="margin-top:6px"><input type="checkbox" id="lgEdFree" ${b.free_bet?'checked':''}> 🎁 Free bet</label></div></div>
     ${b.result&&b.result!=='O'?`<div class="lg-adv lg-z">This bet is settled (${({W:'won',P:'placed',L:'lost',V:'void',C:'cashed out'})[b.result]||b.result}). ${b.result==='C'?'Saving keeps the cash-out and re-works the P&amp;L.':'Saving puts it back to <b>open</b> so it re-settles on the new details.'}</div>`:''}`,async()=>{
@@ -6905,7 +6915,7 @@ function showGuide(){
         <li><b>💡 Stake per pick</b> (Prixm / ☘ Emerald NAP · WIN · STRONG · PLACE): win chance = how that kind of pick has actually done in your logged results (confidence × gap × handicap), adjusted for ⭐ Golden, Verification and 🧭 track fit. Stake = <b>¼ Kelly</b> on the staking bank: bigger edge → bigger stake, outsiders stay small. Shown as a 💡 chip on race cards and runner rows; with no price yet it shows the price needed for each stake.</li>
         <li><b>No bet advised → left blank</b> (tight race, no value, Verification 🚫). Days with no bets are normal.</li>
         <li><b>Staking bank</b> = your starting bank (0 = a notional 100u) + settled P&amp;L. <b>Daily budget</b> = % of it; picks are funded strongest first and the day's strongest bet is always funded in full. Max 3u (5u only for ⭐ Golden + ✅ CONFIRMED); 3 losing days → ⅙ Kelly. ☘ Emerald / Silver / Bronze stakes are paper.</li>
-        <li>Open WIN / EW / PLACE / TOP N bets <b>settle automatically</b> when Fetch Results runs; <b>OTHER</b> opens the multiples — Double, Treble, Trixie, Patent, Yankee, Lucky 15/31/63, Canadian, Heinz, Super Heinz, Goliath (each-way optional) or CUSTOM; stake is per bet, they settle automatically too. The modal shows the <b>potential return</b> live (and Open bets shows it per bet). In the horse search use <b>↑ ↓</b> and <b>Enter</b>. <b>ACCA</b>: pick ACCA, then add 2+ horses (one per race) with a price each — the acca price is the legs multiplied, and it settles automatically once every leg has a result (non-runner leg = void). LENGTH / OTHER are settled by hand in the Ledger.</li>
+        <li>Open WIN / EW / PLACE / TOP N bets <b>settle automatically</b> when Fetch Results runs; <b>ACCA</b> opens the multiples — ACCA (any number of legs), Double, Treble, Trixie, Patent, Yankee, Lucky 15/31/63, Canadian, Heinz, Super Heinz, Goliath (each-way optional) or CUSTOM; stake is per bet, they settle automatically too. The modal shows the <b>potential return</b> live (and Open bets shows it per bet). In the horse search use <b>↑ ↓</b> and <b>Enter</b>. <b>ACCA</b>: pick ACCA, then add 2+ horses (one per race) with a price each — the acca price is the legs multiplied, and it settles automatically once every leg has a result (non-runner leg = void). LENGTH / CUSTOM are settled by hand in the Ledger.</li>
         <li>Changing the unit only affects future bets. <b>Private</b>: stored in race_data.db (or this browser when the DB server is off), never published — the Ledger is hidden on the online (GitHub) version.</li>
       </ul>
     </div>
@@ -9210,6 +9220,7 @@ function setComboFilter(v){st.comboFilter=st.comboFilter===v?false:v;renderRaceC
 function filterRaceType(t){st.raceTypeFilter=st.raceTypeFilter===t?'all':t;renderRaceCards();renderFieldSizeBar()}
 function filterEngine(e){st.engineFilter=st.engineFilter===e?'all':e;renderRaceCards();renderFieldSizeBar()}
 function filterFit(f){st.fitFilter=st.fitFilter===f?'all':f;renderRaceCards();renderFieldSizeBar()}
+function filterRegion(k){st.regionFilter.has(k)?st.regionFilter.delete(k):st.regionFilter.add(k);renderRaceCards();renderFieldSizeBar()}
 function filterPrime(){st.primeFilter=!st.primeFilter;renderRaceCards();renderFieldSizeBar()}
 
 const FIELD_BRACKETS=[
@@ -9246,7 +9257,7 @@ function filterRaceCode(c){st.raceCodeFilter=st.raceCodeFilter===c?'all':c;rende
 
 let _fsbPillOpen=null;
 function fsbToggle(key){_fsbPillOpen=_fsbPillOpen===key?null:key;renderFieldSizeBar();}
-function fsbClearAll(){_fsbPillOpen=null;st.fieldFilter.clear();st.gapFilter.clear();st.raceTypeFilter='all';st.raceCodeFilter='all';st.confidenceFilter='all';st.comboFilter=false;st.engineFilter='all';st.fitFilter='all';st.primeFilter=false;renderVenueBar();renderRaceCards();renderFieldSizeBar();}
+function fsbClearAll(){_fsbPillOpen=null;st.fieldFilter.clear();st.gapFilter.clear();st.raceTypeFilter='all';st.raceCodeFilter='all';st.confidenceFilter='all';st.comboFilter=false;st.engineFilter='all';st.fitFilter='all';st.primeFilter=false;st.regionFilter.clear();renderVenueBar();renderRaceCards();renderFieldSizeBar();}
 (function(){document.addEventListener('click',function(e){if(_fsbPillOpen&&!e.target.closest('#fieldSizeBar')){_fsbPillOpen=null;renderFieldSizeBar();}});})();
 
 function renderFieldSizeBar(){
@@ -9259,7 +9270,7 @@ function renderFieldSizeBar(){
   const confCounts={'TOP PICK':0,'STRONG':0,'SOLID':0,'MODERATE':0};
   const gapCounts={tight:0,competitive:0,clear:0};
   const rcCounts={};
-  const engCounts={prixm:0,emerald:0};let topUCount=0,primeCount=0;
+  const engCounts={prixm:0,emerald:0};let topUCount=0,primeCount=0;const regCounts={};
   let total=0;
   venues.forEach(vk=>{
     const v=D.venues[vk];if(!v)return;
@@ -9277,6 +9288,7 @@ function renderFieldSizeBar(){
       }else gapCounts.tight++;
       const rt=(r.race_type||'Unknown').trim();rcCounts[rt]=(rcCounts[rt]||0)+1;
       engCounts[ire?'emerald':'prixm']++;
+      {const rg=raceRegion(r.course);regCounts[rg]=(regCounts[rg]||0)+1;}
       try{if(getPrimeFlags(r))primeCount++;}catch(e){}
       if(r.runners&&r.runners.length){const t0=[...r.runners].sort((a,b)=>b.score-a.score)[0];if(t0&&t0.track_fit&&t0.track_fit.verdict==='u')topUCount++;}
     });
@@ -9384,9 +9396,13 @@ function renderFieldSizeBar(){
     <div class="fsb-chip${st.fitFilter==='hideU'?' on':''}" onclick="filterFit('hideU')">Hide races where top pick is ❌ (${total-topUCount})</div>
   </div>${fitActive?clearRow("filterFit(st.fitFilter)"):''}`;
   // ── Dropdown: 🎯 Prime (non-hcap · ≤5 runners · gap ≥12) ──
+  const regActive=st.regionFilter.size>0,regN=REGIONS.filter(g=>regCounts[g.key]).length;
+  const regDrop=`<div class="fsb-drop-title">Region</div><div class="fsb-chips">${REGIONS.map(g=>{const c=regCounts[g.key]||0;if(!c)return'';return`<div class="fsb-chip colored${st.regionFilter.has(g.key)?' on':''}" style="border-left-color:${g.color}" onclick="filterRegion('${g.key}')">${g.label} (${c})</div>`;}).join('')}</div>${regActive?clearRow("st.regionFilter.clear();renderRaceCards();renderFieldSizeBar()"):''}`;
+  const regLbl=regActive?(st.regionFilter.size===1?REGIONS.find(g=>st.regionFilter.has(g.key)).label:'Region'):'🌍 Region';
   const primeActive=!!st.primeFilter;
-  const anyActive=fsActive||gapActive||rtActive||codeActive||confActive||!!st.comboFilter||engActive||fitActive||primeActive;
+  const anyActive=regActive||fsActive||gapActive||rtActive||codeActive||confActive||!!st.comboFilter||engActive||fitActive||primeActive;
   el.innerHTML=`<div class="fsb-bar">
+    ${regN>1||regActive?pill('region',regLbl,regActive,regActive&&st.regionFilter.size>1?st.regionFilter.size:0,regDrop):''}
     ${engCounts.emerald?pill('engine',engActive?(st.engineFilter==='emerald'?'☘ Emerald':'Prixm'):'Engine',engActive,0,engDrop):''}
     ${pill('field','Field Size',fsActive,fsActive?st.fieldFilter.size:0,fsDrop)}
     ${pill('gap','Gap',gapActive,gapActive?st.gapFilter.size:0,gapDrop)}
@@ -9419,6 +9435,15 @@ function splitEngineHistory(){
   if(badge&&badge.style.display!=='none'&&emer.length) badge.textContent=badge.textContent.replace(/(\d+) races/,`${uk.length} UK · ☘ ${emer.length} IRE`);
 }
 // France = display only (race cards / race view / MT / Predict). Never in picks, flags, results or analysis.
+// 🌍 Region filter — from the course's country code suffix ("BAHRAIN (BHR)", "SAINT-CLOUD (FR)"); no code = UK (incl. "(AW)")
+const REGIONS=[{key:'uk',label:'🇬🇧 UK',color:'#3b82f6'},{key:'ire',label:'🇮🇪 Ireland',color:'#10b981'},{key:'eu',label:'🇪🇺 Europe',color:'#8b5cf6'},{key:'usa',label:'🇺🇸 USA / Canada',color:'#ef4444'},{key:'me',label:'🕌 Middle East',color:'#f59e0b'},{key:'asia',label:'🌏 Asia',color:'#ec4899'},{key:'aus',label:'🇦🇺 Aus / NZ',color:'#14b8a6'},{key:'other',label:'🌍 Other',color:'#6b7280'}];
+const REGION_CODES={uk:['GB'],eu:['FR','GER','ITY','SWE','NOR','DEN','SPA','BEL','SWI','CZE','POL','HOL','AUT','HUN','SVK','TUR','GR','POR'],usa:['USA','CAN'],me:['BHR','UAE','KSA','QAT','OMA'],asia:['JPN','HK','SIN','KOR','MAL','IND','MAC','CHN'],aus:['AUS','NZ']};
+function raceRegion(course){
+  if(isIreland(course))return'ire';if(isFrance(course))return'eu';
+  const codes=((course||'').toUpperCase().match(/\(([A-Z]{2,4})\)/g)||[]).map(c=>c.slice(1,-1)).filter(c=>c!=='AW');
+  if(!codes.length)return'uk';const c=codes[codes.length-1];
+  for(const k in REGION_CODES)if(REGION_CODES[k].includes(c))return k;return'other';
+}
 function isFrance(course){const v=(course||'').toLowerCase();if(v.includes('(fr)'))return true;const n=v.replace(/-/g,' ');return['longchamp','deauville','saint cloud','chantilly','auteuil','compiegne','toulouse','bordeaux','les landes','nantes','vichy','le lion','la teste de buch','craon','maisons laffitte','clairefontaine','cagnes','fontainebleau','strasbourg','lyon parilly','salon de provence'].some(t=>n.includes(t));}
 function getRaceBorderColor(r){const ire=isIreland(r.course),hcp=r.handicap||/handicap/i.test(r.race_name||'');if(ire&&hcp)return'#f87171';if(ire)return'#10b981';if(hcp)return'#f59e0b';return'#3b82f6';}
 
@@ -9731,6 +9756,8 @@ function renderRaceCards(){
       return true;
     });
   }
+  // 🌍 Region filter (multi-select)
+  if(st.regionFilter&&st.regionFilter.size)races=races.filter(r=>st.regionFilter.has(raceRegion(r.course)));
   // ☘ Engine filter (Prixm UK / Emerald IRE)
   if(st.engineFilter&&st.engineFilter!=='all'){
     races=races.filter(r=>st.engineFilter==='emerald'?isIreland(r.course):!isIreland(r.course));
@@ -10525,8 +10552,8 @@ function renderMainTab(runners,race,vk,ri){
   ${renderAttrFilterBar(runners, attrMap)}
   <table class="rtbl"><thead><tr>
     ${thSort('#','number',RTBL_TIPS.num)}${thSort('Horse','score',RTBL_TIPS.horse)}${thSort('Form','form',RTBL_TIPS.form)}
-    ${thSort('Age','age',RTBL_TIPS.age)}${thSort('RPR','rpr',RTBL_TIPS.rpr)}
-    ${thSort('Wt','weight',RTBL_TIPS.wt)}
+    ${thSort('Age','age',RTBL_TIPS.age)}${thSort('Wt','weight',RTBL_TIPS.wt)}
+    ${thSort('RPR','rpr',RTBL_TIPS.rpr)}
     <th data-thtip="${RTBL_TIPS.dr}">Dr</th><th data-thtip="${RTBL_TIPS.last}">Last</th>
     ${thSort('Score','score',RTBL_TIPS.score.replace('MAXS',MAX_SCORE))}<th data-thtip="${RTBL_TIPS.vsavg}">vs Avg</th>
     <th data-thtip="${RTBL_TIPS.conf}">Confidence</th><th data-thtip="${RTBL_TIPS.vcheck}">Variable Check</th>
@@ -10554,10 +10581,10 @@ function renderMainTab(runners,race,vk,ri){
     let rows=`<tr class="${rowCl} expandable" style="${attrRowStyle}" onclick="toggleExp('${r.name.replace(/'/g,"\\'")}')">
       <td style="font-weight:700;color:var(--muted)">${r.number||'—'}</td>
       <td>${r.silk_url?`<img class="rsilk" src="${r.silk_url}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">`:''}<div style="font-weight:700;font-size:14px"><button class="wl-track-btn ${isWatched(r.name)?'tracked':''}" onclick="event.stopPropagation();toggleWatch('${r.name.replace(/'/g,"\\'")}','${(race.course||'').replace(/'/g,"\\'")}','${(race.name||'').replace(/'/g,"\\'")}')" title="${isWatched(r.name)?'Remove from watchlist':'Add to watchlist'}">${isWatched(r.name)?'TRACKING':'TRACK'}</button><button class="bet-btn ${isBetted(r.name,race.time||'',race.course||'')?'betting':''}" onclick="event.stopPropagation();toggleBet('${r.name.replace(/'/g,"\\'")}','${(race.time||'').replace(/'/g,"\\'")}','${(race.course||'').replace(/'/g,"\\'")}',${r.score||0})">${isBetted(r.name,race.time||'',race.course||'')?'BETTING':'BET'}</button><button class="cmpsel-btn${st.compareSelect.has(r.name)?' on':''}" id="cmpsel_${r.name.replace(/[^a-zA-Z0-9]/g,'_')}" onclick="event.stopPropagation();hcmpToggle('${r.name.replace(/'/g,"\\'")}')" title="Add to compare">${st.compareSelect.has(r.name)?'✓':'+CMP'}</button>${r.name}${hrsBadge}${rankBadge(r.name)}${getRunnerComboBadges(r)}${getCourseSpecialistBadge(r,race)}${getWatchbackBadge(r,race)}${r.price?`<span class="price-dec">${parseFloat(r.price).toFixed(2)}</span>`:''}</div><div style="font-size:11px;color:var(--muted)">${jkyHtml} · ${r.trainer||'?'} ${getConnectionChangeBadge(r)}</div></td>
-      <td>${formHtml(r.form)}${(()=>{const m=calcMomentum(r.form);return m.label!=='UNKNOWN'?` <span class="mom ${m.cls}" title="${m.tip}" style="padding:1px 4px;font-size:8px;vertical-align:middle">${m.icon}</span>`:'';})()}</td>
+      <td>${formHtml(r.form)}${r.age||r.lbs?`<span class="ph-agewt"> · ${r.age?r.age+'yo':''}${r.age&&r.lbs?' · ':''}${r.lbs?wtStr(r.lbs):''}</span>`:''}</td>
       <td style="font-weight:600">${r.age||'?'}</td>
+      <td style="white-space:nowrap">${wtStr(r.lbs)}</td>
       <td style="font-weight:600">${r.rpr||'—'}${(()=>{const d=rprDivergenceFlag(r.ofr,r.rpr);return d?` <span title="${d.tooltip.replace(/"/g,'&quot;')}" style="cursor:help">${d.icon}</span>`:'';})()}</td>
-      <td>${wtStr(r.lbs)}</td>
       <td>${r.draw||'—'}</td>
       <td>${r.last_run!=null?r.last_run+'d':'—'}</td>
       <td><span class="sbar"><span class="sfill" style="width:${(r.score/MAX_SCORE)*100}%;background:${sc(r.score)}"></span></span><b style="color:${sc(r.score)}">${r.score}</b><span style="color:var(--muted);font-size:10px">/${MAX_SCORE}</span>${r.prixm_score!=null?`<div style="font-size:9.5px;color:#9ca3af" title="What Prixm scored this runner">Prixm ${r.prixm_score}</div>`:''}</td>
@@ -11055,11 +11082,11 @@ function rpLenVerdict(){
   const td='padding:5px 6px;border-bottom:1px solid var(--border)';
   el.innerHTML=`<table style="width:100%;border-collapse:collapse;font-size:12.5px"><tr>${['LINE','CHANCE','FAIR','YOUR PRICE','VERDICT'].map(h=>`<th style="text-align:left;padding:4px 6px;font-size:10px;color:var(--muted)">${h}</th>`).join('')}</tr>${lines.map(([dir,x,custom])=>{
     const key=c.subj+':'+(custom?'c':dir+x),p=x?rpLenChance(c,dir,x):null,fair=p?1/p:null;
-    const lbl=custom?`Over <input type="number" step="0.5" min="0.5" value="${cx}" placeholder="x" data-rplkey="cx" oninput="window._rpLenCtx.prices.cx=this.value;rpLenRow(this)" style="width:46px;padding:3px 5px;border:1px solid var(--border);border-radius:5px;font:inherit"> L`:(dir==='u'?'Under ':'Over ')+x+'L';
+    const lbl=custom?`Over <input type="text" inputmode="decimal" autocomplete="off" value="${cx}" placeholder="x" data-rplkey="cx" oninput="window.numClean(this);window._rpLenCtx.prices.cx=this.value;rpLenRow(this)" style="width:46px;padding:3px 5px;border:1px solid var(--border);border-radius:5px;font:inherit"> L`:(dir==='u'?'Under ':'Over ')+x+'L';
     const pr=parseFloat(c.prices[key]);let v='<span style="color:var(--muted)">enter price</span>';
     if(p==null)v=custom?'<span style="color:var(--muted)">set line</span>':'—';
     else if(pr>1){const ev=(p*pr-1)*100;v=ev>5?`<b style="color:#15803d">✅ Value +${ev.toFixed(0)}% · 0.5u</b>`:ev>-3?`<b style="color:#b45309">⚖️ Marginal ${ev.toFixed(0)}%</b>`:`<b style="color:#dc2626">🚫 No bet ${ev.toFixed(0)}%</b>`;}
-    return `<tr><td style="${td};white-space:nowrap">${c.subj==='top'?'Wins by ':''}${lbl}</td><td style="${td}">${p==null?'—':(p*100).toFixed(1)+'%'}</td><td style="${td}">${fair?fair.toFixed(2):'—'}</td><td style="${td}"><input type="number" step="0.05" min="1.01" value="${c.prices[key]||''}" placeholder="e.g. 3.5" data-rplkey="${key}" oninput="window._rpLenCtx.prices['${key}']=this.value;rpLenRow(this)" style="width:74px;padding:3px 6px;border:1px solid var(--border);border-radius:5px;font:inherit"></td><td style="${td}">${v}</td></tr>`;}).join('')}</table>
+    return `<tr><td style="${td};white-space:nowrap">${c.subj==='top'?'Wins by ':''}${lbl}</td><td style="${td}">${p==null?'—':(p*100).toFixed(1)+'%'}</td><td style="${td}">${fair?fair.toFixed(2):'—'}</td><td style="${td}"><input type="text" inputmode="decimal" autocomplete="off" value="${c.prices[key]||''}" placeholder="e.g. 3.5" data-rplkey="${key}" oninput="window.numClean(this);window._rpLenCtx.prices['${key}']=this.value;rpLenRow(this)" style="width:74px;padding:3px 6px;border:1px solid var(--border);border-radius:5px;font:inherit"></td><td style="${td}">${v}</td></tr>`;}).join('')}</table>
     <div style="font-size:11px;color:var(--muted);margin-top:6px">Value only when your price beats the fair price by 5%+. Small stakes — margin bets are volatile.</div>`;
 }
 // Re-render but keep focus in the price box being typed in.
