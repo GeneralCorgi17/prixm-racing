@@ -37,6 +37,9 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .vbtn{padding:7px 16px;border-radius:6px;cursor:pointer;font-size:13px;font-weight:600;background:var(--card2);color:var(--muted);border:1px solid var(--border);transition:all .2s}
 .vbtn:hover{border-color:var(--accent);color:var(--text)}
 .vbtn.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+/* segmented switches (Performance tab) — selected one always clearly filled, both themes */
+.vbtn.seg-btn.on{background:#15803d!important;color:#fff!important;border-color:#15803d!important;font-weight:700} /* !important: a later global .vbtn{background:#fff!important} rule */
+.vbtn.seg-btn.seg-em.on{background:#0f766e!important;border-color:#0f766e!important}
 .vbtn.venue-has-match{border-color:#22c55e!important;color:#22c55e!important}
 .vbtn.venue-no-match{border-color:#ef4444!important;color:#ef4444!important;opacity:.5}
 .vbtn.on.venue-has-match,.vbtn.on.venue-no-match{color:#fff!important;opacity:1}
@@ -113,6 +116,18 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .rtbl tr.strong-row{background:rgba(13,148,136,.05)}
 .rtbl tr.expandable{cursor:pointer}
 .ph-agewt{display:none} /* phone runner cards only — PC has the Age/Wt columns */
+/* ⚖ Weight vs last run chip + panel (display only) */
+.wtc{display:inline-block;font-size:10px;font-weight:700;padding:1px 5px;border-radius:3px;margin-left:5px;white-space:nowrap;cursor:help;vertical-align:middle;letter-spacing:.2px}
+.wtc-up{color:#b7791f;background:rgba(224,168,74,.15)}.wtc-pen{color:#c2410c;background:rgba(224,122,95,.15)}.wtc-info{color:#6b665e;background:rgba(154,148,136,.16)}
+html[data-theme="nothing"] .wtc-up{color:#e0a84a}html[data-theme="nothing"] .wtc-pen{color:#e07a5f}html[data-theme="nothing"] .wtc-info{color:#9a9488}
+.wtbox{grid-column:1/-1;border:1px solid var(--border);border-left:3px solid #e0a84a;border-radius:8px;padding:10px 12px;background:var(--card)}
+.wtbox.pen{border-left-color:#e07a5f}.wtbox.info{border-left-color:#9a9488}
+.wtbox .wt-h{font-size:10px;font-weight:800;letter-spacing:.4px;color:var(--muted);text-transform:uppercase;margin-bottom:5px}
+.wtbox .wt-v{font-size:12.5px;font-weight:700;margin-bottom:6px}
+.wtbox .wt-g{display:grid;grid-template-columns:auto minmax(0,1fr) minmax(0,1fr) auto;gap:3px 12px;font-size:11.5px;align-items:baseline}
+.wtbox .wt-g .h{color:var(--muted);font-size:10px;text-transform:uppercase}
+.wtbox .wt-up{color:#d08a1e;font-weight:700}.wtbox .wt-pen{color:#d0603f;font-weight:700}.wtbox .wt-dn{color:#10b981;font-weight:700}
+.wtbox .wt-ctx{color:var(--muted);font-size:11px;border-top:1px dashed var(--border);margin-top:8px;padding-top:6px}
 .rtbl tr.attr-dim{opacity:.32;transition:opacity .2s}
 
 /* Confidence badge */
@@ -1259,6 +1274,10 @@ html[data-theme="nothing"] .d1-ss.amb .d1-ss-n{color:#d9b25c!important}
 html[data-theme="nothing"] .venues-bar{gap:24px!important;border-bottom:1px solid #1a1a1a;padding-bottom:2px}
 html[data-theme="nothing"] .venues-bar .vbtn{background:none!important;border:none!important;border-bottom:1px solid transparent!important;border-radius:0!important;padding:4px 0 6px!important;color:#7d786f!important;font-size:11px!important;font-weight:400!important;letter-spacing:.2em;text-transform:uppercase}
 html[data-theme="nothing"] .venues-bar .vbtn:hover{color:#f5f2eb!important}
+html[data-theme="nothing"] .vbtn.seg-btn{background:transparent!important;border:1px solid #2a2a2a!important;border-radius:0!important;color:#7d786f!important}
+html[data-theme="nothing"] .vbtn.seg-btn:hover{border-color:#3a3a3a!important;color:#f5f2eb!important}
+html[data-theme="nothing"] .vbtn.seg-btn.on{background:#f5f2eb!important;border-color:#f5f2eb!important;color:#0a0a0a!important}
+html[data-theme="nothing"] .vbtn.seg-btn.seg-em.on{background:#5bb39a!important;border-color:#5bb39a!important;color:#0a0a0a!important}
 html[data-theme="nothing"] .venues-bar .vbtn.on{color:#f5f2eb!important;border-bottom-color:#c8b89a!important}
 html[data-theme="nothing"] #fieldSizeBar .fsb-bar{background:transparent!important;border:none!important;border-top:1px solid #1a1a1a!important;border-bottom:1px solid #1a1a1a!important;border-radius:0!important;padding:12px 0!important}
 html[data-theme="nothing"] .fsb-pill,html[data-theme="nothing"] #fieldSizeBar .vbtn{background:transparent!important;border:1px solid #222!important;border-radius:0!important;color:#7d786f!important;font-size:10px!important;font-weight:400!important;letter-spacing:.14em;text-transform:uppercase}
@@ -1541,6 +1560,7 @@ html[data-theme="nothing"] svg text[fill="#6b7280"],html[data-theme="nothing"] s
   <button class="tab-btn" id="tabTracks" onclick="switchTab('tracks')">🗺 Track Explorer</button>
   <button class="tab-btn" id="tabTopFinish" onclick="switchTab('topfinish')">Top Finish</button>
   <button class="tab-btn" id="tabWatchback" onclick="switchTab('watchback')">Watchback</button>
+  <button class="tab-btn" id="tabTracked" onclick="switchTab('tracked')" title="Your tracked horses — notes, today's runs, full logged history">👁 Tracked</button>
   <button class="tab-btn" id="tabEmerald" onclick="switchTab('emerald')" style="color:#0f766e">☘ Emerald</button>
   <button class="tab-btn vo-hide" id="tabLedger" onclick="switchTab('ledger')">💷 Ledger</button>
   <button class="tab-btn" id="tabM" onclick="switchTab('m')" title="🐎 Race track animation">🐎 MT</button>
@@ -1571,7 +1591,7 @@ window.addEventListener('load',f);window.addEventListener('resize',f);setTimeout
 </div>
 
 <div id="perfView" style="display:none;padding:20px 28px;max-width:1200px;margin:0 auto">
-  <div id="perfContent">Loading performance data...</div>
+  <div id="perfEngineBar"></div><div id="perfContent">Loading performance data...</div>
 </div>
 
 <div id="combosView" style="display:none;padding:20px 28px;max-width:1200px;margin:0 auto">
@@ -1590,6 +1610,7 @@ window.addEventListener('load',f);window.addEventListener('resize',f);setTimeout
 <div id="emeraldView" style="display:none;padding:20px 28px;max-width:1200px;margin:0 auto"><div id="emeraldContent">Loading...</div></div>
 <div id="ledgerView" class="vo-hide" style="display:none;padding:20px 28px 90px;max-width:1200px;margin:0 auto"><div id="ledgerContent">Loading...</div></div>
 <div id="mView" style="display:none;padding:20px 28px;max-width:1300px;margin:0 auto"><div id="mContent">Loading...</div></div>
+<div id="trackedView" style="display:none;padding:20px 28px;max-width:1360px;margin:0 auto"><div id="trackedContent">Loading...</div></div>
 <button id="lgFab" class="lg-fab vo-hide" onclick="window.lgOpen&&window.lgOpen()" title="Log a bet (shortcut: B)">＋<span class="lgf-x"> Log bet <small id="lgFabSub"></small><span class="kbd">B</span></span></button>
 
 <div id="modalContainer"></div>
@@ -1977,6 +1998,49 @@ function formHtml(f){
 }
 function wtStr(lbs){if(!lbs)return'—';return Math.floor(lbs/14)+'st'+lbs%14+'lb'}
 
+// ⚖ WEIGHT VS LAST RUN — display only. runner.wt_change is worked out at racecard fetch time by
+// engine/emerald_engine.py weight_change() (true last run only, same code; hcap: OR up → 'up',
+// OR same + more weight → 'info'; non-hcap: won last time + more weight → 'pen'). No data → nothing.
+// Never changes score/gap/segment (re-score test 2026-11-15: no ROI gain, market prices it).
+const WTC_CTX={
+  up:'Since logging began: handicappers raised 4+ OR won 17–19% vs 13% expected from their Prixm rank (×1.3–1.5) — usually a horse on the up. Prices already reflect it (re-score test: no ROI gain), so it is context, not a bet signal.',
+  pen:'Since logging began: last-time winners carrying 5lb+ more won 22% vs 14% expected (×1.58). A penalty mostly means the horse is in form — the market knows it too.',
+  info:'Rating unchanged — the extra weight comes from this race\'s weight range, not the handicapper. Neutral.'
+};
+function wtcOrd(n){if(n==null)return'—';const s=n%100>10&&n%100<14?'th':({1:'st',2:'nd',3:'rd'}[n%10]||'th');return n+s}
+function wtcVenue(v){return String(v||'').replace(/\s+/g,' ').replace(/\b[A-Za-z]+/g,w=>w[0].toUpperCase()+w.slice(1).toLowerCase())}
+function wtcDate(s){try{const d=new Date(s+'T12:00:00');return d.getDate()+' '+d.toLocaleString('en-GB',{month:'short'})}catch(e){return s}}
+function wtChangeChip(r){
+  const w=r&&r.wt_change;if(!w)return'';
+  const p=w.prev||{};
+  if(w.kind==='up')return `<span class="wtc wtc-up" title="Official rating ${p.ofr}→${r.ofr} since its last run (${wtcDate(p.date)}, ${wtcOrd(p.pos)}). Display only.">▲ OR +${w.dor}</span>`;
+  if(w.kind==='pen')return `<span class="wtc wtc-pen" title="Won last time (${wtcVenue(p.venue)} ${wtcDate(p.date)}) — carries ${w.dl}lb more. Display only.">⚑ Pen +${w.dl}lb</span>`;
+  if(w.kind==='info')return `<span class="wtc wtc-info" title="${w.dl}lb more than last run, rating unchanged — race weights, not a penalty. Display only.">+${w.dl}lb</span>`;
+  return'';
+}
+function renderWeightChangeBox(r, race){
+  const w=r&&r.wt_change;if(!w||!w.prev)return'';
+  const p=w.prev;
+  const chg=(a,b,u)=>{if(a==null||b==null||a===''||b==='')return'<span>–</span>';const x=a-b;return `<span class="${x>0?(w.kind==='pen'?'wt-pen':'wt-up'):x<0?'wt-dn':''}">${x>0?'+':''}${x}${u}</span>`};
+  const verdict=w.kind==='up'?`Raised ${w.dor}lb by the handicapper after ${wtcOrd(p.pos)} at ${wtcVenue(p.venue)}`
+    :w.kind==='pen'?`Won at ${wtcVenue(p.venue)} — carries a ${w.dl}lb winner's penalty`
+    :`Carries ${w.dl}lb more, rating unchanged`;
+  const rt=(h,t,c)=>`${h?'Hcap':'Non-hcap'} ${t||''}${c?' · C'+c:''}`;
+  return `<div class="wtbox ${w.kind==='pen'?'pen':w.kind==='info'?'info':''}" title="Display only — never changes score, gap or segment.">
+    <div class="wt-h">⚖ Weight vs last run <span style="font-weight:400;opacity:.7">(context only)</span></div>
+    <div class="wt-v">${verdict}</div>
+    <div class="wt-g">
+      <span class="h"></span><span class="h">Last run</span><span class="h">Today</span><span class="h">Change</span>
+      <span class="h">When</span><span>${wtcDate(p.date)} · ${wtcVenue(p.venue)}</span><span>${race.time||''} ${wtcVenue(race.course)}</span><span style="color:var(--muted)">${w.days}d</span>
+      <span class="h">Race</span><span>${rt(p.hcap,p.type,p.cls)}</span><span>${rt(race.handicap,race.race_type,race.race_class)}</span><span></span>
+      <span class="h">Result</span><span>${wtcOrd(p.pos)}${p.field?' of '+p.field:''}${p.btn?' · '+p.btn+'L':''}</span><span>—</span><span></span>
+      <span class="h">Weight</span><span>${wtStr(p.lbs)}</span><span>${wtStr(r.lbs)}${r.jockey_allowance?` <span style="color:var(--muted)">(claim −${r.jockey_allowance})</span>`:''}</span>${chg(r.lbs,p.lbs,'lb')}
+      <span class="h">OR</span><span>${p.ofr||'–'}</span><span>${r.ofr||'–'}</span>${chg(r.ofr,p.ofr,'')}
+    </div>
+    <div class="wt-ctx">${WTC_CTX[w.kind]||''}</div>
+  </div>`;
+}
+
 // Form Momentum Engine — detects rising/falling trajectory from form string
 function calcMomentum(formStr){
   if(!formStr||formStr.length<2) return {slope:0,label:'UNKNOWN',icon:'',cls:'',tip:'Not enough form data'};
@@ -2259,6 +2323,7 @@ function switchTab(tab){
   document.getElementById('tabEmerald').classList.toggle('active',tab==='emerald');
   document.getElementById('tabLedger').classList.toggle('active',tab==='ledger');
   document.getElementById('tabM').classList.toggle('active',tab==='m');
+  document.getElementById('tabTracked').classList.toggle('active',tab==='tracked');
   document.getElementById('landingView').style.display=tab==='races'?'block':'none';
   document.getElementById('detailView').style.display='none';
   document.getElementById('perfView').style.display=tab==='performance'?'block':'none';
@@ -2271,6 +2336,7 @@ function switchTab(tab){
   document.getElementById('emeraldView').style.display=tab==='emerald'?'block':'none';
   document.getElementById('ledgerView').style.display=tab==='ledger'&&!VIEW_ONLY?'block':'none';
   document.getElementById('mView').style.display=tab==='m'?'block':'none';
+  document.getElementById('trackedView').style.display=tab==='tracked'?'block':'none';
   if(tab==='performance') renderPerformance();
   if(tab==='combos') renderCombos();
   if(tab==='trends') renderTrends();
@@ -2280,6 +2346,7 @@ function switchTab(tab){
   if(tab==='watchback') window.renderWatchbackDashboard&&window.renderWatchbackDashboard();
   if(tab==='emerald') window.renderEmeraldTab&&window.renderEmeraldTab('emeraldContent');
   if(tab==='ledger') window.renderLedger&&window.renderLedger();
+  if(tab==='tracked') window.renderTrackedTab&&window.renderTrackedTab();
   if(tab==='m') window.renderMTab&&window.renderMTab();
   else if(window.MTSim) MTSim.stop();
 }
@@ -4388,7 +4455,7 @@ window.openTrackExplorer=function(course,sub){
 
 /* ==================== ☘ EMERALD TAB (Irish engine dashboard) ====================
    Reads window._emeraldHistory (Irish races only — never mixed into Prixm analytics).
-   Emerald is TRACK-ONLY: no real-money segments until each profile has EM_REAL_MIN races.
+   Emerald stakes are paper until a profile has EM_REAL_MIN races; then real (Ledger advisor, EV-gated) — emReady() 2026-11-14.
    Calibration reuses _calibrateProfile() on Emerald's own 16 factors; versions are separate from Prixm. */
 (function(){
 'use strict';
@@ -4434,7 +4501,7 @@ function render(target){
     const allIre=((window._emeraldHistory&&window._emeraldHistory.races)||[]).length;
     const trackOnly=Object.values(byProf).some(a=>a.length<EM_REAL_MIN);
     let h=`<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px"><div style="font-size:18px;font-weight:800;color:var(--em)">☘ ${emeraldLabel()}</div><div style="font-size:12px;color:var(--muted)">Irish racing engine · ROI + Northern Ireland · own results, calibration and versions</div></div>`;
-    h+=`<div style="background:var(--em-soft);border:1px solid var(--em-line);color:#065f46;border-radius:10px;padding:10px 14px;margin-bottom:12px;font-size:13px">☘ <b>${trackOnly?'Track only.':'Profiles ready.'}</b> Emerald picks are tracked, never counted in Prixm P&amp;L or Golden. Real-money segments unlock at ${EM_REAL_MIN} Emerald-scored races per profile (ire_flat ${byProf.ire_flat.length}/${EM_REAL_MIN} · ire_nh ${byProf.ire_nh.length}/${EM_REAL_MIN}).${allIre>races.length?` ${allIre-races.length} older Irish races were logged before Emerald scoring and are excluded from these stats.`:''}</div>`;
+    h+=`<div style="background:var(--em-soft);border:1px solid var(--em-line);color:#065f46;border-radius:10px;padding:10px 14px;margin-bottom:12px;font-size:13px">☘ <b>${trackOnly?'Track only.':'Profiles ready.'}</b> Emerald picks are kept separate from Prixm P&amp;L and Golden.${trackOnly?'':' Ledger advisor gives real stakes on all Irish races (same EV + ¼ Kelly gates as Prixm).'} Real money unlocks at ${EM_REAL_MIN} Emerald-scored races per profile (ire_flat ${byProf.ire_flat.length}/${EM_REAL_MIN} · ire_nh ${byProf.ire_nh.length}/${EM_REAL_MIN}).${allIre>races.length?` ${allIre-races.length} older Irish races were logged before Emerald scoring and are excluded from these stats.`:''}</div>`;
     h+=`<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px;margin-bottom:12px">
       ${tile('Emerald races',races.length.toLocaleString(),`ire_flat ${byProf.ire_flat.length} · ire_nh ${byProf.ire_nh.length}`)}
       ${tile('Top-pick win SR',E.n?E.sr.toFixed(1)+'%':'—',P.n?`Prixm on the same races ${P.sr.toFixed(1)}%`:'',E.sr>=P.sr?'#15803d':'#dc2626')}
@@ -4762,8 +4829,8 @@ function suggest(c,price){
   if(!c.cat)return none(`Not a ${c.em?'☘ Emerald':'Prixm'} pick`);
   if(c.tight)return none('Tight race: the engine can\'t separate the top runners');
   if(c.verif==='FLAGGED')return none('Verification Pass 🚫 FLAGGED');
-  const W=winChance(c),p=W.p,paper=c.em||c.seg==='silver'||c.seg==='bronze';
-  const paperWhy=c.em?'☘ Emerald is track-only: paper stake, not real money yet':c.seg==='silver'?'🥈 Silver is paper-only':c.seg==='bronze'?'🥉 Bronze is paper-only':'';
+  const emLive=c.em&&emReady(c.race),W=winChance(c),p=W.p,paper=(c.em&&!emLive)||c.seg==='silver'||c.seg==='bronze';
+  const paperWhy=c.em&&!emLive?`☘ Emerald ${classifyEmeraldProfile(c.race)} has ${emProfileCount(c.race)}/300 races: paper stake until 300`:c.seg==='silver'?'🥈 Silver is paper-only':c.seg==='bronze'?'🥉 Bronze is paper-only':'';
   const bank=effBank(),kd=brakeOn()?6:4,maxU=Math.min(set.max,c.seg==='golden'&&c.verif==='CONFIRMED'?5:3);
   const why=W.rows.map(([t])=>t);why.push(`Win chance ${(p*100).toFixed(1)}% · fair price ${(1/p).toFixed(2)}`);
   if(kd===6)why.push('Losing-run brake: ⅙ Kelly until a winning day');
@@ -4823,6 +4890,19 @@ function openModal(vk,ri,name,presetU){
   if(presetU){window.lgUnit('u');document.getElementById('lgStake').value=presetU;}
   window.lgUpd();setTimeout(()=>{const f=document.getElementById(M.c?'lgStake':'lgHorse');f&&f.focus();},30);
 }
+// ⇥ Tab / Shift+Tab inside any Ledger modal jumps between the input boxes only (skips the chip buttons), then the main footer button.
+// Tab in the horse search with suggestions open = take the highlighted horse (acca: stays in the search to add the next leg).
+document.addEventListener('keydown',e=>{
+  if(e.key!=='Tab'||e.altKey||e.ctrlKey||e.metaKey)return;const mod=e.target.closest&&e.target.closest('.lg-modal');if(!mod)return;
+  const ac=document.getElementById('lgAc');
+  if(e.target.id==='lgHorse'&&!e.shiftKey&&ac&&ac.style.display!=='none'&&(window._lgAc||[]).length&&window._lgAcIdx>=0){
+    window.lgPick(window._lgAcIdx);if(M&&multiMode()){e.preventDefault();return;}}
+  const vis=x=>x.offsetParent!==null&&!x.disabled&&!x.readOnly;
+  const f=[...mod.querySelectorAll('input,select,textarea')].filter(vis),foot=[...mod.querySelectorAll('.lg-mf button')].filter(vis).pop();if(foot)f.push(foot);
+  if(!f.length)return;e.preventDefault();
+  let i=f.indexOf(e.target);i=i<0?0:(i+(e.shiftKey?-1:1)+f.length)%f.length;const n=f[i];n.focus();
+  if(n.tagName==='INPUT'&&/^(text|number|)$/.test(n.type||'')&&n.select)try{n.select();}catch(_){}
+});
 window.lgClose=()=>{const el=document.getElementById('lgModal');if(el)el.innerHTML='';M=null;};
 const multiMode=()=>M.type==='ACCA'||M.type==='OTHER';
 const fixedMulti=()=>M.type==='OTHER'&&M.multi&&M.multi!=='CUSTOM';
@@ -4950,7 +5030,8 @@ window.lgUpd=()=>{
       if(su>s.u*1.5)adv+=`<div class="lg-adv lg-w">⚠ Your stake (${su.toFixed(2)}u) is well above the suggestion.</div>`;}
     M.sug=s.u;}
   const tot=P?P.total:su;
-  if(tot&&!M.free&&!(c&&c.em)&&!(multiMode()&&M.legs.length&&M.legs.every(l=>l.em))&&realTodayU()+tot>dailyBudgetU())adv+=`<div class="lg-adv lg-w">⚠ This takes today to ${(realTodayU()+tot).toFixed(1)}u — over today's ${dailyBudgetU()}u budget.</div>`;
+  const _emPaper=l=>l.em&&!emReady(D.venues[l.vk].races[l.ri]);
+  if(tot&&!M.free&&!(c&&c.em&&!emReady(c.race))&&!(multiMode()&&M.legs.length&&M.legs.every(_emPaper))&&realTodayU()+tot>dailyBudgetU())adv+=`<div class="lg-adv lg-w">⚠ This takes today to ${(realTodayU()+tot).toFixed(1)}u — over today's ${dailyBudgetU()}u budget.</div>`;
   document.getElementById('lgAdv').innerHTML=adv;
   const label=M.type==='OTHER'&&M.multi&&M.multi!=='CUSTOM'?M.multi+(M.ew?' EW':''):M.type==='ACCA'?(M.legs.length>=2?M.legs.length+'-fold acca':''):M.type;
   const h=multiMode()?label:c?c.r.name+' · '+M.type:'';
@@ -5093,7 +5174,7 @@ function render(){
       <b>1 · Win chance</b> — how this kind of pick has actually done in your logged results (engine × confidence × gap × handicap), pulled toward the average when the sample is small; then ⭐ Golden, Verification, 🧭 track fit (measured lifts) and volatile-race adjustments.<br>
       <b>2 · Stake</b> — ¼ Kelly × staking bank: bigger for a bigger edge, small for outsiders (Kelly allows for how often they lose). Nothing under +3% value. Max 3u; 5u only for ⭐ Golden + ✅ CONFIRMED.<br>
       <b>3 · Daily budget</b> — ${set.pct}% of today's staking bank. Picks are funded strongest first; the day's strongest bet is always funded in full.<br>
-      <b>4 · Guards</b> — tight race or Verification 🚫 → no bet (left blank) · 3 losing days → ⅙ Kelly until a winning day · ☘ Emerald / Silver / Bronze stakes are paper and never use the budget.<br>
+      <b>4 · Guards</b> — tight race or Verification 🚫 → no bet (left blank) · 3 losing days → ⅙ Kelly until a winning day · Silver / Bronze stakes (and ☘ Emerald until its profile has 300 races) are paper and never use the budget.<br>
       <b>Staking bank</b> — ${set.bank>0?'your starting bank':'notional 100u (no starting bank set)'} + settled P&amp;L = £${effBank().toFixed(0)}.</div>`);
     h+=`</div></div>`+histCard;
     el.innerHTML=h;
@@ -5638,6 +5719,9 @@ window.xaClearStaleCache=xaClearStaleCache;
 /* ==================== PROFILE CLASSIFIER ==================== */
 // ☘ Emerald calibration profiles for Irish races (Dundalk AW sits in ire_flat — see results_fetcher.classify_profile)
 function classifyEmeraldProfile(race){return /hurdle|chase|nh flat|bumper/i.test((race&&(race.race_type||race.type))||'')?'ire_nh':'ire_flat';}
+// ☘ real money: an Irish race's profile (ire_flat / ire_nh) is live once it has EM_REAL_MIN (300) logged Emerald races (2026-11-14, all Irish tracks/race types)
+function emProfileCount(race){const pf=classifyEmeraldProfile(race),h=window._emeraldHistory;if(!h||!h.races)return 0;if(!window._emCnt||window._emCnt.n!==h.races.length){const c={ire_flat:0,ire_nh:0};h.races.forEach(r=>{if((r.results||[]).some(x=>x.score_breakdown&&'stable_power' in x.score_breakdown))c[r.profile||classifyEmeraldProfile(r)]=(c[r.profile||classifyEmeraldProfile(r)]||0)+1;});window._emCnt={n:h.races.length,c};}return window._emCnt.c[pf]||0;} // same count as the ☘ Emerald tab (Emerald-scored races only), cached
+function emReady(race){return emProfileCount(race)>=300;}
 function classifyProfile(surface,raceType,course){
   const rt=(raceType||'').toLowerCase(),s=(surface||'').toLowerCase();
   // racecards have no surface field → callers pass the going; AW going is "Standard"/"Standard To Slow|Fast" (fixed 2026-10-11)
@@ -5800,6 +5884,11 @@ function getPicksCalibrationHistory(){
 }
 
 /* ==================== DAILY PICKS CALENDAR ==================== */
+// ‹ › month paging for the Prixm picks calendar (shows/hides the pre-rendered months, no re-render)
+function pcalNav(d){const c=document.getElementById('pcal');if(!c)return;const ms=c.querySelectorAll('.pcal-m'),n=ms.length;if(!n)return;
+  const i=Math.min(Math.max((window._pcalIdx||0)+d,0),n-1);window._pcalIdx=i;ms.forEach((m,k)=>m.style.display=k===i?'block':'none');
+  const l=document.getElementById('pcalLbl');if(l)l.textContent=ms[i].dataset.label;
+  c.querySelectorAll('[data-pcal]').forEach(b=>{const off=(+b.dataset.pcal===1&&i>=n-1)||(+b.dataset.pcal===-1&&i<=0);b.disabled=off;b.style.opacity=off?.3:1;b.style.cursor=off?'default':'pointer';});}
 function renderPicksCalendar(){
   const allDates=getAllPicksDates();
   const hist=window._resultsHistory;
@@ -5814,7 +5903,8 @@ function renderPicksCalendar(){
       dailyStats[date]={
         winPct:Math.round(perf.wins/perf.logged*100),
         placePct:Math.round(perf.places/perf.logged*100),
-        wins:perf.wins,places:perf.places,logged:perf.logged,total:perf.total
+        wins:perf.wins,places:perf.places,logged:perf.logged,total:perf.total,
+        pl:perf.pl,plBets:perf.plBets,noSp:perf.noSp
       };
     }else{
       dailyStats[date]={winPct:null,placePct:null,wins:0,places:0,logged:0,total:perf.total};
@@ -5828,17 +5918,32 @@ function renderPicksCalendar(){
     months[m].push(d);
   });
   const sortedMonths=Object.keys(months).sort().reverse();
-  let html=`<div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:16px">
-    <div style="font-size:14px;font-weight:700;margin-bottom:12px">📅 Daily Prixm Picks Performance</div>`;
-  sortedMonths.forEach(ym=>{
+  // one month at a time (‹ › to page back/forward); index kept across re-renders, 0 = latest month
+  const nM=sortedMonths.length;let cur=Math.min(Math.max(window._pcalIdx||0,0),nM-1);
+  let html=`<div id="pcal" data-n="${nM}" style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 18px;margin-bottom:16px;max-width:760px">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px">
+      <div style="font-size:13px;font-weight:700">📅 Daily Prixm Picks</div>
+      <div style="display:flex;align-items:center;gap:4px">
+        <button class="vbtn" data-pcal="1" onclick="pcalNav(1)" aria-label="Previous month" style="padding:2px 9px;font-size:13px">‹</button>
+        <span id="pcalLbl" style="font-size:12px;font-weight:600;min-width:112px;text-align:center"></span>
+        <button class="vbtn" data-pcal="-1" onclick="pcalNav(-1)" aria-label="Next month" style="padding:2px 9px;font-size:13px">›</button>
+      </div></div>`;
+  sortedMonths.forEach((ym,mi)=>{
     const [yr,mo]=ym.split('-');
     const monthName=new Date(yr,mo-1,1).toLocaleString('en-GB',{month:'long',year:'numeric'});
     const firstDay=new Date(yr,mo-1,1).getDay();// 0=Sun
     const daysInMonth=new Date(yr,mo,0).getDate();
     const offset=(firstDay+6)%7;// Mon=0
-    html+=`<div style="margin-bottom:14px">
-      <div style="font-size:12px;font-weight:600;color:var(--muted);margin-bottom:6px">${monthName}</div>
-      <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;font-size:10px;text-align:center">
+    const ms=months[ym].map(d=>dailyStats[d]).filter(x=>x&&x.logged),mw=ms.reduce((a,x)=>a+x.wins,0),mp=ms.reduce((a,x)=>a+x.places,0),ml=ms.reduce((a,x)=>a+x.logged,0);
+    const mpl=ms.reduce((a,x)=>a+(x.pl||0),0),mb=ms.reduce((a,x)=>a+(x.plBets||0),0),mns=ms.reduce((a,x)=>a+(x.noSp||0),0);
+    const plCol=v=>v>0?'#16a34a':v<0?'#dc2626':'var(--muted)',plTxt=v=>(v>0?'+':v<0?'−':'')+Math.abs(v).toFixed(2)+'u';
+    html+=`<div class="pcal-m" data-label="${monthName}" style="display:${mi===cur?'block':'none'}">
+      ${ml?`<div style="display:flex;flex-wrap:wrap;gap:6px 16px;align-items:baseline;font-size:12px;color:var(--muted);margin-bottom:10px">
+        <span>Win <b style="color:var(--text);font-size:14px">${Math.round(mw/ml*100)}%</b> (${mw}/${ml})</span>
+        <span>Place <b style="color:var(--text);font-size:14px">${Math.round(mp/ml*100)}%</b> (${mp}/${ml})</span>
+        <span title="Every pick backed as a 1u WIN single at SP. Non-runners void.${mns?` ${mns} winner(s) with no SP logged are left out.`:''}">1u singles at SP <b style="color:${plCol(mpl)};font-size:15px">${plTxt(mpl)}</b> · ${mb} bets · ROI <b style="color:${plCol(mpl)}">${mb?(mpl/mb*100).toFixed(1):'0'}%</b>${mns?` <span style="font-size:10px">(${mns} no SP)</span>`:''}</span>
+      </div>`:'<div style="font-size:12px;color:var(--muted);margin-bottom:10px">No results logged yet</div>'}
+      <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;font-size:11px;text-align:center">
         <div style="color:var(--muted);font-weight:600">Mon</div><div style="color:var(--muted);font-weight:600">Tue</div><div style="color:var(--muted);font-weight:600">Wed</div><div style="color:var(--muted);font-weight:600">Thu</div><div style="color:var(--muted);font-weight:600">Fri</div><div style="color:var(--muted);font-weight:600">Sat</div><div style="color:var(--muted);font-weight:600">Sun</div>`;
     // Empty cells for offset
     for(let i=0;i<offset;i++) html+='<div></div>';
@@ -5846,22 +5951,24 @@ function renderPicksCalendar(){
       const dateStr=ym+'-'+String(day).padStart(2,'0');
       const stat=dailyStats[dateStr];
       if(!stat){
-        html+=`<div style="padding:4px 2px;border-radius:4px;color:var(--muted);opacity:.3">${day}</div>`;
+        html+=`<div style="padding:7px 2px;border-radius:5px;color:var(--muted);opacity:.3">${day}</div>`;
       }else if(stat.logged===0){
-        html+=`<div style="padding:4px 2px;border-radius:4px;background:var(--card2);color:var(--muted);cursor:default" title="${dateStr}: ${stat.total} picks, not yet logged">${day}<div style="font-size:8px">—</div></div>`;
+        html+=`<div style="padding:7px 2px;border-radius:5px;background:var(--card2);color:var(--muted);cursor:default" title="${dateStr}: ${stat.total} picks, not yet logged">${day}<div style="font-size:8px">—</div></div>`;
       }else{
         const bg=stat.placePct>=70?'rgba(5,150,105,.25)':stat.placePct>=50?'rgba(5,150,105,.15)':stat.placePct>=30?'rgba(251,191,36,.15)':'rgba(239,68,68,.15)';
         const border=stat.placePct>=70?'rgba(5,150,105,.5)':stat.placePct>=50?'rgba(5,150,105,.3)':stat.placePct>=30?'rgba(251,191,36,.3)':'rgba(239,68,68,.3)';
         const wCol=stat.winPct>=40?'var(--accent)':stat.winPct>=20?'var(--gold)':'var(--danger)';
-        html+=`<div style="padding:4px 2px;border-radius:4px;background:${bg};border:1px solid ${border};cursor:default;line-height:1.2" title="${dateStr}:\nWin: ${stat.winPct}% (${stat.wins}/${stat.logged})\nPlace: ${stat.placePct}% (${stat.places}/${stat.logged})">
+        html+=`<div style="padding:7px 2px;border-radius:5px;background:${bg};border:1px solid ${border};cursor:default;line-height:1.15" title="${dateStr}:\nWin: ${stat.winPct}% (${stat.wins}/${stat.logged})\nPlace: ${stat.placePct}% (${stat.places}/${stat.logged})\n1u singles at SP: ${stat.pl>=0?"+":""}${(stat.pl||0).toFixed(2)}u (${stat.plBets} bets)${stat.noSp?" · "+stat.noSp+" winner(s) no SP":""}">
           <div style="font-weight:700">${day}</div>
-          <div style="font-size:8px;color:${wCol}">W${stat.winPct}%</div>
-          <div style="font-size:8px;color:var(--text)">P${stat.placePct}%</div>
+          <div style="font-size:10px;color:${wCol}">W${stat.winPct}%</div>
+          <div style="font-size:10px;color:var(--text)">P${stat.placePct}%</div>
+          ${stat.plBets?`<div style="font-size:10px;font-weight:700;color:${stat.pl>0?'#16a34a':stat.pl<0?'#dc2626':'var(--muted)'}">${stat.pl>0?'+':stat.pl<0?'−':''}${Math.abs(stat.pl).toFixed(1)}u</div>`:''}
         </div>`;
       }
     }
     html+=`</div></div>`;
   });
+  setTimeout(()=>pcalNav(0),0);
   // Legend
   html+=`<div style="display:flex;gap:10px;font-size:10px;color:var(--muted);flex-wrap:wrap;border-top:1px solid var(--border);padding-top:8px;margin-top:4px">
     <span><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:rgba(5,150,105,.25);border:1px solid rgba(5,150,105,.5);vertical-align:middle"></span> ≥70% placed</span>
@@ -5878,13 +5985,16 @@ function renderPicksCalendar(){
 // Performance tab engine toggle — the two engines' results never mix
 function perfEngineToggle(){
   const e=st.perfEngine||'prixm';
-  const b=(k,l,col)=>`<button class="vbtn${e===k?' on':''}" style="font-size:12px;${e===k&&col?'background:'+col+';border-color:'+col+';color:#fff':''}" onclick="st.perfEngine='${k}';renderPerformance()">${l}</button>`;
+  const b=(k,l)=>`<button class="vbtn seg-btn${k==='emerald'?' seg-em':''}${e===k?' on':''}" aria-pressed="${e===k}" style="font-size:12px" onclick="if(st.perfEngine!=='${k}'){st.perfEngine='${k}';renderPerformance()}">${l}</button>`;
   return `<div style="display:flex;gap:8px;margin-bottom:14px;align-items:center;flex-wrap:wrap">${b('prixm',engineLabel()+' · UK')}${b('emerald','☘ '+emeraldLabel()+' · IRE','#0f766e')}<span style="font-size:11px;color:var(--muted)">UK and Irish results are kept separate.</span></div>`;
 }
 async function renderPerformance(){
   const el=document.getElementById('perfContent');
+  // engine switch lives outside perfContent → it never re-renders/jumps; keep the page where it is
+  const _y=window.scrollY;const eb=document.getElementById('perfEngineBar');if(eb)eb.innerHTML=perfEngineToggle();
+  requestAnimationFrame(()=>{if(Math.abs(window.scrollY-_y)>2)window.scrollTo(0,Math.min(_y,document.documentElement.scrollHeight));});
   if(st.perfEngine==='emerald'){
-    el.innerHTML=perfEngineToggle()+'<div id="perfEmerald"></div>';
+    el.innerHTML='<div id="perfEmerald"></div>';
     window.renderEmeraldTab&&window.renderEmeraldTab('perfEmerald');
     return;
   }
@@ -6069,8 +6179,8 @@ async function renderPerformance(){
       </div>
     </div>`;
     h+=renderPicksCalendar();
-    h+=`<div style="display:flex;gap:8px;margin-bottom:8px">${profiles.map(p=>`<button class="vbtn${p===pf?' on':''}" onclick="window._rpf('${p}',window._rhf||'all')" style="font-size:12px">${pLabels[p]}</button>`).join('')}</div>`;
-    h+=`<div style="display:flex;gap:8px;margin-bottom:16px">${[['all','All Races'],['non_handicap','Non-Handicap'],['handicap','Handicap']].map(([v,l])=>`<button class="vbtn${hf===v?' on':''}" onclick="window._rpf('${pf}','${v}')" style="font-size:12px">${l}</button>`).join('')}</div>`;
+    h+=`<div style="display:flex;gap:8px;margin-bottom:8px">${profiles.map(p=>`<button class="vbtn seg-btn${p===pf?' on':''}" aria-pressed="${p===pf}" onclick="window._rpf('${p}',window._rhf||'all')" style="font-size:12px">${pLabels[p]}</button>`).join('')}</div>`;
+    h+=`<div style="display:flex;gap:8px;margin-bottom:16px">${[['all','All Races'],['non_handicap','Non-Handicap'],['handicap','Handicap']].map(([v,l])=>`<button class="vbtn seg-btn${hf===v?' on':''}" aria-pressed="${hf===v}" onclick="window._rpf('${pf}','${v}')" style="font-size:12px">${l}</button>`).join('')}</div>`;
     // Race count cards + unified calibration button with dynamic gating
     const totalRaces=(s.pc.aw||0)+(s.pc.turf_flat||0)+(s.pc.nh||0);
     const hist=window._resultsHistory;
@@ -6319,7 +6429,7 @@ async function renderPerformance(){
     if(!s.tiers.length&&!Object.keys(s.corrs).length){
       h+='<div class="nodata"><p>No results data for this filter yet.</p></div>';
     }
-    el.innerHTML=perfEngineToggle()+h+renderXaValidationCard('prixm');
+    el.innerHTML=h+renderXaValidationCard('prixm');
   }
   window._rpf=renderPerfHTML;
   window._rhf=window._rhf||'all';
@@ -6868,7 +6978,7 @@ function showGuide(){
         <li><b>Base factors</b> — Prixm's 13 (generic draw removed), re-capped. Going / Course / Distance use the horse's <b>own logged runs</b> instead of fixed values.</li>
         <li><b>☘ Draw bias (5)</b> — draw vs this track's logged draw results at this trip. <b>☘ Track fit (6)</b> — the Horse × Track cross analysis (validated checks only). <b>☘ Stable power (6)</b> — Irish trainer/jockey tiers in Irish name formats (e.g. "W P Mullins") + logged strike rates + RTF.</li>
         <li>Irish cards show a <b>☘ Emerald</b> badge and a faded <i>"Prixm would say…"</i> line for comparison. Every Irish runner keeps its Prixm score.</li>
-        <li><b>Track only:</b> Emerald picks sit in their own sidebar panel and are never counted in Prixm P&amp;L, Golden, Silver or Bronze. Real-money segments unlock at 300 Emerald-scored races per profile (ire_flat / ire_nh).</li>
+        <li><b>Real money from 300 races:</b> Emerald picks sit in their own sidebar panel and are never counted in Prixm P&amp;L, Golden, Silver or Bronze. Once a profile (ire_flat / ire_nh) has 300 Emerald-scored races, the 💷 Ledger advisor gives real stakes on every Irish track, with the same +3% EV and ¼ Kelly rules as Prixm — until then they are paper.</li>
         <li>Own results log, own calibration (☘ Emerald tab → Run Emerald calibration) and own version history — Prixm stays UK-only and is untouched.</li>
       </ul>
     </div>
@@ -6927,6 +7037,17 @@ function showGuide(){
         <li>Top-level <b>🐎 MT</b> tab: pick a venue chip and a race time (or ◀ ▶), then <b>▶ Run it</b>. Galloping horses — each jockey wearing the runner's <b>real silks</b> — run the race's <b>own track</b> (left/right-handed oval, or a wide straight course) and pull up after the line. The winner gets a ring and <b>🏆 WINNER</b>. Speed 0.5× / 1× / 2×.</li>
         <li>Finishing order = the engine's predicted order and gaps at the line = predicted lengths (same as 🔮 Predict). Early positions from the pace map + draw; the mid-race moves are for show — <b>illustrative, not a real race</b>.</li>
         <li>Race header shows gap / score / confidence and the ⭐ / 🥈 / 🥉 badge. <b>Open race →</b> jumps to the full race view. Display only — never changes scores or segments.</li>
+      </ul>
+    </div>
+
+    <!-- WEIGHT VS LAST RUN -->
+    <div class="guide-section" style="border-left-color:#e0a84a">
+      <h3><span class="gi">⚖</span> Weight vs last run (both engines)</h3>
+      <ul style="font-size:11.5px;margin:6px 0 0 16px;line-height:1.6">
+        <li>A chip next to the weight (runner table + phone cards): <span class="wtc wtc-up">▲ OR +4</span> rating raised by the handicapper since its last run · <span class="wtc wtc-pen">⚑ Pen +7lb</span> won last time and carries more (winner's penalty) · <span class="wtc wtc-info">+5lb</span> more weight but rating unchanged (just this race's weights).</li>
+        <li>Open the runner → <b>⚖ Weight vs last run</b> panel: last run vs today — date, race type, result, weight, OR.</li>
+        <li>Shown only when it's comparable: the logged run must be the horse's <b>real last run</b> (matches Racing Post's days since last run), same code (Flat/AW vs jumps). Handicaps: OR up, or more weight with OR the same. Non-handicaps: winner's penalty only. Less weight, OR dropped, or no data → <b>nothing</b>.</li>
+        <li><b>Context, not a bet signal</b>: raised horses and penalised winners do win more than their rank suggests, but a re-score test (15 Nov 2026) found the price already reflects it — so it never changes scores, gaps or segments.</li>
       </ul>
     </div>
 
@@ -8073,7 +8194,7 @@ function renderD1Sidebar(){
         <span class="d1-panel-date">IRE · ${emeraldLabel()}</span>
       </div>
       ${emHtml}
-      <div style="font-size:10px;color:var(--muted);padding:6px 12px;background:var(--card2)">Track only — not counted in Prixm P&amp;L or Golden.</div>
+      <div style="font-size:10px;color:var(--muted);padding:6px 12px;background:var(--card2)">Separate from Prixm P&amp;L and Golden · real stakes via 💷 Ledger (EV-gated).</div>
     </div>`:''}
     <div class="d1-panel">
       <div class="d1-panel-hdr">
@@ -8919,7 +9040,7 @@ function isExcludedVenue(venue){
 function analyzePicksPerformance(picks,hist,dateOverride){
   // Analyze how picks performed: wins, places, factor patterns
   // Also track how AVOID/WEAK horses did in the same races (reverse validation)
-  let total=0,wins=0,places=0,logged=0,nrs=0;
+  let total=0,wins=0,places=0,logged=0,nrs=0,pl=0,plBets=0,noSp=0; // pl = level 1u win singles at SP (NR = void)
   let avoidsTotal=0,avoidsBottomHalf=0,avoidsBottomQ=0;
   const factorWins={},factorLosses={};
   const factors=['form','rating','trainer','jockey','fitness','class','going','course','distance','age','weight','draw','headgear','spotlight'];
@@ -8931,6 +9052,7 @@ function analyzePicksPerformance(picks,hist,dateOverride){
     if(!res) return;
     if(res.status==='nr'||res.status==='pu'){nrs++;return;}
     logged++;
+    if(res.status==='won'){const sp=parseFloat(res.sp);if(sp>1){pl+=sp-1;plBets++;}else noSp++;}else{pl-=1;plBets++;}
     const bd=p.scoreBreakdown||{};
     if(res.status==='won'||res.status==='placed'){
       if(res.status==='won') wins++;
@@ -8956,7 +9078,7 @@ function analyzePicksPerformance(picks,hist,dateOverride){
       });
     }
   });
-  return {total,wins,places,logged,nrs,factorWins,factorLosses,avoidsTotal,avoidsBottomHalf,avoidsBottomQ};
+  return {total,wins,places,logged,nrs,pl,plBets,noSp,factorWins,factorLosses,avoidsTotal,avoidsBottomHalf,avoidsBottomQ};
 }
 
 function generateFeedbackInsights(perf,prevPerf){
@@ -10580,10 +10702,10 @@ function renderMainTab(runners,race,vk,ri){
     const hrsBadge=bhrs?`<span class="ban-hrs-badge">🚫 HORSE</span>`:'';
     let rows=`<tr class="${rowCl} expandable" style="${attrRowStyle}" onclick="toggleExp('${r.name.replace(/'/g,"\\'")}')">
       <td style="font-weight:700;color:var(--muted)">${r.number||'—'}</td>
-      <td>${r.silk_url?`<img class="rsilk" src="${r.silk_url}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">`:''}<div style="font-weight:700;font-size:14px"><button class="wl-track-btn ${isWatched(r.name)?'tracked':''}" onclick="event.stopPropagation();toggleWatch('${r.name.replace(/'/g,"\\'")}','${(race.course||'').replace(/'/g,"\\'")}','${(race.name||'').replace(/'/g,"\\'")}')" title="${isWatched(r.name)?'Remove from watchlist':'Add to watchlist'}">${isWatched(r.name)?'TRACKING':'TRACK'}</button><button class="bet-btn ${isBetted(r.name,race.time||'',race.course||'')?'betting':''}" onclick="event.stopPropagation();toggleBet('${r.name.replace(/'/g,"\\'")}','${(race.time||'').replace(/'/g,"\\'")}','${(race.course||'').replace(/'/g,"\\'")}',${r.score||0})">${isBetted(r.name,race.time||'',race.course||'')?'BETTING':'BET'}</button><button class="cmpsel-btn${st.compareSelect.has(r.name)?' on':''}" id="cmpsel_${r.name.replace(/[^a-zA-Z0-9]/g,'_')}" onclick="event.stopPropagation();hcmpToggle('${r.name.replace(/'/g,"\\'")}')" title="Add to compare">${st.compareSelect.has(r.name)?'✓':'+CMP'}</button>${r.name}${hrsBadge}${rankBadge(r.name)}${getRunnerComboBadges(r)}${getCourseSpecialistBadge(r,race)}${getWatchbackBadge(r,race)}${r.price?`<span class="price-dec">${parseFloat(r.price).toFixed(2)}</span>`:''}</div><div style="font-size:11px;color:var(--muted)">${jkyHtml} · ${r.trainer||'?'} ${getConnectionChangeBadge(r)}</div></td>
-      <td>${formHtml(r.form)}${r.age||r.lbs?`<span class="ph-agewt"> · ${r.age?r.age+'yo':''}${r.age&&r.lbs?' · ':''}${r.lbs?wtStr(r.lbs):''}</span>`:''}</td>
+      <td>${r.silk_url?`<img class="rsilk" src="${r.silk_url}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">`:''}<div style="font-weight:700;font-size:14px"><button class="wl-track-btn ${isWatched(r.name)?'tracked':''}" onclick="event.stopPropagation();toggleWatch('${r.name.replace(/'/g,"\\'")}','${(race.course||'').replace(/'/g,"\\'")}','${(race.name||'').replace(/'/g,"\\'")}')" title="${isWatched(r.name)?(getWatchNote(r.name)?'📝 '+wlEsc(getWatchNote(r.name))+' — click to remove':'Remove from watchlist'):'Add to watchlist (you can add a note why)'}">${isWatched(r.name)?'TRACKING':'TRACK'}</button><button class="bet-btn ${isBetted(r.name,race.time||'',race.course||'')?'betting':''}" onclick="event.stopPropagation();toggleBet('${r.name.replace(/'/g,"\\'")}','${(race.time||'').replace(/'/g,"\\'")}','${(race.course||'').replace(/'/g,"\\'")}',${r.score||0})">${isBetted(r.name,race.time||'',race.course||'')?'BETTING':'BET'}</button><button class="cmpsel-btn${st.compareSelect.has(r.name)?' on':''}" id="cmpsel_${r.name.replace(/[^a-zA-Z0-9]/g,'_')}" onclick="event.stopPropagation();hcmpToggle('${r.name.replace(/'/g,"\\'")}')" title="Add to compare">${st.compareSelect.has(r.name)?'✓':'+CMP'}</button>${r.name}${hrsBadge}${rankBadge(r.name)}${getRunnerComboBadges(r)}${getCourseSpecialistBadge(r,race)}${getWatchbackBadge(r,race)}${r.price?`<span class="price-dec">${parseFloat(r.price).toFixed(2)}</span>`:''}</div><div style="font-size:11px;color:var(--muted)">${jkyHtml} · ${r.trainer||'?'} ${getConnectionChangeBadge(r)}</div></td>
+      <td>${formHtml(r.form)}${r.age||r.lbs?`<span class="ph-agewt"> · ${r.age?r.age+'yo':''}${r.age&&r.lbs?' · ':''}${r.lbs?wtStr(r.lbs):''}${wtChangeChip(r)}</span>`:''}</td>
       <td style="font-weight:600">${r.age||'?'}</td>
-      <td style="white-space:nowrap">${wtStr(r.lbs)}</td>
+      <td style="white-space:nowrap">${wtStr(r.lbs)}${wtChangeChip(r)}</td>
       <td style="font-weight:600">${r.rpr||'—'}${(()=>{const d=rprDivergenceFlag(r.ofr,r.rpr);return d?` <span title="${d.tooltip.replace(/"/g,'&quot;')}" style="cursor:help">${d.icon}</span>`:'';})()}</td>
       <td>${r.draw||'—'}</td>
       <td>${r.last_run!=null?r.last_run+'d':'—'}</td>
@@ -11709,7 +11831,7 @@ const RTBL_TIPS={
   form:`<b>Form</b> — Recent finishing positions, latest on the right (1–9, 0 = 10th+, P = pulled up, F = fell, U = unseated, / = new season, - = gap). <b>Why it matters:</b> the biggest single factor in the score (max 20) — consistent recent top-3s mean the horse is in good shape.`,
   age:`<b>Age</b> — Horse’s age in years. <b>Why it matters:</b> 3–5yo Flat horses and 6–9yo jumpers are usually at their peak; very young horses are still improving, older ones often in decline.`,
   rpr:`<b>RPR</b> — Racing Post Rating: the best level of performance the horse has shown, in lbs. <b>Why it matters:</b> the quickest way to see who has run the fastest race. Higher than the rest = has already proven it can beat this field. ⬆️/⬇️ = RPR is 10+ above/below the official rating (OR).`,
-  wt:`<b>Wt</b> — Weight carried (st-lb). <b>Why it matters:</b> extra weight slows a horse — roughly 1 length per 1–3 lbs depending on trip. In handicaps the best horse carries the most to even it out; in non-handicaps, lower weight is an edge.`,
+  wt:`<b>Wt</b> — Weight carried (st-lb). <b>Why it matters:</b> extra weight slows a horse — roughly 1 length per 1–3 lbs depending on trip. In handicaps the best horse carries the most to even it out; in non-handicaps, lower weight is an edge. <b>Chip</b>: ▲ OR +n = re-rated up since last run · ⚑ Pen = winner's penalty · +n lb = more weight, same rating (context only).`,
   dr:`<b>Dr</b> — Draw: the starting stall (Flat only; blank over jumps). <b>Why it matters:</b> at tight or sharp tracks (Chester, Beverley, Epsom) and in big sprint fields, a low or high draw can be worth several lengths — check the Track Explorer for this course’s bias.`,
   last:`<b>Last</b> — Days since the horse last ran. <b>Why it matters:</b> ~14–60 days is ideal fitness. Under 7 days risks tiredness (“bounce”); 90+ days can mean rustiness — unless the trainer does well with fresh horses.`,
   score:`<b>Score</b> — Prixm’s total out of MAXS across all 14 factors (☘ Emerald on Irish races). <b>Why it matters:</b> the top score is the pick, and the gap to the 2nd decides Golden/Silver/Bronze/Prime.`,
@@ -11817,6 +11939,9 @@ function renderExpandedRow(r, fieldSize, race){
 
     <!-- ── WATCHBACK FORWARD SIGNAL BANNER (display-only context — Prixm_Watchback_Spec.md) ── -->
     ${race?renderWatchbackContextBanner(r,race):''}
+
+    <!-- ── ⚖ WEIGHT VS LAST RUN (display only, only when runner.wt_change exists) ── -->
+    ${race?renderWeightChangeBox(r,race):''}
 
     <!-- ── WEATHER / GOING SIGNAL BANNER (soft signal, only renders if a shift is flagged) ── -->
     ${race?renderWeatherBanner(r,race):''}
@@ -12050,12 +12175,37 @@ function toggleWatch(horseName, venue, raceName){
   const wl=loadWatchlist();
   const n=(horseName||'').trim();
   const idx=wl.findIndex(w=>w.name.toLowerCase()===n.toLowerCase());
+  let added=false;
   if(idx>=0){wl.splice(idx,1);}
-  else{wl.push({name:n,addedDate:new Date().toISOString().slice(0,10),addedFrom:venue||''});}
+  else{wl.push({name:n,addedDate:new Date().toISOString().slice(0,10),addedFrom:venue||'',note:''});added=true;}
   saveWatchlist(wl);
   // Re-render affected UI
   renderWatchlistPanel();
   renderDetail().catch(()=>{});
+  window.trackedTabRefresh&&window.trackedTabRefresh();
+  if(added&&venue!=='Manual')wlNotePrompt(n); // 📝 ask why it's tracked (optional — Skip leaves it blank)
+}
+const wlEsc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function getWatchNote(horseName){const n=(horseName||'').trim().toLowerCase();const w=loadWatchlist().find(x=>x.name.toLowerCase()===n);return w&&w.note||'';}
+function saveWatchNote(horseName,note){const wl=loadWatchlist(),n=(horseName||'').trim().toLowerCase(),w=wl.find(x=>x.name.toLowerCase()===n);if(!w)return;w.note=(note||'').trim();w.noteDate=new Date().toISOString().slice(0,10);saveWatchlist(wl);renderWatchlistPanel();window.trackedTabRefresh&&window.trackedTabRefresh();renderDetail().catch(()=>{});}
+// 📝 note box — opens after TRACK (or ✏️ in Manage). Ctrl/⌘+Enter saves, Esc / Skip closes. then = callback after closing.
+function wlNotePrompt(horseName,then){
+  const old=document.getElementById('wlNoteBox');if(old)old.remove();
+  const ov=document.createElement('div');ov.id='wlNoteBox';
+  ov.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:1100;display:flex;align-items:center;justify-content:center';
+  const cur=getWatchNote(horseName);
+  ov.innerHTML=`<div role="dialog" aria-label="Watchlist note" style="background:var(--card);color:var(--text);border:1px solid var(--border);border-radius:12px;padding:18px;width:min(420px,92vw)">
+    <div style="font-size:14px;font-weight:800;margin-bottom:4px">👁 ${wlEsc(horseName)}</div>
+    <div style="font-size:11px;color:var(--muted);margin-bottom:8px">${cur?'Edit your note':'Tracked. Why? (optional)'}</div>
+    <textarea id="wlNoteTxt" rows="3" maxlength="300" placeholder="e.g. Unlucky last time — wants soft ground, back at Haydock" style="width:100%;box-sizing:border-box;padding:8px 10px;border:1px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font:inherit;font-size:13px;resize:vertical">${wlEsc(cur)}</textarea>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;gap:8px"><span style="font-size:10px;color:var(--muted)">Ctrl+Enter to save</span>
+      <span style="display:flex;gap:6px"><button class="vbtn" id="wlNoteSkip" style="font-size:12px">${cur?'Cancel':'Skip'}</button><button class="vbtn" id="wlNoteSave" style="font-size:12px;background:#7c3aed!important;color:#fff!important;border-color:#7c3aed!important">Save note</button></span></div></div>`;
+  document.body.appendChild(ov);
+  const ta=ov.querySelector('#wlNoteTxt'),close=()=>{ov.remove();if(then)then();},save=()=>{saveWatchNote(horseName,ta.value);close();};
+  ov.addEventListener('click',e=>{if(e.target===ov)close();});
+  ov.querySelector('#wlNoteSkip').onclick=close;ov.querySelector('#wlNoteSave').onclick=save;
+  ta.addEventListener('keydown',e=>{if(e.key==='Enter'&&(e.ctrlKey||e.metaKey)){e.preventDefault();save();}else if(e.key==='Escape'){e.preventDefault();close();}});
+  setTimeout(()=>{ta.focus();ta.setSelectionRange(ta.value.length,ta.value.length);},20);
 }
 function getWatchlistMatches(){
   // Scan today's loaded data for horses matching the watchlist
@@ -12100,6 +12250,7 @@ function renderWatchlistPanel(){
       <div>
         <div class="wl-card-name">★ ${m.horse}</div>
         <div class="wl-card-meta">${m.time} ${m.venue} · ${m.jockey||''} · ${m.fieldSize}r</div>
+        ${getWatchNote(m.horse)?`<div class="wl-card-meta" style="font-style:italic;margin-top:2px">📝 ${wlEsc(getWatchNote(m.horse))}</div>`:''}
       </div>
       <div class="wl-card-score">
         <div style="font-weight:800;color:${sCol}">${m.score}/${MAX_SCORE}</div>
@@ -12111,6 +12262,7 @@ function renderWatchlistPanel(){
   el.innerHTML=h;
 }
 function openWatchlistModal(){
+  const prev=document.getElementById('wlManageModal');if(prev)prev.remove(); // reopen replaces, never stacks
   const wl=loadWatchlist();
   let h=`<div style="position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:1000;display:flex;align-items:center;justify-content:center" onclick="if(event.target===this)this.remove()">
     <div style="background:var(--card);border-radius:12px;padding:24px;max-width:500px;width:90%;max-height:80vh;overflow-y:auto" onclick="event.stopPropagation()">
@@ -12133,8 +12285,10 @@ function openWatchlistModal(){
         <div>
           <div style="font-weight:700;font-size:13px;color:var(--text)">${w.name}</div>
           <div style="font-size:10px;color:var(--muted)">Added ${w.addedDate||'?'}${w.addedFrom?' from '+w.addedFrom:''}</div>
+          ${w.note?`<div style="font-size:12px;color:var(--text);margin-top:3px;font-style:italic">📝 ${String(w.note).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}</div>`:''}
         </div>
-        <button onclick="toggleWatch('${esc}');openWatchlistModal()" style="background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.3);color:#f87171;border-radius:6px;padding:4px 10px;cursor:pointer;font-size:11px;font-weight:600">Remove</button>
+        <span style="display:flex;gap:6px;flex-shrink:0"><button onclick="wlNotePrompt('${esc}',openWatchlistModal)" title="${w.note?'Edit note':'Add a note'}" style="background:none;border:1px solid var(--border);color:var(--muted);border-radius:6px;padding:4px 8px;cursor:pointer;font-size:11px">✏️ ${w.note?'Note':'Add note'}</button>
+        <button onclick="toggleWatch('${esc}');openWatchlistModal()" style="background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.3);color:#f87171;border-radius:6px;padding:4px 10px;cursor:pointer;font-size:11px;font-weight:600">Remove</button></span>
       </div>`;
     });
   }
@@ -12148,6 +12302,7 @@ function openWatchlistModal(){
   h+=`</div></div>`;
   const container=document.createElement('div');
   container.innerHTML=h;
+  container.firstElementChild.id='wlManageModal';
   document.body.appendChild(container.firstElementChild);
 }
 
@@ -13200,7 +13355,7 @@ function buildMainExportHTML(opts){
   if(opts.emerald){
     let emP=[];try{emP=getPrixmPicks(getTop10Picks(D,'emerald'),'emerald');}catch(e){}
     if(emP.length){
-      h+=secHdr('☘ Emerald Picks <span style="color:'+fg+';font-size:12px;font-weight:800;text-transform:none;letter-spacing:0;margin-left:4px">'+emeraldLabel()+' · Irish racing · track only (not in Prixm P&amp;L)</span>');
+      h+=secHdr('☘ Emerald Picks <span style="color:'+fg+';font-size:12px;font-weight:800;text-transform:none;letter-spacing:0;margin-left:4px">'+emeraldLabel()+' · Irish racing · separate from Prixm P&amp;L</span>');
       h+='<div style="display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap">';
       emP.slice(0,6).forEach(function(p){
         const catCol=p.category==='NAP'?'#7c3aed':p.category==='WIN'?'#059669':p.category==='STRONG'?'#2563eb':'#d97706';
@@ -13525,7 +13680,7 @@ window.toggleTheme=function(){
   // dark text sitting on a cream/sand surface (e.g. the Log bet button) must stay dark
   function onKeptBg(el){for(let e=el,i=0;e&&i<6;e=e.parentElement,i++){const b=parse(getComputedStyle(e).backgroundColor);if(b&&b.a>.5)return keep(b);}return false;}
   function fix(el){
-    if(SKIP.has(el.tagName)||el.closest('svg')||el.classList.contains('nt-cursor')||el.classList.contains('nt-ring')) return;
+    if(SKIP.has(el.tagName)||el.closest('svg')||el.classList.contains('nt-cursor')||el.classList.contains('nt-ring')||el.classList.contains('seg-btn')) return; // seg-btn: own theme rules (selected state must stay visible)
     const cs=getComputedStyle(el);
     // background
     const bg=parse(cs.backgroundColor);
@@ -13593,7 +13748,7 @@ window.toggleTheme=function(){
   const html=document.documentElement;
   const nav=document.getElementById('phNav'), more=document.getElementById('phMore');
   if(!nav||!more) return;
-  const ICON={tabRaces:'🏇',tabGolden:'⭐',tabLedger:'💷',tabEmerald:'☘',tabM:'🐎'};
+  const ICON={tabRaces:'🏇',tabGolden:'⭐',tabLedger:'💷',tabEmerald:'☘',tabM:'🐎',tabTracked:'👁'};
   const label=b=>b.textContent.replace(/[^A-Za-z0-9&%' ]/g,'').replace(/\s+/g,' ').trim();
   const shown=b=>getComputedStyle(b).display!=='none';
   function build(){
@@ -13636,6 +13791,246 @@ window.toggleTheme=function(){
   if(tb) new MutationObserver(build).observe(tb,{attributes:true,attributeFilter:['class','style'],subtree:true});
   build(); syncDate(); setTimeout(()=>{build();syncDate();},1200);
 })();
+</script>
+<script>
+/* ==================== 👁 TRACKED TAB (watchlist horses — full info) ====================
+   Tab tabTracked / switchTab('tracked') / #trackedView. Built from the approved standalone mockup
+   (mockups/tracked_horses_mockup.html, 2026-11-14). Pure reads: loadWatchlist() + window._allHistory (both engines)
+   + today's card D. Display only — never changes scores, picks or P&L. Both themes (vars on .trk), phone stacks. */
+(function(){
+'use strict';
+const CSS=`
+.trk{--t-bg:#fff;--t-card:#fafaf8;--t-card2:#f3f1ec;--t-line:#e5e0d8;--t-line2:#d6d0c6;--t-text:#111827;--t-muted:#6b7280;--t-muted2:#4b5563;--t-acc:#9a7b4f;--t-inv:#111827;--t-invt:#fff;--t-win:#15803d;--t-place:#1d4ed8;--t-lose:#dc2626;--t-gold:#b45309;--t-grid:#ece8e1;--t-hi:rgba(154,123,79,.08)}
+html[data-theme="nothing"] .trk{--t-bg:#0a0a0a;--t-card:#111;--t-card2:#0f0f0f;--t-line:#1f1f1f;--t-line2:#2a2a2a;--t-text:#f5f2eb;--t-muted:#7d786f;--t-muted2:#9a948a;--t-acc:#c8b89a;--t-inv:#f5f2eb;--t-invt:#0a0a0a;--t-win:#9fd6ae;--t-place:#93b4e8;--t-lose:#e59a8c;--t-gold:#d9b25c;--t-grid:#1c1c1c;--t-hi:rgba(200,184,154,.07)}
+.trk{color:var(--t-text);font-family:'DM Mono',ui-monospace,monospace;font-size:13px;line-height:1.45}
+.trk .bb{font-family:'Bebas Neue',Impact,'Arial Narrow',sans-serif;font-weight:400}
+.trk h1{font-family:'Bebas Neue',Impact,sans-serif;font-weight:400;font-size:60px;letter-spacing:.02em;line-height:.9;margin:0;color:var(--t-text)}
+.trk h1 span{-webkit-text-stroke:1px var(--t-text);color:transparent}
+.trk .sub{color:var(--t-muted);font-size:11px;letter-spacing:.18em;text-transform:uppercase;margin-top:6px}
+.trk .kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border:1px solid var(--t-line);margin:18px 0 14px}
+.trk .kpi{padding:14px 16px;border-right:1px solid var(--t-line)}.trk .kpi:last-child{border-right:none}
+.trk .kpi .l{font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--t-muted)}
+.trk .kpi .v{font-family:'Bebas Neue',Impact,sans-serif;font-size:38px;line-height:1;margin-top:6px}
+.trk .kpi .s{font-size:10.5px;color:var(--t-muted2)}
+.trk .bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+.trk .chip{border:1px solid var(--t-line2);background:transparent;color:var(--t-muted);font:inherit;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;padding:7px 12px;cursor:pointer;border-radius:0}
+.trk .chip:hover{color:var(--t-text)}.trk .chip.on{background:var(--t-inv);color:var(--t-invt);border-color:var(--t-inv)}
+.trk .chip b{font-weight:500;opacity:.7;margin-left:4px}
+.trk .sp{flex:1}
+.trk .search{background:transparent;border:1px solid var(--t-line2);color:var(--t-text);font:inherit;padding:7px 10px;min-width:180px;border-radius:0}
+.trk .grid{display:grid;grid-template-columns:360px minmax(0,1fr);gap:16px;align-items:start}
+.trk .list{border:1px solid var(--t-line);max-height:calc(100vh - 70px);overflow:auto;position:sticky;top:60px;overscroll-behavior:contain}
+.trk .hc{display:grid;grid-template-columns:38px minmax(0,1fr) auto;gap:10px;padding:13px 14px;border-bottom:1px solid var(--t-line);cursor:pointer;position:relative}
+.trk .hc:hover{background:var(--t-card2)}.trk .hc.on{background:var(--t-card)}.trk .hc.on::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--t-acc)}
+.trk .silk{width:38px;height:38px;border-radius:50%;background:var(--t-card2);border:1px solid var(--t-line2);display:flex;align-items:center;justify-content:center;overflow:hidden;font-family:'Bebas Neue',Impact,sans-serif;font-size:18px;color:var(--t-acc)}
+.trk .silk img{width:100%;height:100%;object-fit:contain}
+.trk .hn{font-family:'Bebas Neue',Impact,sans-serif;font-size:22px;letter-spacing:.03em;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.trk .hm{font-size:10.5px;color:var(--t-muted);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.trk .hnote{font-size:11px;color:var(--t-muted2);margin-top:5px;font-style:italic;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.trk .fs{display:flex;gap:3px;margin-top:7px}
+.trk .fs i{width:16px;height:16px;font-style:normal;font-size:9.5px;display:flex;align-items:center;justify-content:center;border:1px solid var(--t-line2);color:var(--t-muted)}
+.trk .fs i.w{background:var(--t-win);color:var(--t-invt);border-color:var(--t-win)}.trk .fs i.p{border-color:var(--t-place);color:var(--t-place)}
+html:not([data-theme="nothing"]) .trk .fs i.w{color:#fff}
+.trk .st{font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;text-align:right;white-space:nowrap}
+.trk .st .today{background:var(--t-inv);color:var(--t-invt);padding:3px 7px;display:inline-block}
+.trk .st .t2{color:var(--t-muted);display:block;margin-top:5px}
+.trk .pick{color:var(--t-gold)}
+.trk .det{border:1px solid var(--t-line);min-width:0}
+.trk .hero{padding:22px 24px 18px;border-bottom:1px solid var(--t-line);display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;align-items:end}
+.trk .hero h2{font-family:'Bebas Neue',Impact,sans-serif;font-weight:400;font-size:72px;line-height:.85;margin:0;letter-spacing:.02em;overflow-wrap:anywhere}
+.trk .hero .meta{color:var(--t-muted);font-size:11px;letter-spacing:.14em;text-transform:uppercase;margin-top:10px}
+.trk .acts{display:flex;gap:8px;flex-wrap:wrap}
+.trk .btn{border:1px solid var(--t-line2);background:transparent;color:var(--t-text);font:inherit;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;padding:9px 13px;cursor:pointer;border-radius:0}
+.trk .btn:hover{background:var(--t-inv);color:var(--t-invt)}.trk .btn.pri{background:var(--t-inv);color:var(--t-invt)}.trk .btn.pri:hover{opacity:.85}
+.trk .note{margin:16px 24px 0;border-left:2px solid var(--t-acc);padding:12px 16px;background:var(--t-card2)}
+.trk .note q{font-size:14px;color:var(--t-text);quotes:none;font-style:italic}.trk .note .nd{font-size:10px;color:var(--t-muted);margin-top:4px;letter-spacing:.1em}
+.trk .note.empty q{color:var(--t-muted)}
+.trk .sec{padding:20px 24px;border-top:1px solid var(--t-line)}
+.trk .note+.sec{border-top:none}
+.trk .sh{font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--t-muted);margin-bottom:12px;display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+.trk .sh b{color:var(--t-text);font-weight:400}
+.trk .todayc{border:1px solid var(--t-acc);display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:18px;padding:16px 18px;align-items:center;background:linear-gradient(90deg,var(--t-hi),transparent 60%)}
+.trk .tt{font-family:'Bebas Neue',Impact,sans-serif;font-size:44px;line-height:.9}.trk .tt small{display:block;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.2em;color:var(--t-acc)}
+.trk .tr{font-size:12px}.trk .tr .rn{color:var(--t-muted);font-size:11px;margin-top:3px}
+.trk .tstats{display:grid;grid-template-columns:repeat(5,auto);gap:4px 20px;text-align:right}
+.trk .tstats .l{font-size:9px;letter-spacing:.18em;color:var(--t-muted);text-transform:uppercase}.trk .tstats .v{font-family:'Bebas Neue',Impact,sans-serif;font-size:28px;line-height:1}
+.trk .cols{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr)}
+.trk .cols>.sec+.sec{border-left:1px solid var(--t-line)}
+.trk svg text{font-family:'DM Mono',monospace;fill:var(--t-muted);font-size:9.5px}
+.trk .cond{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:6px 12px;align-items:center;font-size:11.5px}
+.trk .cond .k{color:var(--t-muted);font-size:10px;letter-spacing:.14em;text-transform:uppercase}
+.trk .mb{height:6px;background:var(--t-card2);position:relative;min-width:40px}.trk .mb i{position:absolute;left:0;top:0;bottom:0;background:var(--t-place)}.trk .mb i.w{background:var(--t-win)}
+.trk .cond .r{color:var(--t-muted2);font-size:11px;white-space:nowrap}
+.trk .cond .hi{color:var(--t-acc)}
+.trk .since{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border:1px solid var(--t-line)}
+.trk .since>div{padding:12px 14px;border-right:1px solid var(--t-line)}.trk .since>div:last-child{border-right:none}
+.trk .since .l{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--t-muted)}.trk .since .v{font-family:'Bebas Neue',Impact,sans-serif;font-size:30px;line-height:1.05}
+.trk .runs{width:100%;border-collapse:collapse}
+.trk .runs td{padding:11px 8px;border-top:1px solid var(--t-line);vertical-align:top;font-size:11.5px}
+.trk .runs tr.sincet td:first-child{box-shadow:inset 2px 0 0 var(--t-acc)}
+.trk .runs td.pos{font-family:'Bebas Neue',Impact,sans-serif;font-size:34px;line-height:.9;width:64px;white-space:nowrap}.trk .pos small{font-family:'DM Mono',monospace;font-size:10px;color:var(--t-muted)}
+.trk .pos.w{color:var(--t-win)}.trk .pos.p{color:var(--t-place)}
+.trk .rd{color:var(--t-muted);font-size:10.5px}
+.trk .rv .c{color:var(--t-muted2);font-size:11px;margin-top:4px;max-width:560px}
+.trk .tag{display:inline-block;font-size:9px;letter-spacing:.14em;text-transform:uppercase;padding:2px 6px;border:1px solid var(--t-line2);color:var(--t-muted2);margin:0 4px 3px 0;white-space:nowrap}
+.trk .rk{text-align:right;white-space:nowrap}.trk .rk .v{font-family:'Bebas Neue',Impact,sans-serif;font-size:22px;line-height:1}.trk .rk .l{font-size:9px;color:var(--t-muted);letter-spacing:.14em}
+.trk .divider{font-size:9.5px;letter-spacing:.22em;color:var(--t-acc);text-transform:uppercase;padding:8px;border-top:1px dashed var(--t-line2)!important}
+.trk .conn{display:flex;flex-wrap:wrap;gap:8px}
+.trk .conn span{border:1px solid var(--t-line2);padding:6px 10px;font-size:11px}.trk .conn b{font-weight:400;color:var(--t-acc);margin-left:6px}
+.trk .legend{display:flex;gap:14px;font-size:10px;color:var(--t-muted);letter-spacing:.1em}
+.trk .legend i{display:inline-block;width:12px;height:2px;vertical-align:middle;margin-right:5px}
+.trk .empty{padding:60px 20px;text-align:center;color:var(--t-muted);border:1px solid var(--t-line)}
+@media(max-width:900px){.trk .grid{grid-template-columns:minmax(0,1fr)}.trk .list{position:static;max-height:none}.trk .cols{grid-template-columns:minmax(0,1fr)}.trk .cols>.sec+.sec{border-left:none}
+  .trk .kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.trk .kpi:nth-child(2){border-right:none}.trk .kpi{border-bottom:1px solid var(--t-line)}
+  .trk .hero h2{font-size:50px}.trk .hero{grid-template-columns:minmax(0,1fr);padding:18px 16px}.trk .sec{padding:16px}.trk .note{margin:14px 16px 0}
+  .trk .todayc{grid-template-columns:minmax(0,1fr)}.trk .tstats{text-align:left;grid-template-columns:repeat(3,auto)}.trk h1{font-size:44px}.trk .since{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .trk .since>div:nth-child(2){border-right:none}.trk .since>div:nth-child(-n+2){border-bottom:1px solid var(--t-line)}.trk .search{min-width:0;flex:1 1 100%}.trk .sp{display:none}}`;
+const st=document.createElement('style');st.id='trackedTabCss';st.textContent=CSS;document.head.appendChild(st);
+
+const S={f:'all',q:'',sel:null};
+let VIS=[],CACHE=null;
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const place=fs=>typeof getPlaceLimit==='function'?getPlaceLimit(fs||12):fs<=4?1:fs<=7?2:fs<=15?3:4;
+const dist=f=>{if(!f)return'';const m=Math.floor(f/8),r=Math.round(f%8);return m?(m+'m'+(r?r+'f':'')):r+'f';};
+const today=()=>(window.D&&D.date)||new Date().toISOString().slice(0,10);
+const days=(a,b)=>Math.max(0,Math.round((new Date(b)-new Date(a))/864e5));
+const fmtD=d=>{try{return new Date(d).toLocaleDateString('en-GB',{day:'numeric',month:'short'});}catch(e){return d;}};
+const cap=s=>String(s||'').toLowerCase().replace(/\s*\([^)]*\)/g,'').trim().replace(/\b\w/g,c=>c.toUpperCase());
+const isPl=r=>r.pos&&r.pos<=place(r.field);
+
+function build(){
+  const wl=loadWatchlist(),hist=((window._allHistory&&window._allHistory.races)||(window._resultsHistory&&window._resultsHistory.races)||[]);
+  const key=JSON.stringify(wl)+'|'+hist.length+'|'+today()+'|'+(window.D&&D.venues?Object.keys(D.venues).length:0);
+  if(CACHE&&CACHE.key===key)return CACHE.H;
+  const by={};wl.forEach(w=>{by[w.name.trim().toLowerCase()]={name:w.name,added:w.addedDate||today(),addedFrom:w.addedFrom||'',note:w.note||'',runs:[],today:null};});
+  hist.forEach(race=>{const res=race.results||[];let ranks=null;
+    res.forEach(x=>{const h=by[(x.name||'').trim().toLowerCase()];if(!h)return;
+      if(!ranks){const sc=res.filter(y=>!y.non_runner&&!y.pull_out&&(y.predicted_score||0)>0).sort((a,b)=>b.predicted_score-a.predicted_score);ranks=new Map(sc.map((y,i)=>[y.name,i+1]));}
+      const field=race.field_size||res.filter(y=>!y.non_runner).length;
+      h.runs.push({date:race.date,venue:race.venue,time:race.time,race:race.race_name,going:race.going,df:race.distance_f,cls:race.race_class,field,
+        hcap:!!(race.handicap||/handicap/i.test(race.race_name||'')),pos:x.finish_pos||null,sp:x.sp,spr:x.sp_raw,btn:x.distance_beaten,rank:ranks.get(x.name)||null,
+        jockey:x.jockey,trainer:x.trainer,comment:x.run_comment,style:x.run_style,winner:x.winner_name,winner_sp:x.winner_sp,nr:!!(x.non_runner||x.pull_out)});});});
+  if(window.D&&D.venues)Object.entries(D.venues).forEach(([vk,v])=>(v.races||[]).forEach((race,ri)=>{
+    const rs=[...(race.runners||[])].sort((a,b)=>(b.score||0)-(a.score||0));
+    rs.forEach((x,i)=>{const h=by[(x.name||'').trim().toLowerCase()];if(!h||h.today)return;
+      h.today={vk,ri,venue:race.course||v.course||vk,time:race.time,race:race.race_name||race.name||'',going:race.going||'',dist:race.distance||race.distance_round||'',field:rs.length,rank:i+1,score:x.score,
+        gap:Math.round(((i===0&&rs.length>1)?x.score-rs[1].score:x.score-rs[0].score)*10)/10,price:x.price?+x.price:null,jockey:x.jockey,trainer:x.trainer,silk:x.silk_url,age:x.age,lbs:x.lbs,rpr:x.rpr,ofr:x.ofr,
+        hcap:!!(race.handicap||/handicap/i.test(race.race_name||''))};});}));
+  const H=Object.values(by);H.forEach(h=>h.runs.sort((a,b)=>(b.date+b.time).localeCompare(a.date+a.time)));
+  CACHE={key,H};return H;
+}
+function stats(h){const runs=h.runs.filter(r=>!r.nr&&r.pos),since=runs.filter(r=>r.date>=h.added);
+  return{since,w:since.filter(r=>r.pos===1).length,p:since.filter(isPl).length};}
+function formStrip(h){return h.runs.filter(r=>!r.nr).slice(0,6).reverse().map(r=>`<i class="${r.pos===1?'w':isPl(r)?'p':''}">${r.pos||'-'}</i>`).join('');}
+function wbTag(r){if(r.nr||!r.pos||typeof classifyRun!=='function')return'';const k=classifyRun({finish_pos:r.pos,beaten_distance:r.btn,winner_sp:r.winner_sp});
+  const L=k&&typeof WATCHBACK_LABELS!=='undefined'?WATCHBACK_LABELS[k]:null;if(!L)return'';return `<span class="tag" style="border-color:${L.col};color:${L.col}">${L.label}</span>`;}
+function chart(h){
+  const R=h.runs.filter(r=>!r.nr&&r.pos).slice(0,10).reverse();if(R.length<2)return'<div style="color:var(--t-muted)">Needs 2+ logged runs.</div>';
+  const W=620,Hh=170,pl=26,pr=10,pt=12,pb=26,mx=Math.max(4,...R.map(r=>Math.max(r.pos,r.rank||1)));
+  const sx=(W-pl-pr)/(R.length-1),x=i=>pl+i*sx,y=v=>pt+(v-1)*(Hh-pt-pb)/(mx-1);
+  const pts=k=>R.map((r,i)=>r[k]?[x(i),y(r[k])]:null).filter(Boolean);
+  const path=a=>a.map((p,i)=>`${i?'L':'M'}${p[0].toFixed(1)} ${p[1].toFixed(1)}`).join(' ');
+  const ai=R.findIndex(r=>r.date>=h.added);let g='';
+  for(let v=1;v<=mx;v+=Math.max(1,Math.ceil(mx/5)))g+=`<line x1="${pl}" x2="${W-pr}" y1="${y(v)}" y2="${y(v)}" style="stroke:var(--t-grid)"/><text x="${pl-8}" y="${y(v)+3}" text-anchor="end">${v}</text>`;
+  const step=Math.ceil(R.length/8);
+  return `<svg viewBox="0 0 ${W} ${Hh}" width="100%" style="display:block" role="img" aria-label="Finishing position vs Prixm rank">${g}
+    ${ai>0?`<line x1="${x(ai)-sx/2}" x2="${x(ai)-sx/2}" y1="${pt}" y2="${Hh-pb}" style="stroke:var(--t-acc)" stroke-dasharray="3 4"/><text x="${x(ai)-sx/2+4}" y="${pt+9}" style="fill:var(--t-acc)">TRACKED</text>`:''}
+    <path d="${path(pts('rank'))}" fill="none" style="stroke:var(--t-muted)" stroke-width="1.2" stroke-dasharray="4 4"/>
+    <path d="${path(pts('pos'))}" fill="none" style="stroke:var(--t-text)" stroke-width="1.6"/>
+    ${R.map((r,i)=>`<circle cx="${x(i)}" cy="${y(r.pos)}" r="${r.pos===1?5:3.5}" style="fill:${r.pos===1?'var(--t-win)':isPl(r)?'var(--t-place)':'var(--t-bg)'};stroke:var(--t-text)" stroke-width="1.2"><title>${esc(r.date+' '+cap(r.venue))}: ${r.pos}/${r.field}${r.rank?' (Prixm rank '+r.rank+')':''}</title></circle>
+      ${i%step===0||i===R.length-1?`<text x="${x(i)}" y="${Hh-8}" text-anchor="middle">${fmtD(r.date)}</text>`:''}`).join('')}</svg>`;
+}
+function conditions(h){
+  const R=h.runs.filter(r=>!r.nr&&r.pos),t=h.today;
+  const grp=f=>{const m={};R.forEach(r=>{const g=f(r);if(g)(m[g]=m[g]||[]).push(r);});return Object.entries(m).map(([g,a])=>({g,n:a.length,w:a.filter(r=>r.pos===1).length,p:a.filter(isPl).length}));};
+  const gb=r=>{const s=(r.going||'').toLowerCase();return !s?null:/standard|slow|fast/.test(s)&&!/good/.test(s)?'AW':/heavy/.test(s)||(/soft/.test(s)&&!/good to soft|good-soft/.test(s))?'Soft/Heavy':/good to soft|yielding/.test(s)?'Good to Soft':/firm/.test(s)?'Good/Firm':'Good';};
+  const db=r=>!r.df?null:r.df<=7?'≤7f':r.df<=10?'1m–1m2f':r.df<=14?'1m3f–1m6f':r.df<=18?'2m–2m2f':r.df<=22?'2m3f–2m6f':'2m7f+';
+  const rows=[['Going',grp(gb),t?gb({going:t.going}):null],['Trip',grp(db),null],['Course',grp(r=>cap(r.venue)),t?cap(t.venue):null],['Type',grp(r=>r.hcap?'Handicap':'Non-handicap'),t?(t.hcap?'Handicap':'Non-handicap'):null]];
+  const out=rows.filter(r=>r[1].length).map(([k,a,hi])=>`<div class="k" style="grid-column:1/-1;margin-top:8px">${k}</div>`+a.sort((x,y)=>y.n-x.n).slice(0,4).map(o=>`<div class="${o.g===hi?'hi':''}">${esc(o.g)}${o.g===hi?' ◂ today':''}</div><div class="mb"><i style="width:${o.p/o.n*100}%"></i><i class="w" style="width:${o.w/o.n*100}%"></i></div><div class="r">${o.w}/${o.p}/${o.n}</div>`).join('')).join('');
+  return out||'<div style="color:var(--t-muted);grid-column:1/-1">No logged runs yet.</div>';
+}
+function visible(H){
+  let V=H.slice();if(S.f==='today')V=V.filter(h=>h.today);if(S.f==='notes')V=V.filter(h=>h.note);
+  if(S.q)V=V.filter(h=>h.name.toLowerCase().includes(S.q.toLowerCase()));
+  V.sort((a,b)=>(a.today?0:1)-(b.today?0:1)||(a.today&&b.today?String(a.today.time).localeCompare(String(b.today.time)):((b.runs[0]&&b.runs[0].date)||'').localeCompare((a.runs[0]&&a.runs[0].date)||'')));
+  return V;
+}
+function drawList(H){
+  VIS=visible(H);if(!S.sel||!VIS.find(h=>h.name===S.sel))S.sel=VIS[0]?VIS[0].name:null;
+  const el=document.getElementById('trkList');if(!el)return;
+  el.innerHTML=VIS.map((h,i)=>{const t=h.today,last=h.runs.find(r=>!r.nr);
+    const st=t?`<span class="today">Today ${esc(t.time)}</span><span class="t2">${esc(cap(t.venue))}${t.rank===1?' · <span class="pick">★ pick</span>':' · #'+t.rank}</span>`
+      :`<span class="t2" style="margin-top:0">${last?days(last.date,today())+'d ago':'no runs'}</span>`;
+    return `<div class="hc${h.name===S.sel?' on':''}" data-i="${i}" role="button" tabindex="0">
+      <div class="silk">${t&&t.silk?`<img src="${esc(t.silk)}" alt="" loading="lazy" onerror="this.remove()">`:esc(h.name[0]||'?')}</div>
+      <div style="min-width:0"><div class="hn">${esc(h.name)}</div><div class="hm">since ${fmtD(h.added)}${h.addedFrom?' · '+esc(cap(h.addedFrom)):''}</div>
+        ${h.note?`<div class="hnote">“${esc(h.note)}”</div>`:''}<div class="fs">${formStrip(h)}</div></div>
+      <div class="st">${st}</div></div>`;}).join('')||'<div style="padding:30px;color:var(--t-muted)">No tracked horses match.</div>';
+  drawDet();
+}
+function drawDet(){
+  const el=document.getElementById('trkDet');if(!el)return;const h=VIS.find(x=>x.name===S.sel);if(!h){el.innerHTML='';return;}
+  const s=stats(h),t=h.today,R=h.runs,T=today();
+  const jk={};R.forEach(r=>{if(r.jockey){const o=jk[r.jockey]=jk[r.jockey]||{n:0,w:0};if(!r.nr){o.n++;if(r.pos===1)o.w++;}}});
+  const trn=[...new Set(R.map(r=>r.trainer).filter(Boolean))].slice(0,3);
+  let shownDiv=false;
+  el.innerHTML=`<div class="hero"><div><h2>${esc(h.name)}</h2>
+      <div class="meta">Tracked ${days(h.added,T)} day${days(h.added,T)!==1?'s':''} · since ${fmtD(h.added)}${h.addedFrom?' from '+esc(cap(h.addedFrom)):''}${trn.length?' · '+trn.map(esc).join(' / '):''}</div></div>
+      <div class="acts"><button class="btn" data-a="note">✏️ Note</button>${t?'<button class="btn" data-a="stats">📊 Stats</button>':''}<button class="btn" data-a="untrack">✕ Untrack</button></div></div>
+    <div class="note${h.note?'':' empty'}"><q>${h.note?esc(h.note):'No note yet — why are you tracking this one?'}</q>${h.note?`<div class="nd">YOUR NOTE</div>`:''}</div>
+    ${t?`<div class="sec"><div class="sh">Running today <b>${t.rank===1?'★ PRIXM TOP PICK':'#'+t.rank+' of '+t.field+' on score'}</b></div>
+      <div class="todayc"><div class="tt"><small>${esc(cap(t.venue))}</small>${esc(t.time)}</div>
+        <div class="tr"><div>${esc(t.race)}</div><div class="rn">${[t.dist,t.going,t.field+' runners',t.hcap?'handicap':'',[t.jockey,t.trainer].filter(Boolean).join(' / '),t.age?t.age+'yo':'',t.lbs?Math.floor(t.lbs/14)+'st'+t.lbs%14+'lb':''].filter(Boolean).map(esc).join(' · ')}</div></div>
+        <div class="tstats"><div><div class="l">Score</div><div class="v">${t.score!=null?t.score:'—'}</div></div><div><div class="l">Rank</div><div class="v">${t.rank}/${t.field}</div></div><div><div class="l">${t.rank===1?'Gap':'Behind'}</div><div class="v">${t.rank===1&&t.gap>0?'+':''}${t.gap}</div></div><div><div class="l">Price</div><div class="v">${t.price?t.price.toFixed(2):'—'}</div></div><div><div class="l">RPR / OR</div><div class="v">${t.rpr||'—'}/${t.ofr||'—'}</div></div></div></div>
+      <div class="acts" style="margin-top:10px"><button class="btn pri" data-a="race">Open race →</button>${typeof VIEW_ONLY!=='undefined'&&VIEW_ONLY?'':'<button class="btn" data-a="bet">＋ Log bet</button>'}</div></div>`
+     :`<div class="sec"><div class="sh">Next run</div><div style="color:var(--t-muted)">Not declared on today's card.${R.find(r=>!r.nr)?` Last ran ${days(R.find(r=>!r.nr).date,T)} days ago at ${esc(cap(R.find(r=>!r.nr).venue))}.`:''}</div></div>`}
+    <div class="sec"><div class="sh">Since you tracked it <b>${s.since.length} run${s.since.length!==1?'s':''}</b></div>
+      <div class="since"><div><div class="l">Record</div><div class="v">${s.w}-${s.p-s.w}-${s.since.length-s.p}</div></div><div><div class="l">Win</div><div class="v">${s.since.length?Math.round(s.w/s.since.length*100)+'%':'—'}</div></div><div><div class="l">Place</div><div class="v">${s.since.length?Math.round(s.p/s.since.length*100)+'%':'—'}</div></div><div><div class="l">Best</div><div class="v">${s.since.length?Math.min(...s.since.map(r=>r.pos))+(Math.min(...s.since.map(r=>r.pos))===1?'st':'')+'':'—'}</div></div></div></div>
+    <div class="cols"><div class="sec"><div class="sh">Finishing position vs Prixm rank <span class="legend"><span><i style="background:var(--t-text)"></i>finished</span><span><i style="background:var(--t-muted)"></i>Prixm rank</span></span></div>${chart(h)}</div>
+      <div class="sec"><div class="sh">Conditions <span style="letter-spacing:.1em">won / placed / runs</span></div><div class="cond">${conditions(h)}</div></div></div>
+    <div class="sec"><div class="sh">Run log <b>${R.length} logged run${R.length!==1?'s':''}</b></div>${R.length?`<table class="runs">${R.map((r,i)=>{
+        const since=r.date>=h.added,div=!shownDiv&&!since&&i>0;if(div)shownDiv=true;
+        return `${div?`<tr><td colspan="4" class="divider">▲ since tracked · before ▼</td></tr>`:''}<tr class="${since?'sincet':''}">
+        <td class="pos ${r.pos===1?'w':isPl(r)?'p':''}">${r.nr?'NR':r.pos||'-'}<small>/${r.field}</small></td>
+        <td class="rv"><div><b style="font-weight:500">${esc(cap(r.venue))}</b> <span class="rd">${[fmtD(r.date),dist(r.df),r.going,r.hcap?'hcap':'non-hcap',r.cls?'C'+r.cls:''].filter(Boolean).map(esc).join(' · ')}</span></div>
+          <div style="margin-top:5px">${wbTag(r)}${r.style?`<span class="tag">${({FR:'front runner',P:'prominent',MD:'mid-div',HU:'held up'})[r.style]||esc(r.style)}</span>`:''}${r.btn&&r.pos!==1?`<span class="tag">btn ${esc(r.btn)}L</span>`:''}${r.pos!==1&&r.winner?`<span class="rd">won by ${esc(r.winner)}</span>`:''}</div>
+          ${r.comment?`<div class="c">${esc(r.comment)}</div>`:''}${r.jockey?`<div class="rd" style="margin-top:4px">${esc(r.jockey)}</div>`:''}</td>
+        <td class="rk"><div class="v">${r.spr?esc(r.spr):r.sp?(+r.sp).toFixed(2):'—'}</div><div class="l">SP</div></td>
+        <td class="rk"><div class="v">${r.rank||'—'}</div><div class="l">PRIXM #</div></td></tr>`;}).join('')}</table>`:'<div style="color:var(--t-muted)">No logged runs for this horse yet — they appear here after Fetch Results.</div>'}</div>
+    ${Object.keys(jk).length?`<div class="sec"><div class="sh">Jockeys <span style="letter-spacing:.1em">wins / rides</span></div><div class="conn">${Object.entries(jk).sort((a,b)=>b[1].n-a[1].n).map(([j,o])=>`<span>${esc(j)}<b>${o.w}/${o.n}</b></span>`).join('')}</div></div>`:''}`;
+}
+function render(){
+  const root=document.getElementById('trackedContent');if(!root)return;
+  const H=build();
+  if(!H.length){root.innerHTML=`<div class="trk"><h1>TRACKED <span>HORSES</span></h1><div class="sub">Your watchlist</div><div class="empty" style="margin-top:18px">No tracked horses yet.<br><span style="font-size:11px">Click <b>TRACK</b> on any runner in a race to follow it here — you can add a note why.</span></div></div>`;return;}
+  const all=H.map(stats),run=H.filter(h=>h.today),picks=run.filter(h=>h.today.rank===1).length;
+  const w=all.reduce((a,s)=>a+s.w,0),p=all.reduce((a,s)=>a+s.p,0),n=all.reduce((a,s)=>a+s.since.length,0);
+  const c={all:H.length,today:run.length,notes:H.filter(h=>h.note).length};
+  root.innerHTML=`<div class="trk"><h1>TRACKED <span>HORSES</span></h1><div class="sub">Your watchlist · every logged run · since you started tracking</div>
+    <div class="kpis">${[['Tracked',H.length,`${c.notes} with notes`],['Running today',run.length,`${picks} Prixm top pick${picks!==1?'s':''}`],
+      ['Since tracked',`${w}-${p-w}-${n-p}`,'won · placed · unplaced'],['Strike rate',n?Math.round(w/n*100)+'%':'—',n?`placed ${Math.round(p/n*100)}% · ${n} runs`:'no runs since tracking yet']]
+      .map(k=>`<div class="kpi"><div class="l">${k[0]}</div><div class="v">${k[1]}</div><div class="s">${k[2]}</div></div>`).join('')}</div>
+    <div class="bar">${[['all','All'],['today','Running today'],['notes','With notes']].map(([k,l])=>`<button class="chip${S.f===k?' on':''}" data-f="${k}">${l}<b>${c[k]}</b></button>`).join('')}
+      <span class="sp"></span><input class="search" id="trkQ" placeholder="Search tracked…" value="${esc(S.q)}" aria-label="Search tracked horses"></div>
+    <div class="grid"><div class="list" id="trkList"></div><div class="det" id="trkDet"></div></div></div>`;
+  drawList(H);
+  root.querySelectorAll('[data-f]').forEach(b=>b.onclick=()=>{S.f=b.dataset.f;render();});
+  const q=root.querySelector('#trkQ');q.oninput=()=>{S.q=q.value;drawList(H);};
+  if(!root._trkBound){root._trkBound=true;
+    root.addEventListener('click',e=>{
+      const hc=e.target.closest('.trk .hc');if(hc){S.sel=VIS[+hc.dataset.i].name;drawList(build());if(window.innerWidth<=900)document.getElementById('trkDet').scrollIntoView({behavior:'smooth',block:'start'});return;}
+      const a=e.target.closest('[data-a]');if(!a)return;const h=VIS.find(x=>x.name===S.sel);if(!h)return;const t=h.today;
+      if(a.dataset.a==='note')wlNotePrompt(h.name,render);
+      else if(a.dataset.a==='untrack'){if(confirm(`Stop tracking ${h.name}?${h.note?'\nYour note will be deleted.':''}`)){toggleWatch(h.name);S.sel=null;render();}}
+      else if(a.dataset.a==='stats'&&t)hsOpen(h.name,t.vk,t.ri);
+      else if(a.dataset.a==='race'&&t){switchTab('races');openRace(t.vk,t.ri).catch(()=>{});}
+      else if(a.dataset.a==='bet'&&t&&window.lgOpen)window.lgOpen(t.vk,t.ri,h.name);});
+    root.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.classList.contains('hc')){e.preventDefault();e.target.click();}});}
+}
+window.renderTrackedTab=render;
+window.trackedTabRefresh=()=>{const v=document.getElementById('trackedView');if(v&&v.style.display==='block')render();};
+})();
+
 </script>
 </body>
 </html>

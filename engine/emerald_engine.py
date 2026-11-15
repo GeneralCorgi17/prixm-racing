@@ -247,6 +247,10 @@ class HistoryIndex:
                     'good': placed or (b is not None and b <= CLOSE_LENGTHS),
                     'style': r.get('run_style') or classify_run_style(comment), 'comment': comment.lower(),
                     'nh': any(x in (race.get('race_type') or '').lower() for x in ('hurdle', 'chase', 'nh flat', 'bumper')),
+                    # ⚖ weight vs last run (display only)
+                    'lbs': r.get('lbs'), 'venue': venue, 'hcap': bool(race.get('handicap')),
+                    'rtype': race.get('race_type') or '', 'cls': race.get('race_class'),
+                    'btn_raw': r.get('distance_beaten'),
                 })
                 if r.get('trainer'):
                     self.trainer[_nm(r['trainer'])].append((date, won))
@@ -651,6 +655,90 @@ def score_race_emerald(race, runners, hist, date, course=None):
     return runners
 
 
+# ── ⚖ Weight vs last run (display only — both engines, never changes score) ──
+# Re-score test 2026-11-15: using weight/OR change in the score gave no ROI gain (market prices it),
+# so it is shown as context only. Rules (approved mockup mockups/weight_change_mockup.html):
+#   * last logged run must be the horse's TRUE last run (date gap == RP days-since-last-run ±1)
+#   * same code (Flat/AW vs jumps) — else weights are not comparable → nothing
+#   * handicap today: OR up → 'up'; OR same + more weight (last run hcap) → 'info'; OR down → nothing;
+#     no OR on either card → more weight with last run a hcap → 'info'
+#   * non-handicap today: only won last time + more weight → 'pen' (winner's penalty)
+_OR_CACHE = {}
+
+
+def _archived_or(date, name):
+    """Official rating the horse had on the archived racecard of that date (race_data/), or None."""
+    if date not in _OR_CACHE:
+        m = {}
+        try:
+            with open(os.path.join(_ROOT, 'race_data', f'race_data_{date}.json'), encoding='utf-8') as f:
+                card = json.load(f)
+            for v in (card.get('venues') or {}).values():
+                for rc in v.get('races', []):
+                    for ru in rc.get('runners', []):
+                        if ru.get('ofr') and ru.get('name'):
+                            m[norm_horse(ru['name'])] = ru['ofr']
+        except Exception:
+            pass
+        _OR_CACHE[date] = m
+    return _OR_CACHE[date].get(norm_horse(name))
+
+
+def _is_nh_type(t):
+    t = (t or '').lower()
+    return any(x in t for x in ('hurdle', 'chase', 'nh flat', 'bumper'))
+
+
+def weight_change(runner, race, hist, date):
+    """runner['wt_change'] dict or None. Pure comparison, never touches the score."""
+    import datetime as dt
+    lbs = runner.get('lbs')
+    if not hist or not lbs or runner.get('non_runner') or runner.get('last_run') is None:
+        return None
+    runs = [x for x in hist.horse(runner.get('name'), date) if x.get('lbs')]
+    if not runs:
+        return None
+    p = runs[0]
+    try:
+        days = (dt.date.fromisoformat(date) - dt.date.fromisoformat(p['date'])).days
+    except Exception:
+        return None
+    if abs(days - int(runner['last_run'])) > 1:
+        return None                                   # ran since somewhere we never logged
+    if _is_nh_type(race.get('race_type')) != p['nh']:
+        return None                                   # code switch — not comparable
+    dl = lbs - p['lbs']
+    p_or = _archived_or(p['date'], runner.get('name'))
+    t_or = runner.get('ofr')
+    dor = (t_or - p_or) if (t_or and p_or) else None
+    kind = None
+    if race.get('handicap'):
+        if dor is not None:
+            if dor > 0:
+                kind = 'up'
+            elif dor == 0 and dl > 0 and p['hcap']:
+                kind = 'info'
+        elif p['hcap'] and dl > 0:
+            kind = 'info'
+    elif p['won'] and dl > 0:
+        kind = 'pen'
+    if not kind:
+        return None
+    return {'kind': kind, 'dl': dl, 'dor': dor, 'days': days,
+            'prev': {'date': p['date'], 'venue': p['venue'], 'lbs': p['lbs'], 'ofr': p_or, 'pos': p['pos'],
+                     'field': p['field'], 'hcap': p['hcap'], 'type': p['rtype'], 'cls': p['cls'],
+                     'btn': p['btn_raw']}}
+
+
+def annotate_weight_change(runners, race, hist, date):
+    for r in runners:
+        wc = weight_change(r, race, hist, date)
+        if wc:
+            r['wt_change'] = wc
+        else:
+            r.pop('wt_change', None)
+
+
 def process_card(output, hist=None, date=None):
     """Post-process a whole racecard dict (daily_race_data format): Emerald-score Irish races,
     cross-analyse every race. Mutates and returns output."""
@@ -666,6 +754,7 @@ def process_card(output, hist=None, date=None):
             else:
                 annotate_race(race, runners, hist, date, course)
                 race['engine'] = 'prixm'
+            annotate_weight_change(race['runners'], race, hist, date)
     return output
 
 

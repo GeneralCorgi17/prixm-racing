@@ -782,6 +782,24 @@
                 "top_6": 66,
                 "top_8": 77,
                 "top_10": 89
+              },
+              "wt_change": {
+                "kind": "up",
+                "dl": 6,
+                "dor": 5,
+                "days": 15,
+                "prev": {
+                  "date": "2026-10-31",
+                  "venue": "ASCOT",
+                  "lbs": 148,
+                  "ofr": 120,
+                  "pos": 1,
+                  "field": 5,
+                  "hcap": true,
+                  "type": "Chase",
+                  "cls": "3",
+                  "btn": null
+                }
               }
             },
             {
@@ -835,6 +853,24 @@
                 "top_6": 63,
                 "top_8": 75,
                 "top_10": 88
+              },
+              "wt_change": {
+                "kind": "up",
+                "dl": -15,
+                "dor": 6,
+                "days": 33,
+                "prev": {
+                  "date": "2026-10-13",
+                  "venue": "SOUTHWELL",
+                  "lbs": 168,
+                  "ofr": 118,
+                  "pos": 1,
+                  "field": 6,
+                  "hcap": true,
+                  "type": "Chase",
+                  "cls": "4",
+                  "btn": null
+                }
               }
             },
             {
@@ -941,6 +977,24 @@
                 "top_6": 62,
                 "top_8": 75,
                 "top_10": 87
+              },
+              "wt_change": {
+                "kind": "info",
+                "dl": 6,
+                "dor": 0,
+                "days": 32,
+                "prev": {
+                  "date": "2026-10-14",
+                  "venue": "FFOS LAS",
+                  "lbs": 145,
+                  "ofr": 131,
+                  "pos": 2,
+                  "field": 5,
+                  "hcap": true,
+                  "type": "Chase",
+                  "cls": "3",
+                  "btn": "7\u00bd"
+                }
               }
             },
             {
@@ -1112,6 +1166,24 @@
                 "top_6": 61,
                 "top_8": 74,
                 "top_10": 87
+              },
+              "wt_change": {
+                "kind": "up",
+                "dl": 1,
+                "dor": 2,
+                "days": 22,
+                "prev": {
+                  "date": "2026-10-24",
+                  "venue": "CHELTENHAM",
+                  "lbs": 160,
+                  "ofr": 130,
+                  "pos": null,
+                  "field": 9,
+                  "hcap": true,
+                  "type": "Chase",
+                  "cls": "3",
+                  "btn": null
+                }
               }
             },
             {
@@ -1450,6 +1522,24 @@
                 "top_6": 74,
                 "top_8": 87,
                 "top_10": 95
+              },
+              "wt_change": {
+                "kind": "info",
+                "dl": 5,
+                "dor": 0,
+                "days": 15,
+                "prev": {
+                  "date": "2026-10-31",
+                  "venue": "ASCOT",
+                  "lbs": 147,
+                  "ofr": 123,
+                  "pos": 3,
+                  "field": 12,
+                  "hcap": true,
+                  "type": "Chase",
+                  "cls": "2",
+                  "btn": "2\u00bc"
+                }
               }
             },
             {
@@ -1503,6 +1593,24 @@
                 "top_6": 72,
                 "top_8": 86,
                 "top_10": 95
+              },
+              "wt_change": {
+                "kind": "up",
+                "dl": 11,
+                "dor": 4,
+                "days": 220,
+                "prev": {
+                  "date": "2026-04-09",
+                  "venue": "Aintree",
+                  "lbs": 155,
+                  "ofr": 133,
+                  "pos": 2,
+                  "field": 15,
+                  "hcap": true,
+                  "type": "Chase",
+                  "cls": 1,
+                  "btn": "3\u00bd"
+                }
               }
             },
             {
@@ -1556,6 +1664,24 @@
                 "top_6": 70,
                 "top_8": 85,
                 "top_10": 95
+              },
+              "wt_change": {
+                "kind": "up",
+                "dl": -20,
+                "dor": 2,
+                "days": 34,
+                "prev": {
+                  "date": "2026-10-12",
+                  "venue": "WORCESTER",
+                  "lbs": 167,
+                  "ofr": 116,
+                  "pos": 2,
+                  "field": 6,
+                  "hcap": true,
+                  "type": "Chase",
+                  "cls": "4",
+                  "btn": "2"
+                }
               }
             },
             {
@@ -1662,6 +1788,24 @@
                 "top_6": 69,
                 "top_8": 84,
                 "top_10": 95
+              },
+              "wt_change": {
+                "kind": "up",
+                "dl": -6,
+                "dor": 7,
+                "days": 11,
+                "prev": {
+                  "date": "2026-11-04",
+                  "venue": "CHEPSTOW",
+                  "lbs": 154,
+                  "ofr": 112,
+                  "pos": 1,
+                  "field": 5,
+                  "hcap": true,
+                  "type": "Chase",
+                  "cls": "3",
+                  "btn": null
+                }
               }
             },
             {
@@ -1768,6 +1912,24 @@
                 "top_6": 68,
                 "top_8": 84,
                 "top_10": 95
+              },
+              "wt_change": {
+                "kind": "up",
+                "dl": 10,
+                "dor": 2,
+                "days": 206,
+                "prev": {
+                  "date": "2026-04-23",
+                  "venue": "Perth",
+                  "lbs": 150,
+                  "ofr": 129,
+                  "pos": 1,
+                  "field": 7,
+                  "hcap": true,
+                  "type": "Chase",
+                  "cls": 2,
+                  "btn": null
+                }
               }
             },
             {
@@ -2065,6 +2227,24 @@
                 "top_6": 74,
                 "top_8": 91,
                 "top_10": 95
+              },
+              "wt_change": {
+                "kind": "up",
+                "dl": -6,
+                "dor": 4,
+                "days": 31,
+                "prev": {
+                  "date": "2026-10-15",
+                  "venue": "FONTWELL",
+                  "lbs": 164,
+                  "ofr": 136,
+                  "pos": 1,
+                  "field": 4,
+                  "hcap": true,
+                  "type": "Chase",
+                  "cls": "3",
+                  "btn": null
+                }
               }
             },
             {
@@ -2224,6 +2404,24 @@
                 "top_6": 73,
                 "top_8": 91,
                 "top_10": 95
+              },
+              "wt_change": {
+                "kind": "up",
+                "dl": 6,
+                "dor": 4,
+                "days": 204,
+                "prev": {
+                  "date": "2026-04-25",
+                  "venue": "Sandown",
+                  "lbs": 151,
+                  "ofr": 135,
+                  "pos": 1,
+                  "field": 11,
+                  "hcap": true,
+                  "type": "Chase",
+                  "cls": 1,
+                  "btn": null
+                }
               }
             },
             {
@@ -2330,6 +2528,24 @@
                 "top_6": 73,
                 "top_8": 91,
                 "top_10": 95
+              },
+              "wt_change": {
+                "kind": "up",
+                "dl": 7,
+                "dor": 1,
+                "days": 223,
+                "prev": {
+                  "date": "2026-04-06",
+                  "venue": "Fairyhouse",
+                  "lbs": 153,
+                  "ofr": 141,
+                  "pos": 5,
+                  "field": 30,
+                  "hcap": true,
+                  "type": "Chase",
+                  "cls": 1,
+                  "btn": "3\u00bd"
+                }
               }
             },
             {
@@ -2383,6 +2599,24 @@
                 "top_6": 72,
                 "top_8": 91,
                 "top_10": 95
+              },
+              "wt_change": {
+                "kind": "info",
+                "dl": 9,
+                "dor": 0,
+                "days": 204,
+                "prev": {
+                  "date": "2026-04-25",
+                  "venue": "Sandown",
+                  "lbs": 144,
+                  "ofr": 135,
+                  "pos": 9,
+                  "field": 11,
+                  "hcap": true,
+                  "type": "Chase",
+                  "cls": 1,
+                  "btn": "17"
+                }
               }
             },
             {
@@ -2436,6 +2670,24 @@
                 "top_6": 72,
                 "top_8": 91,
                 "top_10": 95
+              },
+              "wt_change": {
+                "kind": "up",
+                "dl": -17,
+                "dor": 8,
+                "days": 214,
+                "prev": {
+                  "date": "2026-04-15",
+                  "venue": "Haydock",
+                  "lbs": 165,
+                  "ofr": 122,
+                  "pos": 1,
+                  "field": 11,
+                  "hcap": true,
+                  "type": "Chase",
+                  "cls": 3,
+                  "btn": null
+                }
               }
             }
           ],
@@ -2627,6 +2879,24 @@
                     "valid"
                   ]
                 ]
+              },
+              "wt_change": {
+                "kind": "up",
+                "dl": 10,
+                "dor": 8,
+                "days": 37,
+                "prev": {
+                  "date": "2026-10-09",
+                  "venue": "CHEPSTOW",
+                  "lbs": 147,
+                  "ofr": 125,
+                  "pos": 1,
+                  "field": 17,
+                  "hcap": true,
+                  "type": "Hurdle",
+                  "cls": "2",
+                  "btn": null
+                }
               }
             },
             {
@@ -2733,6 +3003,24 @@
                 "top_6": 49,
                 "top_8": 57,
                 "top_10": 66
+              },
+              "wt_change": {
+                "kind": "up",
+                "dl": -5,
+                "dor": 4,
+                "days": 219,
+                "prev": {
+                  "date": "2026-04-10",
+                  "venue": "Aintree",
+                  "lbs": 157,
+                  "ofr": 124,
+                  "pos": 2,
+                  "field": 21,
+                  "hcap": true,
+                  "type": "Hurdle",
+                  "cls": 2,
+                  "btn": "1\u00bd"
+                }
               }
             },
             {
@@ -3104,6 +3392,24 @@
                 "top_6": 46,
                 "top_8": 55,
                 "top_10": 64
+              },
+              "wt_change": {
+                "kind": "up",
+                "dl": -15,
+                "dor": 1,
+                "days": 15,
+                "prev": {
+                  "date": "2026-10-31",
+                  "venue": "WETHERBY",
+                  "lbs": 161,
+                  "ofr": 121,
+                  "pos": 3,
+                  "field": 4,
+                  "hcap": true,
+                  "type": "Hurdle",
+                  "cls": "3",
+                  "btn": "\u00bd"
+                }
               }
             },
             {
@@ -3169,6 +3475,24 @@
                     "valid"
                   ]
                 ]
+              },
+              "wt_change": {
+                "kind": "up",
+                "dl": 0,
+                "dor": 4,
+                "days": 175,
+                "prev": {
+                  "date": "2026-05-24",
+                  "venue": "Kelso",
+                  "lbs": 166,
+                  "ofr": 138,
+                  "pos": 1,
+                  "field": 4,
+                  "hcap": true,
+                  "type": "Hurdle",
+                  "cls": "2",
+                  "btn": null
+                }
               }
             },
             {
@@ -3222,6 +3546,24 @@
                 "top_6": 44,
                 "top_8": 53,
                 "top_10": 63
+              },
+              "wt_change": {
+                "kind": "up",
+                "dl": 8,
+                "dor": 1,
+                "days": 197,
+                "prev": {
+                  "date": "2026-05-02",
+                  "venue": "Punchestown                                                                                                                        (IRE)",
+                  "lbs": 160,
+                  "ofr": 143,
+                  "pos": 12,
+                  "field": 17,
+                  "hcap": true,
+                  "type": "Hurdle",
+                  "cls": null,
+                  "btn": "5\u00bd"
+                }
               }
             },
             {
@@ -3572,6 +3914,24 @@
                 "top_6": 69,
                 "top_8": 81,
                 "top_10": 94
+              },
+              "wt_change": {
+                "kind": "pen",
+                "dl": 4,
+                "dor": null,
+                "days": 39,
+                "prev": {
+                  "date": "2026-10-07",
+                  "venue": "WORCESTER",
+                  "lbs": 152,
+                  "ofr": null,
+                  "pos": 1,
+                  "field": 10,
+                  "hcap": false,
+                  "type": "NH Flat",
+                  "cls": "4",
+                  "btn": null
+                }
               }
             },
             {
@@ -3837,6 +4197,24 @@
                 "top_6": 64,
                 "top_8": 78,
                 "top_10": 93
+              },
+              "wt_change": {
+                "kind": "pen",
+                "dl": 6,
+                "dor": null,
+                "days": 185,
+                "prev": {
+                  "date": "2026-05-14",
+                  "venue": "Fontwell",
+                  "lbs": 150,
+                  "ofr": null,
+                  "pos": 1,
+                  "field": 12,
+                  "hcap": false,
+                  "type": "NH Flat",
+                  "cls": 5,
+                  "btn": null
+                }
               }
             },
             {
@@ -4049,6 +4427,24 @@
                 "top_6": 61,
                 "top_8": 77,
                 "top_10": 92
+              },
+              "wt_change": {
+                "kind": "pen",
+                "dl": 2,
+                "dor": null,
+                "days": 133,
+                "prev": {
+                  "date": "2026-07-05",
+                  "venue": "Market Rasen",
+                  "lbs": 154,
+                  "ofr": null,
+                  "pos": 1,
+                  "field": 11,
+                  "hcap": false,
+                  "type": "NH Flat",
+                  "cls": 5,
+                  "btn": null
+                }
               }
             }
           ],
@@ -4572,6 +4968,24 @@
                 "top_6": 67,
                 "top_8": 80,
                 "top_10": 93
+              },
+              "wt_change": {
+                "kind": "up",
+                "dl": 0,
+                "dor": 8,
+                "days": 18,
+                "prev": {
+                  "date": "2026-10-28",
+                  "venue": "NEWTON ABBOT",
+                  "lbs": 167,
+                  "ofr": 116,
+                  "pos": 1,
+                  "field": 6,
+                  "hcap": true,
+                  "type": "Chase",
+                  "cls": "4",
+                  "btn": null
+                }
               }
             },
             {
@@ -4796,6 +5210,24 @@
                     "valid"
                   ]
                 ]
+              },
+              "wt_change": {
+                "kind": "up",
+                "dl": 19,
+                "dor": 5,
+                "days": 21,
+                "prev": {
+                  "date": "2026-10-25",
+                  "venue": "MARKET RASEN",
+                  "lbs": 146,
+                  "ofr": 117,
+                  "pos": 1,
+                  "field": 4,
+                  "hcap": true,
+                  "type": "Chase",
+                  "cls": "3",
+                  "btn": null
+                }
               }
             },
             {
@@ -4902,6 +5334,24 @@
                 "top_6": 63,
                 "top_8": 78,
                 "top_10": 93
+              },
+              "wt_change": {
+                "kind": "up",
+                "dl": -4,
+                "dor": 6,
+                "days": 7,
+                "prev": {
+                  "date": "2026-11-08",
+                  "venue": "FFOS LAS",
+                  "lbs": 146,
+                  "ofr": 93,
+                  "pos": 3,
+                  "field": 7,
+                  "hcap": true,
+                  "type": "Chase",
+                  "cls": "4",
+                  "btn": "10"
+                }
               }
             },
             {
@@ -5187,6 +5637,24 @@
                 "top_6": 61,
                 "top_8": 71,
                 "top_10": 81
+              },
+              "wt_change": {
+                "kind": "pen",
+                "dl": 7,
+                "dor": null,
+                "days": 27,
+                "prev": {
+                  "date": "2026-10-19",
+                  "venue": "PLUMPTON",
+                  "lbs": 154,
+                  "ofr": null,
+                  "pos": 1,
+                  "field": 5,
+                  "hcap": false,
+                  "type": "Hurdle",
+                  "cls": "4",
+                  "btn": null
+                }
               }
             },
             {
@@ -5973,6 +6441,18 @@
                 "top_6": 68,
                 "top_8": 81,
                 "top_10": 94
+              },
+              "track_fit": {
+                "verdict": "s",
+                "checks": [
+                  [
+                    "\u2705",
+                    "Handy position is an advantage here",
+                    "Prominent in 2 of last 4 runs",
+                    "sharp_handy_good",
+                    "valid"
+                  ]
+                ]
               }
             },
             {
@@ -6250,6 +6730,24 @@
                     "valid"
                   ]
                 ]
+              },
+              "wt_change": {
+                "kind": "pen",
+                "dl": 7,
+                "dor": 5,
+                "days": 20,
+                "prev": {
+                  "date": "2026-10-26",
+                  "venue": "HEREFORD",
+                  "lbs": 154,
+                  "ofr": 95,
+                  "pos": 1,
+                  "field": 10,
+                  "hcap": false,
+                  "type": "Hurdle",
+                  "cls": "4",
+                  "btn": null
+                }
               }
             },
             {
@@ -6865,6 +7363,24 @@
                 "top_6": 67,
                 "top_8": 83,
                 "top_10": 95
+              },
+              "wt_change": {
+                "kind": "info",
+                "dl": 2,
+                "dor": 0,
+                "days": 25,
+                "prev": {
+                  "date": "2026-10-21",
+                  "venue": "FONTWELL",
+                  "lbs": 140,
+                  "ofr": 74,
+                  "pos": null,
+                  "field": 8,
+                  "hcap": true,
+                  "type": "Chase",
+                  "cls": "5",
+                  "btn": null
+                }
               }
             },
             {
@@ -7024,6 +7540,24 @@
                 "top_6": 65,
                 "top_8": 82,
                 "top_10": 95
+              },
+              "wt_change": {
+                "kind": "up",
+                "dl": 8,
+                "dor": 3,
+                "days": 17,
+                "prev": {
+                  "date": "2026-10-29",
+                  "venue": "FFOS LAS",
+                  "lbs": 157,
+                  "ofr": 94,
+                  "pos": null,
+                  "field": 6,
+                  "hcap": true,
+                  "type": "Hurdle",
+                  "cls": "5",
+                  "btn": null
+                }
               }
             },
             {
@@ -7215,6 +7749,24 @@
                 "top_6": 66,
                 "top_8": 79,
                 "top_10": 93
+              },
+              "wt_change": {
+                "kind": "up",
+                "dl": 0,
+                "dor": 10,
+                "days": 31,
+                "prev": {
+                  "date": "2026-10-15",
+                  "venue": "FONTWELL",
+                  "lbs": 156,
+                  "ofr": 75,
+                  "pos": 3,
+                  "field": 7,
+                  "hcap": false,
+                  "type": "Hurdle",
+                  "cls": "4",
+                  "btn": "3\u00be"
+                }
               }
             },
             {
@@ -7268,6 +7820,36 @@
                 "top_6": 65,
                 "top_8": 79,
                 "top_10": 93
+              },
+              "track_fit": {
+                "verdict": "s",
+                "checks": [
+                  [
+                    "\u2705",
+                    "Handy position is an advantage here",
+                    "Front-runner in 2 of last 4 runs",
+                    "sharp_handy_good",
+                    "valid"
+                  ]
+                ]
+              },
+              "wt_change": {
+                "kind": "up",
+                "dl": -4,
+                "dor": 1,
+                "days": 12,
+                "prev": {
+                  "date": "2026-11-03",
+                  "venue": "SEDGEFIELD",
+                  "lbs": 152,
+                  "ofr": 76,
+                  "pos": 2,
+                  "field": 11,
+                  "hcap": true,
+                  "type": "Hurdle",
+                  "cls": "5",
+                  "btn": "2"
+                }
               }
             },
             {
@@ -7321,6 +7903,24 @@
                 "top_6": 64,
                 "top_8": 78,
                 "top_10": 93
+              },
+              "wt_change": {
+                "kind": "up",
+                "dl": 5,
+                "dor": 5,
+                "days": 183,
+                "prev": {
+                  "date": "2026-05-16",
+                  "venue": "Bangor-on-Dee",
+                  "lbs": 161,
+                  "ofr": 90,
+                  "pos": 2,
+                  "field": 11,
+                  "hcap": true,
+                  "type": "Hurdle",
+                  "cls": 5,
+                  "btn": "2\u00bc"
+                }
               }
             },
             {
@@ -7586,6 +8186,24 @@
                 "top_6": 60,
                 "top_8": 76,
                 "top_10": 92
+              },
+              "wt_change": {
+                "kind": "info",
+                "dl": 3,
+                "dor": 0,
+                "days": 217,
+                "prev": {
+                  "date": "2026-04-12",
+                  "venue": "Ffos Las",
+                  "lbs": 142,
+                  "ofr": 74,
+                  "pos": 10,
+                  "field": 12,
+                  "hcap": true,
+                  "type": "Hurdle",
+                  "cls": 5,
+                  "btn": "13"
+                }
               }
             },
             {
@@ -8862,8 +9480,8 @@
               "Mergus Serrator",
               "Glen Echo",
               "Matada",
-              "Fay Og",
               "Arizona Star",
+              "Fay Og",
               "Moon Aura"
             ],
             "HU": [
@@ -9267,7 +9885,25 @@
                 "headgear": 2,
                 "spotlight": 1
               },
-              "engine": "emerald"
+              "engine": "emerald",
+              "wt_change": {
+                "kind": "pen",
+                "dl": 8,
+                "dor": null,
+                "days": 177,
+                "prev": {
+                  "date": "2026-05-22",
+                  "venue": "Downpatrick",
+                  "lbs": 153,
+                  "ofr": null,
+                  "pos": 1,
+                  "field": 7,
+                  "hcap": false,
+                  "type": "NH Flat",
+                  "cls": null,
+                  "btn": null
+                }
+              }
             },
             {
               "name": "Royale Walk",
@@ -10494,7 +11130,25 @@
                 "headgear": 2,
                 "spotlight": 1
               },
-              "engine": "emerald"
+              "engine": "emerald",
+              "wt_change": {
+                "kind": "info",
+                "dl": 3,
+                "dor": 0,
+                "days": 33,
+                "prev": {
+                  "date": "2026-10-13",
+                  "venue": "PUNCHESTOWN (IRE)",
+                  "lbs": 145,
+                  "ofr": 80,
+                  "pos": 10,
+                  "field": 18,
+                  "hcap": true,
+                  "type": "Hurdle",
+                  "cls": null,
+                  "btn": "4\u00be"
+                }
+              }
             },
             {
               "name": "Mr Caulfield",
@@ -10652,7 +11306,25 @@
                 "headgear": 2,
                 "spotlight": 1
               },
-              "engine": "emerald"
+              "engine": "emerald",
+              "wt_change": {
+                "kind": "up",
+                "dl": 6,
+                "dor": 7,
+                "days": 38,
+                "prev": {
+                  "date": "2026-10-08",
+                  "venue": "TRAMORE (IRE)",
+                  "lbs": 158,
+                  "ofr": 89,
+                  "pos": 1,
+                  "field": 9,
+                  "hcap": false,
+                  "type": "Hurdle",
+                  "cls": null,
+                  "btn": null
+                }
+              }
             },
             {
               "name": "Invincible Oscar",
@@ -10725,7 +11397,25 @@
                 "headgear": 2,
                 "spotlight": 1
               },
-              "engine": "emerald"
+              "engine": "emerald",
+              "wt_change": {
+                "kind": "up",
+                "dl": 6,
+                "dor": 3,
+                "days": 37,
+                "prev": {
+                  "date": "2026-10-09",
+                  "venue": "DOWNPATRICK (IRE)",
+                  "lbs": 150,
+                  "ofr": 85,
+                  "pos": 2,
+                  "field": 9,
+                  "hcap": true,
+                  "type": "Hurdle",
+                  "cls": null,
+                  "btn": "1\u00bd"
+                }
+              }
             },
             {
               "name": "Sheer Raz",
@@ -10895,7 +11585,25 @@
                 "headgear": 2,
                 "spotlight": 1
               },
-              "engine": "emerald"
+              "engine": "emerald",
+              "wt_change": {
+                "kind": "up",
+                "dl": 8,
+                "dor": 8,
+                "days": 14,
+                "prev": {
+                  "date": "2026-11-01",
+                  "venue": "CORK (IRE)",
+                  "lbs": 150,
+                  "ofr": 82,
+                  "pos": 1,
+                  "field": 24,
+                  "hcap": true,
+                  "type": "Hurdle",
+                  "cls": null,
+                  "btn": null
+                }
+              }
             },
             {
               "name": "Champagne Dawn",
@@ -12306,7 +13014,25 @@
                 "headgear": 2,
                 "spotlight": 1
               },
-              "engine": "emerald"
+              "engine": "emerald",
+              "wt_change": {
+                "kind": "info",
+                "dl": 1,
+                "dor": 0,
+                "days": 23,
+                "prev": {
+                  "date": "2026-10-23",
+                  "venue": "SLIGO (IRE)",
+                  "lbs": 150,
+                  "ofr": 83,
+                  "pos": 7,
+                  "field": 14,
+                  "hcap": true,
+                  "type": "Hurdle",
+                  "cls": null,
+                  "btn": "\u00bd"
+                }
+              }
             },
             {
               "name": "Tommy Go Maith",
@@ -12379,7 +13105,25 @@
                 "headgear": 2,
                 "spotlight": 1
               },
-              "engine": "emerald"
+              "engine": "emerald",
+              "wt_change": {
+                "kind": "info",
+                "dl": 3,
+                "dor": 0,
+                "days": 23,
+                "prev": {
+                  "date": "2026-10-23",
+                  "venue": "SLIGO (IRE)",
+                  "lbs": 137,
+                  "ofr": 72,
+                  "pos": 8,
+                  "field": 14,
+                  "hcap": true,
+                  "type": "Hurdle",
+                  "cls": null,
+                  "btn": "\u00be"
+                }
+              }
             },
             {
               "name": "Mirfaq",
@@ -12537,12 +13281,12 @@
             ],
             "MD": [
               "Tropical Twist",
-              "Crypto Crash",
-              "Dunmore",
-              "Champagne Dawn",
-              "La Rocca Lass",
               "Sheer Raz",
+              "Crypto Crash",
+              "Champagne Dawn",
               "Microscope",
+              "Dunmore",
+              "La Rocca Lass",
               "Mirfaq"
             ],
             "HU": [
@@ -12802,7 +13546,25 @@
                 "headgear": 2,
                 "spotlight": 1
               },
-              "engine": "emerald"
+              "engine": "emerald",
+              "wt_change": {
+                "kind": "pen",
+                "dl": 5,
+                "dor": null,
+                "days": 1,
+                "prev": {
+                  "date": "2026-11-14",
+                  "venue": "NAVAN (IRE)",
+                  "lbs": 155,
+                  "ofr": null,
+                  "pos": 1,
+                  "field": 8,
+                  "hcap": false,
+                  "type": "Hurdle",
+                  "cls": null,
+                  "btn": null
+                }
+              }
             },
             {
               "name": "Gillane",
@@ -13033,7 +13795,25 @@
                 "headgear": 2,
                 "spotlight": 1
               },
-              "engine": "emerald"
+              "engine": "emerald",
+              "wt_change": {
+                "kind": "pen",
+                "dl": 3,
+                "dor": 10,
+                "days": 29,
+                "prev": {
+                  "date": "2026-10-17",
+                  "venue": "LIMERICK (IRE)",
+                  "lbs": 147,
+                  "ofr": 113,
+                  "pos": 1,
+                  "field": 6,
+                  "hcap": false,
+                  "type": "Hurdle",
+                  "cls": null,
+                  "btn": null
+                }
+              }
             },
             {
               "name": "Barnahash Mason",
@@ -13218,7 +13998,25 @@
                 "headgear": 2,
                 "spotlight": 1
               },
-              "engine": "emerald"
+              "engine": "emerald",
+              "wt_change": {
+                "kind": "up",
+                "dl": -26,
+                "dor": 7,
+                "days": 23,
+                "prev": {
+                  "date": "2026-10-23",
+                  "venue": "SLIGO (IRE)",
+                  "lbs": 166,
+                  "ofr": 97,
+                  "pos": 1,
+                  "field": 14,
+                  "hcap": true,
+                  "type": "Hurdle",
+                  "cls": null,
+                  "btn": null
+                }
+              }
             },
             {
               "name": "Champagne Venture",
@@ -13595,7 +14393,25 @@
                 "headgear": 2,
                 "spotlight": 1
               },
-              "engine": "emerald"
+              "engine": "emerald",
+              "wt_change": {
+                "kind": "up",
+                "dl": -2,
+                "dor": 8,
+                "days": 52,
+                "prev": {
+                  "date": "2026-09-24",
+                  "venue": "LISTOWEL (IRE)",
+                  "lbs": 154,
+                  "ofr": 108,
+                  "pos": 1,
+                  "field": 18,
+                  "hcap": true,
+                  "type": "Hurdle",
+                  "cls": null,
+                  "btn": null
+                }
+              }
             },
             {
               "name": "Royal Gladiator",
@@ -14325,7 +15141,25 @@
                 "headgear": 2,
                 "spotlight": 1
               },
-              "engine": "emerald"
+              "engine": "emerald",
+              "wt_change": {
+                "kind": "up",
+                "dl": -17,
+                "dor": 4,
+                "days": 160,
+                "prev": {
+                  "date": "2026-06-08",
+                  "venue": "Roscommon",
+                  "lbs": 162,
+                  "ofr": 105,
+                  "pos": 8,
+                  "field": 14,
+                  "hcap": true,
+                  "type": "Chase",
+                  "cls": null,
+                  "btn": "1\u00bc"
+                }
+              }
             }
           ],
           "pace": {
@@ -15199,7 +16033,25 @@
                 "headgear": 2,
                 "spotlight": 1
               },
-              "engine": "emerald"
+              "engine": "emerald",
+              "wt_change": {
+                "kind": "up",
+                "dl": -18,
+                "dor": 3,
+                "days": 28,
+                "prev": {
+                  "date": "2026-10-18",
+                  "venue": "LIMERICK (IRE)",
+                  "lbs": 158,
+                  "ofr": 127,
+                  "pos": 3,
+                  "field": 9,
+                  "hcap": true,
+                  "type": "Chase",
+                  "cls": null,
+                  "btn": "\u00be"
+                }
+              }
             },
             {
               "name": "Will Do",
@@ -15272,7 +16124,25 @@
                 "headgear": 2,
                 "spotlight": 1
               },
-              "engine": "emerald"
+              "engine": "emerald",
+              "wt_change": {
+                "kind": "up",
+                "dl": -26,
+                "dor": 3,
+                "days": 21,
+                "prev": {
+                  "date": "2026-10-25",
+                  "venue": "GALWAY (IRE)",
+                  "lbs": 166,
+                  "ofr": 127,
+                  "pos": 2,
+                  "field": 6,
+                  "hcap": false,
+                  "type": "Chase",
+                  "cls": null,
+                  "btn": "17"
+                }
+              }
             },
             {
               "name": "The Wallpark",
@@ -15649,7 +16519,25 @@
                 "headgear": 2,
                 "spotlight": 1
               },
-              "engine": "emerald"
+              "engine": "emerald",
+              "wt_change": {
+                "kind": "up",
+                "dl": -21,
+                "dor": 25,
+                "days": 45,
+                "prev": {
+                  "date": "2026-10-01",
+                  "venue": "CLONMEL (IRE)",
+                  "lbs": 161,
+                  "ofr": 105,
+                  "pos": 11,
+                  "field": 12,
+                  "hcap": true,
+                  "type": "Hurdle",
+                  "cls": null,
+                  "btn": "1\u00bc"
+                }
+              }
             },
             {
               "name": "Sportinthepark",
@@ -15722,7 +16610,25 @@
                 "headgear": 2,
                 "spotlight": 1
               },
-              "engine": "emerald"
+              "engine": "emerald",
+              "wt_change": {
+                "kind": "up",
+                "dl": -16,
+                "dor": 5,
+                "days": 20,
+                "prev": {
+                  "date": "2026-10-26",
+                  "venue": "GALWAY (IRE)",
+                  "lbs": 156,
+                  "ofr": 125,
+                  "pos": 5,
+                  "field": 14,
+                  "hcap": true,
+                  "type": "Hurdle",
+                  "cls": null,
+                  "btn": "6\u00bd"
+                }
+              }
             },
             {
               "name": "Da Capo Glory",
@@ -15795,7 +16701,25 @@
                 "headgear": 3,
                 "spotlight": 1
               },
-              "engine": "emerald"
+              "engine": "emerald",
+              "wt_change": {
+                "kind": "up",
+                "dl": -23,
+                "dor": 4,
+                "days": 21,
+                "prev": {
+                  "date": "2026-10-25",
+                  "venue": "GALWAY (IRE)",
+                  "lbs": 163,
+                  "ofr": 126,
+                  "pos": 5,
+                  "field": 6,
+                  "hcap": false,
+                  "type": "Chase",
+                  "cls": null,
+                  "btn": "7"
+                }
+              }
             },
             {
               "name": "Croke Park",
@@ -16014,7 +16938,25 @@
                 "headgear": 2,
                 "spotlight": 1
               },
-              "engine": "emerald"
+              "engine": "emerald",
+              "wt_change": {
+                "kind": "up",
+                "dl": -5,
+                "dor": 2,
+                "days": 198,
+                "prev": {
+                  "date": "2026-05-01",
+                  "venue": "Punchestown                                                                                                                        (IRE)",
+                  "lbs": 145,
+                  "ofr": 128,
+                  "pos": 13,
+                  "field": 22,
+                  "hcap": true,
+                  "type": "Chase",
+                  "cls": null,
+                  "btn": "9\u00bd"
+                }
+              }
             },
             {
               "name": "Patter Merchant",
@@ -16485,7 +17427,25 @@
                 "headgear": 2,
                 "spotlight": 1
               },
-              "engine": "emerald"
+              "engine": "emerald",
+              "wt_change": {
+                "kind": "pen",
+                "dl": 5,
+                "dor": null,
+                "days": 44,
+                "prev": {
+                  "date": "2026-10-02",
+                  "venue": "GOWRAN PARK (IRE)",
+                  "lbs": 160,
+                  "ofr": null,
+                  "pos": 1,
+                  "field": 13,
+                  "hcap": false,
+                  "type": "NH Flat",
+                  "cls": null,
+                  "btn": null
+                }
+              }
             },
             {
               "name": "Brosna Shine",
@@ -16728,7 +17688,25 @@
                 "headgear": 2,
                 "spotlight": 1
               },
-              "engine": "emerald"
+              "engine": "emerald",
+              "wt_change": {
+                "kind": "pen",
+                "dl": 9,
+                "dor": null,
+                "days": 21,
+                "prev": {
+                  "date": "2026-10-25",
+                  "venue": "GALWAY (IRE)",
+                  "lbs": 152,
+                  "ofr": null,
+                  "pos": 1,
+                  "field": 8,
+                  "hcap": false,
+                  "type": "NH Flat",
+                  "cls": null,
+                  "btn": null
+                }
+              }
             },
             {
               "name": "All Noise",
@@ -16801,7 +17779,25 @@
                 "headgear": 2,
                 "spotlight": 1
               },
-              "engine": "emerald"
+              "engine": "emerald",
+              "wt_change": {
+                "kind": "pen",
+                "dl": 3,
+                "dor": null,
+                "days": 29,
+                "prev": {
+                  "date": "2026-10-17",
+                  "venue": "LIMERICK (IRE)",
+                  "lbs": 158,
+                  "ofr": null,
+                  "pos": 1,
+                  "field": 8,
+                  "hcap": false,
+                  "type": "NH Flat",
+                  "cls": null,
+                  "btn": null
+                }
+              }
             },
             {
               "name": "Shuil Solas",
