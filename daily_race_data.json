@@ -73,6 +73,25 @@
                 "top_6": 95,
                 "top_8": 95,
                 "top_10": 95
+              },
+              "eye": {
+                "pm": 23.8,
+                "pr": 28.6,
+                "flag": false,
+                "pos": [
+                  [
+                    "Placed last time",
+                    1.24,
+                    15628
+                  ]
+                ],
+                "neg": [
+                  [
+                    "Up in class",
+                    0.86,
+                    7510
+                  ]
+                ]
               }
             },
             {
@@ -138,6 +157,35 @@
                     "valid"
                   ]
                 ]
+              },
+              "eye": {
+                "pm": 25.4,
+                "pr": 19.2,
+                "flag": false,
+                "pos": [
+                  [
+                    "Won last time",
+                    1.32,
+                    5792
+                  ],
+                  [
+                    "Placed last time",
+                    1.24,
+                    15628
+                  ],
+                  [
+                    "Won on this going",
+                    1.2,
+                    6087
+                  ]
+                ],
+                "neg": [
+                  [
+                    "Up in class",
+                    0.86,
+                    7510
+                  ]
+                ]
               }
             },
             {
@@ -191,6 +239,13 @@
                 "top_6": 95,
                 "top_8": 95,
                 "top_10": 95
+              },
+              "eye": {
+                "pm": 11.2,
+                "pr": 16.9,
+                "flag": false,
+                "pos": [],
+                "neg": []
               }
             },
             {
@@ -244,6 +299,13 @@
                 "top_6": 95,
                 "top_8": 95,
                 "top_10": 95
+              },
+              "eye": {
+                "pm": 17.8,
+                "pr": 13.6,
+                "flag": false,
+                "pos": [],
+                "neg": []
               }
             },
             {
@@ -297,6 +359,19 @@
                 "top_6": 95,
                 "top_8": 95,
                 "top_10": 95
+              },
+              "eye": {
+                "pm": 12.9,
+                "pr": 11.4,
+                "flag": false,
+                "pos": [
+                  [
+                    "Top Topspeed in field",
+                    1.15,
+                    8140
+                  ]
+                ],
+                "neg": []
               }
             },
             {
@@ -350,10 +425,18 @@
                 "top_6": 95,
                 "top_8": 95,
                 "top_10": 95
+              },
+              "eye": {
+                "pm": 8.9,
+                "pr": 10.3,
+                "flag": false,
+                "pos": [],
+                "neg": []
               }
             }
           ],
-          "engine": "prixm"
+          "engine": "prixm",
+          "eye_top": "Mysterland"
         },
         {
           "time": "13:15",
@@ -460,6 +543,34 @@
                   "cls": "5",
                   "btn": "nk"
                 }
+              },
+              "eye": {
+                "pm": 17.9,
+                "pr": 20.9,
+                "flag": false,
+                "pos": [
+                  [
+                    "Course winner",
+                    1.25,
+                    2772
+                  ],
+                  [
+                    "Placed last time",
+                    1.24,
+                    15628
+                  ],
+                  [
+                    "Trainer 20%+ at course",
+                    1.23,
+                    3984
+                  ],
+                  [
+                    "Won on this going",
+                    1.2,
+                    6087
+                  ]
+                ],
+                "neg": []
               }
             },
             {
@@ -513,6 +624,35 @@
                 "top_6": 61,
                 "top_8": 74,
                 "top_10": 87
+              },
+              "eye": {
+                "pm": 12.3,
+                "pr": 11.9,
+                "flag": false,
+                "pos": [
+                  [
+                    "Won last time",
+                    1.32,
+                    5792
+                  ],
+                  [
+                    "Placed last time",
+                    1.24,
+                    15628
+                  ],
+                  [
+                    "Distance winner",
+                    1.15,
+                    7820
+                  ]
+                ],
+                "neg": [
+                  [
+                    "Rating dropped 3+",
+                    0.8,
+                    5115
+                  ]
+                ]
               }
             },
             {
@@ -584,6 +724,29 @@
                   "cls": "5",
                   "btn": "22"
                 }
+              },
+              "eye": {
+                "pm": 11.9,
+                "pr": 10.8,
+                "flag": false,
+                "pos": [
+                  [
+                    "Course winner",
+                    1.25,
+                    2772
+                  ],
+                  [
+                    "Trainer 20%+ at course",
+                    1.23,
+                    3984
+                  ],
+                  [
+                    "Won on this going",
+                    1.2,
+                    6087
+                  ]
+                ],
+                "neg": []
               }
             },
             {
@@ -670,6 +833,24 @@
                     "valid"
                   ]
                 ]
+              },
+              "eye": {
+                "pm": 8.2,
+                "pr": 8.5,
+                "flag": false,
+                "pos": [
+                  [
+                    "Won on this going",
+                    1.2,
+                    6087
+                  ],
+                  [
+                    "Distance winner",
+                    1.15,
+                    7820
+                  ]
+                ],
+                "neg": []
               }
             },
             {
@@ -723,6 +904,24 @@
                 "top_6": 59,
                 "top_8": 73,
                 "top_10": 86
+              },
+              "eye": {
+                "pm": 7.3,
+                "pr": 7.2,
+                "flag": false,
+                "pos": [],
+                "neg": [
+                  [
+                    "Trainer cold (<15%)",
+                    0.76,
+                    4122
+                  ],
+                  [
+                    "Rating dropped 3+",
+                    0.8,
+                    5115
+                  ]
+                ]
               }
             },
             {
@@ -794,6 +993,13 @@
                   "cls": "5",
                   "btn": null
                 }
+              },
+              "eye": {
+                "pm": 6.1,
+                "pr": 7.0,
+                "flag": false,
+                "pos": [],
+                "neg": []
               }
             },
             {
@@ -847,6 +1053,13 @@
                 "top_6": 59,
                 "top_8": 73,
                 "top_10": 86
+              },
+              "eye": {
+                "pm": 7.5,
+                "pr": 6.4,
+                "flag": false,
+                "pos": [],
+                "neg": []
               }
             },
             {
@@ -912,6 +1125,13 @@
                     "valid"
                   ]
                 ]
+              },
+              "eye": {
+                "pm": 7.1,
+                "pr": 6.8,
+                "flag": false,
+                "pos": [],
+                "neg": []
               }
             },
             {
@@ -965,6 +1185,19 @@
                 "top_6": 58,
                 "top_8": 72,
                 "top_10": 86
+              },
+              "eye": {
+                "pm": 7.1,
+                "pr": 5.7,
+                "flag": false,
+                "pos": [],
+                "neg": [
+                  [
+                    "Rating dropped 3+",
+                    0.8,
+                    5115
+                  ]
+                ]
               }
             },
             {
@@ -1044,6 +1277,19 @@
                     "unproven"
                   ]
                 ]
+              },
+              "eye": {
+                "pm": 6.5,
+                "pr": 5.3,
+                "flag": false,
+                "pos": [
+                  [
+                    "Ran within 7 days",
+                    1.47,
+                    2578
+                  ]
+                ],
+                "neg": []
               }
             },
             {
@@ -1097,6 +1343,25 @@
                 "top_6": 57,
                 "top_8": 72,
                 "top_10": 86
+              },
+              "eye": {
+                "pm": 5.1,
+                "pr": 5.2,
+                "flag": false,
+                "pos": [
+                  [
+                    "Rating raised 3+",
+                    1.26,
+                    5824
+                  ]
+                ],
+                "neg": [
+                  [
+                    "Up in class",
+                    0.86,
+                    7510
+                  ]
+                ]
               }
             },
             {
@@ -1150,6 +1415,19 @@
                 "top_6": 55,
                 "top_8": 70,
                 "top_10": 85
+              },
+              "eye": {
+                "pm": 3.0,
+                "pr": 4.1,
+                "flag": false,
+                "pos": [],
+                "neg": [
+                  [
+                    "Trainer cold (<15%)",
+                    0.76,
+                    4122
+                  ]
+                ]
               }
             }
           ],
@@ -1167,7 +1445,8 @@
             "fr_count": 1,
             "verdict": "Lone front-runner (Bread And Butter) \u2014 likely a steady pace and a possible easy lead; hold-up horses may struggle."
           },
-          "engine": "prixm"
+          "engine": "prixm",
+          "eye_top": "Market House"
         },
         {
           "time": "13:45",
@@ -1237,6 +1516,19 @@
                 "top_6": 95,
                 "top_8": 95,
                 "top_10": 95
+              },
+              "eye": {
+                "pm": 25.0,
+                "pr": 28.0,
+                "flag": false,
+                "pos": [
+                  [
+                    "Jockey 20%+ at course",
+                    1.22,
+                    4216
+                  ]
+                ],
+                "neg": []
               }
             },
             {
@@ -1290,6 +1582,19 @@
                 "top_6": 95,
                 "top_8": 95,
                 "top_10": 95
+              },
+              "eye": {
+                "pm": 18.8,
+                "pr": 19.5,
+                "flag": false,
+                "pos": [
+                  [
+                    "Top Topspeed in field",
+                    1.15,
+                    8140
+                  ]
+                ],
+                "neg": []
               }
             },
             {
@@ -1355,6 +1660,13 @@
                     "valid"
                   ]
                 ]
+              },
+              "eye": {
+                "pm": 15.1,
+                "pr": 16.5,
+                "flag": false,
+                "pos": [],
+                "neg": []
               }
             },
             {
@@ -1441,6 +1753,19 @@
                     "valid"
                   ]
                 ]
+              },
+              "eye": {
+                "pm": 15.5,
+                "pr": 14.4,
+                "flag": false,
+                "pos": [
+                  [
+                    "Distance winner",
+                    1.15,
+                    7820
+                  ]
+                ],
+                "neg": []
               }
             },
             {
@@ -1494,6 +1819,24 @@
                 "top_6": 95,
                 "top_8": 95,
                 "top_10": 95
+              },
+              "eye": {
+                "pm": 12.1,
+                "pr": 11.1,
+                "flag": false,
+                "pos": [
+                  [
+                    "Trainer 20%+ at course",
+                    1.23,
+                    3984
+                  ],
+                  [
+                    "Won on this going",
+                    1.2,
+                    6087
+                  ]
+                ],
+                "neg": []
               }
             },
             {
@@ -1547,10 +1890,18 @@
                 "top_6": 95,
                 "top_8": 95,
                 "top_10": 95
+              },
+              "eye": {
+                "pm": 13.6,
+                "pr": 10.5,
+                "flag": false,
+                "pos": [],
+                "neg": []
               }
             }
           ],
-          "engine": "prixm"
+          "engine": "prixm",
+          "eye_top": "Clap Of Thunder"
         },
         {
           "time": "14:15",
@@ -1671,6 +2022,40 @@
                   "cls": "4",
                   "btn": null
                 }
+              },
+              "eye": {
+                "pm": 22.2,
+                "pr": 24.0,
+                "flag": false,
+                "pos": [
+                  [
+                    "Ran within 7 days",
+                    1.47,
+                    2578
+                  ],
+                  [
+                    "Won last time",
+                    1.32,
+                    5792
+                  ],
+                  [
+                    "Rating raised 3+",
+                    1.26,
+                    5824
+                  ],
+                  [
+                    "Course winner",
+                    1.25,
+                    2772
+                  ]
+                ],
+                "neg": [
+                  [
+                    "Up in class",
+                    0.86,
+                    7510
+                  ]
+                ]
               }
             },
             {
@@ -1757,6 +2142,34 @@
                     "valid"
                   ]
                 ]
+              },
+              "eye": {
+                "pm": 16.0,
+                "pr": 14.8,
+                "flag": false,
+                "pos": [
+                  [
+                    "Ran within 7 days",
+                    1.47,
+                    2578
+                  ],
+                  [
+                    "Won last time",
+                    1.32,
+                    5792
+                  ],
+                  [
+                    "Placed last time",
+                    1.24,
+                    15628
+                  ],
+                  [
+                    "Won on this going",
+                    1.2,
+                    6087
+                  ]
+                ],
+                "neg": []
               }
             },
             {
@@ -1828,6 +2241,34 @@
                   "cls": "3",
                   "btn": null
                 }
+              },
+              "eye": {
+                "pm": 14.3,
+                "pr": 13.5,
+                "flag": false,
+                "pos": [
+                  [
+                    "Won last time",
+                    1.32,
+                    5792
+                  ],
+                  [
+                    "Placed last time",
+                    1.24,
+                    15628
+                  ],
+                  [
+                    "Won on this going",
+                    1.2,
+                    6087
+                  ],
+                  [
+                    "Top Topspeed in field",
+                    1.15,
+                    8140
+                  ]
+                ],
+                "neg": []
               }
             },
             {
@@ -1911,6 +2352,34 @@
                   "cls": "3",
                   "btn": null
                 }
+              },
+              "eye": {
+                "pm": 12.4,
+                "pr": 9.9,
+                "flag": false,
+                "pos": [
+                  [
+                    "Won last time",
+                    1.32,
+                    5792
+                  ],
+                  [
+                    "Rating raised 3+",
+                    1.26,
+                    5824
+                  ],
+                  [
+                    "Placed last time",
+                    1.24,
+                    15628
+                  ],
+                  [
+                    "Trainer 20%+ at course",
+                    1.23,
+                    3984
+                  ]
+                ],
+                "neg": []
               }
             },
             {
@@ -1982,6 +2451,40 @@
                   "cls": "4",
                   "btn": null
                 }
+              },
+              "eye": {
+                "pm": 8.4,
+                "pr": 8.1,
+                "flag": false,
+                "pos": [
+                  [
+                    "Won last time",
+                    1.32,
+                    5792
+                  ],
+                  [
+                    "Rating raised 3+",
+                    1.26,
+                    5824
+                  ],
+                  [
+                    "Placed last time",
+                    1.24,
+                    15628
+                  ],
+                  [
+                    "Distance winner",
+                    1.15,
+                    7820
+                  ]
+                ],
+                "neg": [
+                  [
+                    "Up in class",
+                    0.86,
+                    7510
+                  ]
+                ]
               }
             },
             {
@@ -2047,6 +2550,24 @@
                     "valid"
                   ]
                 ]
+              },
+              "eye": {
+                "pm": 8.8,
+                "pr": 6.8,
+                "flag": false,
+                "pos": [
+                  [
+                    "Rating raised 3+",
+                    1.26,
+                    5824
+                  ],
+                  [
+                    "Trainer 20%+ at course",
+                    1.23,
+                    3984
+                  ]
+                ],
+                "neg": []
               }
             },
             {
@@ -2100,6 +2621,19 @@
                 "top_6": 65,
                 "top_8": 83,
                 "top_10": 95
+              },
+              "eye": {
+                "pm": 4.5,
+                "pr": 6.1,
+                "flag": false,
+                "pos": [],
+                "neg": [
+                  [
+                    "Up in class",
+                    0.86,
+                    7510
+                  ]
+                ]
               }
             },
             {
@@ -2153,6 +2687,19 @@
                 "top_6": 65,
                 "top_8": 83,
                 "top_10": 95
+              },
+              "eye": {
+                "pm": 5.5,
+                "pr": 6.4,
+                "flag": false,
+                "pos": [
+                  [
+                    "Jockey 20%+ at course",
+                    1.22,
+                    4216
+                  ]
+                ],
+                "neg": []
               }
             },
             {
@@ -2206,6 +2753,13 @@
                 "top_6": 65,
                 "top_8": 83,
                 "top_10": 95
+              },
+              "eye": {
+                "pm": 2.7,
+                "pr": 5.4,
+                "flag": false,
+                "pos": [],
+                "neg": []
               }
             },
             {
@@ -2271,6 +2825,24 @@
                     "valid"
                   ]
                 ]
+              },
+              "eye": {
+                "pm": 5.2,
+                "pr": 5.1,
+                "flag": false,
+                "pos": [],
+                "neg": [
+                  [
+                    "Track unsuited",
+                    0.68,
+                    291
+                  ],
+                  [
+                    "Rating dropped 3+",
+                    0.8,
+                    5115
+                  ]
+                ]
               }
             }
           ],
@@ -2290,7 +2862,8 @@
             "fr_count": 1,
             "verdict": "Lone front-runner (Kamille Au Kanada) \u2014 likely a steady pace and a possible easy lead; hold-up horses may struggle."
           },
-          "engine": "prixm"
+          "engine": "prixm",
+          "eye_top": "Kamille Au Kanada"
         },
         {
           "time": "14:45",
@@ -2378,6 +2951,29 @@
                   "cls": "5",
                   "btn": "2\u00bd"
                 }
+              },
+              "eye": {
+                "pm": 19.0,
+                "pr": 25.0,
+                "flag": false,
+                "pos": [
+                  [
+                    "Won last time",
+                    1.32,
+                    5792
+                  ],
+                  [
+                    "Rating raised 3+",
+                    1.26,
+                    5824
+                  ],
+                  [
+                    "Placed last time",
+                    1.24,
+                    15628
+                  ]
+                ],
+                "neg": []
               }
             },
             {
@@ -2449,6 +3045,29 @@
                   "cls": "5",
                   "btn": "15"
                 }
+              },
+              "eye": {
+                "pm": 14.1,
+                "pr": 15.0,
+                "flag": false,
+                "pos": [
+                  [
+                    "Trainer 20%+ at course",
+                    1.23,
+                    3984
+                  ],
+                  [
+                    "Won on this going",
+                    1.2,
+                    6087
+                  ],
+                  [
+                    "Distance winner",
+                    1.15,
+                    7820
+                  ]
+                ],
+                "neg": []
               }
             },
             {
@@ -2546,6 +3165,34 @@
                   "cls": "5",
                   "btn": null
                 }
+              },
+              "eye": {
+                "pm": 19.5,
+                "pr": 13.4,
+                "flag": false,
+                "pos": [
+                  [
+                    "Ran within 7 days",
+                    1.47,
+                    2578
+                  ],
+                  [
+                    "Won last time",
+                    1.32,
+                    5792
+                  ],
+                  [
+                    "Course winner",
+                    1.25,
+                    2772
+                  ],
+                  [
+                    "Placed last time",
+                    1.24,
+                    15628
+                  ]
+                ],
+                "neg": []
               }
             },
             {
@@ -2629,6 +3276,25 @@
                   "cls": "4",
                   "btn": null
                 }
+              },
+              "eye": {
+                "pm": 12.5,
+                "pr": 11.1,
+                "flag": false,
+                "pos": [
+                  [
+                    "Ran within 7 days",
+                    1.47,
+                    2578
+                  ]
+                ],
+                "neg": [
+                  [
+                    "Trainer cold (<15%)",
+                    0.76,
+                    4122
+                  ]
+                ]
               }
             },
             {
@@ -2682,6 +3348,19 @@
                 "top_6": 79,
                 "top_8": 95,
                 "top_10": 95
+              },
+              "eye": {
+                "pm": 5.4,
+                "pr": 9.5,
+                "flag": false,
+                "pos": [],
+                "neg": [
+                  [
+                    "Rating dropped 3+",
+                    0.8,
+                    5115
+                  ]
+                ]
               }
             },
             {
@@ -2735,6 +3414,25 @@
                 "top_6": 79,
                 "top_8": 95,
                 "top_10": 95
+              },
+              "eye": {
+                "pm": 11.9,
+                "pr": 9.0,
+                "flag": false,
+                "pos": [
+                  [
+                    "Jockey 20%+ at course",
+                    1.22,
+                    4216
+                  ]
+                ],
+                "neg": [
+                  [
+                    "Rating dropped 3+",
+                    0.8,
+                    5115
+                  ]
+                ]
               }
             },
             {
@@ -2788,6 +3486,30 @@
                 "top_6": 79,
                 "top_8": 95,
                 "top_10": 95
+              },
+              "eye": {
+                "pm": 9.2,
+                "pr": 8.3,
+                "flag": false,
+                "pos": [
+                  [
+                    "Placed last time",
+                    1.24,
+                    15628
+                  ],
+                  [
+                    "Top Topspeed in field",
+                    1.15,
+                    8140
+                  ]
+                ],
+                "neg": [
+                  [
+                    "Trainer cold (<15%)",
+                    0.76,
+                    4122
+                  ]
+                ]
               }
             },
             {
@@ -2841,10 +3563,24 @@
                 "top_6": 79,
                 "top_8": 95,
                 "top_10": 95
+              },
+              "eye": {
+                "pm": 8.5,
+                "pr": 8.6,
+                "flag": false,
+                "pos": [
+                  [
+                    "Jockey 20%+ at course",
+                    1.22,
+                    4216
+                  ]
+                ],
+                "neg": []
               }
             }
           ],
-          "engine": "prixm"
+          "engine": "prixm",
+          "eye_top": "Golly Gosh"
         },
         {
           "time": "15:15",
@@ -2951,6 +3687,34 @@
                   "cls": "5",
                   "btn": null
                 }
+              },
+              "eye": {
+                "pm": 39.0,
+                "pr": 39.4,
+                "flag": false,
+                "pos": [
+                  [
+                    "Won last time",
+                    1.32,
+                    5792
+                  ],
+                  [
+                    "Rating raised 3+",
+                    1.26,
+                    5824
+                  ],
+                  [
+                    "Placed last time",
+                    1.24,
+                    15628
+                  ],
+                  [
+                    "Distance winner",
+                    1.15,
+                    7820
+                  ]
+                ],
+                "neg": []
               }
             },
             {
@@ -3041,6 +3805,34 @@
                   "cls": "5",
                   "btn": "33"
                 }
+              },
+              "eye": {
+                "pm": 25.0,
+                "pr": 21.0,
+                "flag": false,
+                "pos": [
+                  [
+                    "Rating raised 3+",
+                    1.26,
+                    5824
+                  ],
+                  [
+                    "Placed last time",
+                    1.24,
+                    15628
+                  ],
+                  [
+                    "Won on this going",
+                    1.2,
+                    6087
+                  ],
+                  [
+                    "Lone front-runner",
+                    1.17,
+                    819
+                  ]
+                ],
+                "neg": []
               }
             },
             {
@@ -3094,6 +3886,25 @@
                 "top_6": 95,
                 "top_8": 95,
                 "top_10": 95
+              },
+              "eye": {
+                "pm": 17.4,
+                "pr": 17.2,
+                "flag": false,
+                "pos": [
+                  [
+                    "Trainer 20%+ at course",
+                    1.23,
+                    3984
+                  ]
+                ],
+                "neg": [
+                  [
+                    "Rating dropped 3+",
+                    0.8,
+                    5115
+                  ]
+                ]
               }
             },
             {
@@ -3147,6 +3958,13 @@
                 "top_6": 95,
                 "top_8": 95,
                 "top_10": 95
+              },
+              "eye": {
+                "pm": 14.0,
+                "pr": 13.4,
+                "flag": false,
+                "pos": [],
+                "neg": []
               }
             },
             {
@@ -3200,10 +4018,24 @@
                 "top_6": 95,
                 "top_8": 95,
                 "top_10": 95
+              },
+              "eye": {
+                "pm": 4.6,
+                "pr": 9.0,
+                "flag": false,
+                "pos": [],
+                "neg": [
+                  [
+                    "Rating dropped 3+",
+                    0.8,
+                    5115
+                  ]
+                ]
               }
             }
           ],
-          "engine": "prixm"
+          "engine": "prixm",
+          "eye_top": "Uncle Al"
         },
         {
           "time": "15:45",
@@ -3273,6 +4105,30 @@
                 "top_6": 82,
                 "top_8": 95,
                 "top_10": 95
+              },
+              "eye": {
+                "pm": 19.9,
+                "pr": 25.4,
+                "flag": false,
+                "pos": [
+                  [
+                    "Rating raised 3+",
+                    1.26,
+                    5824
+                  ],
+                  [
+                    "Placed last time",
+                    1.24,
+                    15628
+                  ]
+                ],
+                "neg": [
+                  [
+                    "Up in class",
+                    0.86,
+                    7510
+                  ]
+                ]
               }
             },
             {
@@ -3338,6 +4194,40 @@
                     "valid"
                   ]
                 ]
+              },
+              "eye": {
+                "pm": 22.8,
+                "pr": 15.0,
+                "flag": false,
+                "pos": [
+                  [
+                    "Ran within 7 days",
+                    1.47,
+                    2578
+                  ],
+                  [
+                    "Won last time",
+                    1.32,
+                    5792
+                  ],
+                  [
+                    "Placed last time",
+                    1.24,
+                    15628
+                  ],
+                  [
+                    "Lone front-runner",
+                    1.17,
+                    819
+                  ]
+                ],
+                "neg": [
+                  [
+                    "Rating dropped 3+",
+                    0.8,
+                    5115
+                  ]
+                ]
               }
             },
             {
@@ -3391,6 +4281,30 @@
                 "top_6": 80,
                 "top_8": 95,
                 "top_10": 95
+              },
+              "eye": {
+                "pm": 10.9,
+                "pr": 13.7,
+                "flag": false,
+                "pos": [
+                  [
+                    "Rating raised 3+",
+                    1.26,
+                    5824
+                  ],
+                  [
+                    "Jockey 20%+ at course",
+                    1.22,
+                    4216
+                  ]
+                ],
+                "neg": [
+                  [
+                    "Up in class",
+                    0.86,
+                    7510
+                  ]
+                ]
               }
             },
             {
@@ -3444,6 +4358,13 @@
                 "top_6": 79,
                 "top_8": 95,
                 "top_10": 95
+              },
+              "eye": {
+                "pm": 10.2,
+                "pr": 11.1,
+                "flag": false,
+                "pos": [],
+                "neg": []
               }
             },
             {
@@ -3497,6 +4418,13 @@
                 "top_6": 79,
                 "top_8": 95,
                 "top_10": 95
+              },
+              "eye": {
+                "pm": 9.2,
+                "pr": 9.2,
+                "flag": false,
+                "pos": [],
+                "neg": []
               }
             },
             {
@@ -3550,6 +4478,19 @@
                 "top_6": 79,
                 "top_8": 95,
                 "top_10": 95
+              },
+              "eye": {
+                "pm": 9.1,
+                "pr": 8.9,
+                "flag": false,
+                "pos": [
+                  [
+                    "Top Topspeed in field",
+                    1.15,
+                    8140
+                  ]
+                ],
+                "neg": []
               }
             },
             {
@@ -3603,6 +4544,19 @@
                 "top_6": 79,
                 "top_8": 95,
                 "top_10": 95
+              },
+              "eye": {
+                "pm": 8.9,
+                "pr": 8.0,
+                "flag": false,
+                "pos": [
+                  [
+                    "Trainer 20%+ at course",
+                    1.23,
+                    3984
+                  ]
+                ],
+                "neg": []
               }
             },
             {
@@ -3656,10 +4610,24 @@
                 "top_6": 79,
                 "top_8": 95,
                 "top_10": 95
+              },
+              "eye": {
+                "pm": 8.9,
+                "pr": 8.7,
+                "flag": false,
+                "pos": [
+                  [
+                    "Trainer 20%+ at course",
+                    1.23,
+                    3984
+                  ]
+                ],
+                "neg": []
               }
             }
           ],
-          "engine": "prixm"
+          "engine": "prixm",
+          "eye_top": "Bobbi's Beauty"
         }
       ],
       "race_count": 7
@@ -3747,6 +4715,24 @@
                     "valid"
                   ]
                 ]
+              },
+              "eye": {
+                "pm": 17.5,
+                "pr": 21.1,
+                "flag": false,
+                "pos": [
+                  [
+                    "Placed last time",
+                    1.24,
+                    15628
+                  ],
+                  [
+                    "Distance winner",
+                    1.15,
+                    7820
+                  ]
+                ],
+                "neg": []
               }
             },
             {
@@ -3800,6 +4786,13 @@
                 "top_6": 64,
                 "top_8": 79,
                 "top_10": 93
+              },
+              "eye": {
+                "pm": 8.7,
+                "pr": 12.7,
+                "flag": false,
+                "pos": [],
+                "neg": []
               }
             },
             {
@@ -3872,6 +4865,34 @@
                     "valid"
                   ]
                 ]
+              },
+              "eye": {
+                "pm": 13.8,
+                "pr": 11.5,
+                "flag": false,
+                "pos": [
+                  [
+                    "Course winner",
+                    1.25,
+                    2772
+                  ],
+                  [
+                    "Trainer 20%+ at course",
+                    1.23,
+                    3984
+                  ],
+                  [
+                    "Won on this going",
+                    1.2,
+                    6087
+                  ],
+                  [
+                    "Distance winner",
+                    1.15,
+                    7820
+                  ]
+                ],
+                "neg": []
               }
             },
             {
@@ -3937,6 +4958,29 @@
                     "valid"
                   ]
                 ]
+              },
+              "eye": {
+                "pm": 12.5,
+                "pr": 9.7,
+                "flag": false,
+                "pos": [
+                  [
+                    "Placed last time",
+                    1.24,
+                    15628
+                  ],
+                  [
+                    "Won on this going",
+                    1.2,
+                    6087
+                  ],
+                  [
+                    "Distance winner",
+                    1.15,
+                    7820
+                  ]
+                ],
+                "neg": []
               }
             },
             {
@@ -3990,6 +5034,19 @@
                 "top_6": 63,
                 "top_8": 78,
                 "top_10": 93
+              },
+              "eye": {
+                "pm": 10.3,
+                "pr": 7.9,
+                "flag": false,
+                "pos": [
+                  [
+                    "Placed last time",
+                    1.24,
+                    15628
+                  ]
+                ],
+                "neg": []
               }
             },
             {
@@ -4055,6 +5112,19 @@
                     "valid"
                   ]
                 ]
+              },
+              "eye": {
+                "pm": 5.3,
+                "pr": 7.3,
+                "flag": false,
+                "pos": [
+                  [
+                    "Distance winner",
+                    1.15,
+                    7820
+                  ]
+                ],
+                "neg": []
               }
             },
             {
@@ -4120,6 +5190,35 @@
                     "valid"
                   ]
                 ]
+              },
+              "eye": {
+                "pm": 6.1,
+                "pr": 6.4,
+                "flag": false,
+                "pos": [
+                  [
+                    "Course winner",
+                    1.25,
+                    2772
+                  ],
+                  [
+                    "Won on this going",
+                    1.2,
+                    6087
+                  ],
+                  [
+                    "Distance winner",
+                    1.15,
+                    7820
+                  ]
+                ],
+                "neg": [
+                  [
+                    "Rating dropped 3+",
+                    0.8,
+                    5115
+                  ]
+                ]
               }
             },
             {
@@ -4173,6 +5272,24 @@
                 "top_6": 61,
                 "top_8": 77,
                 "top_10": 92
+              },
+              "eye": {
+                "pm": 7.9,
+                "pr": 6.8,
+                "flag": false,
+                "pos": [
+                  [
+                    "Placed last time",
+                    1.24,
+                    15628
+                  ],
+                  [
+                    "Jockey 20%+ at course",
+                    1.22,
+                    4216
+                  ]
+                ],
+                "neg": []
               }
             },
             {
@@ -4226,6 +5343,19 @@
                 "top_6": 61,
                 "top_8": 77,
                 "top_10": 92
+              },
+              "eye": {
+                "pm": 7.8,
+                "pr": 5.7,
+                "flag": false,
+                "pos": [
+                  [
+                    "Placed last time",
+                    1.24,
+                    15628
+                  ]
+                ],
+                "neg": []
               }
             },
             {
@@ -4279,6 +5409,30 @@
                 "top_6": 61,
                 "top_8": 77,
                 "top_10": 92
+              },
+              "eye": {
+                "pm": 3.5,
+                "pr": 5.5,
+                "flag": false,
+                "pos": [
+                  [
+                    "Top Topspeed in field",
+                    1.15,
+                    8140
+                  ]
+                ],
+                "neg": [
+                  [
+                    "Trainer cold (<15%)",
+                    0.76,
+                    4122
+                  ],
+                  [
+                    "Rating dropped 3+",
+                    0.8,
+                    5115
+                  ]
+                ]
               }
             },
             {
@@ -4362,10 +5516,29 @@
                   "cls": "5",
                   "btn": "1\u00bc"
                 }
+              },
+              "eye": {
+                "pm": 6.7,
+                "pr": 5.4,
+                "flag": false,
+                "pos": [
+                  [
+                    "Placed last time",
+                    1.24,
+                    15628
+                  ],
+                  [
+                    "Top Topspeed in field",
+                    1.15,
+                    8140
+                  ]
+                ],
+                "neg": []
               }
             }
           ],
-          "engine": "prixm"
+          "engine": "prixm",
+          "eye_top": "Harry's Pop"
         },
         {
           "time": "17:00",
@@ -4435,6 +5608,19 @@
                 "top_6": 64,
                 "top_8": 74,
                 "top_10": 85
+              },
+              "eye": {
+                "pm": 32.7,
+                "pr": 22.3,
+                "flag": false,
+                "pos": [
+                  [
+                    "Placed last time",
+                    1.24,
+                    15628
+                  ]
+                ],
+                "neg": []
               }
             },
             {
@@ -4488,6 +5674,19 @@
                 "top_6": 61,
                 "top_8": 72,
                 "top_10": 83
+              },
+              "eye": {
+                "pm": 15.3,
+                "pr": 13.6,
+                "flag": false,
+                "pos": [
+                  [
+                    "Placed last time",
+                    1.24,
+                    15628
+                  ]
+                ],
+                "neg": []
               }
             },
             {
@@ -4541,6 +5740,29 @@
                 "top_6": 57,
                 "top_8": 69,
                 "top_10": 82
+              },
+              "eye": {
+                "pm": 14.9,
+                "pr": 9.8,
+                "flag": false,
+                "pos": [
+                  [
+                    "Placed last time",
+                    1.24,
+                    15628
+                  ],
+                  [
+                    "Trainer 20%+ at course",
+                    1.23,
+                    3984
+                  ],
+                  [
+                    "Top Topspeed in field",
+                    1.15,
+                    8140
+                  ]
+                ],
+                "neg": []
               }
             },
             {
@@ -4594,6 +5816,13 @@
                 "top_6": 56,
                 "top_8": 69,
                 "top_10": 81
+              },
+              "eye": {
+                "pm": 9.6,
+                "pr": 8.1,
+                "flag": false,
+                "pos": [],
+                "neg": []
               }
             },
             {
@@ -4647,6 +5876,13 @@
                 "top_6": 55,
                 "top_8": 68,
                 "top_10": 81
+              },
+              "eye": {
+                "pm": 6.7,
+                "pr": 6.5,
+                "flag": false,
+                "pos": [],
+                "neg": []
               }
             },
             {
@@ -4700,6 +5936,13 @@
                 "top_6": 55,
                 "top_8": 68,
                 "top_10": 81
+              },
+              "eye": {
+                "pm": 4.0,
+                "pr": 6.5,
+                "flag": false,
+                "pos": [],
+                "neg": []
               }
             },
             {
@@ -4753,6 +5996,19 @@
                 "top_6": 55,
                 "top_8": 68,
                 "top_10": 81
+              },
+              "eye": {
+                "pm": 5.0,
+                "pr": 5.8,
+                "flag": false,
+                "pos": [
+                  [
+                    "Trainer 20%+ at course",
+                    1.23,
+                    3984
+                  ]
+                ],
+                "neg": []
               }
             },
             {
@@ -4806,6 +6062,13 @@
                 "top_6": 54,
                 "top_8": 67,
                 "top_10": 80
+              },
+              "eye": {
+                "pm": 3.6,
+                "pr": 6.0,
+                "flag": false,
+                "pos": [],
+                "neg": []
               }
             },
             {
@@ -4859,6 +6122,13 @@
                 "top_6": 53,
                 "top_8": 67,
                 "top_10": 80
+              },
+              "eye": {
+                "pm": 1.9,
+                "pr": 4.7,
+                "flag": false,
+                "pos": [],
+                "neg": []
               }
             },
             {
@@ -4912,6 +6182,13 @@
                 "top_6": 53,
                 "top_8": 66,
                 "top_10": 80
+              },
+              "eye": {
+                "pm": 1.1,
+                "pr": 4.4,
+                "flag": false,
+                "pos": [],
+                "neg": []
               }
             },
             {
@@ -4965,6 +6242,19 @@
                 "top_6": 53,
                 "top_8": 66,
                 "top_10": 80
+              },
+              "eye": {
+                "pm": 2.6,
+                "pr": 4.4,
+                "flag": false,
+                "pos": [
+                  [
+                    "Trainer 20%+ at course",
+                    1.23,
+                    3984
+                  ]
+                ],
+                "neg": []
               }
             },
             {
@@ -5018,6 +6308,19 @@
                 "top_6": 53,
                 "top_8": 66,
                 "top_10": 80
+              },
+              "eye": {
+                "pm": 1.4,
+                "pr": 4.4,
+                "flag": false,
+                "pos": [],
+                "neg": [
+                  [
+                    "Up in class",
+                    0.86,
+                    7510
+                  ]
+                ]
               }
             },
             {
@@ -5071,10 +6374,18 @@
                 "top_6": 51,
                 "top_8": 65,
                 "top_10": 79
+              },
+              "eye": {
+                "pm": 1.1,
+                "pr": 3.5,
+                "flag": false,
+                "pos": [],
+                "neg": []
               }
             }
           ],
-          "engine": "prixm"
+          "engine": "prixm",
+          "eye_top": "Desert Romance"
         },
         {
           "time": "17:30",
@@ -5162,6 +6473,29 @@
                   "cls": "2",
                   "btn": null
                 }
+              },
+              "eye": {
+                "pm": 39.3,
+                "pr": 24.3,
+                "flag": false,
+                "pos": [
+                  [
+                    "Won last time",
+                    1.32,
+                    5792
+                  ],
+                  [
+                    "Placed last time",
+                    1.24,
+                    15628
+                  ],
+                  [
+                    "Distance winner",
+                    1.15,
+                    7820
+                  ]
+                ],
+                "neg": []
               }
             },
             {
@@ -5215,6 +6549,19 @@
                 "top_6": 73,
                 "top_8": 91,
                 "top_10": 95
+              },
+              "eye": {
+                "pm": 13.1,
+                "pr": 14.5,
+                "flag": false,
+                "pos": [
+                  [
+                    "Trainer 20%+ at course",
+                    1.23,
+                    3984
+                  ]
+                ],
+                "neg": []
               }
             },
             {
@@ -5268,6 +6615,24 @@
                 "top_6": 73,
                 "top_8": 91,
                 "top_10": 95
+              },
+              "eye": {
+                "pm": 12.8,
+                "pr": 13.0,
+                "flag": false,
+                "pos": [
+                  [
+                    "Lone front-runner",
+                    1.17,
+                    819
+                  ],
+                  [
+                    "Top Topspeed in field",
+                    1.15,
+                    8140
+                  ]
+                ],
+                "neg": []
               }
             },
             {
@@ -5333,6 +6698,19 @@
                     "valid"
                   ]
                 ]
+              },
+              "eye": {
+                "pm": 7.1,
+                "pr": 10.5,
+                "flag": false,
+                "pos": [],
+                "neg": [
+                  [
+                    "Track unsuited",
+                    0.68,
+                    291
+                  ]
+                ]
               }
             },
             {
@@ -5386,6 +6764,19 @@
                 "top_6": 72,
                 "top_8": 91,
                 "top_10": 95
+              },
+              "eye": {
+                "pm": 7.9,
+                "pr": 8.7,
+                "flag": false,
+                "pos": [
+                  [
+                    "Trainer 20%+ at course",
+                    1.23,
+                    3984
+                  ]
+                ],
+                "neg": []
               }
             },
             {
@@ -5439,6 +6830,13 @@
                 "top_6": 72,
                 "top_8": 91,
                 "top_10": 95
+              },
+              "eye": {
+                "pm": 4.6,
+                "pr": 8.5,
+                "flag": false,
+                "pos": [],
+                "neg": []
               }
             },
             {
@@ -5492,6 +6890,24 @@
                 "top_6": 71,
                 "top_8": 90,
                 "top_10": 95
+              },
+              "eye": {
+                "pm": 8.1,
+                "pr": 7.1,
+                "flag": false,
+                "pos": [
+                  [
+                    "Trainer 20%+ at course",
+                    1.23,
+                    3984
+                  ],
+                  [
+                    "Top Topspeed in field",
+                    1.15,
+                    8140
+                  ]
+                ],
+                "neg": []
               }
             },
             {
@@ -5545,6 +6961,19 @@
                 "top_6": 71,
                 "top_8": 90,
                 "top_10": 95
+              },
+              "eye": {
+                "pm": 4.0,
+                "pr": 7.5,
+                "flag": false,
+                "pos": [],
+                "neg": [
+                  [
+                    "Up in class",
+                    0.86,
+                    7510
+                  ]
+                ]
               }
             },
             {
@@ -5610,10 +7039,29 @@
                     "valid"
                   ]
                 ]
+              },
+              "eye": {
+                "pm": 3.1,
+                "pr": 5.9,
+                "flag": false,
+                "pos": [],
+                "neg": [
+                  [
+                    "Track unsuited",
+                    0.68,
+                    291
+                  ],
+                  [
+                    "Up in class",
+                    0.86,
+                    7510
+                  ]
+                ]
               }
             }
           ],
-          "engine": "prixm"
+          "engine": "prixm",
+          "eye_top": "Leading Role"
         },
         {
           "time": "18:00",
@@ -5683,6 +7131,19 @@
                 "top_6": 75,
                 "top_8": 92,
                 "top_10": 95
+              },
+              "eye": {
+                "pm": 38.1,
+                "pr": 24.8,
+                "flag": false,
+                "pos": [
+                  [
+                    "Placed last time",
+                    1.24,
+                    15628
+                  ]
+                ],
+                "neg": []
               }
             },
             {
@@ -5736,6 +7197,24 @@
                 "top_6": 73,
                 "top_8": 91,
                 "top_10": 95
+              },
+              "eye": {
+                "pm": 15.4,
+                "pr": 13.9,
+                "flag": false,
+                "pos": [
+                  [
+                    "Trainer 20%+ at course",
+                    1.23,
+                    3984
+                  ],
+                  [
+                    "Top Topspeed in field",
+                    1.15,
+                    8140
+                  ]
+                ],
+                "neg": []
               }
             },
             {
@@ -5789,6 +7268,19 @@
                 "top_6": 72,
                 "top_8": 91,
                 "top_10": 95
+              },
+              "eye": {
+                "pm": 13.1,
+                "pr": 12.1,
+                "flag": false,
+                "pos": [
+                  [
+                    "Trainer 20%+ at course",
+                    1.23,
+                    3984
+                  ]
+                ],
+                "neg": []
               }
             },
             {
@@ -5842,6 +7334,19 @@
                 "top_6": 72,
                 "top_8": 91,
                 "top_10": 95
+              },
+              "eye": {
+                "pm": 8.7,
+                "pr": 10.4,
+                "flag": false,
+                "pos": [
+                  [
+                    "Trainer 20%+ at course",
+                    1.23,
+                    3984
+                  ]
+                ],
+                "neg": []
               }
             },
             {
@@ -5895,6 +7400,19 @@
                 "top_6": 72,
                 "top_8": 91,
                 "top_10": 95
+              },
+              "eye": {
+                "pm": 6.9,
+                "pr": 8.7,
+                "flag": false,
+                "pos": [
+                  [
+                    "Trainer 20%+ at course",
+                    1.23,
+                    3984
+                  ]
+                ],
+                "neg": []
               }
             },
             {
@@ -5948,6 +7466,25 @@
                 "top_6": 71,
                 "top_8": 90,
                 "top_10": 95
+              },
+              "eye": {
+                "pm": 4.7,
+                "pr": 8.2,
+                "flag": false,
+                "pos": [
+                  [
+                    "Trainer 20%+ at course",
+                    1.23,
+                    3984
+                  ]
+                ],
+                "neg": [
+                  [
+                    "Trainer cold (<15%)",
+                    0.76,
+                    4122
+                  ]
+                ]
               }
             },
             {
@@ -6001,6 +7538,13 @@
                 "top_6": 71,
                 "top_8": 90,
                 "top_10": 95
+              },
+              "eye": {
+                "pm": 4.1,
+                "pr": 7.4,
+                "flag": false,
+                "pos": [],
+                "neg": []
               }
             },
             {
@@ -6066,6 +7610,19 @@
                     "valid"
                   ]
                 ]
+              },
+              "eye": {
+                "pm": 6.5,
+                "pr": 7.8,
+                "flag": false,
+                "pos": [],
+                "neg": [
+                  [
+                    "Track unsuited",
+                    0.68,
+                    291
+                  ]
+                ]
               }
             },
             {
@@ -6119,10 +7676,24 @@
                 "top_6": 71,
                 "top_8": 90,
                 "top_10": 95
+              },
+              "eye": {
+                "pm": 2.6,
+                "pr": 6.6,
+                "flag": false,
+                "pos": [],
+                "neg": [
+                  [
+                    "Up in class",
+                    0.86,
+                    7510
+                  ]
+                ]
               }
             }
           ],
-          "engine": "prixm"
+          "engine": "prixm",
+          "eye_top": "Al Lahbab"
         },
         {
           "time": "18:30",
@@ -6210,6 +7781,35 @@
                   "cls": "4",
                   "btn": "\u00be"
                 }
+              },
+              "eye": {
+                "pm": 18.3,
+                "pr": 21.7,
+                "flag": false,
+                "pos": [
+                  [
+                    "Placed last time",
+                    1.24,
+                    15628
+                  ],
+                  [
+                    "Won on this going",
+                    1.2,
+                    6087
+                  ],
+                  [
+                    "Distance winner",
+                    1.15,
+                    7820
+                  ]
+                ],
+                "neg": [
+                  [
+                    "Up in class",
+                    0.86,
+                    7510
+                  ]
+                ]
               }
             },
             {
@@ -6282,6 +7882,25 @@
                     "valid"
                   ]
                 ]
+              },
+              "eye": {
+                "pm": 9.0,
+                "pr": 13.6,
+                "flag": false,
+                "pos": [
+                  [
+                    "Distance winner",
+                    1.15,
+                    7820
+                  ]
+                ],
+                "neg": [
+                  [
+                    "Up in class",
+                    0.86,
+                    7510
+                  ]
+                ]
               }
             },
             {
@@ -6345,6 +7964,30 @@
                     "Front-runner in 2 of last 2 runs",
                     "sharp_handy_good",
                     "valid"
+                  ]
+                ]
+              },
+              "eye": {
+                "pm": 7.7,
+                "pr": 12.4,
+                "flag": false,
+                "pos": [
+                  [
+                    "Top Topspeed in field",
+                    1.15,
+                    8140
+                  ]
+                ],
+                "neg": [
+                  [
+                    "Trainer cold (<15%)",
+                    0.76,
+                    4122
+                  ],
+                  [
+                    "Up in class",
+                    0.86,
+                    7510
                   ]
                 ]
               }
@@ -6430,6 +8073,45 @@
                   "cls": "4",
                   "btn": null
                 }
+              },
+              "eye": {
+                "pm": 12.9,
+                "pr": 10.2,
+                "flag": false,
+                "pos": [
+                  [
+                    "Won last time",
+                    1.32,
+                    5792
+                  ],
+                  [
+                    "Rating raised 3+",
+                    1.26,
+                    5824
+                  ],
+                  [
+                    "Placed last time",
+                    1.24,
+                    15628
+                  ],
+                  [
+                    "Jockey 20%+ at course",
+                    1.22,
+                    4216
+                  ]
+                ],
+                "neg": [
+                  [
+                    "Trainer cold (<15%)",
+                    0.76,
+                    4122
+                  ],
+                  [
+                    "Up in class",
+                    0.86,
+                    7510
+                  ]
+                ]
               }
             },
             {
@@ -6483,6 +8165,25 @@
                 "top_6": 62,
                 "top_8": 77,
                 "top_10": 92
+              },
+              "eye": {
+                "pm": 6.3,
+                "pr": 7.6,
+                "flag": false,
+                "pos": [
+                  [
+                    "Jockey 20%+ at course",
+                    1.22,
+                    4216
+                  ]
+                ],
+                "neg": [
+                  [
+                    "Up in class",
+                    0.86,
+                    7510
+                  ]
+                ]
               }
             },
             {
@@ -6566,6 +8267,45 @@
                   "cls": "4",
                   "btn": null
                 }
+              },
+              "eye": {
+                "pm": 7.4,
+                "pr": 7.3,
+                "flag": false,
+                "pos": [
+                  [
+                    "Won last time",
+                    1.32,
+                    5792
+                  ],
+                  [
+                    "Rating raised 3+",
+                    1.26,
+                    5824
+                  ],
+                  [
+                    "Placed last time",
+                    1.24,
+                    15628
+                  ],
+                  [
+                    "Won on this going",
+                    1.2,
+                    6087
+                  ]
+                ],
+                "neg": [
+                  [
+                    "Trainer cold (<15%)",
+                    0.76,
+                    4122
+                  ],
+                  [
+                    "Up in class",
+                    0.86,
+                    7510
+                  ]
+                ]
               }
             },
             {
@@ -6638,6 +8378,25 @@
                     "valid"
                   ]
                 ]
+              },
+              "eye": {
+                "pm": 5.8,
+                "pr": 6.3,
+                "flag": false,
+                "pos": [
+                  [
+                    "Distance winner",
+                    1.15,
+                    7820
+                  ]
+                ],
+                "neg": [
+                  [
+                    "Up in class",
+                    0.86,
+                    7510
+                  ]
+                ]
               }
             },
             {
@@ -6703,6 +8462,34 @@
                     "valid"
                   ]
                 ]
+              },
+              "eye": {
+                "pm": 11.0,
+                "pr": 6.3,
+                "flag": false,
+                "pos": [
+                  [
+                    "Placed last time",
+                    1.24,
+                    15628
+                  ],
+                  [
+                    "Trainer 20%+ at course",
+                    1.23,
+                    3984
+                  ],
+                  [
+                    "Won on this going",
+                    1.2,
+                    6087
+                  ],
+                  [
+                    "Distance winner",
+                    1.15,
+                    7820
+                  ]
+                ],
+                "neg": []
               }
             },
             {
@@ -6775,6 +8562,13 @@
                     "valid"
                   ]
                 ]
+              },
+              "eye": {
+                "pm": 10.5,
+                "pr": 5.0,
+                "flag": false,
+                "pos": [],
+                "neg": []
               }
             },
             {
@@ -6846,6 +8640,13 @@
                   "cls": "2",
                   "btn": "\u00bd"
                 }
+              },
+              "eye": {
+                "pm": 6.2,
+                "pr": 4.8,
+                "flag": false,
+                "pos": [],
+                "neg": []
               }
             },
             {
@@ -6899,10 +8700,24 @@
                 "top_6": 60,
                 "top_8": 76,
                 "top_10": 92
+              },
+              "eye": {
+                "pm": 4.9,
+                "pr": 4.8,
+                "flag": false,
+                "pos": [],
+                "neg": [
+                  [
+                    "Rating dropped 3+",
+                    0.8,
+                    5115
+                  ]
+                ]
               }
             }
           ],
-          "engine": "prixm"
+          "engine": "prixm",
+          "eye_top": "Tan Rapido"
         },
         {
           "time": "19:00",
@@ -7002,6 +8817,40 @@
                   "cls": "6",
                   "btn": "nk"
                 }
+              },
+              "eye": {
+                "pm": 17.1,
+                "pr": 21.5,
+                "flag": false,
+                "pos": [
+                  [
+                    "Course winner",
+                    1.25,
+                    2772
+                  ],
+                  [
+                    "Placed last time",
+                    1.24,
+                    15628
+                  ],
+                  [
+                    "Won on this going",
+                    1.2,
+                    6087
+                  ],
+                  [
+                    "Distance winner",
+                    1.15,
+                    7820
+                  ]
+                ],
+                "neg": [
+                  [
+                    "Up in class",
+                    0.86,
+                    7510
+                  ]
+                ]
               }
             },
             {
@@ -7065,6 +8914,30 @@
                     "2/4 placed or within 2L left-handed",
                     "direction_good",
                     "valid"
+                  ]
+                ]
+              },
+              "eye": {
+                "pm": 12.5,
+                "pr": 15.1,
+                "flag": false,
+                "pos": [
+                  [
+                    "Placed last time",
+                    1.24,
+                    15628
+                  ],
+                  [
+                    "Top Topspeed in field",
+                    1.15,
+                    8140
+                  ]
+                ],
+                "neg": [
+                  [
+                    "Up in class",
+                    0.86,
+                    7510
                   ]
                 ]
               }
@@ -7157,6 +9030,34 @@
                   "cls": "5",
                   "btn": "hd"
                 }
+              },
+              "eye": {
+                "pm": 17.1,
+                "pr": 11.0,
+                "flag": false,
+                "pos": [
+                  [
+                    "Course winner",
+                    1.25,
+                    2772
+                  ],
+                  [
+                    "Placed last time",
+                    1.24,
+                    15628
+                  ],
+                  [
+                    "Trainer 20%+ at course",
+                    1.23,
+                    3984
+                  ],
+                  [
+                    "Won on this going",
+                    1.2,
+                    6087
+                  ]
+                ],
+                "neg": []
               }
             },
             {
@@ -7240,6 +9141,40 @@
                   "cls": "6",
                   "btn": "nk"
                 }
+              },
+              "eye": {
+                "pm": 8.9,
+                "pr": 9.0,
+                "flag": false,
+                "pos": [
+                  [
+                    "Placed last time",
+                    1.24,
+                    15628
+                  ],
+                  [
+                    "Jockey 20%+ at course",
+                    1.22,
+                    4216
+                  ],
+                  [
+                    "Won on this going",
+                    1.2,
+                    6087
+                  ]
+                ],
+                "neg": [
+                  [
+                    "Track unsuited",
+                    0.68,
+                    291
+                  ],
+                  [
+                    "Up in class",
+                    0.86,
+                    7510
+                  ]
+                ]
               }
             },
             {
@@ -7312,6 +9247,34 @@
                     "valid"
                   ]
                 ]
+              },
+              "eye": {
+                "pm": 8.9,
+                "pr": 7.7,
+                "flag": false,
+                "pos": [
+                  [
+                    "Course winner",
+                    1.25,
+                    2772
+                  ],
+                  [
+                    "Won on this going",
+                    1.2,
+                    6087
+                  ],
+                  [
+                    "Distance winner",
+                    1.15,
+                    7820
+                  ],
+                  [
+                    "Placed 2+ times here",
+                    1.12,
+                    1206
+                  ]
+                ],
+                "neg": []
               }
             },
             {
@@ -7377,6 +9340,19 @@
                     "valid"
                   ]
                 ]
+              },
+              "eye": {
+                "pm": 6.7,
+                "pr": 7.3,
+                "flag": false,
+                "pos": [],
+                "neg": [
+                  [
+                    "Track unsuited",
+                    0.68,
+                    291
+                  ]
+                ]
               }
             },
             {
@@ -7430,6 +9406,19 @@
                 "top_6": 61,
                 "top_8": 77,
                 "top_10": 92
+              },
+              "eye": {
+                "pm": 6.0,
+                "pr": 6.7,
+                "flag": false,
+                "pos": [],
+                "neg": [
+                  [
+                    "Rating dropped 3+",
+                    0.8,
+                    5115
+                  ]
+                ]
               }
             },
             {
@@ -7501,6 +9490,19 @@
                   "cls": "5",
                   "btn": "3\u00be"
                 }
+              },
+              "eye": {
+                "pm": 7.4,
+                "pr": 6.9,
+                "flag": false,
+                "pos": [
+                  [
+                    "Distance winner",
+                    1.15,
+                    7820
+                  ]
+                ],
+                "neg": []
               }
             },
             {
@@ -7566,6 +9568,30 @@
                     "valid"
                   ]
                 ]
+              },
+              "eye": {
+                "pm": 7.6,
+                "pr": 5.5,
+                "flag": false,
+                "pos": [
+                  [
+                    "Won on this going",
+                    1.2,
+                    6087
+                  ]
+                ],
+                "neg": [
+                  [
+                    "Track unsuited",
+                    0.68,
+                    291
+                  ],
+                  [
+                    "Rating dropped 3+",
+                    0.8,
+                    5115
+                  ]
+                ]
               }
             },
             {
@@ -7619,6 +9645,25 @@
                 "top_6": 60,
                 "top_8": 76,
                 "top_10": 92
+              },
+              "eye": {
+                "pm": 4.4,
+                "pr": 5.4,
+                "flag": false,
+                "pos": [
+                  [
+                    "Top Topspeed in field",
+                    1.15,
+                    8140
+                  ]
+                ],
+                "neg": [
+                  [
+                    "Up in class",
+                    0.86,
+                    7510
+                  ]
+                ]
               }
             },
             {
@@ -7672,6 +9717,13 @@
                 "top_6": 58,
                 "top_8": 75,
                 "top_10": 92
+              },
+              "eye": {
+                "pm": 3.4,
+                "pr": 3.9,
+                "flag": false,
+                "pos": [],
+                "neg": []
               }
             }
           ],
@@ -7690,7 +9742,8 @@
             "fr_count": 0,
             "verdict": "No established front-runner \u2014 a slow early pace is likely; prominent racers favoured."
           },
-          "engine": "prixm"
+          "engine": "prixm",
+          "eye_top": "Split Elevens"
         },
         {
           "time": "19:30",
@@ -7772,6 +9825,24 @@
                     "valid"
                   ]
                 ]
+              },
+              "eye": {
+                "pm": 15.8,
+                "pr": 19.7,
+                "flag": false,
+                "pos": [
+                  [
+                    "Placed last time",
+                    1.24,
+                    15628
+                  ],
+                  [
+                    "Distance winner",
+                    1.15,
+                    7820
+                  ]
+                ],
+                "neg": []
               }
             },
             {
@@ -7862,6 +9933,40 @@
                   "cls": "6",
                   "btn": null
                 }
+              },
+              "eye": {
+                "pm": 13.0,
+                "pr": 13.5,
+                "flag": false,
+                "pos": [
+                  [
+                    "Won last time",
+                    1.32,
+                    5792
+                  ],
+                  [
+                    "Rating raised 3+",
+                    1.26,
+                    5824
+                  ],
+                  [
+                    "Course winner",
+                    1.25,
+                    2772
+                  ],
+                  [
+                    "Placed last time",
+                    1.24,
+                    15628
+                  ]
+                ],
+                "neg": [
+                  [
+                    "Up in class",
+                    0.86,
+                    7510
+                  ]
+                ]
               }
             },
             {
@@ -7933,6 +10038,29 @@
                   "cls": "5",
                   "btn": "shd"
                 }
+              },
+              "eye": {
+                "pm": 12.8,
+                "pr": 11.5,
+                "flag": false,
+                "pos": [
+                  [
+                    "Placed last time",
+                    1.24,
+                    15628
+                  ],
+                  [
+                    "Won on this going",
+                    1.2,
+                    6087
+                  ],
+                  [
+                    "Distance winner",
+                    1.15,
+                    7820
+                  ]
+                ],
+                "neg": []
               }
             },
             {
@@ -8016,6 +10144,40 @@
                   "cls": "6",
                   "btn": null
                 }
+              },
+              "eye": {
+                "pm": 8.8,
+                "pr": 9.5,
+                "flag": false,
+                "pos": [
+                  [
+                    "Won last time",
+                    1.32,
+                    5792
+                  ],
+                  [
+                    "Rating raised 3+",
+                    1.26,
+                    5824
+                  ],
+                  [
+                    "Course winner",
+                    1.25,
+                    2772
+                  ],
+                  [
+                    "Placed last time",
+                    1.24,
+                    15628
+                  ]
+                ],
+                "neg": [
+                  [
+                    "Up in class",
+                    0.86,
+                    7510
+                  ]
+                ]
               }
             },
             {
@@ -8081,6 +10243,13 @@
                     "valid"
                   ]
                 ]
+              },
+              "eye": {
+                "pm": 7.4,
+                "pr": 8.0,
+                "flag": false,
+                "pos": [],
+                "neg": []
               }
             },
             {
@@ -8153,6 +10322,13 @@
                     "valid"
                   ]
                 ]
+              },
+              "eye": {
+                "pm": 7.5,
+                "pr": 6.6,
+                "flag": false,
+                "pos": [],
+                "neg": []
               }
             },
             {
@@ -8206,6 +10382,13 @@
                 "top_6": 59,
                 "top_8": 73,
                 "top_10": 86
+              },
+              "eye": {
+                "pm": 7.0,
+                "pr": 6.1,
+                "flag": false,
+                "pos": [],
+                "neg": []
               }
             },
             {
@@ -8259,6 +10442,19 @@
                 "top_6": 59,
                 "top_8": 73,
                 "top_10": 86
+              },
+              "eye": {
+                "pm": 6.6,
+                "pr": 6.4,
+                "flag": false,
+                "pos": [],
+                "neg": [
+                  [
+                    "Rating dropped 3+",
+                    0.8,
+                    5115
+                  ]
+                ]
               }
             },
             {
@@ -8324,6 +10520,24 @@
                     "valid"
                   ]
                 ]
+              },
+              "eye": {
+                "pm": 6.5,
+                "pr": 5.3,
+                "flag": false,
+                "pos": [
+                  [
+                    "Trainer 20%+ at course",
+                    1.23,
+                    3984
+                  ],
+                  [
+                    "Distance winner",
+                    1.15,
+                    7820
+                  ]
+                ],
+                "neg": []
               }
             },
             {
@@ -8377,6 +10591,13 @@
                 "top_6": 57,
                 "top_8": 72,
                 "top_10": 86
+              },
+              "eye": {
+                "pm": 4.5,
+                "pr": 4.6,
+                "flag": false,
+                "pos": [],
+                "neg": []
               }
             },
             {
@@ -8442,6 +10663,13 @@
                     "valid"
                   ]
                 ]
+              },
+              "eye": {
+                "pm": 5.1,
+                "pr": 4.4,
+                "flag": false,
+                "pos": [],
+                "neg": []
               }
             },
             {
@@ -8495,10 +10723,18 @@
                 "top_6": 57,
                 "top_8": 71,
                 "top_10": 86
+              },
+              "eye": {
+                "pm": 4.9,
+                "pr": 4.4,
+                "flag": false,
+                "pos": [],
+                "neg": []
               }
             }
           ],
-          "engine": "prixm"
+          "engine": "prixm",
+          "eye_top": "Danehill Star"
         },
         {
           "time": "20:00",
@@ -8580,6 +10816,19 @@
                     "valid"
                   ]
                 ]
+              },
+              "eye": {
+                "pm": 12.3,
+                "pr": 18.6,
+                "flag": false,
+                "pos": [
+                  [
+                    "Placed last time",
+                    1.24,
+                    15628
+                  ]
+                ],
+                "neg": []
               }
             },
             {
@@ -8633,6 +10882,24 @@
                 "top_6": 61,
                 "top_8": 72,
                 "top_10": 83
+              },
+              "eye": {
+                "pm": 12.3,
+                "pr": 12.4,
+                "flag": false,
+                "pos": [
+                  [
+                    "Trainer 20%+ at course",
+                    1.23,
+                    3984
+                  ],
+                  [
+                    "Jockey 20%+ at course",
+                    1.22,
+                    4216
+                  ]
+                ],
+                "neg": []
               }
             },
             {
@@ -8730,6 +10997,29 @@
                   "cls": "5",
                   "btn": "nk"
                 }
+              },
+              "eye": {
+                "pm": 11.1,
+                "pr": 11.3,
+                "flag": false,
+                "pos": [
+                  [
+                    "Placed last time",
+                    1.24,
+                    15628
+                  ],
+                  [
+                    "Top Topspeed in field",
+                    1.15,
+                    8140
+                  ],
+                  [
+                    "Distance winner",
+                    1.15,
+                    7820
+                  ]
+                ],
+                "neg": []
               }
             },
             {
@@ -8813,6 +11103,34 @@
                   "cls": "5",
                   "btn": null
                 }
+              },
+              "eye": {
+                "pm": 12.1,
+                "pr": 9.1,
+                "flag": false,
+                "pos": [
+                  [
+                    "Won last time",
+                    1.32,
+                    5792
+                  ],
+                  [
+                    "Rating raised 3+",
+                    1.26,
+                    5824
+                  ],
+                  [
+                    "Course winner",
+                    1.25,
+                    2772
+                  ],
+                  [
+                    "Placed last time",
+                    1.24,
+                    15628
+                  ]
+                ],
+                "neg": []
               }
             },
             {
@@ -8866,6 +11184,13 @@
                 "top_6": 58,
                 "top_8": 70,
                 "top_10": 82
+              },
+              "eye": {
+                "pm": 6.1,
+                "pr": 7.0,
+                "flag": false,
+                "pos": [],
+                "neg": []
               }
             },
             {
@@ -8949,6 +11274,29 @@
                   "cls": "5",
                   "btn": null
                 }
+              },
+              "eye": {
+                "pm": 7.8,
+                "pr": 6.8,
+                "flag": false,
+                "pos": [
+                  [
+                    "Won last time",
+                    1.32,
+                    5792
+                  ],
+                  [
+                    "Placed last time",
+                    1.24,
+                    15628
+                  ],
+                  [
+                    "Won on this going",
+                    1.2,
+                    6087
+                  ]
+                ],
+                "neg": []
               }
             },
             {
@@ -9020,6 +11368,29 @@
                   "cls": "5",
                   "btn": "\u00be"
                 }
+              },
+              "eye": {
+                "pm": 8.6,
+                "pr": 5.8,
+                "flag": false,
+                "pos": [
+                  [
+                    "Rating raised 3+",
+                    1.26,
+                    5824
+                  ],
+                  [
+                    "Placed last time",
+                    1.24,
+                    15628
+                  ],
+                  [
+                    "Distance winner",
+                    1.15,
+                    7820
+                  ]
+                ],
+                "neg": []
               }
             },
             {
@@ -9073,6 +11444,13 @@
                 "top_6": 56,
                 "top_8": 69,
                 "top_10": 81
+              },
+              "eye": {
+                "pm": 6.1,
+                "pr": 6.2,
+                "flag": false,
+                "pos": [],
+                "neg": []
               }
             },
             {
@@ -9145,6 +11523,19 @@
                     "valid"
                   ]
                 ]
+              },
+              "eye": {
+                "pm": 4.8,
+                "pr": 4.8,
+                "flag": false,
+                "pos": [
+                  [
+                    "Distance winner",
+                    1.15,
+                    7820
+                  ]
+                ],
+                "neg": []
               }
             },
             {
@@ -9210,6 +11601,19 @@
                     "valid"
                   ]
                 ]
+              },
+              "eye": {
+                "pm": 4.1,
+                "pr": 4.8,
+                "flag": false,
+                "pos": [],
+                "neg": [
+                  [
+                    "Rating dropped 3+",
+                    0.8,
+                    5115
+                  ]
+                ]
               }
             },
             {
@@ -9263,6 +11667,24 @@
                 "top_6": 54,
                 "top_8": 67,
                 "top_10": 80
+              },
+              "eye": {
+                "pm": 6.7,
+                "pr": 4.5,
+                "flag": false,
+                "pos": [
+                  [
+                    "Placed last time",
+                    1.24,
+                    15628
+                  ],
+                  [
+                    "Trainer 20%+ at course",
+                    1.23,
+                    3984
+                  ]
+                ],
+                "neg": []
               }
             },
             {
@@ -9316,6 +11738,13 @@
                 "top_6": 54,
                 "top_8": 67,
                 "top_10": 80
+              },
+              "eye": {
+                "pm": 4.1,
+                "pr": 4.5,
+                "flag": false,
+                "pos": [],
+                "neg": []
               }
             },
             {
@@ -9369,10 +11798,24 @@
                 "top_6": 53,
                 "top_8": 67,
                 "top_10": 80
+              },
+              "eye": {
+                "pm": 3.7,
+                "pr": 4.2,
+                "flag": false,
+                "pos": [],
+                "neg": [
+                  [
+                    "Rating dropped 3+",
+                    0.8,
+                    5115
+                  ]
+                ]
               }
             }
           ],
-          "engine": "prixm"
+          "engine": "prixm",
+          "eye_top": "Mr Nugget"
         },
         {
           "time": "20:30",
@@ -9479,6 +11922,34 @@
                   "cls": "6",
                   "btn": null
                 }
+              },
+              "eye": {
+                "pm": 27.0,
+                "pr": 24.1,
+                "flag": false,
+                "pos": [
+                  [
+                    "Won last time",
+                    1.32,
+                    5792
+                  ],
+                  [
+                    "Rating raised 3+",
+                    1.26,
+                    5824
+                  ],
+                  [
+                    "Course winner",
+                    1.25,
+                    2772
+                  ],
+                  [
+                    "Placed last time",
+                    1.24,
+                    15628
+                  ]
+                ],
+                "neg": []
               }
             },
             {
@@ -9551,6 +12022,29 @@
                     "valid"
                   ]
                 ]
+              },
+              "eye": {
+                "pm": 12.6,
+                "pr": 13.2,
+                "flag": false,
+                "pos": [
+                  [
+                    "Placed last time",
+                    1.24,
+                    15628
+                  ],
+                  [
+                    "Top Topspeed in field",
+                    1.15,
+                    8140
+                  ],
+                  [
+                    "Placed 2+ times here",
+                    1.12,
+                    1206
+                  ]
+                ],
+                "neg": []
               }
             },
             {
@@ -9630,6 +12124,13 @@
                     "valid"
                   ]
                 ]
+              },
+              "eye": {
+                "pm": 8.1,
+                "pr": 11.5,
+                "flag": false,
+                "pos": [],
+                "neg": []
               }
             },
             {
@@ -9683,6 +12184,19 @@
                 "top_6": 63,
                 "top_8": 78,
                 "top_10": 93
+              },
+              "eye": {
+                "pm": 9.0,
+                "pr": 9.0,
+                "flag": false,
+                "pos": [
+                  [
+                    "Distance winner",
+                    1.15,
+                    7820
+                  ]
+                ],
+                "neg": []
               }
             },
             {
@@ -9754,6 +12268,34 @@
                   "cls": "6",
                   "btn": "1\u00be"
                 }
+              },
+              "eye": {
+                "pm": 6.2,
+                "pr": 7.5,
+                "flag": false,
+                "pos": [
+                  [
+                    "Course winner",
+                    1.25,
+                    2772
+                  ],
+                  [
+                    "Jockey 20%+ at course",
+                    1.22,
+                    4216
+                  ],
+                  [
+                    "Won on this going",
+                    1.2,
+                    6087
+                  ],
+                  [
+                    "Distance winner",
+                    1.15,
+                    7820
+                  ]
+                ],
+                "neg": []
               }
             },
             {
@@ -9825,6 +12367,24 @@
                   "cls": "6",
                   "btn": "2"
                 }
+              },
+              "eye": {
+                "pm": 10.4,
+                "pr": 7.2,
+                "flag": false,
+                "pos": [
+                  [
+                    "Placed last time",
+                    1.24,
+                    15628
+                  ],
+                  [
+                    "Lone front-runner",
+                    1.17,
+                    819
+                  ]
+                ],
+                "neg": []
               }
             },
             {
@@ -9878,6 +12438,13 @@
                 "top_6": 62,
                 "top_8": 77,
                 "top_10": 92
+              },
+              "eye": {
+                "pm": 5.1,
+                "pr": 6.3,
+                "flag": false,
+                "pos": [],
+                "neg": []
               }
             },
             {
@@ -9943,6 +12510,13 @@
                     "valid"
                   ]
                 ]
+              },
+              "eye": {
+                "pm": 6.5,
+                "pr": 6.6,
+                "flag": false,
+                "pos": [],
+                "neg": []
               }
             },
             {
@@ -10015,6 +12589,19 @@
                     "valid"
                   ]
                 ]
+              },
+              "eye": {
+                "pm": 7.7,
+                "pr": 5.2,
+                "flag": false,
+                "pos": [
+                  [
+                    "Placed last time",
+                    1.24,
+                    15628
+                  ]
+                ],
+                "neg": []
               }
             },
             {
@@ -10068,6 +12655,19 @@
                 "top_6": 60,
                 "top_8": 76,
                 "top_10": 92
+              },
+              "eye": {
+                "pm": 3.0,
+                "pr": 4.9,
+                "flag": false,
+                "pos": [],
+                "neg": [
+                  [
+                    "Rating dropped 3+",
+                    0.8,
+                    5115
+                  ]
+                ]
               }
             },
             {
@@ -10133,10 +12733,24 @@
                     "valid"
                   ]
                 ]
+              },
+              "eye": {
+                "pm": 4.3,
+                "pr": 4.3,
+                "flag": false,
+                "pos": [],
+                "neg": [
+                  [
+                    "Rating dropped 3+",
+                    0.8,
+                    5115
+                  ]
+                ]
               }
             }
           ],
-          "engine": "prixm"
+          "engine": "prixm",
+          "eye_top": "Saxophonic"
         }
       ],
       "race_count": 9
@@ -22421,5 +25035,10 @@
       ],
       "race_count": 8
     }
+  },
+  "eye_model": {
+    "trained_on": 69609,
+    "flag_min": 15.0,
+    "flag_ratio": 2.0
   }
 }

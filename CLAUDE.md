@@ -84,7 +84,7 @@ Horse racing analysis tool. Two engines: **Prixm** scores UK races across 14 wei
 **Schema additions (2026-09-01, improvement.md):** `races.distance_f` (REAL), `races.race_class` (TEXT) — backfilled for existing rows via `scripts/backfill_distance_class.py`, captured go-forward by `results_fetcher.py`. `runners.winner_sp`/`winner_name` (auto-derived at fetch time), `runners.interference`/`interference_type`/`position_in_race`/`finishing_trend` (manual-input only, never scraped — see Watchback System below).
 
 **HTML loading priority:** localhost:7432 → `_resultsHistoryFile` JS global → `results_history.json` fetch → localStorage.
-Tab bar shows `🟢 DB N races` (server live) or `🟡 JSON` (fallback).
+Header shows `🟢 DB N races` (server live) or `🟡 JSON` (fallback).
 
 **Dual-write:** `results_fetcher.py` writes to SQLite (via `_write_to_sqlite(entry)`) AND JSON after every fetch.
 JSON stays in sync as permanent fallback. SQLite is primary.
@@ -112,6 +112,7 @@ Irish races (26 tracks, ROI + Northern Ireland — `IRE_TRACKS` in `scripts/resu
 ## 🗺 Track Explorer (replaces the Tracks tab)
 
 Tab id stays `tabTracks`/`switchTab('tracks')`. IIFE `window.renderTrackExplorer`, `window.openTrackExplorer(course, sub)`; sub-tabs 🗺 Profile (layout SVG, final-4f elevation, character meters, stalls, **draw heat by stall + winning styles computed from logged results**, wants, caution flags) · 🧭 Today's Runners Fit · 📊 Stats (old Track Analysis, now renders into `#taStatsView`; venue matching normalised so "Curragh"/"CURRAGH (IRE)" merge). Track data: `track_profiles.js` (`TRACK_PROFILES`, `getTrackProfile()`, `getTrackKey()`, `normalizeTrackKey()`). Fixed in the port: Cheltenham is left-handed, Beverley right-handed.
+- **Charts (2026-11-15, mockup `mockups/track_explorer_charts_mockup.html`)**: theme-aware colours `--tx-*` (both themes). Layout sketch = finish line + flag, Stalls label, direction arrows, circuit/straight line. Elevation = furlong gridlines 4f→post, dip + "climbs to post" marked, one-line summary. Track character = 4-step scale with step names (`meter(label,v,txt,names,ire)`). Draw heat (`heatChart()`) = bar per stall vs **expected** place rate (places ÷ runners of the races each stall ran in — raw % unfairly punished high stalls), colour = pts vs expected, <15 runs faded, inside-vs-outside verdict. Running style = vs all-track average (`styleBase()`). PDF export gets light colours via `txLight()` inside `window._texLayoutSVG/_texElevSVG`.
 
 ## 🏁 Predict Tab — Race Replay + 📏 Length Bet
 
@@ -130,6 +131,15 @@ Top-level tab `tabTracked` / `switchTab('tracked')` / `#trackedView` → `window
 - Data = `loadWatchlist()` (`localStorage.horseWatchlist`: name, addedDate, addedFrom, **note**) + `window._allHistory` (both engines, Prixm rank = order of `predicted_score` in that race) + today's card `D`. Pure reads, display only.
 - KPIs (tracked · running today · since-tracked W-P-U · strike rate), filter chips All / Running today / With notes + search, list (silk, note, last-6 form squares, TODAY time + ★ pick / days since run), detail (note, running-today card with Open race / Log bet / 📊 Stats, since-tracked record, finishing pos vs Prixm rank SVG, conditions bars, run log with Watchback tag + run style + in-running comment, jockeys). No 1u P/L here (user rule).
 - Watchlist notes: TRACK → `wlNotePrompt()` (optional note, Ctrl+Enter saves) · `getWatchNote()` / `saveWatchNote()` · ✏️ in Manage Watchlist · tooltip on TRACKING. `toggleWatch`/`saveWatchNote` call `trackedTabRefresh()`.
+
+## 🔭 Model — eye-catchers + soft blend (display only, added 2026-11-16)
+
+`engine/eye_model.py` (needs scikit-learn + numpy; skipped quietly without). Gradient-boosted model on every logged runner — features from archived racecards + history strictly before each race (class drop, quick return, trainer RTF, course/distance/going wins, OR change, draw vs expected, track fit, top RPR/TS, pace style, rank/gap/score). **No market prices as inputs.** Mockup: `mockups/model_eyecatchers_mockup.html`; research: `scripts/research/`.
+- **Racecard fetch** (both fetchers, after `process_card`): `annotate_card()` → `runner.eye = {pm, pr, flag, pos, neg}` (data chance %, engine-rank chance %, reasons `[label, lift, n]`), `race.eye_top` (model's top pick), `card.eye_model`. Model cached in `engine/eye_model.pkl` (gitignored), retrained when results/archives change (~15s). `python engine/eye_model.py` re-applies to today's card.
+- **Eye-catcher** = rank > 1, pm ≥ 15, pm ≥ 2 × pr (`FLAG_MIN`/`FLAG_RATIO`).
+- **Log**: `eye_log.json` + `.js` (`window._eyeLogFile`, pushed by Push Update.bat) — `backtest` (walk-forward, `--backtest`) + `live` (every archived card carrying `eye` joined with results; rebuilt by `build_log()` after every Fetch Results).
+- **HTML**: tab `tabEye` / `switchTab('eye')` / `#eyeView` → `window.renderEyeTab()` (last script block, CSS `#eyeTabCss`, `.eyt`). Race card chip `eyeChipForRace(r,top)` (purple = eye-catcher, dashed = model ≠ engine top pick) and runner badge `eyeBadgeForRunner()` → `eyeOpen(vk,ri,name)` jumps to the tab. Colours `--ey/--eyA` (both themes). Guide section 🔭.
+- **Never changes scores, gaps, segments, picks or the Ledger** (soft blend = shadow log only). Walk-forward 2026-11-16 (Jun–Nov, deterministic): 344 flags, 22.4% won, ROI −10.1% at SP; model top pick 26.3% vs engine 25.1% (ROI −14.7% vs −14.6%). Hit rate proven, profit not — review after ~3 months live.
 
 ## ⚖ Weight vs Last Run (display only, added 2026-11-15)
 
@@ -562,7 +572,7 @@ Irish venues also caught by `(IRE)` suffix check before list lookup.
 - **Golden flag** — `⭐ GOLDEN` banner on qualifying race cards (gap≥18, score≥74, UK NH) via `getGoldenFlags()` / `renderGoldenFlag()`
 - **Silver flag** — `🥈 SILVER` banner on qualifying race cards (gap 10–<12, score≥72, UK NH, Turf) via `getSilverFlags()` / `renderSilverFlag()`
 - **Bronze flag** — `🥉 BRONZE` banner on qualifying race cards (gap 8–<10, score≥74, UK NH, Good/GF) via `getBronzeFlags()` / `renderBronzeFlag()`
-- **DB status badge** — `#dbStatusBadge` in tab bar: `🟢 DB N races` (server live) or `🟡 JSON` (fallback)
+- **DB status badge** — `#dbStatusBadge` (`.db-badge`) in the header under the subtitle (moved from the tab bar 2026-11-15 so tab labels fit on one line; hidden on phone): `🟢 DB N races` (server live) or `🟡 JSON` (fallback)
 - **🎯 Top pick card + silks** (race view, 2026-10-06) — `renderTopPickCard()` in the shared detail header (all tabs): silk, connections, score/gap/win chance (`calcCompetitiveProb`)/price, "why it's on top" lines from `tpcGroups()` (six factor groups as % of max) + CDP + track fit + RPR/OR; no data → line omitted. Runner rows show the jockey silk (`.rsilk`). Display only.
 - **Prixm Picks** — Design C layout: accent bar, category dot+label, horse name, bet chip, edge bar with % fill, reasoning tags
 - **Personal bet tracker** — BET button per runner, bet type selection (EW/WIN/TOP N), export as PNG
@@ -635,6 +645,7 @@ Irish venues also caught by `(IRE)` suffix check before list lookup.
 
 - `requests`, `beautifulsoup4`, `lxml` — for scraping
 - `openpyxl` — for Excel export
+- `scikit-learn`, `numpy` — 🔭 Model (`engine/eye_model.py`); optional, skipped if missing
 - `sqlite3`, `http.server` — stdlib, used by db_server.py (no pip needed)
 - Standard library: `json`, `re`, `datetime`, `argparse`, `os`
 
