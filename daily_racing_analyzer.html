@@ -122,8 +122,8 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .ey-chip:hover{filter:brightness(1.12)}.ey-chip.dim{background:transparent;border-style:dashed;color:var(--muted);border-color:var(--border);font-weight:500}
 .ey-badge{display:inline-block;margin-left:5px;padding:0 5px;border-radius:3px;background:var(--eyA);color:var(--ey);border:1px solid var(--ey);font-size:10.5px;cursor:pointer;vertical-align:middle;line-height:1.5}
 /* 🗺 Track Explorer charts (2026-11-15, mockups/track_explorer_charts_mockup.html) — theme-aware colours */
-:root{--tx-uk:#1d4ed8;--tx-ukA:rgba(29,78,216,.14);--tx-ire:#0f9f78;--tx-ireA:rgba(16,185,129,.15);--tx-good:#15803d;--tx-good2:#86c79a;--tx-neu:#9ca3af;--tx-bad2:#f0a9a0;--tx-bad:#dc2626;--tx-amber:#d97706;--tx-ring:#d1d5db;--tx-ink:#111827;--tx-mut:#6b7280;--tx-grid:#e5e7eb}
-html[data-theme="nothing"]{--tx-uk:#7aa2f7;--tx-ukA:rgba(122,162,247,.16);--tx-ire:#34d399;--tx-ireA:rgba(52,211,153,.14);--tx-good:#5bbf85;--tx-good2:#3d8a5c;--tx-neu:#77716a;--tx-bad2:#a3574b;--tx-bad:#e5735f;--tx-amber:#e0a84a;--tx-ring:#3a3a3a;--tx-ink:#f5f2eb;--tx-mut:#8d877c;--tx-grid:#262626}
+:root{--tx-fr:#6b7280;--tx-frA:rgba(107,114,128,.15);--tx-uk:#1d4ed8;--tx-ukA:rgba(29,78,216,.14);--tx-ire:#0f9f78;--tx-ireA:rgba(16,185,129,.15);--tx-good:#15803d;--tx-good2:#86c79a;--tx-neu:#9ca3af;--tx-bad2:#f0a9a0;--tx-bad:#dc2626;--tx-amber:#d97706;--tx-ring:#d1d5db;--tx-ink:#111827;--tx-mut:#6b7280;--tx-grid:#e5e7eb}
+html[data-theme="nothing"]{--tx-fr:#aab4c3;--tx-frA:rgba(170,180,195,.14);--tx-uk:#7aa2f7;--tx-ukA:rgba(122,162,247,.16);--tx-ire:#34d399;--tx-ireA:rgba(52,211,153,.14);--tx-good:#5bbf85;--tx-good2:#3d8a5c;--tx-neu:#77716a;--tx-bad2:#a3574b;--tx-bad:#e5735f;--tx-amber:#e0a84a;--tx-ring:#3a3a3a;--tx-ink:#f5f2eb;--tx-mut:#8d877c;--tx-grid:#262626}
 .tx-svg text{font-family:inherit}
 .tx-mtr{display:grid;grid-template-columns:104px minmax(0,1fr);gap:3px 12px;align-items:center;margin:7px 0}
 .tx-mtr .n{color:var(--muted);font-size:12px}
@@ -1111,6 +1111,38 @@ html[data-theme="nothing"] .wtc-up{color:#e0a84a}html[data-theme="nothing"] .wtc
 .rc-eng-em{background:var(--em);color:#fff}
 .rc-eng-px{background:#f0fdf4;color:#15803d;border:1px solid #bbf7d0}
 .rc-px-ghost{font-size:10.5px;color:#9ca3af;margin:1px 0 3px}
+/* Vanta engine (France, 2026-11-16) — black / silver, no icon */
+:root{--va:#3f444c;--va2:#6b7280;--va-soft:#eef0f3;--va-line:#b9bec6}
+.rc-eng-va{background:var(--va-soft);color:var(--va);border:1px solid var(--va-line);letter-spacing:.12em}
+html[data-theme="nothing"] #tabVanta{color:#aab4c3!important}
+.va-top{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.va-ttl{font:800 40px/0.95 'Bebas Neue',Inter,sans-serif;letter-spacing:.22em;color:var(--va)}
+.va-ttl small{font-size:18px;letter-spacing:.1em;color:var(--va2);margin-left:8px}
+.va-sub{font-size:12px;color:var(--muted)}
+.va-kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:12px}
+.va-kpi,.va-card,.va-pg{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px 14px}
+.va-card{margin-bottom:12px}
+.va-l,.va-h{font-size:10.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700}
+.va-h{margin-bottom:8px}
+.va-n{font-size:26px;font-weight:800;color:var(--va)}
+.va-s{font-size:11px;color:var(--muted)}
+.va-prog{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px;margin-bottom:12px}
+.va-pgt{display:flex;justify-content:space-between;gap:8px;font-size:12px;color:var(--muted)}.va-pgt b{color:var(--text);letter-spacing:.1em}
+.va-track{height:10px;background:var(--card2);border-radius:5px;overflow:hidden;margin:8px 0 6px}
+.va-track i{display:block;height:100%;background:linear-gradient(90deg,var(--va2),var(--va))}
+.va-foot{font-size:11.5px;color:var(--muted)}
+.va-two{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:12px}
+.va-tbl{width:100%;border-collapse:collapse;font-size:12.5px}
+.va-tbl th{text-align:left;font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);padding:6px 8px;border-bottom:1px solid var(--border);white-space:nowrap}
+.va-tbl td{padding:6px 8px;border-bottom:1px solid var(--border);white-space:nowrap}
+.va-mini{display:inline-flex;gap:2px;align-items:flex-end;height:22px;vertical-align:middle}.va-mini i{width:7px;border-radius:1px}
+.va-fs{display:grid;grid-template-columns:120px 1fr 52px;gap:8px;align-items:center;font-size:12px;margin:3px 0}
+.va-fst{height:8px;background:var(--card2);border-radius:4px;overflow:hidden}.va-fst i{display:block;height:100%}
+.va-x{color:var(--va);font-weight:700}
+.va-vrow{display:grid;grid-template-columns:64px 92px 1fr;gap:8px;padding:6px 0;border-bottom:1px solid var(--border);font-size:12px}
+.va-ver{font-weight:800;color:var(--va);letter-spacing:.06em}
+.va-btn{background:var(--va)!important;color:var(--bg)!important;border-color:var(--va)!important}
+@media(max-width:860px){.va-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.va-prog,.va-two{grid-template-columns:minmax(0,1fr)}}
 .rc-fit-u{font-size:10px}
 .rc-fit-strip{margin-top:6px;font-size:11px;background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;border-radius:6px;padding:4px 8px}
 .fit-badge{display:inline-block;font-size:10.5px;font-weight:800;border-radius:6px;padding:1px 7px;white-space:nowrap}
@@ -1231,6 +1263,7 @@ html[data-theme="nothing"]{
   --bg:#0a0a0a;--card:#0a0a0a;--card2:#141414;--accent:#c8b89a;--accent2:#93b4e8;--warn:#e3c07e;--danger:#e59a8c;
   --text:#f5f2eb;--fg:#f5f2eb;--muted:#8a857c;--border:#222;--gold:#d9b25c;
   --em:#5bb39a;--em2:#5bb39a;--em-soft:#0f1d19;--em-line:#24453b;
+  --va:#aab4c3;--va2:#8e939b;--va-soft:#141518;--va-line:#3a3d42;
   color-scheme:dark;
 }
 html[data-theme="nothing"] body{background:#0a0a0a!important;color:var(--text);font-family:'DM Mono',ui-monospace,monospace!important;font-size:12.5px}
@@ -1354,6 +1387,7 @@ html[data-theme="nothing"] .landing .rc .rc-sg-silver{color:#aab4c3!important;bo
 html[data-theme="nothing"] .landing .rc .rc-sg-bronze{color:#b9825a!important;border:1px solid #b9825a!important}
 html[data-theme="nothing"] .landing .rc .rc-sg-prime{color:#7fb8c4!important;border:1px solid #7fb8c4!important}
 html[data-theme="nothing"] .rc-eng-em{color:#5bb39a!important;border:1px solid #24453b!important}
+html[data-theme="nothing"] .rc-eng-va{color:#aab4c3!important;border:1px solid #3a3d42!important;background:transparent!important}
 html[data-theme="nothing"] .rc-eng-px{color:#7d786f!important;border:1px solid #2a2a2a!important}
 html[data-theme="nothing"] .landing .rc .rc-logged{color:#9fd6ae!important;border:1px solid #24382a!important}
 html[data-theme="nothing"] .landing .rc .rc-combo-row,html[data-theme="nothing"] .rc-xa-strip{background:transparent!important;border-top:1px solid #1a1a1a!important;border-radius:0!important;padding:8px 20px!important}
@@ -1543,10 +1577,10 @@ html[data-theme="nothing"] svg text[fill="#6b7280"],html[data-theme="nothing"] s
 
   /* ---- other tabs: wide tables scroll inside their own box ---- */
   html[data-theme] #perfView table,html[data-theme] #combosView table,html[data-theme] #trendsView table,html[data-theme] #goldenView table,
-  html[data-theme] #tracksView table,html[data-theme] #watchbackView table,html[data-theme] #emeraldView table,html[data-theme] #ledgerView table,
+  html[data-theme] #tracksView table,html[data-theme] #watchbackView table,html[data-theme] #emeraldView table,html[data-theme] #vantaView table,html[data-theme] #ledgerView table,
   html[data-theme] #topFinishView table{display:block;overflow-x:auto;max-width:100%;-webkit-overflow-scrolling:touch}
   html[data-theme] #perfView,html[data-theme] #combosView,html[data-theme] #trendsView,html[data-theme] #goldenView,html[data-theme] #tracksView,
-  html[data-theme] #watchbackView,html[data-theme] #emeraldView,html[data-theme] #ledgerView,html[data-theme] #topFinishView,html[data-theme] #mView{padding:14px 14px 24px!important}
+  html[data-theme] #watchbackView,html[data-theme] #emeraldView,html[data-theme] #vantaView,html[data-theme] #ledgerView,html[data-theme] #topFinishView,html[data-theme] #mView{padding:14px 14px 24px!important}
 }
 </style>
 <script src="results_history.js" onerror=""></script>
@@ -1589,6 +1623,7 @@ html[data-theme="nothing"] svg text[fill="#6b7280"],html[data-theme="nothing"] s
   <button class="tab-btn" id="tabTracked" onclick="switchTab('tracked')" title="Your tracked horses — notes, today's runs, full logged history">👁 Tracked</button>
   <button class="tab-btn" id="tabEye" onclick="switchTab('eye')" title="🔭 Model — data chance, eye-catchers, model vs engine (display only)">🔭 Model</button>
   <button class="tab-btn" id="tabEmerald" onclick="switchTab('emerald')" style="color:#0f766e">☘ Emerald</button>
+  <button class="tab-btn" id="tabVanta" onclick="switchTab('vanta')" style="color:var(--va);letter-spacing:.12em">VANTA</button>
   <button class="tab-btn vo-hide" id="tabLedger" onclick="switchTab('ledger')">💷 Ledger</button>
   <button class="tab-btn" id="tabM" onclick="switchTab('m')" title="🐎 Race track animation">🐎 MT</button>
 </div>
@@ -1634,6 +1669,7 @@ window.addEventListener('load',f);window.addEventListener('resize',f);setTimeout
 <div id="topFinishView" style="display:none;padding:20px 28px;max-width:1100px;margin:0 auto"><div id="topFinishContent"></div></div>
 <div id="watchbackView" style="display:none;padding:20px 28px;max-width:1200px;margin:0 auto"><div id="watchbackContent">Loading...</div></div>
 <div id="emeraldView" style="display:none;padding:20px 28px;max-width:1200px;margin:0 auto"><div id="emeraldContent">Loading...</div></div>
+<div id="vantaView" style="display:none;padding:20px 28px;max-width:1200px;margin:0 auto"><div id="vantaContent">Loading...</div></div>
 <div id="ledgerView" class="vo-hide" style="display:none;padding:20px 28px 90px;max-width:1200px;margin:0 auto"><div id="ledgerContent">Loading...</div></div>
 <div id="mView" style="display:none;padding:20px 28px;max-width:1300px;margin:0 auto"><div id="mContent">Loading...</div></div>
 <div id="trackedView" style="display:none;padding:20px 28px;max-width:1360px;margin:0 auto"><div id="trackedContent">Loading...</div></div>
@@ -1864,7 +1900,15 @@ const EM_FM={
   age:{l:'Age',mx:5},weight:{l:'Weight',mx:7},headgear:{l:'Headgear',mx:2},spotlight:{l:'Expert',mx:2},
   draw_bias:{l:'☘ Draw bias',mx:5,ir:1},track_fit:{l:'☘ Track fit',mx:6,ir:1},stable_power:{l:'☘ Stable power',mx:6,ir:1}
 };
-function fmFor(bd){return bd&&('draw_bias' in bd||'stable_power' in bd)?EM_FM:FM;}
+// Vanta factor map (France) — Prixm base re-capped + 4 French factors, same 118 total (engine/vanta_engine.py)
+const VA_FM={
+  form:{l:'Form',mx:19},rating:{l:'Rating',mx:14},trainer:{l:'Trainer',mx:10},
+  jockey:{l:'Jockey',mx:9},fitness:{l:'Fitness',mx:7},class:{l:'Class',mx:7},
+  going:{l:'Going',mx:7},weight:{l:'Weight',mx:7},age:{l:'Age',mx:6},course:{l:'Course',mx:5},distance:{l:'Distance',mx:5},
+  headgear:{l:'Headgear',mx:2},spotlight:{l:'Expert',mx:1},
+  draw_bias:{l:'Stall bias',mx:5,va:1},track_fit:{l:'Track fit',mx:5,va:1},stable_power:{l:'Stable power',mx:5,va:1},class_earn:{l:'Earnings',mx:4,va:1}
+};
+function fmFor(bd){return bd&&'class_earn' in bd?VA_FM:bd&&('draw_bias' in bd||'stable_power' in bd)?EM_FM:FM;}
 
 /* ==================== ANALYSIS VERSION TRACKING ==================== */
 const ENGINE_NAME='Prixm';
@@ -1925,6 +1969,21 @@ function emeraldVersionHistory(){
     out.push({v,date:d,profiles:byDate[d].map(c=>c.profile),races:byDate[d].reduce((a,c)=>a+(c.races_used||0),0),cal:byDate[d]});});
   return out;
 }
+// Vanta (France) — STARTER (Prixm base + French factors, Prixm comparison shown) until a profile
+// (fr_flat / fr_nh) has VA_RECAL_STEP races AND the user clicks Apply in the Vanta tab → that profile is
+// Vanta 1.0 (own weights, comparison hidden, real Ledger stakes). Every later Apply on it → +0.1.
+const VANTA_NAME='Vanta';
+const VANTA_PROFILES=['fr_flat','fr_nh'];
+const VA_RECAL_STEP=1000;
+function classifyVantaProfile(race){return /hurdle|chase|nh flat|bumper|cross/i.test((race&&(race.race_type||race.type))||'')?'fr_nh':'fr_flat';}
+function isVantaRace(r){return !!r&&(r.engine==='vanta'||isFrance(r.venue||r.course));}
+function vaCals(p){return((window._vantaHistory&&window._vantaHistory.calibrations)||[]).filter(c=>c.applied&&(!p||c.profile===p)).sort((a,b)=>(a.date||'').localeCompare(b.date||''));}
+function vaProfVersion(p){const n=vaCals(p).length;return n?parseFloat((1+0.1*(n-1)).toFixed(1)):null;}  // null = Starter
+function vaLive(race){return vaProfVersion(typeof race==='string'?race:classifyVantaProfile(race))!=null;}
+function getVantaVersion(){const v=VANTA_PROFILES.map(vaProfVersion).filter(x=>x!=null);return v.length?Math.max(...v):null;}
+function vantaLabel(race){const v=race?vaProfVersion(typeof race==='string'?race:classifyVantaProfile(race)):getVantaVersion();return VANTA_NAME+' '+(v==null?'Starter':v.toFixed(1));}
+function vaCount(p){return((window._vantaHistory&&window._vantaHistory.races)||[]).filter(r=>r.profile===p&&(r.results||[]).some(x=>x.score_breakdown&&'class_earn' in x.score_breakdown)).length;}
+function allEngineCalibs(){return[...((window._resultsHistory&&window._resultsHistory.calibrations)||[]),...((window._emeraldHistory&&window._emeraldHistory.calibrations)||[]),...((window._vantaHistory&&window._vantaHistory.calibrations)||[])];}
 function syncVersionFromCalibrations(hist){
   if(!hist||!hist.calibrations) return;
   const applied=hist.calibrations.filter(c=>c.applied);
@@ -2348,6 +2407,7 @@ function switchTab(tab){
   document.getElementById('tabTopFinish').classList.toggle('active',tab==='topfinish');
   document.getElementById('tabWatchback').classList.toggle('active',tab==='watchback');
   document.getElementById('tabEmerald').classList.toggle('active',tab==='emerald');
+  document.getElementById('tabVanta').classList.toggle('active',tab==='vanta');
   document.getElementById('tabLedger').classList.toggle('active',tab==='ledger');
   document.getElementById('tabM').classList.toggle('active',tab==='m');
   document.getElementById('tabTracked').classList.toggle('active',tab==='tracked');
@@ -2362,6 +2422,7 @@ function switchTab(tab){
   document.getElementById('topFinishView').style.display=tab==='topfinish'?'block':'none';
   document.getElementById('watchbackView').style.display=tab==='watchback'?'block':'none';
   document.getElementById('emeraldView').style.display=tab==='emerald'?'block':'none';
+  document.getElementById('vantaView').style.display=tab==='vanta'?'block':'none';
   document.getElementById('ledgerView').style.display=tab==='ledger'&&!VIEW_ONLY?'block':'none';
   document.getElementById('mView').style.display=tab==='m'?'block':'none';
   document.getElementById('trackedView').style.display=tab==='tracked'?'block':'none';
@@ -2374,6 +2435,7 @@ function switchTab(tab){
   if(tab==='topfinish') window.renderTopFinishAnalysis&&window.renderTopFinishAnalysis();
   if(tab==='watchback') window.renderWatchbackDashboard&&window.renderWatchbackDashboard();
   if(tab==='emerald') window.renderEmeraldTab&&window.renderEmeraldTab('emeraldContent');
+  if(tab==='vanta') window.renderVantaTab&&window.renderVantaTab('vantaContent');
   if(tab==='ledger') window.renderLedger&&window.renderLedger();
   if(tab==='tracked') window.renderTrackedTab&&window.renderTrackedTab();
   if(tab==='eye') window.renderEyeTab&&window.renderEyeTab();
@@ -3048,7 +3110,7 @@ function switchTab(tab){
           if(race.handicap)continue;
           const vLow=(race.course||vk).toLowerCase();
           if(_TN_EXCL.some(ex=>vLow.includes(ex)))continue;
-          if(isIreland(race.course||vk))continue;
+          if(isIreland(race.course||vk)||isFrance(race.course||vk))continue;
           const sorted=[...(race.runners||[])].sort((a,b)=>b.score-a.score);
           if(sorted.length<2)continue;
           const gap=Math.round((sorted[0].score-sorted[1].score)*10)/10;
@@ -4330,7 +4392,7 @@ function styleStats(key){
 
 // ── SVG layout sketch (theme-aware, 2026-11-15) ──
 function layoutSVG(tp){
-  const ire=tp.country==='IRE',col=ire?'var(--tx-ire)':'var(--tx-uk)';
+  const ire=tp.country==='IRE',col=ire?'var(--tx-ire)':tp.country==='FR'?'var(--tx-fr)':'var(--tx-uk)';
   const dirTxt=tp.direction==='R'?'↻ Right-handed':tp.direction==='L'?'↺ Left-handed':tp.direction==='F8'?'∞ Figure-of-eight':'↑ Straight course';
   const circ=tp.circuit_f||12;const rx=Math.min(150,70+circ*5),ry=Math.min(85,45+circ*2.4);
   const cx=180,cy=112;let track='',post=[cx,cy+ry],stalls=[cx,cy-ry],arrows='';
@@ -4372,7 +4434,7 @@ function layoutSVG(tp){
 // ── Elevation of the final 4f: furlong gridlines, dip + climb marked, one-line summary ──
 function elevSVG(tp){
   const e=tp.elevation||[];if(e.length<2)return'';
-  const ire=tp.country==='IRE',col=ire?'var(--tx-ire)':'var(--tx-uk)',fill=ire?'var(--tx-ireA)':'var(--tx-ukA)';
+  const ire=tp.country==='IRE',fr=tp.country==='FR',col=ire?'var(--tx-ire)':fr?'var(--tx-fr)':'var(--tx-uk)',fill=ire?'var(--tx-ireA)':fr?'var(--tx-frA)':'var(--tx-ukA)';
   const lo=Math.min(...e),hi=Math.max(...e),flat=hi-lo<3;
   const W=360,H=150,pl=10,pr=10,pt=18,pb=30,mn=lo-8,mx=hi+8,sx=(W-pl-pr)/(e.length-1);
   const X=i=>pl+i*sx,Y=v=>pt+(1-(v-mn)/(mx-mn||1))*(H-pt-pb);
@@ -4392,7 +4454,7 @@ function elevSVG(tp){
 // ── Track character: 4-step scale, the track's step lit + named ──
 function meter(label,v,txt,names,ire){
   const k=v>=.8?3:v>=.55?2:v>=.25?1:0;names=names||['','','',''];
-  return `<div class="tx-mtr" style="--tx-c:${ire?'var(--tx-ire)':'var(--tx-uk)'}" title="${esc(label)}: ${esc(txt)}"><span class="n">${label}</span><div class="tx-seg">${names.map((_,i)=>`<span class="${i===k?'on':i<k?'f':''}"></span>`).join('')}</div><div class="tx-segl">${names.map((n,i)=>`<span class="${i===k?'on':''}">${esc(n)}</span>`).join('')}</div></div>`;
+  return `<div class="tx-mtr" style="--tx-c:${ire==='fr'?'var(--tx-fr)':ire?'var(--tx-ire)':'var(--tx-uk)'}" title="${esc(label)}: ${esc(txt)}"><span class="n">${label}</span><div class="tx-seg">${names.map((_,i)=>`<span class="${i===k?'on':i<k?'f':''}"></span>`).join('')}</div><div class="tx-segl">${names.map((n,i)=>`<span class="${i===k?'on':''}">${esc(n)}</span>`).join('')}</div></div>`;
 }
 const lvl=(v,a)=>v>=.8?a[3]:v>=.55?a[2]:v>=.25?a[1]:a[0];
 // ── Draw heat: bar = win+place %, dashed tick = expected for those fields, colour = pts vs expected ──
@@ -4426,11 +4488,11 @@ function header(){
   const segBtn=(k,l,on,fn)=>`<button onclick="${fn}" style="border:none;background:${on?'#111827':'none'};color:${on?'#fff':'var(--muted)'};padding:6px 14px;font:inherit;font-size:12px;font-weight:600;cursor:pointer">${l}</button>`;
   const seg=(items)=>`<div style="display:inline-flex;border:1px solid var(--border);border-radius:8px;overflow:hidden;background:#fff;margin:0 8px 10px 0;flex-wrap:wrap">${items.join('')}</div>`;
   const cur=S.key&&TP()[S.key];
-  return `<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:6px"><div style="font-size:17px;font-weight:800">🗺 Track Explorer</div><div style="font-size:12px;color:var(--muted)">${Object.keys(TP()).length} tracks · UK (Prixm) + Ireland (☘ Emerald)</div></div>
-    ${seg([segBtn('all','All tracks',S.cty==='all',"window._texSet({cty:'all'})"),segBtn('GB','🇬🇧 UK · Prixm',S.cty==='GB',"window._texSet({cty:'GB'})"),segBtn('IRE','☘ Ireland · Emerald',S.cty==='IRE',"window._texSet({cty:'IRE'})")])}
+  return `<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:6px"><div style="font-size:17px;font-weight:800">🗺 Track Explorer</div><div style="font-size:12px;color:var(--muted)">${Object.keys(TP()).length} tracks · UK (Prixm) + Ireland (☘ Emerald) + France (Vanta)</div></div>
+    ${seg([segBtn('all','All tracks',S.cty==='all',"window._texSet({cty:'all'})"),segBtn('GB','🇬🇧 UK · Prixm',S.cty==='GB',"window._texSet({cty:'GB'})"),segBtn('IRE','☘ Ireland · Emerald',S.cty==='IRE',"window._texSet({cty:'IRE'})"),segBtn('FR','France · Vanta',S.cty==='FR',"window._texSet({cty:'FR'})")])}
     ${seg([segBtn('prof','🗺 Profile',S.sub==='prof',"window._texSet({sub:'prof'})"),segBtn('fit',"🧭 Today's Runners Fit",S.sub==='fit',"window._texSet({sub:'fit'})"),segBtn('stats','📊 Stats',S.sub==='stats',"window._texSet({sub:'stats'})")])}
     <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:12px">
-      ${today.map(([k,t])=>`<button onclick="window._texSet({key:'${k}'})" style="border:1px solid ${t.country==='IRE'?'#a7f3d0':'#bfdbfe'};background:${S.key===k?(t.country==='IRE'?'#0f766e':'#1d4ed8'):'#fff'};color:${S.key===k?'#fff':(t.country==='IRE'?'#0f766e':'#1d4ed8')};border-radius:16px;padding:4px 12px;font:inherit;font-size:12px;font-weight:600;cursor:pointer">${t.country==='IRE'?'☘ ':''}${esc(t.name)} <span style="font-size:9px;background:#f59e0b;color:#fff;border-radius:4px;padding:0 4px">TODAY</span></button>`).join('')}
+      ${today.map(([k,t])=>`<button onclick="window._texSet({key:'${k}'})" style="border:1px solid ${t.country==='IRE'?'#a7f3d0':t.country==='FR'?'#b9bec6':'#bfdbfe'};background:${S.key===k?(t.country==='IRE'?'#0f766e':t.country==='FR'?'#3f444c':'#1d4ed8'):'#fff'};color:${S.key===k?'#fff':(t.country==='IRE'?'#0f766e':t.country==='FR'?'#3f444c':'#1d4ed8')};border-radius:16px;padding:4px 12px;font:inherit;font-size:12px;font-weight:600;cursor:pointer">${t.country==='IRE'?'☘ ':''}${esc(t.name)} <span style="font-size:9px;background:#f59e0b;color:#fff;border-radius:4px;padding:0 4px">TODAY</span></button>`).join('')}
       <select onchange="window._texSet({key:this.value})" style="padding:5px 8px;border:1px solid var(--border);border-radius:6px;font:inherit;font-size:12px;background:#fff">
         <option value="">${cur?'Other track…':'Choose a track…'}</option>
         ${list.sort((a,b)=>a[1].name.localeCompare(b[1].name)).map(([k,t])=>`<option value="${k}" ${S.key===k?'selected':''}>${t.country==='IRE'?'☘ ':''}${esc(t.name)}</option>`).join('')}
@@ -4459,11 +4521,11 @@ function profile(){
   const card=(t,b)=>`<div style="font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700;margin:14px 0 6px">${t}</div>${b}`;
   return `<div style="background:#fff;border:1px solid var(--border);border-radius:10px;padding:14px 16px">
     <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px"><div style="font-size:18px;font-weight:800">${ire?'☘ ':''}${esc(tp.name)}</div>
-      <div style="display:flex;gap:6px;align-items:center"><span style="font-size:10.5px;font-weight:700;border-radius:6px;padding:2px 8px;background:${ire?'#0f766e':'#1d4ed8'};color:#fff">${ire?'☘ Emerald track':'🇬🇧 Prixm track'}</span><span title="How well-documented this track's character is — gradients are approximate for 'medium'" style="font-size:10.5px;color:var(--muted);border:1px solid var(--border);border-radius:6px;padding:1px 7px">profile: ${tp.conf||'medium'}</span></div></div>
+      <div style="display:flex;gap:6px;align-items:center"><span style="font-size:10.5px;font-weight:700;border-radius:6px;padding:2px 8px;background:${ire?'#0f766e':tp.country==='FR'?'#3f444c':'#1d4ed8'};color:#fff;${tp.country==='FR'?'letter-spacing:.1em':''}">${ire?'☘ Emerald track':tp.country==='FR'?'VANTA TRACK':'🇬🇧 Prixm track'}</span><span title="How well-documented this track's character is — gradients are approximate for 'medium'" style="font-size:10.5px;color:var(--muted);border:1px solid var(--border);border-radius:6px;padding:1px 7px">profile: ${tp.conf||'medium'}</span></div></div>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:10px">
       <div>${layoutSVG(tp)}${card('Elevation · final 4f (hill / dip)',elevSVG(tp))}</div>
       <div><div style="display:grid;grid-template-columns:auto 1fr;gap:3px 14px;font-size:12.5px">${kv.map(([a,b])=>`<span style="color:var(--muted)">${a}</span><b>${b}</b>`).join('')}</div>
-        ${card('Track character',[['Sharpness',tp.sharpness,['Galloping','Fair','Sharp','Very sharp']],['Undulation',tp.undulation,['Flat','Mild','Undulating','Big']],['Camber / tilt',tp.camber,['Minimal','Slight','Moderate','Pronounced']],['Uphill finish',tp.uphill_finish,['None','Gentle','Stiff','Steep']],['Straight length',Math.min(1,(tp.straight_f||0)/6),['Short','Medium','Long','Very long']]].map(([l,v,a])=>meter(l,v||0,lvl(v||0,a),a,ire)).join(''))}
+        ${card('Track character',[['Sharpness',tp.sharpness,['Galloping','Fair','Sharp','Very sharp']],['Undulation',tp.undulation,['Flat','Mild','Undulating','Big']],['Camber / tilt',tp.camber,['Minimal','Slight','Moderate','Pronounced']],['Uphill finish',tp.uphill_finish,['None','Gentle','Stiff','Steep']],['Straight length',Math.min(1,(tp.straight_f||0)/6),['Short','Medium','Long','Very long']]].map(([l,v,a])=>meter(l,v||0,lvl(v||0,a),a,tp.country==='FR'?'fr':ire)).join(''))}
         ${tp.stalls&&tp.stalls.length?card('Stalls position by distance',`<table style="width:100%;border-collapse:collapse;font-size:12px"><tr>${['Distance','Stalls','Known bias'].map(h=>`<th style="text-align:left;font-size:10px;text-transform:uppercase;color:var(--muted);padding:4px 6px;border-bottom:1px solid var(--border)">${h}</th>`).join('')}</tr>${tp.stalls.map(r=>`<tr>${r.map(c=>`<td style="padding:4px 6px;border-bottom:1px solid var(--border)">${esc(c)}</td>`).join('')}</tr>`).join('')}</table>`):''}</div>
     </div>
     ${heat?card('Stall favoured · draw heat (logged results)',heat):''}
@@ -4654,13 +4716,134 @@ window._emApplyCal=function(){
     try{localStorage.setItem('calibWeights_'+res.profile,JSON.stringify(res.newW));}catch(e){}
     try{rescoreTodayWithWeights(res.newW,res.profile);}catch(e){}
   });
-  const all=[...((window._resultsHistory&&window._resultsHistory.calibrations)||[]),...eh.calibrations];
+  const all=allEngineCalibs();   // Prixm + ☘ Emerald + Vanta — never drop another engine's entries
   try{localStorage.setItem('calibHistory',JSON.stringify(all));}catch(e){}
   try{fetch('http://localhost:7432/api/calibrations',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(all)});}catch(e){}
   _proposals=null;render();try{renderRaceCards();renderD1Sidebar();}catch(e){}
 };
 window.renderEmeraldTab=render;
 })();
+
+/* ==================== VANTA TAB (French engine dashboard, 2026-11-16) ====================
+   Reads window._vantaHistory (French races only — never mixed into Prixm or Emerald analytics).
+   STARTER: Prixm base + 4 French factors, Prixm comparison shown, Ledger stakes are paper.
+   A profile (fr_flat / fr_nh) with VA_RECAL_STEP (1000) Vanta-scored races can be calibrated here;
+   clicking Apply makes that profile Vanta 1.0: own weights, Prixm comparison hidden, real Ledger stakes.
+   Later reviews every +1000 races (+0.1). Approved mockup: mockups/vanta_mockup.html. */
+(function(){
+'use strict';
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let _proposals=null,_target='vantaContent';
+const vaRaces=()=>((window._vantaHistory&&window._vantaHistory.races)||[]).filter(r=>(r.results||[]).some(x=>x.score_breakdown&&'class_earn' in x.score_breakdown));
+const pl=fs=>typeof getPlaceLimit==='function'?getPlaceLimit(fs):(fs<=7?2:fs<=15?3:4);
+const PN={fr_flat:'FR Flat',fr_nh:'FR Jumps'};
+function topBy(race,key){const rs=(race.results||[]).filter(x=>!x.non_runner&&x.finish_pos!==undefined&&x[key]!=null);if(rs.length<2)return null;return rs.reduce((a,b)=>(b[key]>a[key]?b:a));}
+function perf(races,key){
+  let n=0,w=0,p=0,stake=0,ret=0,fld=0;
+  races.forEach(r=>{const t=topBy(r,key);if(!t)return;n++;const fs=r.field_size||(r.results||[]).filter(x=>!x.non_runner).length;fld+=fs;
+    stake++;if(t.finish_pos===1){w++;ret+=t.sp||0;}
+    if(t.finish_pos&&t.finish_pos<=pl(fs))p++;});
+  return {n,sr:n?w/n*100:0,pr:n?p/n*100:0,roi:stake?(ret-stake)/stake*100:null,rnd:fld?n/fld*100:0};
+}
+const tile=(l,v,sub,col)=>`<div class="va-kpi"><div class="va-l">${l}</div><div class="va-n"${col?` style="color:${col}"`:''}>${v}</div><div class="va-s">${sub||''}</div></div>`;
+const card=(t,b)=>`<div class="va-card"><div class="va-h">${t}</div>${b}</div>`;
+const tbl=(head,rows)=>`<div style="overflow-x:auto"><table class="va-tbl"><tr>${head.map(h=>`<th>${h}</th>`).join('')}</tr>${rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</table></div>`;
+// Stall bias: place rate of each stall vs the expected rate for the fields it ran in (places ÷ runners)
+function stallBias(races){
+  const by={};
+  races.forEach(r=>{const res=(r.results||[]).filter(x=>!x.non_runner&&x.draw);const fs=r.field_size||res.length;if(fs<6||!res.length)return;const lim=pl(fs);
+    res.forEach(x=>{const s=Math.min(+x.draw,12);const b=by[s]=by[s]||{n:0,pl:0,ex:0};b.n++;b.ex+=lim/fs;if(x.finish_pos&&x.finish_pos<=lim)b.pl++;});});
+  return Object.keys(by).map(Number).sort((a,b)=>a-b).map(s=>({s,n:by[s].n,d:by[s].n?(by[s].pl-by[s].ex)/by[s].n*100:0}));
+}
+function miniBars(sb){
+  const rows=sb.filter(x=>x.s<=10);if(rows.filter(x=>x.n>=8).length<4)return'<span style="color:var(--muted);font-size:11px">not enough stalls yet</span>';
+  return `<span class="va-mini" title="${rows.map(x=>`stall ${x.s}: ${x.d>=0?'+':''}${x.d.toFixed(0)} pts (${x.n} runs)`).join('\n')}">${rows.map(x=>`<i style="height:${Math.max(8,Math.min(100,50+x.d*3))}%;background:${x.d>=0?'#5bb39a':'#e07a5f'};opacity:${x.n<15?.4:1}"></i>`).join('')}</span>`;
+}
+function render(target){
+  if(target)_target=target;
+  const el=document.getElementById(_target)||document.getElementById('vantaContent');if(!el)return;
+  try{
+    const races=vaRaces();
+    const byProf={fr_flat:races.filter(r=>r.profile==='fr_flat'),fr_nh:races.filter(r=>r.profile==='fr_nh')};
+    const anyStarter=VANTA_PROFILES.some(p=>!vaLive(p)), allLive=!anyStarter;
+    const V=perf(races,'predicted_score'),P=perf(races,'prixm_score');
+    const recent=[...races].sort((a,b)=>(a.date||'').localeCompare(b.date||'')).slice(-200),R=perf(recent,'predicted_score');
+    const tracks=new Set(races.map(r=>getTrackKey(r.venue)||normalizeTrackKey(r.venue)));
+    const first=races.reduce((m,r)=>!m||r.date<m?r.date:m,'');
+    let h=`<div class="va-top"><div><div class="va-ttl">VANTA<small>${getVantaVersion()==null?'STARTER':getVantaVersion().toFixed(1)}</small></div>
+      <div class="va-sub">French gallop racing · ${anyStarter?'Starter = Prixm base + stall · track fit · stable · earnings':'own weights, learned from logged French races'}</div></div>
+      <div class="va-sub">Logged races ${races.length.toLocaleString()} · ${tracks.size} tracks${first?` · from ${first}`:''}</div></div>`;
+    if(!races.length){el.innerHTML=h+card('No French results yet','Run <b>Backfill Vanta.bat</b> once (French results since April), then Fetch Results logs new French races every day.');return;}
+    h+=`<div class="va-kpis">
+      ${tile('Top pick win %',V.sr.toFixed(1)+'%',anyStarter&&P.n?`Prixm same races ${P.sr.toFixed(1)}% · <b style="color:${V.sr>=P.sr?'#15803d':'#dc2626'}">${V.sr>=P.sr?'+':''}${(V.sr-P.sr).toFixed(1)}</b>`:`last 200 races ${R.sr.toFixed(1)}%`)}
+      ${tile('Top pick place %',V.pr.toFixed(1)+'%',anyStarter&&P.n?`Prixm ${P.pr.toFixed(1)}% · <b style="color:${V.pr>=P.pr?'#15803d':'#dc2626'}">${V.pr>=P.pr?'+':''}${(V.pr-P.pr).toFixed(1)}</b>`:`last 200 races ${R.pr.toFixed(1)}%`)}
+      ${tile('ROI at tote (1u)',V.roi==null?'—':(V.roi>=0?'+':'')+V.roi.toFixed(1)+'%','PMU tote odds, not SP',V.roi!=null&&V.roi>=0?'#15803d':'#dc2626')}
+      ${tile('Random win %',V.rnd.toFixed(1)+'%','1 ÷ average field')}
+    </div>`;
+    // progress / calibration per profile
+    const lastN=p=>{const c=vaCals(p).slice(-1)[0];return c?(c.races_used||0):0;};
+    h+=`<div class="va-prog">${VANTA_PROFILES.map(p=>{const n=byProf[p].length,live=vaLive(p),need=lastN(p)?lastN(p)+VA_RECAL_STEP:VA_RECAL_STEP,pct=Math.min(100,n/need*100);
+      return `<div class="va-pg"><div class="va-pgt"><b>${PN[p].toUpperCase()}</b><span>${live?`${vantaLabel(p)} live · ${n.toLocaleString()} races`:`${n.toLocaleString()} / ${VA_RECAL_STEP} races`}</span></div>
+        <div class="va-track"><i style="width:${pct}%"></i></div>
+        <div class="va-foot">${n>=need?`<b>Ready</b> — run the review below, then click Apply → ${live?'Vanta '+(vaProfVersion(p)+0.1).toFixed(1):'<b>Vanta 1.0</b>'}`:live?`${need-n} to the next review`:`${need-n} to go → review + Apply → <b>Vanta 1.0</b> (still Starter: Prixm base, comparison shown, paper stakes)`}</div></div>`;}).join('')}</div>`;
+    const ready=VANTA_PROFILES.some(p=>byProf[p].length>=(lastN(p)?lastN(p)+VA_RECAL_STEP:VA_RECAL_STEP));
+    let prop='';
+    if(_proposals&&_proposals.length){
+      prop=tbl(['Profile','Races','Top-pick placed: now → proposed','Weight changes'],_proposals.map(r=>[PN[r.profile],r.races,`${r.oldPct}% → <b style="color:${r.newPct>=r.oldPct?'#15803d':'#dc2626'}">${r.newPct}%</b>`,`<span style="font-size:11px">${Object.keys(r.newW).filter(f=>r.oldW[f]!==r.newW[f]).map(f=>`${f} ${r.oldW[f]}→${r.newW[f]}`).join(' · ')||'no change'}</span>`]))
+        +`<div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap" class="vo-hide"><button class="vbtn va-btn" onclick="window._vaApplyCal()">✓ Apply → ${_proposals.map(r=>PN[r.profile]+' '+(vaLive(r.profile)?(vaProfVersion(r.profile)+0.1).toFixed(1):'1.0')).join(' · ')}</button><button class="vbtn" onclick="window._vaCancelCal()">Cancel</button></div>
+        <div style="font-size:11px;color:var(--muted);margin-top:6px">Apply = that profile runs on its own weights from the next load; the Prixm comparison disappears and the 💷 Ledger gives real stakes.</div>`;
+    }
+    if(ready&&!VIEW_ONLY&&!_proposals) prop=`<button class="vbtn va-btn vo-hide" onclick="window._vaRunCal()">Run Vanta review</button>`;
+    // per track
+    const byT={};races.forEach(r=>{const k=getTrackKey(r.venue)||normalizeTrackKey(r.venue);(byT[k]=byT[k]||[]).push(r);});
+    const trows=Object.entries(byT).map(([k,rs])=>{const e=perf(rs,'predicted_score'),p=perf(rs,'prixm_score');const tp=(window._trackProfiles||{})[k];
+      return {k,name:tp?tp.name:(rs[0].venue||k).replace(/\s*\(FR\)/i,''),dir:tp?tp.direction:'',n:e.n,sr:e.sr,psr:p.sr,roi:e.roi,sb:stallBias(rs.filter(r=>/flat/i.test(r.race_type||'')))};}).filter(x=>x.n>=5).sort((a,b)=>b.n-a.n);
+    const trackCard=card('By track',trows.length?tbl(['Track','Dir','Races','Win %',...(anyStarter?['Prixm']:[]),'ROI','Stall bias (Flat)',''],trows.map(t=>[`<b>${esc(t.name)}</b>`,t.dir,t.n,t.sr.toFixed(1)+'%',...(anyStarter?[`<span style="color:var(--muted)">${t.psr.toFixed(1)}%</span>`]:[]),
+      t.roi==null?'—':`<span style="color:${t.roi>=0?'#15803d':'#dc2626'}">${t.roi>=0?'+':''}${t.roi.toFixed(0)}%</span>`,miniBars(t.sb),
+      `<button class="vbtn" style="font-size:10.5px;padding:2px 8px" onclick="openTrackExplorer('${esc(t.name).replace(/'/g,"\\'")}','prof')">🗺</button>`])):'<div style="color:var(--muted);font-size:12px">Needs at least 5 Vanta races at a track.</div>');
+    // factor strength (Spearman ρ vs finish, both profiles averaged)
+    let fsCard='';
+    const cal=VANTA_PROFILES.map(p=>_calibrateProfile(window._vantaHistory,p)).filter(Boolean);
+    if(cal.length){
+      const agg={};cal.forEach(c=>Object.entries(c.corrs).forEach(([f,v])=>{(agg[f]=agg[f]||[]).push(v);}));
+      const fs=Object.entries(agg).map(([f,a])=>[f,a.reduce((x,y)=>x+y,0)/a.length]).sort((a,b)=>b[1]-a[1]);
+      const mx=Math.max(...fs.map(x=>Math.abs(x[1])),0.01);
+      fsCard=card('Factor strength · Spearman ρ vs finish',fs.map(([f,v])=>`<div class="va-fs"><span${VA_FM[f]&&VA_FM[f].va?' class="va-x"':''}>${(VA_FM[f]&&VA_FM[f].l)||f}</span><div class="va-fst"><i style="width:${Math.abs(v)/mx*100}%;background:${v>=0?(VA_FM[f]&&VA_FM[f].va?'var(--va)':'var(--va2)'):'#ef4444'}"></i></div><span style="text-align:right;color:var(--muted)">${v.toFixed(3)}</span></div>`).join('')+'<div style="font-size:11px;color:var(--muted);margin-top:6px">Highlighted = Vanta-only French factors.</div>');
+    }
+    // version history
+    const vh=[`<div class="va-vrow"><span class="va-ver" style="font-size:13px">STARTER</span><span>launch</span><span>Prixm base re-capped + 4 French factors (stall, track fit, stable, earnings). Prixm comparison shown.</span></div>`];
+    VANTA_PROFILES.forEach(p=>vaCals(p).forEach((c,i)=>vh.push(`<div class="va-vrow"><span class="va-ver">${(1+0.1*i).toFixed(1)}</span><span>${esc(c.date)}</span><span>${PN[p]} · ${c.races_used} races · own weights${i?'':', comparison removed, real Ledger stakes'}</span></div>`)));
+    VANTA_PROFILES.filter(p=>!vaLive(p)).forEach(p=>vh.push(`<div class="va-vrow" style="color:var(--muted)"><span class="va-ver" style="color:var(--muted)">1.0</span><span>at ${VA_RECAL_STEP}</span><span>${PN[p]}: review, then click Apply. Nothing switches by itself.</span></div>`));
+    h+=`<div class="va-two"><div>${card('Review · Vanta profiles',`<div style="font-size:12.5px;margin-bottom:8px">Each profile needs ${VA_RECAL_STEP} Vanta-scored races before its first review, then ${VA_RECAL_STEP} more for each later one.</div>`+prop)}${trackCard}</div><div>${fsCard}${card('Version history',vh.join(''))}</div></div>`;
+    el.innerHTML=h;
+  }catch(e){el.innerHTML=`<div style="padding:20px;color:#dc2626;background:#fef2f2;border:1px solid #fecaca;border-radius:8px"><b>Vanta tab error:</b> ${esc(e.message)}</div>`;console.error('VantaTab',e);}
+}
+window._vaRunCal=function(){
+  const byProf=p=>vaRaces().filter(r=>r.profile===p).length;
+  const last=p=>{const c=vaCals(p).slice(-1)[0];return c?(c.races_used||0):0;};
+  _proposals=VANTA_PROFILES.filter(p=>byProf(p)>=(last(p)?last(p)+VA_RECAL_STEP:VA_RECAL_STEP)).map(p=>_calibrateProfile(window._vantaHistory,p)).filter(Boolean);
+  if(!_proposals.length)_proposals=null;
+  render();
+};
+window._vaCancelCal=function(){_proposals=null;render();};
+window._vaApplyCal=function(){
+  if(!_proposals)return;
+  const vh=window._vantaHistory;vh.calibrations=vh.calibrations||[];vh.weight_profiles=vh.weight_profiles||{};
+  const today=new Date().toISOString().slice(0,10);
+  _proposals.forEach(res=>{
+    vh.calibrations.push({date:today,profile:res.profile,engine:'vanta',races_used:res.races,old_weights:vh.weight_profiles[res.profile]||res.oldW,new_weights:res.newW,applied:true,correlations:res.corrs||{}});
+    vh.weight_profiles[res.profile]=res.newW;
+    try{localStorage.setItem('calibWeights_'+res.profile,JSON.stringify(res.newW));}catch(e){}
+    try{rescoreTodayWithWeights(res.newW,res.profile);}catch(e){}
+  });
+  const all=allEngineCalibs();
+  try{localStorage.setItem('calibHistory',JSON.stringify(all));}catch(e){}
+  try{fetch('http://localhost:7432/api/calibrations',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(all)});}catch(e){}
+  _proposals=null;render();try{renderRaceCards();renderD1Sidebar();}catch(e){}
+};
+window.renderVantaTab=render;
+})();
+
 
 /* 🧭 Track-fit validation table — shared by the Emerald tab and the Performance tab */
 function renderXaValidationCard(engine){
@@ -4845,18 +5028,19 @@ function segSR(seg){
 }
 
 // ── context for a runner: engine, pick category, segment, verification, fit, tight ──
-function todaysPicks(em){
-  const k=(em?'e':'p')+(D&&D.date)+'|'+Object.keys((D&&D.venues)||{}).length;
+function todaysPicks(em){  // em: false = Prixm · true = ☘ Emerald · 'vanta' = Vanta
+  const eng=em==='vanta'?'vanta':em?'emerald':undefined;
+  const k=(eng||'p')+(D&&D.date)+'|'+Object.keys((D&&D.venues)||{}).length;
   const c=window._lgPickCache||(window._lgPickCache={});
-  if(!c[k]||Date.now()-c[k].t>4000){let ps=[];try{ps=getPrixmPicks(getTop10Picks(D,em?'emerald':undefined),em?'emerald':undefined);}catch(e){}c[k]={t:Date.now(),ps};}
+  if(!c[k]||Date.now()-c[k].t>4000){let ps=[];try{ps=getPrixmPicks(getTop10Picks(D,eng),eng);}catch(e){}c[k]={t:Date.now(),ps};}
   return c[k].ps;
 }
 function ctxFor(vk,ri,name){
   const venue=D&&D.venues&&D.venues[vk];const race=venue&&venue.races[ri];if(!race)return null;
   const r=race.runners.find(x=>x.name===name);if(!r)return null;
-  const em=isIreland(race.course||venue.course);const eng=em?'emerald':'prixm';
-  const pick=todaysPicks(em).find(p=>p.horse===name&&p.time===race.time)||null;
-  let seg=null;if(!em){try{seg=getGoldenFlags(race)?'golden':getSilverFlags(race)?'silver':getBronzeFlags(race)?'bronze':null;}catch(e){}
+  const em=isIreland(race.course||venue.course),va=!em&&isFrance(race.course||venue.course);const eng=em?'emerald':va?'vanta':'prixm';
+  const pick=todaysPicks(va?'vanta':em).find(p=>p.horse===name&&p.time===race.time)||null;
+  let seg=null;if(!em&&!va){try{seg=getGoldenFlags(race)?'golden':getSilverFlags(race)?'silver':getBronzeFlags(race)?'bronze':null;}catch(e){}
     const sorted=[...race.runners].sort((a,b)=>b.score-a.score);if(seg&&sorted[0].name!==name)seg=null;}
   let verif=null;if(pick&&pick.edge>=60){try{const v=runVerificationPass(pick,race,r);verif=v&&v.verdict;}catch(e){}}
   let tight=false;try{tight=rpTightCheck(race,race.runners).tight;}catch(e){}
@@ -4864,7 +5048,7 @@ function ctxFor(vk,ri,name){
   const srt=[...race.runners].sort((a,b)=>b.score-a.score),isTop=srt[0]&&srt[0].name===name;
   const gap=srt.length>1?srt[0].score-srt[1].score:0;
   let vol=false;try{vol=rpComputeVolatility(race,rpBuildPredictedOrder(race.runners,race).order).level==='VOLATILE';}catch(e){}
-  return {vk,ri,race,r,em,eng,pick,cat:pick&&pick.category,seg,verif,fit:r.track_fit&&r.track_fit.verdict,tight,fs,hcp,isTop,gap,vol,
+  return {vk,ri,race,r,em,va,eng,pick,cat:pick&&pick.category,seg,verif,fit:r.track_fit&&r.track_fit.verdict,tight,fs,hcp,isTop,gap,vol,
     model:calcCompetitiveProb(r.score||0,race.runners.map(x=>x.score||0),1)/100,price:r.price?parseFloat(r.price):null};
 }
 const floorHalf=x=>Math.floor(x*2)/2;
@@ -4880,10 +5064,10 @@ const lgGb=g=>g>=18?'18+':g>=10?'10-18':g>=5?'5-10':'<5';
 function lgBuckets(){
   const A=((window._allHistory||window._resultsHistory||{}).races)||[];
   if(window._lgBk&&window._lgBk.n===A.length)return window._lgBk;
-  const m={n:A.length,b:{},all:{uk:[0,0],ire:[0,0]}};
+  const m={n:A.length,b:{},all:{uk:[0,0],ire:[0,0],fr:[0,0]}};
   A.forEach(r=>{const res=(r.results||[]).filter(x=>!x.non_runner&&x.finish_pos&&x.predicted_score!=null);if(res.length<3)return;
     const sc=res.map(x=>x.predicted_score).sort((x,y)=>y-x),t=res.reduce((x,y)=>y.predicted_score>x.predicted_score?y:x);
-    const e=isEmeraldRace(r)?'ire':'uk',k=`${e}|${lgConf(sc[0])}|${lgGb(sc[0]-sc[1])}|${r.handicap?'H':'NH'}`;
+    const e=isEmeraldRace(r)?'ire':isVantaRace(r)?'fr':'uk',k=`${e}|${lgConf(sc[0])}|${lgGb(sc[0]-sc[1])}|${r.handicap?'H':'NH'}`;
     const o=(m.b[k]=m.b[k]||[0,0]);o[0]++;o[1]+=t.finish_pos===1?1:0;m.all[e][0]++;m.all[e][1]+=t.finish_pos===1?1:0;});
   window._lgBk=m;return m;
 }
@@ -4894,7 +5078,7 @@ function winChance(c){
     const ukAll=m.all.uk[0]?m.all.uk[1]/m.all.uk[0]:0.25,uk=m.b['uk|'+tail]||[0,0];
     const ukP=(uk[1]+ukAll*LG_K)/(uk[0]+LG_K);
     const lbl=`${conf==='TOP'?'TOP PICK':conf} · gap ${lgGb(c.gap)} · ${c.hcp?'handicap':'non-handicap'}`;
-    if(c.em){const ir=m.b['ire|'+tail]||[0,0];p=(ir[1]+ukP*LG_K)/(ir[0]+LG_K);rows.push([`${lbl}: Irish ${ir[0]} races (${ir[0]?Math.round(ir[1]/ir[0]*100):0}% won), anchored on UK ${(ukP*100).toFixed(0)}%`,p]);}
+    if(c.em||c.va){const nm=c.em?'Irish':'French',ir=m.b[(c.em?'ire|':'fr|')+tail]||[0,0];p=(ir[1]+ukP*LG_K)/(ir[0]+LG_K);rows.push([`${lbl}: ${nm} ${ir[0]} races (${ir[0]?Math.round(ir[1]/ir[0]*100):0}% won), anchored on UK ${(ukP*100).toFixed(0)}%`,p]);}
     else{p=ukP;rows.push([`${lbl}: ${uk[0]} logged races won ${uk[0]?(uk[1]/uk[0]*100).toFixed(1):'—'}%${uk[0]<200?', pulled toward the average':''}`,p]);}
   }else{p=c.model*0.92;rows.push([`Not the top-rated runner: engine win chance ${(c.model*100).toFixed(0)}% × 0.92`,p]);}
   if(c.seg==='golden'&&c.isTop){const g=segSR('golden');if(g.n>=20){p=(g.sr*g.n+p*20)/(g.n+20);rows.push([`⭐ Golden: blended with live Golden ${(g.sr*100).toFixed(0)}% (n=${g.n})`,p]);}}
@@ -4909,11 +5093,12 @@ function winChance(c){
 function suggest(c,price){
   price=price||c.price;const set=S();
   const none=why=>({u:0,kind:'none',why:[why]});
-  if(!c.cat)return none(`Not a ${c.em?'☘ Emerald':'Prixm'} pick`);
+  if(!c.cat)return none(`Not a ${c.em?'☘ Emerald':c.va?'Vanta':'Prixm'} pick`);
   if(c.tight)return none('Tight race: the engine can\'t separate the top runners');
   if(c.verif==='FLAGGED')return none('Verification Pass 🚫 FLAGGED');
-  const emLive=c.em&&emReady(c.race),W=winChance(c),p=W.p,paper=(c.em&&!emLive)||c.seg==='silver'||c.seg==='bronze';
-  const paperWhy=c.em&&!emLive?`☘ Emerald ${classifyEmeraldProfile(c.race)} has ${emProfileCount(c.race)}/300 races: paper stake until 300`:c.seg==='silver'?'🥈 Silver is paper-only':c.seg==='bronze'?'🥉 Bronze is paper-only':'';
+  const emLive=c.em&&emReady(c.race),vaOn=c.va&&vaLive(c.race),W=winChance(c),p=W.p,paper=(c.em&&!emLive)||(c.va&&!vaOn)||c.seg==='silver'||c.seg==='bronze';
+  const paperWhy=c.em&&!emLive?`☘ Emerald ${classifyEmeraldProfile(c.race)} has ${emProfileCount(c.race)}/300 races: paper stake until 300`
+    :c.va&&!vaOn?`Vanta ${classifyVantaProfile(c.race)==='fr_nh'?'Jumps':'Flat'} is still Starter (${vaCount(classifyVantaProfile(c.race))}/${VA_RECAL_STEP} races): paper stake until you apply Vanta 1.0`:c.seg==='silver'?'🥈 Silver is paper-only':c.seg==='bronze'?'🥉 Bronze is paper-only':'';
   const bank=effBank(),kd=brakeOn()?6:4,maxU=Math.min(set.max,c.seg==='golden'&&c.verif==='CONFIRMED'?5:3);
   const why=W.rows.map(([t])=>t);why.push(`Win chance ${(p*100).toFixed(1)}% · fair price ${(1/p).toFixed(2)}`);
   if(kd===6)why.push('Losing-run brake: ⅙ Kelly until a winning day');
@@ -4936,8 +5121,8 @@ function lgChip(s){
   return `<span class="lg-schip${s.kind==='paper'?' pp':''}" title="${esc(s.why.join(' · '))}">💡 ${s.u}u${s.kind==='paper'?' · paper':''}</span>`;
 }
 window.lgChipForRunner=function(vk,ri,name){if(VIEW_ONLY)return'';try{const c=ctxFor(vk,ri,name);return c&&c.cat?lgChip(suggest(c)):'';}catch(e){return'';}};
-window.lgChipForRace=function(vk,ri){if(VIEW_ONLY||!D||!D.venues[vk])return'';try{const race=D.venues[vk].races[ri];const em=isIreland(race.course||D.venues[vk].course);
-  const pk=todaysPicks(em).find(p=>p.venueKey===vk&&p.raceIdx===ri);return pk?window.lgChipForRunner(vk,ri,pk.horse):'';}catch(e){return'';}};
+window.lgChipForRace=function(vk,ri){if(VIEW_ONLY||!D||!D.venues[vk])return'';try{const race=D.venues[vk].races[ri];const em=isIreland(race.course||D.venues[vk].course),va=!em&&isFrance(race.course||D.venues[vk].course);
+  const pk=todaysPicks(va?'vanta':em).find(p=>p.venueKey===vk&&p.raceIdx===ri);return pk?window.lgChipForRunner(vk,ri,pk.horse):'';}catch(e){return'';}};
 
 // ── chrome: header chip + FAB ──
 function refreshChrome(){
@@ -4951,7 +5136,7 @@ function refreshChrome(){
 let M=null;
 // number boxes: plain text + decimal keypad (type=number loses the caret, reads '3.' as empty and fights deletes). Keeps digits + one dot (+ '/' for fractional odds), comma → dot.
 window.numClean=(el,frac)=>{const v=el.value;let c=v.replace(/,/g,'.').replace(frac?/[^0-9./]/g:/[^0-9.]/g,'');const i=c.indexOf('.');if(i>=0)c=c.slice(0,i+1)+c.slice(i+1).replace(/\./g,'');if(c!==v){const p=Math.max(0,(el.selectionStart||c.length)-(v.length-c.length));el.value=c;try{el.setSelectionRange(p,p);}catch(e){}}};
-function allRunners(){const out=[];if(!window.D||!D.venues)return out;Object.entries(D.venues).forEach(([vk,v])=>(v.races||[]).forEach((r,ri)=>(r.runners||[]).forEach(x=>out.push({vk,ri,name:x.name,course:v.course||vk,time:r.time,em:isIreland(v.course||vk)}))));return out;}
+function allRunners(){const out=[];if(!window.D||!D.venues)return out;Object.entries(D.venues).forEach(([vk,v])=>(v.races||[]).forEach((r,ri)=>(r.runners||[]).forEach(x=>out.push({vk,ri,name:x.name,course:v.course||vk,time:r.time,em:isIreland(v.course||vk),va:isFrance(v.course||vk)}))));return out;}
 function openModal(vk,ri,name,presetU){
   if(VIEW_ONLY)return;
   M={c:(vk!=null&&name)?ctxFor(vk,ri,name):null,type:'WIN',unitMode:'gbp',places:null,legs:[],multi:null,ew:false,ewPl:null,ewFr:null,free:false};
@@ -5011,7 +5196,7 @@ window.lgKey=e=>{
 function legFrom(vk,ri,name){const race=D.venues[vk].races[ri],run=(race.runners||[]).find(x=>x.name===name)||{};
   const hcp=!!(race.handicap||/handicap/i.test(race.race_name||race.name||'')),pt=placeTerms(race.field_size||(race.runners||[]).length,hcp);
   return{vk,ri,horse:name,venue:race.course||D.venues[vk].course||vk,time:race.time,price_raw:run.price?parseFloat(run.price).toFixed(2):'',
-    hcp,em:isIreland(race.course||D.venues[vk].course||vk),places:pt.places,frac:pt.frac};}
+    hcp,em:isIreland(race.course||D.venues[vk].course||vk),va:isFrance(race.course||D.venues[vk].course||vk),places:pt.places,frac:pt.frac};}
 function renderSub(){
   const el=document.getElementById('lgSub');if(!el)return;
   el.innerHTML=!multiMode()?'':`<div class="lg-sub"><div class="lg-sm" style="margin-bottom:5px">Acca / multiple — ACCA = any number of legs; the others take exactly that many horses</div><div class="lg-seg"><button class="${M.type==='ACCA'?'on':''}" onclick="window.lgMulti('ACCA')">ACCA<small>2+ sel · 1 bet</small></button>${MULTI.map(m=>`<button class="${M.multi===m.k?'on':''}" onclick="window.lgMulti('${m.k}')">${m.k}<small>${m.n} sel · ${multiBets({n:m.n,sizes:m.s})} bets</small></button>`).join('')}<button class="${M.multi==='CUSTOM'?'on':''}" onclick="window.lgMulti('CUSTOM')">CUSTOM</button></div>
@@ -5026,7 +5211,7 @@ function renderLegs(){
   document.getElementById('lgHorse').placeholder=on?'Add a horse…':'Start typing…';
   if(!on){el.innerHTML='';return;}
   const d=curDef(),need=fixedMulti()?d.n:0;
-  el.innerHTML=`<div class="lg-legs">${M.legs.map((l,i)=>`<div class="lg-leg"><b>${i+1}.</b> <span><b>${esc(l.horse)}</b> <span class="lg-sm">${esc(l.venue)} ${esc(l.time)}${l.em?' · ☘':''}</span>${l.hcp?' <span class="fit-badge fit-q" title="Handicap race">⚠ hcp</span>':''}</span>
+  el.innerHTML=`<div class="lg-legs">${M.legs.map((l,i)=>`<div class="lg-leg"><b>${i+1}.</b> <span><b>${esc(l.horse)}</b> <span class="lg-sm">${esc(l.venue)} ${esc(l.time)}${l.em?' · ☘':l.va?' · Vanta':''}</span>${l.hcp?' <span class="fit-badge fit-q" title="Handicap race">⚠ hcp</span>':''}</span>
     <input type="text" inputmode="decimal" autocomplete="off" placeholder="price" value="${esc(l.price_raw)}" aria-label="Leg price" oninput="window.numClean(this,1);window.lgLegPrice(${i},this.value)"><button class="lg-x" onclick="window.lgLegDel(${i})" aria-label="Remove leg">✕</button></div>`).join('')}</div>
     <div class="lg-sm" style="margin-top:4px">${M.type==='OTHER'&&!M.multi?'Pick the multiple type below (CUSTOM for anything else).':M.multi==='CUSTOM'&&M.type==='OTHER'?'Custom: add the horses (optional) and type the total price — settled by hand.':need?`${M.legs.length} / ${need} selections${M.legs.length<need?` — add ${need-M.legs.length} more`:' ✔'}`:M.legs.length<2?`Add ${M.legs.length?'at least one more horse':'2+ horses'} — each pick adds a leg (one per race).`:`${M.legs.length}-fold · leg prices optional — price = leg prices multiplied, or type the acca odds (e.g. a boost) in Price`}</div>`;
 }
@@ -5089,7 +5274,7 @@ window.lgUpd=()=>{
   document.getElementById('lgStakeLbl').textContent=fx?'Stake per bet':'Stake';
   const c=M.c,su=stakeU(),pr=parsePrice(pEl.value),unit=S().unit;
   const sv=+document.getElementById('lgStake').value||0;
-  document.getElementById('lgRace').innerHTML=c?`${esc(c.race.course)} ${esc(c.race.time)} · <b class="rc-eng ${c.em?'rc-eng-em':'rc-eng-px'}">${c.em?'☘ '+emeraldLabel():engineLabel()}</b>${c.cat?` <b class="fit-badge" style="background:#ede9fe;color:#6d28d9">${c.cat}</b>`:''}${c.seg==='golden'?' <b class="fit-badge" style="background:#fef3c7;color:#92400e">⭐ Golden</b>':''} · ${c.fs} runners${c.fit==='u'?' · <span class="fit-badge fit-u">❌ unsuited</span>':''}`:'';
+  document.getElementById('lgRace').innerHTML=c?`${esc(c.race.course)} ${esc(c.race.time)} · <b class="rc-eng ${c.em?'rc-eng-em':c.va?'rc-eng-va':'rc-eng-px'}">${c.em?'☘ '+emeraldLabel():c.va?vantaLabel(c.race):engineLabel()}</b>${c.cat?` <b class="fit-badge" style="background:#ede9fe;color:#6d28d9">${c.cat}</b>`:''}${c.seg==='golden'?' <b class="fit-badge" style="background:#fef3c7;color:#92400e">⭐ Golden</b>':''} · ${c.fs} runners${c.fit==='u'?' · <span class="fit-badge fit-u">❌ unsuited</span>':''}`:'';
   const pt=c?placeTerms(c.fs,c.hcp):null;
   if(c&&(M.type==='EW'||M.type==='PLACE'))M.places=pt.places;
   const et=c?ewTerms(c):null;
@@ -5113,8 +5298,8 @@ window.lgUpd=()=>{
       if(su>s.u*1.5)adv+=`<div class="lg-adv lg-w">⚠ Your stake (${su.toFixed(2)}u) is well above the suggestion.</div>`;}
     M.sug=s.u;}
   const tot=P?P.total:su;
-  const _emPaper=l=>l.em&&!emReady(D.venues[l.vk].races[l.ri]);
-  if(tot&&!M.free&&!(c&&c.em&&!emReady(c.race))&&!(multiMode()&&M.legs.length&&M.legs.every(_emPaper))&&realTodayU()+tot>dailyBudgetU())adv+=`<div class="lg-adv lg-w">⚠ This takes today to ${(realTodayU()+tot).toFixed(1)}u — over today's ${dailyBudgetU()}u budget.</div>`;
+  const _emPaper=l=>(l.em&&!emReady(D.venues[l.vk].races[l.ri]))||(l.va&&!vaLive(D.venues[l.vk].races[l.ri]));
+  if(tot&&!M.free&&!(c&&c.em&&!emReady(c.race))&&!(c&&c.va&&!vaLive(c.race))&&!(multiMode()&&M.legs.length&&M.legs.every(_emPaper))&&realTodayU()+tot>dailyBudgetU())adv+=`<div class="lg-adv lg-w">⚠ This takes today to ${(realTodayU()+tot).toFixed(1)}u — over today's ${dailyBudgetU()}u budget.</div>`;
   document.getElementById('lgAdv').innerHTML=adv;
   const label=M.type==='OTHER'&&M.multi&&M.multi!=='CUSTOM'?M.multi+(M.ew?' EW':''):M.type==='ACCA'?(M.legs.length>=2?M.legs.length+'-fold acca':''):M.type;
   const h=multiMode()?label:c?c.r.name+' · '+M.type:'';
@@ -5147,7 +5332,7 @@ async function saveMulti(){
   if(M.type==='ACCA'&&!accaPr)return err('Enter the acca odds in Price (or a price for every leg).');
   if(!custom&&M.type!=='ACCA'&&!ps.every(Boolean))return err('Enter a price for every leg.');
   if(!su)return err('Enter a stake.');
-  const legs=M.legs.map((l,i)=>({venue:l.venue,time:l.time,horse:l.horse,price:ps[i]||null,engine:l.em?'emerald':'prixm',places:l.places,frac:l.frac}));
+  const legs=M.legs.map((l,i)=>({venue:l.venue,time:l.time,horse:l.horse,price:ps[i]||null,engine:l.em?'emerald':l.va?'vanta':'prixm',places:l.places,frac:l.frac}));
   const typed=document.getElementById('lgHorse').value.trim(),manualPr=parsePrice(document.getElementById('lgPrice').value);
   if(custom&&!legs.length&&!typed)return err('Add a horse (or type what the bet is).');
   if(custom&&!manualPr)return err('Enter the total price.');
@@ -5155,7 +5340,7 @@ async function saveMulti(){
   const srt=legs.slice().sort((a,b)=>a.time.localeCompare(b.time));
   const type=custom?'OTHER':M.type==='ACCA'?'ACCA':M.multi+(M.ew?' EW':'');
   const b={created:new Date().toISOString().slice(0,19),date:today(),venue:srt[0]?srt[0].venue:'',time:srt[0]?srt[0].time:'',
-    horse:legs.length?legs.map(l=>l.horse).join(' / '):typed,engine:legs.length&&legs.every(l=>l.engine==='emerald')?'emerald':'prixm',category:null,segment:null,
+    horse:legs.length?legs.map(l=>l.horse).join(' / '):typed,engine:legs.length&&legs.every(l=>l.engine==='emerald')?'emerald':legs.length&&legs.every(l=>l.engine==='vanta')?'vanta':'prixm',category:null,segment:null,
     bet_type:type,stake_u:Math.round(total*100)/100,unit_gbp:S().unit,price:null,price_raw:custom||(M.type==='ACCA'&&M.accaTyped&&document.getElementById('lgPrice').value.trim())?document.getElementById('lgPrice').value:legs.map(l=>l.price).join(' × '),
     bookmaker:document.getElementById('lgBook').value,note:null,
     suggested_u:null,places:null,ew_fraction:null,field_size:null,legs:legs.length?JSON.stringify(legs):null,result:'O',source:'app',free_bet:M.free?1:0};
@@ -5170,10 +5355,10 @@ function toast(t){let el=document.getElementById('lgToast');if(!el){el=document.
 // ── Ledger tab ──
 const F={eng:'',type:'',sug:''};
 function dailyBudgetU(){const s=S();return floorHalf(effBank()*s.pct/100/s.unit);}
-function realTodayU(){return LG.bets.filter(b=>b.date===today()&&b.engine!=='emerald'&&!b.free_bet).reduce((a,b)=>a+(+b.stake_u||0),0);}
+function realTodayU(){return LG.bets.filter(b=>b.date===today()&&b.engine!=='emerald'&&!(b.engine==='vanta'&&getVantaVersion()==null)&&!b.free_bet).reduce((a,b)=>a+(+b.stake_u||0),0);}
 function planRows(){
   const out=[];if(!window.D||!D.venues)return out;
-  [false,true].forEach(em=>todaysPicks(em).forEach(p=>{const c=ctxFor(p.venueKey,p.raceIdx,p.horse);if(c){const s=suggest(c);if(s.kind!=='none')out.push({p,c,s});}}));
+  [false,true,'vanta'].forEach(em=>todaysPicks(em).forEach(p=>{const c=ctxFor(p.venueKey,p.raceIdx,p.horse);if(c){const s=suggest(c);if(s.kind!=='none')out.push({p,c,s});}}));
   // strongest first (Kelly share), so the day's best fancy is funded before anything weaker
   const rank=o=>o.s.kind==='go'?0:o.s.kind==='ladder'&&!o.s.paper?1:2; // real bets → awaiting price → paper
   out.sort((x,y)=>(rank(x)-rank(y))||((y.s.f||0)-(x.s.f||0)));
@@ -5211,7 +5396,7 @@ function render(){
       if(o.s.kind==='go'&&!o.u)return '';                      // squeezed out by the budget → blank
       const val=o.s.kind==='ladder'?lgChip(o.s):`${o.u}u<div class="lg-sm" style="font-weight:600">£${(o.u*set.unit).toFixed(0)}${o.s.kind==='paper'?' · paper':''}</div>`;
       return `<div class="lg-plan"><div><b>${esc(o.p.horse)}</b> <span class="lg-sm">${esc(o.p.venue)} ${esc(o.p.time)}</span><br>
-        <b class="rc-eng ${o.c.em?'rc-eng-em':'rc-eng-px'}">${o.c.em?'☘':'Prixm'}</b> <b class="fit-badge" style="background:#ede9fe;color:#6d28d9">${o.p.category}</b>${o.c.seg==='golden'?' <b class="fit-badge" style="background:#fef3c7;color:#92400e">⭐ Golden</b>':o.c.seg?` <b class="fit-badge" style="background:#e0e7ff;color:#3730a3">${o.c.seg}</b>`:''}${o.full?' <b class="fit-badge fit-s">⭐ strongest today: funded in full</b>':''}
+        <b class="rc-eng ${o.c.em?'rc-eng-em':o.c.va?'rc-eng-va':'rc-eng-px'}">${o.c.em?'☘':o.c.va?'Vanta':'Prixm'}</b> <b class="fit-badge" style="background:#ede9fe;color:#6d28d9">${o.p.category}</b>${o.c.seg==='golden'?' <b class="fit-badge" style="background:#fef3c7;color:#92400e">⭐ Golden</b>':o.c.seg?` <b class="fit-badge" style="background:#e0e7ff;color:#3730a3">${o.c.seg}</b>`:''}${o.full?' <b class="fit-badge fit-s">⭐ strongest today: funded in full</b>':''}
         <details><summary class="lg-sm" style="cursor:pointer">why ${o.s.kind==='paper'?'(paper)':''}</summary><div class="lg-sm">${[...o.s.why,o.s.paperWhy].filter(Boolean).map(esc).join('<br>')}</div></details></div>
         <div class="lg-u ${o.s.kind==='paper'?'z':''}" style="${o.s.kind==='ladder'?'font-size:12px;font-weight:600;max-width:240px;text-align:right':''}">${val}</div>
         <div>${logged?'<span class="lg-sm">✔ logged</span>':(o.u||o.s.kind==='ladder')?`<button class="vbtn" style="font-size:11px;padding:3px 10px;background:#15803d;color:#fff;border-color:#15803d" onclick="window.lgOpen('${o.p.venueKey.replace(/'/g,"\\'")}',${o.p.raceIdx},'${o.p.horse.replace(/'/g,"\\'")}',${o.u||0})">Log</button>`:''}</div></div>`;}).join('');
@@ -5229,8 +5414,8 @@ function render(){
     const sel=(k,opts)=>`<select onchange="window.lgFilter('${k}',this.value)" style="padding:3px 6px;border:1px solid var(--border);border-radius:6px;font-size:11.5px">${opts.map(([v,l])=>`<option value="${v}" ${F[k]===v?'selected':''}>${l}</option>`).join('')}</select>`;
     // History spans the full width under both columns (was squeezed into the left column)
     let histCard='';
-    histCard+=card(`History <span style="float:right;display:flex;gap:6px;text-transform:none;letter-spacing:0">${sel('eng',[['','All engines'],['prixm','Prixm'],['emerald','☘ Emerald']])}${sel('type',[['','All types'],...[...new Set([...TYPES,...LG.bets.map(b=>b.bet_type).filter(Boolean)])].map(t=>[t,t])])}${sel('sug',[['','All bets'],['f','Followed suggestion'],['o','Own call']])}</span>`,
-      fl.length?tbl(['Date','Horse','Engine','Type','Stake','Price','Result','P&L','Sugg.',''],fl.slice(0,200).map(b=>{const idq=typeof b.id==='number'?b.id:`'${b.id}'`;return[esc(b.date.slice(5)),`<b>${esc(b.horse)}</b><div class="lg-sm">${esc(b.venue||'')} ${esc(b.time||'')}</div>`,b.engine==='emerald'?'<b class="rc-eng rc-eng-em">☘</b>':'<b class="rc-eng rc-eng-px">Prixm</b>',esc(b.bet_type)+(b.free_bet?' <b class="fit-badge" style="background:#fef3c7;color:#92400e">🎁 free</b>':''),`${b.stake_u}u<div class="lg-sm">£${(b.stake_u*b.unit_gbp).toFixed(2)}</div>`,(+b.price||0).toFixed(2),
+    histCard+=card(`History <span style="float:right;display:flex;gap:6px;text-transform:none;letter-spacing:0">${sel('eng',[['','All engines'],['prixm','Prixm'],['emerald','☘ Emerald'],['vanta','Vanta']])}${sel('type',[['','All types'],...[...new Set([...TYPES,...LG.bets.map(b=>b.bet_type).filter(Boolean)])].map(t=>[t,t])])}${sel('sug',[['','All bets'],['f','Followed suggestion'],['o','Own call']])}</span>`,
+      fl.length?tbl(['Date','Horse','Engine','Type','Stake','Price','Result','P&L','Sugg.',''],fl.slice(0,200).map(b=>{const idq=typeof b.id==='number'?b.id:`'${b.id}'`;return[esc(b.date.slice(5)),`<b>${esc(b.horse)}</b><div class="lg-sm">${esc(b.venue||'')} ${esc(b.time||'')}</div>`,b.engine==='emerald'?'<b class="rc-eng rc-eng-em">☘</b>':b.engine==='vanta'?'<b class="rc-eng rc-eng-va">Vanta</b>':'<b class="rc-eng rc-eng-px">Prixm</b>',esc(b.bet_type)+(b.free_bet?' <b class="fit-badge" style="background:#fef3c7;color:#92400e">🎁 free</b>':''),`${b.stake_u}u<div class="lg-sm">£${(b.stake_u*b.unit_gbp).toFixed(2)}</div>`,(+b.price||0).toFixed(2),
         `<b class="fit-badge ${b.result==='W'?'fit-s':b.result==='P'||b.result==='C'?'fit-q':b.result==='V'?'':'fit-u'}">${({W:'WON',P:'PLACED',L:'LOST',V:'VOID',C:'CASHED OUT'})[b.result]||b.result}</b>${b.result==='C'&&b.cashout_gbp!=null?`<div class="lg-sm">got £${(+b.cashout_gbp).toFixed(2)}</div>`:''}`,`<b style="color:${pnlOf(b)>=0?'#15803d':'#dc2626'}">${uf(pnlOf(b))}</b><div class="lg-sm">${gbp(pnlOf(b)*(+b.unit_gbp||10))}</div>`,`<span class="lg-sm">${followed(b)?'✔ followed':b.suggested_u>0?b.suggested_u+'u':'own call'}</span>`,`<button class="vbtn lg-mini" title="Edit (wrong horse / price / stake)" onclick="window.lgEdit(${idq})">✏️ Edit</button>`];})):'<div class="lg-sm">No settled bets for this filter.</div>');
     h+=`</div><div>`;
     // curve
@@ -5251,7 +5436,7 @@ function render(){
     </svg>`:'';
     h+=card(`Bankroll curve (units)${pts.length>1?` <span style="float:right;text-transform:none;letter-spacing:0;font-size:13px;font-weight:800;color:${lc}">${uf(last)}</span>`:''}`,pts.length>1?`<div style="clear:both">${curve}</div>`:'<div class="lg-sm">Settle a bet to start the curve.</div>');
     const grp=(k,f)=>{const g={};st.forEach(b=>{(g[f(b)]=g[f(b)]||[]).push(b);});return Object.entries(g).map(([n,bs])=>{const s=bs.reduce((a,b)=>a+ownU(b),0),p=bs.reduce((a,b)=>a+pnlOf(b),0);return [`${k}: <b>${esc(n)}</b>`,bs.length,`<b style="color:${p>=0?'#15803d':'#dc2626'}">${uf(p)}</b>`,s?(p/s*100).toFixed(0)+'%':'—'];});};
-    h+=card('Breakdown',st.length?tbl(['Group','Bets','P&L','ROI'],[...grp('Engine',b=>b.engine==='emerald'?'☘ Emerald':'Prixm'),...grp('Type',b=>b.bet_type),...grp('Stake',b=>followed(b)?'followed suggestion':'own call')]):'<div class="lg-sm">—</div>');
+    h+=card('Breakdown',st.length?tbl(['Group','Bets','P&L','ROI'],[...grp('Engine',b=>b.engine==='emerald'?'☘ Emerald':b.engine==='vanta'?'Vanta':'Prixm'),...grp('Type',b=>b.bet_type),...grp('Stake',b=>followed(b)?'followed suggestion':'own call')]):'<div class="lg-sm">—</div>');
     const g=segSR('golden');
     h+=card('How the stake is worked out',`<div style="font-size:12.5px;line-height:1.6">
       <b>1 · Win chance</b> — how this kind of pick has actually done in your logged results (engine × confidence × gap × handicap), pulled toward the average when the sample is small; then ⭐ Golden, Verification, 🧭 track fit (measured lifts) and volatile-race adjustments.<br>
@@ -6069,13 +6254,18 @@ function renderPicksCalendar(){
 function perfEngineToggle(){
   const e=st.perfEngine||'prixm';
   const b=(k,l)=>`<button class="vbtn seg-btn${k==='emerald'?' seg-em':''}${e===k?' on':''}" aria-pressed="${e===k}" style="font-size:12px" onclick="if(st.perfEngine!=='${k}'){st.perfEngine='${k}';renderPerformance()}">${l}</button>`;
-  return `<div style="display:flex;gap:8px;margin-bottom:14px;align-items:center;flex-wrap:wrap">${b('prixm',engineLabel()+' · UK')}${b('emerald','☘ '+emeraldLabel()+' · IRE','#0f766e')}<span style="font-size:11px;color:var(--muted)">UK and Irish results are kept separate.</span></div>`;
+  return `<div style="display:flex;gap:8px;margin-bottom:14px;align-items:center;flex-wrap:wrap">${b('prixm',engineLabel()+' · UK')}${b('emerald','☘ '+emeraldLabel()+' · IRE','#0f766e')}${b('vanta',vantaLabel()+' · FR')}<span style="font-size:11px;color:var(--muted)">UK, Irish and French results are kept separate.</span></div>`;
 }
 async function renderPerformance(){
   const el=document.getElementById('perfContent');
   // engine switch lives outside perfContent → it never re-renders/jumps; keep the page where it is
   const _y=window.scrollY;const eb=document.getElementById('perfEngineBar');if(eb)eb.innerHTML=perfEngineToggle();
   requestAnimationFrame(()=>{if(Math.abs(window.scrollY-_y)>2)window.scrollTo(0,Math.min(_y,document.documentElement.scrollHeight));});
+  if(st.perfEngine==='vanta'){
+    el.innerHTML='<div id="perfVanta"></div>';
+    window.renderVantaTab&&window.renderVantaTab('perfVanta');
+    return;
+  }
   if(st.perfEngine==='emerald'){
     el.innerHTML='<div id="perfEmerald"></div>';
     window.renderEmeraldTab&&window.renderEmeraldTab('perfEmerald');
@@ -6524,15 +6714,23 @@ async function renderPerformance(){
 function _calibrateProfile(history,profile){
   // Internal: compute calibration for a single profile, returns result object or null
   // ☘ Emerald profiles (ire_*) calibrate Emerald's own 16 factors on Emerald-scored Irish races only
-  const isEm=/^ire_/.test(profile);
-  const races=history.races.filter(r=>r.profile===profile&&(!isEm||(r.results||[]).some(x=>x.score_breakdown&&'stable_power' in x.score_breakdown)));
+  const isEm=/^ire_/.test(profile), isVa=/^fr_/.test(profile), XFM=isEm?EM_FM:isVa?VA_FM:null;
+  // Vanta profiles (fr_*) calibrate Vanta's 17 factors on Vanta-scored French races only.
+  // Prixm profiles never see an Irish or French race (engine guard on top of the profile match).
+  const races=history.races.filter(r=>r.profile===profile&&(isEm?(r.results||[]).some(x=>x.score_breakdown&&'stable_power' in x.score_breakdown)
+    :isVa?(r.results||[]).some(x=>x.score_breakdown&&'class_earn' in x.score_breakdown)
+    :(r.engine||'prixm')==='prixm'&&!isVantaRace(r)&&!isEmeraldRace(r)));
   if(races.length<50) return null;
-  const factors=isEm?Object.keys(EM_FM):['form','rating','trainer','jockey','fitness','class','going','course','distance','age','weight','draw','headgear','spotlight'];
-  const oldW=history.weight_profiles?.[profile]||(isEm?Object.fromEntries(factors.map(f=>[f,EM_FM[f].mx])):Object.fromEntries(factors.map((f,i)=>[f,[20,15,12,10,8,8,8,6,6,7,8,5,3,2][i]])));
+  const factors=XFM?Object.keys(XFM):['form','rating','trainer','jockey','fitness','class','going','course','distance','age','weight','draw','headgear','spotlight'];
+  const oldW=history.weight_profiles?.[profile]||(XFM?Object.fromEntries(factors.map(f=>[f,XFM[f].mx])):Object.fromEntries(factors.map((f,i)=>[f,[20,15,12,10,8,8,8,6,6,7,8,5,3,2][i]])));
   function spearman(x,y){
     if(x.length<10) return 0;
     const rank=arr=>{const s=arr.map((v,i)=>[v,i]).sort((a,b)=>a[0]-b[0]);const r=new Array(arr.length);let i=0;while(i<s.length){let j=i;while(j<s.length&&s[j][0]===s[i][0])j++;const avg=(i+j+1)/2;for(let k=i;k<j;k++)r[s[k][1]]=avg;i=j;}return r;};
     const rx=rank(x),ry=rank(y),n=x.length;
+    if(isVa){ // Vanta: tie-corrected (Pearson on ranks) — a factor that never varies scores 0, not 0.5
+      const m=(n+1)/2;let sxy=0,sxx=0,syy=0;for(let i=0;i<n;i++){const a=rx[i]-m,b=ry[i]-m;sxy+=a*b;sxx+=a*a;syy+=b*b;}
+      return sxx&&syy?sxy/Math.sqrt(sxx*syy):0;
+    }
     return 1-6*rx.reduce((a,v,i)=>a+(v-ry[i])**2,0)/(n*(n*n-1));
   }
   const runners=[];
@@ -6643,8 +6841,9 @@ function rescoreTodayWithWeights(newW,profile){
   Object.values(D.venues).forEach(venue=>{
     venue.races.forEach(race=>{
       // Check if this race matches the calibrated profile
-      const rp=isIreland(race.course)?classifyEmeraldProfile(race):classifyProfile(race.surface||race.going||'',race.race_type||race.type||'',race.course||venue.course);
-      if(rp!==profile&&!(profile==='all'&&!isIreland(race.course))) return; // Prixm weights never touch ☘ Irish races
+      const _c=race.course||venue.course;
+      const rp=isIreland(_c)?classifyEmeraldProfile(race):isFrance(_c)?classifyVantaProfile(race):classifyProfile(race.surface||race.going||'',race.race_type||race.type||'',_c);
+      if(rp!==profile&&!(profile==='all'&&!isIreland(_c)&&!isFrance(_c))) return; // Prixm weights never touch ☘ Irish or Vanta French races
       race.runners.forEach(runner=>{
         if(!runner.score_breakdown) return;
         const newScore=rescoreRunnerWithWeights(runner,newW);
@@ -6659,7 +6858,7 @@ function rescoreTodayWithWeights(newW,profile){
   const newPicks=getTop10Picks(D);
   saveTop10Picks(todayDate,newPicks);
   // Also update FM caps for the profile so subsequent renders use new weights
-  Object.keys(newW).forEach(f=>{if(FM[f]) FM[f].mx=newW[f];});
+  if(!/^(ire|fr)_/.test(profile)) Object.keys(newW).forEach(f=>{if(FM[f]) FM[f].mx=newW[f];}); // only Prixm weights change Prixm's caps
   // Recalculate MAX_SCORE — but keep it at 118 since weights redistribute, total stays same
 }
 
@@ -6670,7 +6869,7 @@ function applyUnifiedCalibration(){
   history.calibrations=history.calibrations||[];
   // Seed from calibHistory if in-memory calibrations are empty (guards against source-switch edge cases)
   if(!history.calibrations.length){
-    try{const c=localStorage.getItem('calibHistory');if(c){const saved=JSON.parse(c);if(Array.isArray(saved))history.calibrations.push(...saved.filter(c=>!/^ire_/.test(c.profile||'')));}}catch(e){}
+    try{const c=localStorage.getItem('calibHistory');if(c){const saved=JSON.parse(c);if(Array.isArray(saved))history.calibrations.push(...saved.filter(c=>!/^(ire|fr)_/.test(c.profile||'')));}}catch(e){}
   }
   history.weight_profiles=history.weight_profiles||{};
   const today=new Date().toISOString().slice(0,10);
@@ -6687,7 +6886,7 @@ function applyUnifiedCalibration(){
   try{localStorage.setItem('resultsHistory',JSON.stringify(history));}catch(e){}
   // Persist calibrations to localStorage AND server file (belt+suspenders)
   // calibrations.json holds BOTH engines — always persist Prixm + ☘ Emerald entries together
-  const _allCalibs=()=>[...(history.calibrations||[]),...((window._emeraldHistory&&window._emeraldHistory.calibrations)||[])];
+  const _allCalibs=()=>[...(history.calibrations||[]),...((window._emeraldHistory&&window._emeraldHistory.calibrations)||[]),...((window._vantaHistory&&window._vantaHistory.calibrations)||[])];
   try{localStorage.setItem('calibHistory',JSON.stringify(_allCalibs()));}catch(e){}
   try{localStorage.setItem('calibWeightProfiles',JSON.stringify(history.weight_profiles||{}));}catch(e){}
   // Write to server file — survives localStorage issues
@@ -6776,16 +6975,16 @@ function saveDayData(data){
 function applyCalibratedWeightsToData(data){
   // Apply any persisted calibrated weights to rescore runners in the given data
   if(!data||!data.venues) return;
-  // Prixm profiles apply to UK races only; ☘ Emerald profiles (ire_flat/ire_nh) to Irish races only
-  ['aw','turf_flat','nh','ire_flat','ire_nh'].forEach(prf=>{
+  // Prixm profiles apply to UK races only; ☘ Emerald profiles (ire_*) to Irish races; Vanta (fr_*) to French races
+  ['aw','turf_flat','nh','ire_flat','ire_nh','fr_flat','fr_nh'].forEach(prf=>{
     try{
       const stored=localStorage.getItem('calibWeights_'+prf);
       if(!stored) return;
       const cw=JSON.parse(stored);
       Object.values(data.venues).forEach(venue=>{
         venue.races.forEach(race=>{
-          const ire=isIreland(race.course||venue.course);
-          const rp=ire?classifyEmeraldProfile(race):classifyProfile(race.surface||race.going||'',race.race_type||race.type||'',race.course||venue.course);
+          const _c=race.course||venue.course;
+          const rp=isIreland(_c)?classifyEmeraldProfile(race):isFrance(_c)?classifyVantaProfile(race):classifyProfile(race.surface||race.going||'',race.race_type||race.type||'',_c);
           if(rp!==prf) return;
           race.runners.forEach(runner=>{
             if(!runner.score_breakdown) return;
@@ -6920,7 +7119,7 @@ async function load(){
       (window._resultsHistory.calibrations||[]).filter(c=>c.applied&&c.new_weights).forEach(c=>{if(!latest[c.profile]||(c.date||'')>=(latest[c.profile].date||''))latest[c.profile]=c;});
       Object.entries(latest).forEach(([prf,c])=>{
         try{localStorage.setItem('calibWeights_'+prf,JSON.stringify(c.new_weights));}catch(e){}
-        if(!/^ire_/.test(prf)) wp[prf]=c.new_weights;
+        if(!/^(ire|fr)_/.test(prf)) wp[prf]=c.new_weights;
       });
       try{localStorage.setItem('calibWeightProfiles',JSON.stringify(wp));}catch(e){}
     }catch(e){}
@@ -7024,7 +7223,7 @@ function showGuide(){
   document.getElementById('modalContainer').innerHTML=`<div class="modal-bg" onclick="if(event.target===this)closeModal()"><div class="modal" style="max-width:820px">
     <button class="mclose" onclick="closeModal()">&times;</button>
     <h2 style="display:flex;align-items:center;gap:8px;margin-bottom:4px">📖 Daily Racing Analyzer — Complete Guide</h2>
-    <p style="font-size:11px;color:var(--muted);margin-bottom:16px">Prixm (UK) + ☘ Emerald (Ireland) · 14-variable scoring · 🧭 Horse × Track · 🗺 Track Explorer · 💷 Ledger · Auto-calibration · PDF export</p>
+    <p style="font-size:11px;color:var(--muted);margin-bottom:16px">Prixm (UK) + ☘ Emerald (Ireland) + Vanta (France) · 14-variable scoring · 🧭 Horse × Track · 🗺 Track Explorer · 🔭 Model · 👁 Tracked · 💷 Ledger · Auto-calibration · PDF export</p>
 
     <div class="guide-section info">
       <h3><span class="gi">◐</span> Look — Nothing / Classic</h3>
@@ -7065,6 +7264,17 @@ function showGuide(){
         <li>Own results log, own calibration (☘ Emerald tab → Run Emerald calibration) and own version history — Prixm stays UK-only and is untouched.</li>
       </ul>
     </div>
+    <div class="guide-section" style="border-left-color:var(--va2)">
+      <h3><span class="gi" style="letter-spacing:.1em">V</span> Vanta — the French engine (${vantaLabel()})</h3>
+      <p>French gallop races (Flat, hurdles, chases, cross-country — trotting is left out) are scored by <b>Vanta</b>, not Prixm. Same 118-point scale. Cards come from Racing Post on big days and PMU every day; results come from PMU.</p>
+      <ul style="font-size:11.5px;margin:6px 0 0 16px;line-height:1.6">
+        <li><b>Starter</b> — Prixm's base factors re-capped, plus 4 French factors: <b>Stall bias (5)</b> (the real stall from PMU vs this track's logged stall results), <b>Track fit (5)</b>, <b>Stable power (5)</b> (French trainers/jockeys + their logged strike rates) and <b>Earnings (4)</b> (career prize money per run vs the field — France's class signal).</li>
+        <li>While a profile is Starter, French cards show a faded <i>"Prixm would say…"</i> line and each runner shows its Prixm score with ▲/▼. Ledger stakes on Vanta picks are <b>paper</b>.</li>
+        <li><b>Vanta 1.0</b> — once FR Flat or FR Jumps has ${VA_RECAL_STEP} Vanta-scored races, run the review in the <b>Vanta</b> tab and click <b>Apply</b>. Only then does that profile switch to its own weights: the Prixm comparison disappears and the 💷 Ledger gives real stakes (same +3% EV / ¼ Kelly gates). Nothing switches by itself. Each later review needs ${VA_RECAL_STEP} more races (+0.1).</li>
+        <li>Own results log, own picks panel, own calibration and versions. French results never enter Prixm or Emerald stats, calibration, Golden/Silver/Bronze, the 🔭 model or the qualifying Excel.</li>
+        <li><b>Backfill Vanta.bat</b> logs every French gallop race since 1 April 2026, scored only with history from before each day. ROI uses PMU tote odds (not SP).</li>
+      </ul>
+    </div>
 
     <!-- 🧭 HORSE × TRACK -->
     <div class="guide-section" style="border-left-color:#7c3aed">
@@ -7083,7 +7293,9 @@ function showGuide(){
       <h3><span class="gi">🗺</span> Track Explorer (replaces the old Tracks tab)</h3>
       <p>Every UK (Prixm) and Irish (☘ Emerald) track in one tab — toggle All / UK / Ireland, tracks racing today are tagged <b>TODAY</b>.</p>
       <ul style="font-size:11.5px;margin:6px 0 0 16px;line-height:1.6">
-        <li><b>🗺 Profile</b> — layout sketch (direction, straight course, stalls, winning post), final-4f hill/dip profile, sharpness · undulation · camber · uphill finish · straight length, stalls by distance, <b>draw heat by stall</b> and <b>winning running styles</b> (both computed from logged results, hidden until there's enough data), horse type the track wants, caution flags.</li>
+        <li><b>🗺 Profile</b> — layout sketch (direction arrows, stalls, finish line + flag, circuit · straight length), final-4f elevation with furlong marks, the dip and climb marked and a one-line summary, track character on a <b>4-step scale</b> (e.g. Galloping · Fair · Sharp · <b>Very sharp</b>), stalls by distance, horse type the track wants, caution flags.</li>
+        <li><b>Draw heat</b> — a bar per stall = win+place % from logged results; the dashed tick is what that stall <i>should</i> get for the field sizes it ran in, and the colour/number = points above or below that (high stalls only appear in big fields, so raw % would always make them look bad). Thin data is faded; a line on top says <b>Low draw helps / High draw helps / No clear draw bias</b>.</li>
+        <li><b>Running style that wins here</b> — share of winners by style, with a tick for the average across all tracks (green = above average, red = below).</li>
         <li><b>🧭 Today's Runners Fit</b> — every race at that track today with its pace map and each runner's cross analysis.</li>
         <li><b>📊 Stats</b> — the old Track Analysis (top-pick SR by gap/going/type, jockeys, draw, trainers, PDF).</li>
         <li>Shortcuts: <b>🗺 … track profile →</b> in any race header, the 📊 button on race cards.</li>
@@ -7109,6 +7321,7 @@ function showGuide(){
         <li><b>No bet advised → left blank</b> (tight race, no value, Verification 🚫). Days with no bets are normal.</li>
         <li><b>Staking bank</b> = your starting bank (0 = a notional 100u) + settled P&amp;L. <b>Daily budget</b> = % of it; picks are funded strongest first and the day's strongest bet is always funded in full. Max 3u (5u only for ⭐ Golden + ✅ CONFIRMED); 3 losing days → ⅙ Kelly. ☘ Emerald / Silver / Bronze stakes are paper.</li>
         <li>Open WIN / EW / PLACE / TOP N bets <b>settle automatically</b> when Fetch Results runs; <b>ACCA</b> opens the multiples — ACCA (any number of legs), Double, Treble, Trixie, Patent, Yankee, Lucky 15/31/63, Canadian, Heinz, Super Heinz, Goliath (each-way optional) or CUSTOM; stake is per bet, they settle automatically too. The modal shows the <b>potential return</b> live (and Open bets shows it per bet). In the horse search use <b>↑ ↓</b> and <b>Enter</b>. <b>ACCA</b>: pick ACCA, then add 2+ horses (one per race) with a price each — the acca price is the legs multiplied, and it settles automatically once every leg has a result (non-runner leg = void). LENGTH / CUSTOM are settled by hand in the Ledger.</li>
+        <li><b>Keyboard</b>: in the log / edit windows <b>Tab</b> moves between the boxes (Shift+Tab back) and on to the save button; Tab in the horse search picks the highlighted horse. Price / stake boxes take a decimal point or a comma (2,5 = 2.5) and fractions in the price box (5/2).</li>
         <li>Changing the unit only affects future bets. <b>Private</b>: stored in race_data.db (or this browser when the DB server is off), never published — the Ledger is hidden on the online (GitHub) version.</li>
       </ul>
     </div>
@@ -7123,6 +7336,16 @@ function showGuide(){
       </ul>
     </div>
 
+    <!-- 👁 TRACKED -->
+    <div class="guide-section" style="border-left-color:#c8b89a">
+      <h3><span class="gi">👁</span> Tracked tab &amp; watchlist notes</h3>
+      <ul style="font-size:11.5px;margin:6px 0 0 16px;line-height:1.6">
+        <li><b>TRACK</b> on any runner adds it to your watchlist and asks for an optional <b>note</b> (why you're following it — Ctrl+Enter saves). Edit notes with ✏️ in Manage Watchlist or in the tab; hover <b>TRACKING</b> to read it.</li>
+        <li><b>👁 Tracked</b> tab: tracked count, how many run today, record and strike rate <b>since you tracked them</b>. Filter All / Running today / With notes, or search.</li>
+        <li>Click a horse: your note, today's run (Open race · Log bet · 📊 Stats), since-tracked record, finishing position vs Prixm rank chart, conditions (going / trip / course / type), every logged run with its Watchback tag, running style and in-running comment, and jockeys. ✕ Untrack asks first (the note is deleted).</li>
+      </ul>
+    </div>
+
     <!-- 🔭 MODEL -->
     <div class="guide-section" style="border-left-color:#7c3aed">
       <h3><span class="gi">🔭</span> Model — eye-catchers &amp; soft blend</h3>
@@ -7132,6 +7355,12 @@ function showGuide(){
         <li>Dashed chip = the model's top pick differs from the engine's. Both top picks are logged with results after every Fetch Results (<b>soft blend</b>) — the engine itself is never changed.</li>
         <li><b>Proven: hit rate. Not proven: profit</b> — the tab shows the walk-forward back-test and the live record since launch.</li>
       </ul>
+    </div>
+
+    <!-- LAYOUT NOTES -->
+    <div class="guide-section" style="border-left-color:#9ca3af">
+      <h3><span class="gi">🧩</span> Layout notes</h3>
+      <p style="font-size:11.5px">Runner table columns: <b>Age · Wt · RPR</b> (phone cards show "· 4yo · 9st4lb" after the form) · the right-hand sidebar scrolls on its own · race cards are equal size in each row · the <b>🟢 DB / 🟡 JSON</b> status sits in the header under the subtitle · tab names stay on one line (the bar scrolls sideways on narrow screens).</p>
     </div>
 
     <!-- WEIGHT VS LAST RUN -->
@@ -7148,6 +7377,7 @@ function showGuide(){
     <!-- FILTERS & TOGGLES -->
     <div class="guide-section" style="border-left-color:#9ca3af">
       <h3><span class="gi">🎛</span> New filters &amp; toggles</h3>
+      <p style="font-size:11.5px"><b>🌍 Region</b> pill (first in the filter bar) — show only 🇬🇧 UK / 🇮🇪 Ireland / 🇪🇺 Europe cards (multi-select, cleared by Clear all) · <b>🎯 Prime</b> one-click toggle · <b>Performance → 📅 Picks calendar</b>: one month at a time (◀ ▶), each day's win / place and the 1u win-single P/L of the picks at SP.</p>
       <p style="font-size:11.5px"><b>Engine</b> pill (Prixm · UK / ☘ Emerald · IRE) and <b>🧭 Track fit</b> pill (❌ top pick unsuited / hide those races) in the race filter bar · <b>Performance</b> tab has a Prixm / ☘ Emerald toggle — UK and Irish results never mix · header chip shows your bank and P&amp;L.</p>
     </div>
 
@@ -8258,6 +8488,10 @@ function renderD1Sidebar(){
   const emPicks=getPrixmPicks(getTop10Picks(D,'emerald'),'emerald');
   const emHist=window._allHistory||hist;
   const emHtml=emPicks.length?emPicks.slice(0,5).map(p=>_pickCard(p,emHist,true)).join(''):'<div style="padding:12px 14px;font-size:12px;color:#9ca3af">No Emerald picks today</div>';
+  // Vanta picks — French races (paper until that profile is Vanta 1.0)
+  const vaPicks=getPrixmPicks(getTop10Picks(D,'vanta'),'vanta');
+  const vaHtml=vaPicks.length?vaPicks.slice(0,5).map(p=>_pickCard(p,emHist,true)).join(''):'<div style="padding:12px 14px;font-size:12px;color:#9ca3af">No Vanta picks today</div>';
+  const vaState=VANTA_PROFILES.map(p=>vaLive(p)?`${p==='fr_flat'?'Flat':'Jumps'} ${vaProfVersion(p).toFixed(1)} · real`:(vaCount(p)>=VA_RECAL_STEP?`${p==='fr_flat'?'Flat':'Jumps'} paper · ready for review in the Vanta tab`:`${p==='fr_flat'?'Flat':'Jumps'} paper ${vaCount(p)}/${VA_RECAL_STEP}`)).join(' · ');
   let plHtml='<div class="d1-pl-row"><span class="d1-pl-label">No results today</span></div>';
   if(hist&&hist.races&&date){
     const todayR=hist.races.filter(h=>h.date===date&&h.result);
@@ -8289,6 +8523,14 @@ function renderD1Sidebar(){
       </div>
       ${emHtml}
       <div style="font-size:10px;color:var(--muted);padding:6px 12px;background:var(--card2)">Separate from Prixm P&amp;L and Golden · real stakes via 💷 Ledger (EV-gated).</div>
+    </div>`:''}
+    ${Object.values(D.venues).some(v=>isFrance(v.course))?`<div class="d1-panel" style="border-color:var(--va-line)">
+      <div class="d1-panel-hdr" style="background:var(--va-soft)">
+        <span class="d1-panel-title" style="color:var(--va);letter-spacing:.14em">VANTA PICKS</span>
+        <span class="d1-panel-date">FR · ${vantaLabel()}</span>
+      </div>
+      ${vaHtml}
+      <div style="font-size:10px;color:var(--muted);padding:6px 12px;background:var(--card2)">${vaState}. Separate from Prixm and Emerald.</div>
     </div>`:''}
     <div class="d1-panel">
       <div class="d1-panel-hdr">
@@ -8397,16 +8639,20 @@ function getTop10Picks(data,engine){
   // and pick the horse that scores best under adjusted weights (may reject raw #1)
   // engine: undefined/'prixm' → UK races (default, unchanged) · 'emerald' → ☘ Irish races only
   if(!data||!data.venues) return [];
-  const em=engine==='emerald';
-  const adj=em?null:getPicksFactorAdjustments(); // pick feedback adjustments are Prixm-calibrated
+  // 'vanta' → French races only (Vanta engine)
+  const em=engine==='emerald', va=engine==='vanta';
+  const adj=(em||va)?null:getPicksFactorAdjustments(); // pick feedback adjustments are Prixm-calibrated
   let racePicks=[];
   Object.entries(data.venues).forEach(([vk,venue])=>{
     // Double-check excluded venues (safety net in case data wasn't pre-filtered)
     const vName=(venue.course||vk).toLowerCase().replace(/-/g,' ');
     if(EXCLUDED_VENUES.some(ex=>vName.includes(ex))) return;
+    if(va){if(!isFrance(venue.course||vk)) return;} // Vanta = French only
+    else{
     if(em!==isIreland(venue.course||vk)) return; // Prixm = UK only; ☘ Emerald = Irish only
     if(!em&&isExcludedVenue(venue.course||vk)) return; // UK whitelist — no foreign cards in Prixm picks
-    if(isFrance(venue.course||vk)) return; // display only — excluded from picks/analysis
+    if(isFrance(venue.course||vk)) return; // French races are Vanta's — never in Prixm/Emerald picks
+    }
     venue.races.forEach((race,ri)=>{
       if(!race.runners||!race.runners.length) return;
       const sorted=[...race.runners].sort((a,b)=>b.score-a.score);
@@ -8456,7 +8702,7 @@ function getPrixmPicks(picks,engine){
   // Each pick gets a bet category and target finish based on edge analysis
   // engine 'emerald' → same logic for ☘ Irish picks (getTop10Picks(D,'emerald'))
   if(!picks||!picks.length||!D||!D.venues) return [];
-  const _em=engine==='emerald';
+  const _em=engine==='emerald', _va=engine==='vanta';
   const prixm=[];
   picks.forEach(p=>{
     // Reconstruct race data for edge/CDP/momentum calculation
@@ -8464,7 +8710,7 @@ function getPrixmPicks(picks,engine){
     if(!venue) return;
     const race=venue.races[p.raceIdx];
     if(!race||!race.runners) return;
-    if(_em!==isIreland(race.course)) return;
+    if(_va?!isFrance(race.course):(_em!==isIreland(race.course)||isFrance(race.course))) return;
     const sorted=[...race.runners].sort((a,b)=>b.score-a.score);
     const runner=race.runners.find(r=>r.name===p.horse);
     if(!runner) return;
@@ -9482,11 +9728,11 @@ function renderFieldSizeBar(){
   const venues=st.venue==='all'?Object.keys(D.venues):[st.venue];
   // ── Accumulate counts ──
   const fsCounts={};FIELD_BRACKETS.filter(b=>b.key!=='all').forEach(b=>fsCounts[b.key]=0);
-  const rtCounts={eng_nh:0,eng_hcp:0,ire_nh:0,ire_hcp:0};
+  const rtCounts={eng_nh:0,eng_hcp:0,ire_nh:0,ire_hcp:0,fr_nh:0,fr_hcp:0};
   const confCounts={'TOP PICK':0,'STRONG':0,'SOLID':0,'MODERATE':0};
   const gapCounts={tight:0,competitive:0,clear:0};
   const rcCounts={};
-  const engCounts={prixm:0,emerald:0};let topUCount=0,primeCount=0;const regCounts={};
+  const engCounts={prixm:0,emerald:0,vanta:0};let topUCount=0,primeCount=0;const regCounts={};
   let total=0;
   venues.forEach(vk=>{
     const v=D.venues[vk];if(!v)return;
@@ -9494,8 +9740,8 @@ function renderFieldSizeBar(){
       total++;
       const fs=r.field_size||r.runners.length,fb=getFieldBracket(fs);
       if(fsCounts[fb]!==undefined)fsCounts[fb]++;
-      const ire=isIreland(r.course),hcp=r.handicap||/handicap/i.test(r.race_name||'');
-      if(ire&&hcp)rtCounts.ire_hcp++;else if(ire)rtCounts.ire_nh++;else if(hcp)rtCounts.eng_hcp++;else rtCounts.eng_nh++;
+      const ire=isIreland(r.course),fr=!ire&&isFrance(r.course),hcp=r.handicap||/handicap/i.test(r.race_name||'');
+      if(fr)rtCounts[hcp?'fr_hcp':'fr_nh']++;else if(ire&&hcp)rtCounts.ire_hcp++;else if(ire)rtCounts.ire_nh++;else if(hcp)rtCounts.eng_hcp++;else rtCounts.eng_nh++;
       const top=r.runners&&r.runners[0];
       if(top&&confCounts[top.confidence]!==undefined)confCounts[top.confidence]++;
       if(r.runners&&r.runners.length>=2){
@@ -9503,7 +9749,7 @@ function renderFieldSizeBar(){
         gapCounts[getGapBracket(Math.round((s[0].score-s[1].score)*10)/10)]++;
       }else gapCounts.tight++;
       const rt=(r.race_type||'Unknown').trim();rcCounts[rt]=(rcCounts[rt]||0)+1;
-      engCounts[ire?'emerald':'prixm']++;
+      engCounts[ire?'emerald':isFrance(r.course)?'vanta':'prixm']++;
       {const rg=raceRegion(r.course);regCounts[rg]=(regCounts[rg]||0)+1;}
       try{if(getPrimeFlags(r))primeCount++;}catch(e){}
       if(r.runners&&r.runners.length){const t0=[...r.runners].sort((a,b)=>b.score-a.score)[0];if(t0&&t0.track_fit&&t0.track_fit.verdict==='u')topUCount++;}
@@ -9570,10 +9816,10 @@ function renderFieldSizeBar(){
     }).join('')}
   </div>${gapActive?clearRow("st.gapFilter.clear();renderRaceCards();renderFieldSizeBar()"):''}`;
   // ── Dropdown: Race Type ──
-  const RT=[{key:'eng_nh',label:'ENG Non-HCP',short:'ENG NH',color:'#3b82f6'},{key:'eng_hcp',label:'ENG Handicap',short:'ENG HCP',color:'#f59e0b'},{key:'ire_nh',label:'IRE Non-HCP',short:'IRE NH',color:'#10b981'},{key:'ire_hcp',label:'IRE Handicap',short:'IRE HCP',color:'#f87171'}];
+  const RT=[{key:'eng_nh',label:'ENG Non-HCP',short:'ENG NH',color:'#3b82f6'},{key:'eng_hcp',label:'ENG Handicap',short:'ENG HCP',color:'#f59e0b'},{key:'ire_nh',label:'IRE Non-HCP',short:'IRE NH',color:'#10b981'},{key:'ire_hcp',label:'IRE Handicap',short:'IRE HCP',color:'#f87171'},{key:'fr_nh',label:'FR Non-HCP',short:'FR NH',color:'#94a3b8'},{key:'fr_hcp',label:'FR Handicap',short:'FR HCP',color:'#a855f7'}];
   const rtActive=st.raceTypeFilter!=='all';const rtSel=RT.find(t=>t.key===st.raceTypeFilter);
   const rtDrop=`<div class="fsb-drop-title">Race Type</div>
-    <div style="font-size:9px;color:var(--muted);margin-bottom:8px"><span style="color:#3b82f6">■</span> ENG NH &nbsp;<span style="color:#f59e0b">■</span> ENG HCP &nbsp;<span style="color:#10b981">■</span> IRE NH &nbsp;<span style="color:#f87171">■</span> IRE HCP</div>
+    <div style="font-size:9px;color:var(--muted);margin-bottom:8px"><span style="color:#3b82f6">■</span> ENG NH &nbsp;<span style="color:#f59e0b">■</span> ENG HCP &nbsp;<span style="color:#10b981">■</span> IRE NH &nbsp;<span style="color:#f87171">■</span> IRE HCP${rtCounts.fr_nh||rtCounts.fr_hcp?' &nbsp;<span style="color:#94a3b8">■</span> FR NH &nbsp;<span style="color:#a855f7">■</span> FR HCP':''}</div>
     <div class="fsb-chips">${RT.map(t=>{const c=rtCounts[t.key]||0;if(!c)return'';return`<div class="fsb-chip colored${st.raceTypeFilter===t.key?' on':''}" style="border-left-color:${t.color}" onclick="filterRaceType('${t.key}')">${t.label} (${c})</div>`;}).join('')}</div>
     ${rtActive?clearRow("filterRaceType(st.raceTypeFilter)"):''}`;
   // ── Dropdown: Code ──
@@ -9604,6 +9850,7 @@ function renderFieldSizeBar(){
   const engDrop=`<div class="fsb-drop-title">Engine</div><div class="fsb-chips">
     <div class="fsb-chip colored${st.engineFilter==='prixm'?' on':''}" style="border-left-color:#15803d" onclick="filterEngine('prixm')">${engineLabel()} · UK (${engCounts.prixm})</div>
     ${engCounts.emerald?`<div class="fsb-chip colored${st.engineFilter==='emerald'?' on':''}" style="border-left-color:#0f766e" onclick="filterEngine('emerald')">☘ ${emeraldLabel()} · IRE (${engCounts.emerald})</div>`:''}
+    ${engCounts.vanta?`<div class="fsb-chip colored${st.engineFilter==='vanta'?' on':''}" style="border-left-color:var(--va2)" onclick="filterEngine('vanta')">${vantaLabel()} · FR (${engCounts.vanta})</div>`:''}
   </div>${engActive?clearRow("filterEngine(st.engineFilter)"):''}`;
   // ── Dropdown: Track fit (🧭 only ❌ — validated verdicts) ──
   const fitActive=st.fitFilter&&st.fitFilter!=='all';
@@ -9619,7 +9866,7 @@ function renderFieldSizeBar(){
   const anyActive=regActive||fsActive||gapActive||rtActive||codeActive||confActive||!!st.comboFilter||engActive||fitActive||primeActive;
   el.innerHTML=`<div class="fsb-bar">
     ${regN>1||regActive?pill('region',regLbl,regActive,regActive&&st.regionFilter.size>1?st.regionFilter.size:0,regDrop):''}
-    ${engCounts.emerald?pill('engine',engActive?(st.engineFilter==='emerald'?'☘ Emerald':'Prixm'):'Engine',engActive,0,engDrop):''}
+    ${engCounts.emerald||engCounts.vanta?pill('engine',engActive?(st.engineFilter==='emerald'?'☘ Emerald':st.engineFilter==='vanta'?'Vanta':'Prixm'):'Engine',engActive,0,engDrop):''}
     ${pill('field','Field Size',fsActive,fsActive?st.fieldFilter.size:0,fsDrop)}
     ${pill('gap','Gap',gapActive,gapActive?st.gapFilter.size:0,gapDrop)}
     ${pill('rtype',rtActive?(rtSel?.short||'Race Type'):'Race Type',rtActive,0,rtDrop)}
@@ -9640,28 +9887,31 @@ const IRE_TRACKS=new Set(['ballinrobe','bellewstown','clonmel','cork','curragh',
 function isIreland(course){const raw=(course||'').toLowerCase();if(raw.includes('(ire)'))return true;const v=raw.replace(/\s*\([^)]*\)/g,' ').replace(/-/g,' ').replace(/\s+/g,' ').trim().replace(/^the /,'');return IRE_TRACKS.has(v)||[...IRE_TRACKS].some(t=>v.startsWith(t+' '));}
 function isEmeraldRace(r){return !!r&&(r.engine==='emerald'||isIreland(r.venue||r.course));}
 function splitEngineHistory(){
+  // Three engines, never mixed: _resultsHistory = UK (Prixm) only · _emeraldHistory = Irish · _vantaHistory = French.
+  // _allHistory = all three (horse/venue-level lookups only — STAT+, form history, Track Explorer, …).
   const h=window._resultsHistory;if(!h||!Array.isArray(h.races))return;
   const all=(window._allHistory&&window._allHistory.races&&h.races.length<window._allHistory.races.length)?window._allHistory.races:h.races;
-  const emer=all.filter(isEmeraldRace), uk=all.filter(r=>!isEmeraldRace(r));
+  const emer=all.filter(isEmeraldRace), va=all.filter(r=>!isEmeraldRace(r)&&isVantaRace(r)), uk=all.filter(r=>!isEmeraldRace(r)&&!isVantaRace(r));
   window._allHistory={version:1,races:all};
   window._emeraldHistory={version:1,races:emer,calibrations:(h.calibrations||[]).filter(c=>/^ire_/.test(c.profile||'')),weight_profiles:{}};
+  window._vantaHistory={version:1,races:va,calibrations:(h.calibrations||[]).filter(c=>/^fr_/.test(c.profile||'')),weight_profiles:{}};
   h.races=uk;
-  h.calibrations=(h.calibrations||[]).filter(c=>!/^ire_/.test(c.profile||''));
+  h.calibrations=(h.calibrations||[]).filter(c=>!/^(ire|fr)_/.test(c.profile||''));
   const badge=document.getElementById('dbStatusBadge');
-  if(badge&&badge.style.display!=='none'&&emer.length) badge.textContent=badge.textContent.replace(/(\d+) races/,`${uk.length} UK · ☘ ${emer.length} IRE`);
+  if(badge&&badge.style.display!=='none'&&(emer.length||va.length)) badge.textContent=badge.textContent.replace(/(\d+) races/,`${uk.length} UK · ☘ ${emer.length} IRE${va.length?` · ${va.length} FR`:''}`);
 }
-// France = display only (race cards / race view / MT / Predict). Never in picks, flags, results or analysis.
+// France = Vanta engine (2026-11-16): own picks/history/calibration. Never in Prixm picks, flags or analysis.
 // 🌍 Region filter — from the course's country code suffix ("BAHRAIN (BHR)", "SAINT-CLOUD (FR)"); no code = UK (incl. "(AW)")
-const REGIONS=[{key:'uk',label:'🇬🇧 UK',color:'#3b82f6'},{key:'ire',label:'🇮🇪 Ireland',color:'#10b981'},{key:'eu',label:'🇪🇺 Europe',color:'#8b5cf6'},{key:'usa',label:'🇺🇸 USA / Canada',color:'#ef4444'},{key:'me',label:'🕌 Middle East',color:'#f59e0b'},{key:'asia',label:'🌏 Asia',color:'#ec4899'},{key:'aus',label:'🇦🇺 Aus / NZ',color:'#14b8a6'},{key:'other',label:'🌍 Other',color:'#6b7280'}];
+const REGIONS=[{key:'uk',label:'🇬🇧 UK',color:'#3b82f6'},{key:'ire',label:'🇮🇪 Ireland',color:'#10b981'},{key:'fr',label:'🇫🇷 France',color:'#8e939b'},{key:'eu',label:'🇪🇺 Europe',color:'#8b5cf6'},{key:'usa',label:'🇺🇸 USA / Canada',color:'#ef4444'},{key:'me',label:'🕌 Middle East',color:'#f59e0b'},{key:'asia',label:'🌏 Asia',color:'#ec4899'},{key:'aus',label:'🇦🇺 Aus / NZ',color:'#14b8a6'},{key:'other',label:'🌍 Other',color:'#6b7280'}];
 const REGION_CODES={uk:['GB'],eu:['FR','GER','ITY','SWE','NOR','DEN','SPA','BEL','SWI','CZE','POL','HOL','AUT','HUN','SVK','TUR','GR','POR'],usa:['USA','CAN'],me:['BHR','UAE','KSA','QAT','OMA'],asia:['JPN','HK','SIN','KOR','MAL','IND','MAC','CHN'],aus:['AUS','NZ']};
 function raceRegion(course){
-  if(isIreland(course))return'ire';if(isFrance(course))return'eu';
+  if(isIreland(course))return'ire';if(isFrance(course))return'fr';
   const codes=((course||'').toUpperCase().match(/\(([A-Z]{2,4})\)/g)||[]).map(c=>c.slice(1,-1)).filter(c=>c!=='AW');
   if(!codes.length)return'uk';const c=codes[codes.length-1];
   for(const k in REGION_CODES)if(REGION_CODES[k].includes(c))return k;return'other';
 }
-function isFrance(course){const v=(course||'').toLowerCase();if(v.includes('(fr)'))return true;const n=v.replace(/-/g,' ');return['longchamp','deauville','saint cloud','chantilly','auteuil','compiegne','toulouse','bordeaux','les landes','nantes','vichy','le lion','la teste de buch','craon','maisons laffitte','clairefontaine','cagnes','fontainebleau','strasbourg','lyon parilly','salon de provence'].some(t=>n.includes(t));}
-function getRaceBorderColor(r){const ire=isIreland(r.course),hcp=r.handicap||/handicap/i.test(r.race_name||'');if(ire&&hcp)return'#f87171';if(ire)return'#10b981';if(hcp)return'#f59e0b';return'#3b82f6';}
+function isFrance(course){const v=(course||'').toLowerCase();if(v.includes('(fr)'))return true;const n=v.replace(/-/g,' ');return['longchamp','deauville','saint cloud','chantilly','auteuil','compiegne','toulouse','bordeaux','les landes','nantes','vichy','le lion','la teste de buch','craon','maisons laffitte','clairefontaine','cagnes','fontainebleau','strasbourg','lyon parilly','lyon la soie','salon de provence','la cepiere','borely','pont de vivaux','marseille vivaux','le bouscat','pau','enghien','pornichet','dieppe','mont de marsan','moulins'].some(t=>n.includes(t));}
+function getRaceBorderColor(r){if(isFrance(r.course))return(r.handicap||/handicap/i.test(r.race_name||''))?'#a855f7':document.documentElement.dataset.theme==='nothing'?'#aab4c3':'#94a3b8';const ire=isIreland(r.course),hcp=r.handicap||/handicap/i.test(r.race_name||'');if(ire&&hcp)return'#f87171';if(ire)return'#10b981';if(hcp)return'#f59e0b';return'#3b82f6';}
 
 /* ==================== TRACK PROFILE DATABASE (improvement.md Feature 4 → 🗺 Track Explorer) ====================
    Loaded from track_profiles.js (window._trackProfiles), generated by scripts/build_track_profiles.py —
@@ -9700,7 +9950,7 @@ function renderTrackFitBox(r,race){
   return `<div style="grid-column:1/-1"><div class="xa-box"><div class="xa-box-h ${hcls}"><span>🧭 Horse × Track: ${tp?tp.name:race.course} ${race.distance||''}</span>${head}</div>
     <div class="xa-row2" style="font-weight:700;font-size:9.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)"><span></span><span>Track demands</span><span>This horse</span></div>
     ${rows}
-    <div class="xa-foot">${em?'☘ Emerald: validated checks feed the <b>Track fit</b> factor.':'Prixm: <b>flag only</b> — never changes the score, gap or Golden/Silver/Bronze.'} Checks come from logged runs + in-running comments; only checks proven on past results count toward the verdict.</div></div></div>`;
+    <div class="xa-foot">${em?'☘ Emerald: validated checks feed the <b>Track fit</b> factor.':isFrance(race.course)?'Vanta: validated checks feed the <b>Track fit</b> factor.':'Prixm: <b>flag only</b> — never changes the score, gap or Golden/Silver/Bronze.'} Checks come from logged runs + in-running comments; only checks proven on past results count toward the verdict.</div></div></div>`;
 }
 function renderPaceBox(race){
   const p=race&&race.pace;if(!p)return'';
@@ -9964,9 +10214,11 @@ function renderRaceCards(){
   // Apply race type filter
   if(st.raceTypeFilter&&st.raceTypeFilter!=='all'){
     races=races.filter(r=>{
-      const ire=isIreland(r.course),hcp=r.handicap||/handicap/i.test(r.race_name||'');
-      if(st.raceTypeFilter==='eng_nh') return !ire&&!hcp;
-      if(st.raceTypeFilter==='eng_hcp') return !ire&&hcp;
+      const ire=isIreland(r.course),fr=!ire&&isFrance(r.course),hcp=r.handicap||/handicap/i.test(r.race_name||'');
+      if(st.raceTypeFilter==='fr_nh') return fr&&!hcp;
+      if(st.raceTypeFilter==='fr_hcp') return fr&&hcp;
+      if(st.raceTypeFilter==='eng_nh') return !ire&&!fr&&!hcp;
+      if(st.raceTypeFilter==='eng_hcp') return !ire&&!fr&&hcp;
       if(st.raceTypeFilter==='ire_nh') return ire&&!hcp;
       if(st.raceTypeFilter==='ire_hcp') return ire&&hcp;
       return true;
@@ -9976,7 +10228,7 @@ function renderRaceCards(){
   if(st.regionFilter&&st.regionFilter.size)races=races.filter(r=>st.regionFilter.has(raceRegion(r.course)));
   // ☘ Engine filter (Prixm UK / Emerald IRE)
   if(st.engineFilter&&st.engineFilter!=='all'){
-    races=races.filter(r=>st.engineFilter==='emerald'?isIreland(r.course):!isIreland(r.course));
+    races=races.filter(r=>st.engineFilter==='emerald'?isIreland(r.course):st.engineFilter==='vanta'?isFrance(r.course):!isIreland(r.course)&&!isFrance(r.course));
   }
   // 🧭 Track-fit filter — only ever acts on ❌ UNSUITED (validated verdicts)
   if(st.fitFilter==='topU') races=races.filter(r=>{const t=r.runners&&[...r.runners].sort((a,b)=>b.score-a.score)[0];return t&&t.track_fit&&t.track_fit.verdict==='u';});
@@ -10072,10 +10324,13 @@ function renderRaceCards(){
     const dataSeg=_gf?'golden':_sf?'silver':_bf?'bronze':'';
     const _xaR=_xaByRace[r.venueKey+'_'+r.raceIdx];
     const xaCls=_xaR?(_xaR.strength==='strong'?'rc-xa-strong':'rc-xa-mod'):'';
-    const _em=isIreland(r.course);
-    const _engBadge=_em?`<span class="rc-eng rc-eng-em" title="Scored by the ☘ Emerald engine (Irish racing)">☘ ${emeraldLabel()}</span>`:`<span class="rc-eng rc-eng-px">${engineLabel()}</span>`;
-    // Emerald cards: what Prixm would have said (kept on every runner as prixm_score)
-    const _pxSorted=_em&&r.runners&&r.runners.some(x=>x.prixm_score!=null)?[...r.runners].sort((a,b)=>(b.prixm_score||0)-(a.prixm_score||0)):null;
+    const _em=isIreland(r.course), _va=!_em&&isFrance(r.course);
+    const _engBadge=_em?`<span class="rc-eng rc-eng-em" title="Scored by the ☘ Emerald engine (Irish racing)">☘ ${emeraldLabel()}</span>`
+      :_va?`<span class="rc-eng rc-eng-va" title="Scored by the Vanta engine (French racing)">${vantaLabel(r).toUpperCase()}</span>`
+      :`<span class="rc-eng rc-eng-px">${engineLabel()}</span>`;
+    // Emerald cards + Vanta Starter cards: what Prixm would have said (kept on every runner as prixm_score).
+    // Vanta drops the comparison once that profile is 1.0 (own weights, applied in the Vanta tab).
+    const _pxSorted=(_em||(_va&&!vaLive(r)))&&r.runners&&r.runners.some(x=>x.prixm_score!=null)?[...r.runners].sort((a,b)=>(b.prixm_score||0)-(a.prixm_score||0)):null;
     const _pxLine=_pxSorted&&_pxSorted.length>1?`<div class="rc-px-ghost">Prixm would say: ${_pxSorted[0].name} ${_pxSorted[0].prixm_score} · gap ${Math.round((_pxSorted[0].prixm_score-_pxSorted[1].prixm_score)*10)/10}</div>`:'';
     const _uIcon=ru=>ru&&ru.track_fit&&ru.track_fit.verdict==='u'?` <span class="rc-fit-u" title="🧭 Unsuited to this track — open the race for the reasons">❌</span>`:'';
     const _topU=top&&sortedR[0]&&sortedR[0].track_fit&&sortedR[0].track_fit.verdict==='u'?sortedR[0]:null;
@@ -10236,7 +10491,7 @@ async function renderDetail(){
     ${race.race_class?`<span>Class ${race.race_class}</span>`:''}
     ${race.pattern?`<span>${race.pattern}</span>`:''}
     ${race.prize?`<span>Prize: £${race.prize}</span>`:''}
-    ${isIreland(race.course)?`<b class="rc-eng rc-eng-em" style="align-self:center;font-size:11px;padding:3px 9px">☘ ${emeraldLabel()}</b>`:`<b class="rc-eng rc-eng-px" style="align-self:center;font-size:11px;padding:3px 9px">${engineLabel()}</b>`}
+    ${isIreland(race.course)?`<b class="rc-eng rc-eng-em" style="align-self:center;font-size:11px;padding:3px 9px">☘ ${emeraldLabel()}</b>`:isFrance(race.course)?`<b class="rc-eng rc-eng-va" style="align-self:center;font-size:11px;padding:3px 9px">${vantaLabel(race).toUpperCase()}</b>`:`<b class="rc-eng rc-eng-px" style="align-self:center;font-size:11px;padding:3px 9px">${engineLabel()}</b>`}
     ${getTrackProfile(race.course)?`<button class="vbtn" style="font-size:11px;padding:3px 10px" onclick="openTrackExplorer('${(race.course||'').replace(/'/g,"\\'")}','prof')">🗺 ${getTrackProfile(race.course).name} track profile →</button>`:''}
   </div>
   ${renderPaceBox(race)}
@@ -10764,7 +11019,7 @@ function renderMainTab(runners,race,vk,ri){
     <div class="vcl-item"><span class="vcl-dot" style="background:#059669"></span>Pass (≥70%)</div>
     <div class="vcl-item"><span class="vcl-dot" style="background:#d97706"></span>Marginal (40-69%)</div>
     <div class="vcl-item"><span class="vcl-dot" style="background:#dc2626"></span>Fail (&lt;40%)</div>
-    <span style="margin-left:auto;font-size:11px;color:var(--muted)">Avg: ${Math.round(avgScore)}/${MAX_SCORE} · ${isIreland(race&&race.course)?'☘ '+emeraldLabel()+' · ':''}Variables: ${Object.values(isIreland(race&&race.course)?EM_FM:FM).map(f=>f.l).join(' · ')}</span>
+    <span style="margin-left:auto;font-size:11px;color:var(--muted)">Avg: ${Math.round(avgScore)}/${MAX_SCORE} · ${isIreland(race&&race.course)?'☘ '+emeraldLabel()+' · ':isFrance(race&&race.course)?vantaLabel(race)+' · ':''}Variables: ${Object.values(isIreland(race&&race.course)?EM_FM:isFrance(race&&race.course)?VA_FM:FM).map(f=>f.l).join(' · ')}</span>
   </div>
   ${renderAttrFilterBar(runners, attrMap)}
   <table class="rtbl"><thead><tr>
@@ -10804,7 +11059,7 @@ function renderMainTab(runners,race,vk,ri){
       <td style="font-weight:600">${r.rpr||'—'}${(()=>{const d=rprDivergenceFlag(r.ofr,r.rpr);return d?` <span title="${d.tooltip.replace(/"/g,'&quot;')}" style="cursor:help">${d.icon}</span>`:'';})()}</td>
       <td>${r.draw||'—'}</td>
       <td>${r.last_run!=null?r.last_run+'d':'—'}</td>
-      <td><span class="sbar"><span class="sfill" style="width:${(r.score/MAX_SCORE)*100}%;background:${sc(r.score)}"></span></span><b style="color:${sc(r.score)}">${r.score}</b><span style="color:var(--muted);font-size:10px">/${MAX_SCORE}</span>${r.prixm_score!=null?`<div style="font-size:9.5px;color:#9ca3af" title="What Prixm scored this runner">Prixm ${r.prixm_score}</div>`:''}</td>
+      <td><span class="sbar"><span class="sfill" style="width:${(r.score/MAX_SCORE)*100}%;background:${sc(r.score)}"></span></span><b style="color:${sc(r.score)}">${r.score}</b><span style="color:var(--muted);font-size:10px">/${MAX_SCORE}</span>${r.prixm_score!=null&&!(race&&isFrance(race.course)&&vaLive(race))?`<div style="font-size:9.5px;color:#9ca3af" title="What Prixm scored this runner">Prixm ${r.prixm_score}${isFrance(race&&race.course)&&r.score!=null?` <span style="color:${r.score>=r.prixm_score?'#15803d':'#dc2626'}">${r.score>r.prixm_score?'▲':r.score<r.prixm_score?'▼':''}${r.score!==r.prixm_score?Math.abs(Math.round((r.score-r.prixm_score)*10)/10):''}</span>`:''}</div>`:''}</td>
       <td>${deltaHtml(r.score)}</td>
       <td>${confBadge(conf)}${fitBadge(r)}${window.lgChipForRunner?`<div>${window.lgChipForRunner(vk,ri,r.name)}</div>`:''}</td>
       <td>${varTicks(r.score_breakdown)}</td>
@@ -11244,7 +11499,7 @@ function rpTightCheck(race,runners){
   const gap=Math.round((s[0].score-s[1].score)*10)/10,all=runners.map(r=>r.score||0);
   const p1=calcCompetitiveProb(s[0].score,all,1),p2=calcCompetitiveProb(s[1].score,all,1),pd=Math.round(p1-p2);
   let verif='—',flagged=false;
-  try{const em=isIreland(race.course);const pk=getPrixmPicks(getTop10Picks(D,em?'emerald':undefined),em?'emerald':undefined).find(p=>p.horse===s[0].name&&p.time===race.time);
+  try{const em=isIreland(race.course),_e=em?'emerald':isFrance(race.course)?'vanta':undefined;const pk=getPrixmPicks(getTop10Picks(D,_e),_e).find(p=>p.horse===s[0].name&&p.time===race.time);
     if(pk&&pk.edge>=60){const v=runVerificationPass(pk,race,s[0]);if(v&&v.verdict){verif=v.verdict;flagged=v.verdict==='FLAGGED';}}}catch(e){}
   const reasons=[['Score gap',gap.toFixed(1),gap>=8,'≥ 8'],['Top-2 win chance gap',pd+' pts',pd>=8,'≥ 8 pts'],['Verification Pass',verif,!flagged,'not FLAGGED']];
   return{tight:reasons.some(x=>!x[2]),reasons,gap,p1};
@@ -12007,7 +12262,7 @@ function renderExpandedRow(r, fieldSize, race){
     <!-- ── COLLAPSIBLE: Factor Breakdown ── -->
     <div style="grid-column:1/-1">
       <button onclick="toggleSection('fb_${uid}')" style="width:100%;display:flex;align-items:center;justify-content:space-between;background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:8px 12px;cursor:pointer;color:var(--muted);font-size:11px;font-weight:700">
-        <span>Factor Breakdown${fmFor(bd)===EM_FM?' · ☘ Emerald':''} <span style="font-weight:400;opacity:.6">(${r.score}/${MAX_SCORE}${r.prixm_score!=null?` · Prixm ${r.prixm_score}`:''})</span></span>
+        <span>Factor Breakdown${fmFor(bd)===EM_FM?' · ☘ Emerald':fmFor(bd)===VA_FM?' · '+vantaLabel(race):''} <span style="font-weight:400;opacity:.6">(${r.score}/${MAX_SCORE}${r.prixm_score!=null&&!(race&&isFrance(race.course)&&vaLive(race))?` · Prixm ${r.prixm_score}`:''})</span></span>
         <span id="arr_fb_${uid}">▼</span>
       </button>
       <div id="fb_${uid}" style="display:none;margin-top:6px">

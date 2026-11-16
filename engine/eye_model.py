@@ -168,6 +168,7 @@ def race_rows(d, rc, course, I, or_at, results=None):
 
 def load_all():
     hist = json.load(open(os.path.join(_ROOT, 'results_history.json'), encoding='utf-8')).get('races', [])
+    hist = [r for r in hist if r.get('engine') != 'vanta']   # Vanta (France) stays out of the UK/IRE model
     cards = {}
     for f in sorted(glob.glob(os.path.join(_ROOT, 'race_data', 'race_data_*.json'))):
         try: cards[f[-15:-5]] = json.load(open(f, encoding='utf-8'))

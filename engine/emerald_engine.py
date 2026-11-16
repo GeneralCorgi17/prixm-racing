@@ -38,10 +38,13 @@ from fetch_daily_races import (  # noqa: E402
 )
 
 try:
-    from results_fetcher import is_ireland, classify_run_style  # single source of truth
+    from results_fetcher import is_ireland, is_france, classify_run_style  # single source of truth
 except Exception:  # pragma: no cover — fallback keeps the engine importable standalone
     def is_ireland(v):
         return '(ire)' in (v or '').lower()
+
+    def is_france(v):
+        return '(fr)' in (v or '').lower()
 
     def classify_run_style(c):
         return None
@@ -219,48 +222,54 @@ class HistoryIndex:
         self.jockey = defaultdict(list)
         self.draw = defaultdict(list)   # (track, draw band) -> [(date, rel_draw, placed)]
         for race in races or []:
-            date = race.get('date', '')
-            venue = race.get('venue', '')
-            tk = track_key(venue)
-            field = race.get('field_size') or len([r for r in race.get('results', []) if not r.get('non_runner')])
-            pl = places_for(field)
-            df = race.get('distance_f')
-            # Cumulative lengths behind the winner (distance_beaten is the gap to the horse in front)
-            btn, cum = {}, 0.0
-            for r in sorted((r for r in race.get('results', []) if not r.get('non_runner') and r.get('finish_pos')),
-                            key=lambda r: r['finish_pos']):
-                if r['finish_pos'] > 1 and cum is not None:
-                    g = parse_btn_gap(r.get('distance_beaten'))
-                    cum = None if g is None else cum + g
-                btn[id(r)] = cum
-            for r in race.get('results', []):
-                if r.get('non_runner'):
-                    continue
-                pos = r.get('finish_pos')
-                won = pos == 1
-                placed = bool(pos and pos <= pl)
-                b = btn.get(id(r))
-                comment = r.get('run_comment') or ''
-                self.runs[norm_horse(r.get('name'))].append({
-                    'date': date, 'track': tk, 'going': going_cat(race.get('going')), 'dist': df,
-                    'pos': pos, 'won': won, 'placed': placed, 'field': field,
-                    'good': placed or (b is not None and b <= CLOSE_LENGTHS),
-                    'style': r.get('run_style') or classify_run_style(comment), 'comment': comment.lower(),
-                    'nh': any(x in (race.get('race_type') or '').lower() for x in ('hurdle', 'chase', 'nh flat', 'bumper')),
-                    # ⚖ weight vs last run (display only)
-                    'lbs': r.get('lbs'), 'venue': venue, 'hcap': bool(race.get('handicap')),
-                    'rtype': race.get('race_type') or '', 'cls': race.get('race_class'),
-                    'btn_raw': r.get('distance_beaten'),
-                })
-                if r.get('trainer'):
-                    self.trainer[_nm(r['trainer'])].append((date, won))
-                jk = r.get('jockey') or r.get('jockey_result')
-                if jk:
-                    self.jockey[_nm(jk)].append((date, won))
-                if r.get('draw') and field and field >= 6 and df:
-                    self.draw[(tk, draw_band_key(df))].append((date, (r['draw'] - 1) / max(1, field - 1), placed))
+            self.add_race(race, _sort=False)
         for v in self.runs.values():
             v.sort(key=lambda x: x['date'], reverse=True)
+
+    def add_race(self, race, _sort=True):
+        """Index one logged race (used incrementally by the Vanta backfill)."""
+        date = race.get('date', '')
+        venue = race.get('venue', '')
+        tk = track_key(venue)
+        field = race.get('field_size') or len([r for r in race.get('results', []) if not r.get('non_runner')])
+        pl = places_for(field)
+        df = race.get('distance_f')
+        # Cumulative lengths behind the winner (distance_beaten is the gap to the horse in front)
+        btn, cum = {}, 0.0
+        for r in sorted((r for r in race.get('results', []) if not r.get('non_runner') and r.get('finish_pos')),
+                        key=lambda r: r['finish_pos']):
+            if r['finish_pos'] > 1 and cum is not None:
+                g = parse_btn_gap(r.get('distance_beaten'))
+                cum = None if g is None else cum + g
+            btn[id(r)] = cum
+        for r in race.get('results', []):
+            if r.get('non_runner'):
+                continue
+            pos = r.get('finish_pos')
+            won = pos == 1
+            placed = bool(pos and pos <= pl)
+            b = btn.get(id(r))
+            comment = r.get('run_comment') or ''
+            self.runs[norm_horse(r.get('name'))].append({
+                'date': date, 'track': tk, 'going': going_cat(race.get('going')), 'dist': df,
+                'pos': pos, 'won': won, 'placed': placed, 'field': field,
+                'good': placed or (b is not None and b <= CLOSE_LENGTHS),
+                'style': r.get('run_style') or classify_run_style(comment), 'comment': comment.lower(),
+                'nh': any(x in (race.get('race_type') or '').lower() for x in ('hurdle', 'chase', 'nh flat', 'bumper')),
+                # ⚖ weight vs last run (display only)
+                'lbs': r.get('lbs'), 'venue': venue, 'hcap': bool(race.get('handicap')),
+                'rtype': race.get('race_type') or '', 'cls': race.get('race_class'),
+                'btn_raw': r.get('distance_beaten'),
+            })
+            if r.get('trainer'):
+                self.trainer[_nm(r['trainer'])].append((date, won))
+            jk = r.get('jockey') or r.get('jockey_result')
+            if jk:
+                self.jockey[_nm(jk)].append((date, won))
+            if r.get('draw') and field and field >= 6 and df:
+                self.draw[(tk, draw_band_key(df))].append((date, (r['draw'] - 1) / max(1, field - 1), placed))
+            if _sort:
+                self.runs[norm_horse(r.get('name'))].sort(key=lambda x: x['date'], reverse=True)
 
     @classmethod
     def from_file(cls, path=None):
@@ -741,7 +750,7 @@ def annotate_weight_change(runners, race, hist, date):
 
 def process_card(output, hist=None, date=None):
     """Post-process a whole racecard dict (daily_race_data format): Emerald-score Irish races,
-    cross-analyse every race. Mutates and returns output."""
+    Vanta-score French races, cross-analyse every race. Mutates and returns output."""
     hist = hist or HistoryIndex.from_file()
     date = date or output.get('date') or ''
     for vkey, venue in (output.get('venues') or {}).items():
@@ -751,6 +760,9 @@ def process_card(output, hist=None, date=None):
             race.setdefault('course', course)
             if is_ireland(course):
                 race['runners'] = score_race_emerald(race, runners, hist, date, course)
+            elif is_france(course):
+                from vanta_engine import score_race_vanta   # Vanta (France) — lazy: vanta imports this module
+                race['runners'] = score_race_vanta(race, runners, hist, date, course)
             else:
                 annotate_race(race, runners, hist, date, course)
                 race['engine'] = 'prixm'
