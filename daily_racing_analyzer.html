@@ -1974,7 +1974,7 @@ function emeraldVersionHistory(){
 // Vanta 1.0 (own weights, comparison hidden, real Ledger stakes). Every later Apply on it → +0.1.
 const VANTA_NAME='Vanta';
 const VANTA_PROFILES=['fr_flat','fr_nh'];
-const VA_RECAL_STEP=1000;
+const VA_RECAL_STEP=3000;
 function classifyVantaProfile(race){return /hurdle|chase|nh flat|bumper|cross/i.test((race&&(race.race_type||race.type))||'')?'fr_nh':'fr_flat';}
 function isVantaRace(r){return !!r&&(r.engine==='vanta'||isFrance(r.venue||r.course));}
 function vaCals(p){return((window._vantaHistory&&window._vantaHistory.calibrations)||[]).filter(c=>c.applied&&(!p||c.profile===p)).sort((a,b)=>(a.date||'').localeCompare(b.date||''));}
@@ -4727,9 +4727,9 @@ window.renderEmeraldTab=render;
 /* ==================== VANTA TAB (French engine dashboard, 2026-11-16) ====================
    Reads window._vantaHistory (French races only — never mixed into Prixm or Emerald analytics).
    STARTER: Prixm base + 4 French factors, Prixm comparison shown, Ledger stakes are paper.
-   A profile (fr_flat / fr_nh) with VA_RECAL_STEP (1000) Vanta-scored races can be calibrated here;
+   A profile (fr_flat / fr_nh) with VA_RECAL_STEP (3000) Vanta-scored races can be calibrated here;
    clicking Apply makes that profile Vanta 1.0: own weights, Prixm comparison hidden, real Ledger stakes.
-   Later reviews every +1000 races (+0.1). Approved mockup: mockups/vanta_mockup.html. */
+   Later reviews every +3000 races (+0.1). Approved mockup: mockups/vanta_mockup.html. */
 (function(){
 'use strict';
 const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
