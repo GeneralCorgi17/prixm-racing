@@ -1114,7 +1114,6 @@ html[data-theme="nothing"] .wtc-up{color:#e0a84a}html[data-theme="nothing"] .wtc
 /* Vanta engine (France, 2026-11-16) — black / silver, no icon */
 :root{--va:#3f444c;--va2:#6b7280;--va-soft:#eef0f3;--va-line:#b9bec6}
 .rc-eng-va{background:var(--va-soft);color:var(--va);border:1px solid var(--va-line);letter-spacing:.12em}
-html[data-theme="nothing"] #tabVanta{color:#aab4c3!important}
 .va-top{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;flex-wrap:wrap;margin-bottom:12px}
 .va-ttl{font:800 40px/0.95 'Bebas Neue',Inter,sans-serif;letter-spacing:.22em;color:var(--va)}
 .va-ttl small{font-size:18px;letter-spacing:.1em;color:var(--va2);margin-left:8px}
@@ -1316,7 +1315,6 @@ html[data-theme="nothing"] .tab-bar{position:sticky;top:0;z-index:50;background:
 html[data-theme="nothing"] .tab-btn{font-size:10px!important;letter-spacing:.16em!important;text-transform:uppercase;font-weight:400!important;color:#7d786f!important;border-bottom:1px solid transparent!important;height:46px!important;padding:0 13px!important;white-space:nowrap}
 html[data-theme="nothing"] .tab-btn:hover{color:#f5f2eb!important}
 html[data-theme="nothing"] .tab-btn.active{color:#f5f2eb!important;border-bottom-color:#c8b89a!important}
-html[data-theme="nothing"] #tabEmerald{color:#5bb39a!important}
 
 /* ---------- landing: stats strip / venues / filters ---------- */
 html[data-theme="nothing"] .landing{animation:ntFadeUp .6s ease}
@@ -1622,8 +1620,6 @@ html[data-theme="nothing"] svg text[fill="#6b7280"],html[data-theme="nothing"] s
   <button class="tab-btn" id="tabWatchback" onclick="switchTab('watchback')">Watchback</button>
   <button class="tab-btn" id="tabTracked" onclick="switchTab('tracked')" title="Your tracked horses — notes, today's runs, full logged history">👁 Tracked</button>
   <button class="tab-btn" id="tabEye" onclick="switchTab('eye')" title="🔭 Model — data chance, eye-catchers, model vs engine (display only)">🔭 Model</button>
-  <button class="tab-btn" id="tabEmerald" onclick="switchTab('emerald')" style="color:#0f766e">☘ Emerald</button>
-  <button class="tab-btn" id="tabVanta" onclick="switchTab('vanta')" style="color:var(--va);letter-spacing:.12em">VANTA</button>
   <button class="tab-btn vo-hide" id="tabLedger" onclick="switchTab('ledger')">💷 Ledger</button>
   <button class="tab-btn" id="tabM" onclick="switchTab('m')" title="🐎 Race track animation">🐎 MT</button>
 </div>
@@ -1668,8 +1664,6 @@ window.addEventListener('load',f);window.addEventListener('resize',f);setTimeout
 <div id="tracksView" style="display:none;padding:20px 28px;max-width:1200px;margin:0 auto"><div id="texHeader"></div><div id="texProf"></div><div id="texFit" style="display:none"></div><div id="taStatsView" style="display:none"></div></div>
 <div id="topFinishView" style="display:none;padding:20px 28px;max-width:1100px;margin:0 auto"><div id="topFinishContent"></div></div>
 <div id="watchbackView" style="display:none;padding:20px 28px;max-width:1200px;margin:0 auto"><div id="watchbackContent">Loading...</div></div>
-<div id="emeraldView" style="display:none;padding:20px 28px;max-width:1200px;margin:0 auto"><div id="emeraldContent">Loading...</div></div>
-<div id="vantaView" style="display:none;padding:20px 28px;max-width:1200px;margin:0 auto"><div id="vantaContent">Loading...</div></div>
 <div id="ledgerView" class="vo-hide" style="display:none;padding:20px 28px 90px;max-width:1200px;margin:0 auto"><div id="ledgerContent">Loading...</div></div>
 <div id="mView" style="display:none;padding:20px 28px;max-width:1300px;margin:0 auto"><div id="mContent">Loading...</div></div>
 <div id="trackedView" style="display:none;padding:20px 28px;max-width:1360px;margin:0 auto"><div id="trackedContent">Loading...</div></div>
@@ -2414,6 +2408,8 @@ function varTicks(bd){
 
 /* ==================== TAB SWITCHING ==================== */
 function switchTab(tab){
+  // ☘ Emerald + Vanta live inside Performance (own top-level tabs removed 2026-11-22) — old calls land on the Performance toggle
+  if(tab==='emerald'||tab==='vanta'){st.perfEngine=tab;tab='performance';}
   document.getElementById('tabRaces').classList.toggle('active',tab==='races');
   document.getElementById('tabPerf').classList.toggle('active',tab==='performance');
   document.getElementById('tabCombos').classList.toggle('active',tab==='combos');
@@ -2422,8 +2418,6 @@ function switchTab(tab){
   document.getElementById('tabTracks').classList.toggle('active',tab==='tracks');
   document.getElementById('tabTopFinish').classList.toggle('active',tab==='topfinish');
   document.getElementById('tabWatchback').classList.toggle('active',tab==='watchback');
-  document.getElementById('tabEmerald').classList.toggle('active',tab==='emerald');
-  document.getElementById('tabVanta').classList.toggle('active',tab==='vanta');
   document.getElementById('tabLedger').classList.toggle('active',tab==='ledger');
   document.getElementById('tabM').classList.toggle('active',tab==='m');
   document.getElementById('tabTracked').classList.toggle('active',tab==='tracked');
@@ -2437,8 +2431,6 @@ function switchTab(tab){
   document.getElementById('tracksView').style.display=tab==='tracks'?'block':'none';
   document.getElementById('topFinishView').style.display=tab==='topfinish'?'block':'none';
   document.getElementById('watchbackView').style.display=tab==='watchback'?'block':'none';
-  document.getElementById('emeraldView').style.display=tab==='emerald'?'block':'none';
-  document.getElementById('vantaView').style.display=tab==='vanta'?'block':'none';
   document.getElementById('ledgerView').style.display=tab==='ledger'&&!VIEW_ONLY?'block':'none';
   document.getElementById('mView').style.display=tab==='m'?'block':'none';
   document.getElementById('trackedView').style.display=tab==='tracked'?'block':'none';
@@ -2450,8 +2442,6 @@ function switchTab(tab){
   if(tab==='tracks') window.renderTrackExplorer?window.renderTrackExplorer():(window.renderTracksTab&&window.renderTracksTab());
   if(tab==='topfinish') window.renderTopFinishAnalysis&&window.renderTopFinishAnalysis();
   if(tab==='watchback') window.renderWatchbackDashboard&&window.renderWatchbackDashboard();
-  if(tab==='emerald') window.renderEmeraldTab&&window.renderEmeraldTab('emeraldContent');
-  if(tab==='vanta') window.renderVantaTab&&window.renderVantaTab('vantaContent');
   if(tab==='ledger') window.renderLedger&&window.renderLedger();
   if(tab==='tracked') window.renderTrackedTab&&window.renderTrackedTab();
   if(tab==='eye') window.renderEyeTab&&window.renderEyeTab();
@@ -4669,6 +4659,7 @@ function render(target){
       ${tile('Top-pick place %',E.n?E.pr.toFixed(1)+'%':'—',P.n?`Prixm ${P.pr.toFixed(1)}%`:'')}
       ${tile('ROI · 1u win on top pick',E.roi==null?'—':(E.roi>=0?'+':'')+E.roi.toFixed(1)+'%',P.roi==null?'at SP':`Prixm ${(P.roi>=0?'+':'')+P.roi.toFixed(1)}% · at SP`,E.roi!=null&&E.roi>=0?'#15803d':'#dc2626')}
     </div>`;
+    h+=renderPicksCalendar('emerald');
     // calibration
     const calN=((window._emeraldHistory&&window._emeraldHistory.calibrations)||[]).filter(c=>c.applied);
     const lastN=p=>{const c=calN.filter(x=>x.profile===p).sort((a,b)=>(b.date||'').localeCompare(a.date||''))[0];return c?(c.races_used||0):0;};
@@ -4797,6 +4788,7 @@ function render(target){
       ${tile('ROI at tote (1u)',V.roi==null?'—':(V.roi>=0?'+':'')+V.roi.toFixed(1)+'%','PMU tote odds, not SP',V.roi!=null&&V.roi>=0?'#15803d':'#dc2626')}
       ${tile('Random win %',V.rnd.toFixed(1)+'%','1 ÷ average field')}
     </div>`;
+    h+=renderPicksCalendar('vanta');
     // progress / calibration per profile
     const lastN=p=>{const c=vaCals(p).slice(-1)[0];return c?(c.races_used||0):0;};
     h+=`<div class="va-prog">${VANTA_PROFILES.map(p=>{const n=byProf[p].length,live=vaLive(p),need=lastN(p)+VA_RECAL_STEP,pct=Math.max(0,Math.min(100,(n-lastN(p))/VA_RECAL_STEP*100));
@@ -6176,7 +6168,35 @@ function pcalNav(d){const c=document.getElementById('pcal');if(!c)return;const m
   const i=Math.min(Math.max((window._pcalIdx||0)+d,0),n-1);window._pcalIdx=i;ms.forEach((m,k)=>m.style.display=k===i?'block':'none');
   const l=document.getElementById('pcalLbl');if(l)l.textContent=ms[i].dataset.label;
   c.querySelectorAll('[data-pcal]').forEach(b=>{const off=(+b.dataset.pcal===1&&i>=n-1)||(+b.dataset.pcal===-1&&i<=0);b.disabled=off;b.style.opacity=off?.3:1;b.style.cursor=off?'default':'pointer';});}
-function renderPicksCalendar(){
+// ☘ Emerald / Vanta calendars (2026-11-22): each logged race's engine top pick (highest predicted_score), straight from
+// the engine's own history — no saved picks needed, so backfilled months show too. Same look/maths as the Prixm calendar.
+function engineTopPickDailyStats(hist){
+  const st={};
+  ((hist&&hist.races)||[]).forEach(r=>{
+    const rs=(r.results||[]);if(rs.length<2||!r.date)return;
+    const top=rs.reduce((a,b)=>((b.predicted_score??-1)>(a.predicted_score??-1)?b:a));
+    if(top.predicted_score==null)return;
+    const d=st[r.date]=st[r.date]||{wins:0,places:0,logged:0,total:0,pl:0,plBets:0,noSp:0};
+    d.total++;
+    if(top.non_runner)return; // NR = void
+    d.logged++;
+    const fs=r.field_size||rs.filter(x=>!x.non_runner).length;
+    if(top.finish_pos===1){d.wins++;const sp=parseFloat(top.sp);if(sp>1){d.pl+=sp-1;d.plBets++;}else d.noSp++;}
+    else{d.pl-=1;d.plBets++;}
+    if(top.finish_pos&&top.finish_pos<=getPlaceLimit(fs))d.places++;
+  });
+  Object.values(st).forEach(d=>{d.winPct=d.logged?Math.round(d.wins/d.logged*100):null;d.placePct=d.logged?Math.round(d.places/d.logged*100):null;});
+  return st;
+}
+function renderPicksCalendar(engine){
+  engine=engine||'prixm';
+  if(window._pcalEng!==engine){window._pcalEng=engine;window._pcalIdx=0;} // each engine opens on its latest month
+  const title=engine==='emerald'?'📅 Daily ☘ Emerald Top Picks':engine==='vanta'?'📅 Daily Vanta Top Picks':'📅 Daily Prixm Picks';
+  if(engine!=='prixm'){
+    const dailyStats=engineTopPickDailyStats(engine==='emerald'?window._emeraldHistory:window._vantaHistory);
+    const allDates=Object.keys(dailyStats).sort().reverse();
+    return allDates.length?pcalHTML(allDates,dailyStats,title,'Top-scored runner of each logged race, backed as a 1u WIN single at SP'+(engine==='vanta'?' (PMU tote)':'')+'. Non-runners void.'):'';
+  }
   const allDates=getAllPicksDates();
   const hist=window._resultsHistory;
   if(!allDates.length) return '';
@@ -6197,6 +6217,9 @@ function renderPicksCalendar(){
       dailyStats[date]={winPct:null,placePct:null,wins:0,places:0,logged:0,total:perf.total};
     }
   });
+  return pcalHTML(allDates,dailyStats,title,'Every pick backed as a 1u WIN single at SP. Non-runners void.');
+}
+function pcalHTML(allDates,dailyStats,title,plTip){
   // Group by month
   const months={};
   allDates.forEach(d=>{
@@ -6209,7 +6232,7 @@ function renderPicksCalendar(){
   const nM=sortedMonths.length;let cur=Math.min(Math.max(window._pcalIdx||0,0),nM-1);
   let html=`<div id="pcal" data-n="${nM}" style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 18px;margin-bottom:16px;max-width:760px">
     <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px">
-      <div style="font-size:13px;font-weight:700">📅 Daily Prixm Picks</div>
+      <div style="font-size:13px;font-weight:700">${title}</div>
       <div style="display:flex;align-items:center;gap:4px">
         <button class="vbtn" data-pcal="1" onclick="pcalNav(1)" aria-label="Previous month" style="padding:2px 9px;font-size:13px">‹</button>
         <span id="pcalLbl" style="font-size:12px;font-weight:600;min-width:112px;text-align:center"></span>
@@ -6228,7 +6251,7 @@ function renderPicksCalendar(){
       ${ml?`<div style="display:flex;flex-wrap:wrap;gap:6px 16px;align-items:baseline;font-size:12px;color:var(--muted);margin-bottom:10px">
         <span>Win <b style="color:var(--text);font-size:14px">${Math.round(mw/ml*100)}%</b> (${mw}/${ml})</span>
         <span>Place <b style="color:var(--text);font-size:14px">${Math.round(mp/ml*100)}%</b> (${mp}/${ml})</span>
-        <span title="Every pick backed as a 1u WIN single at SP. Non-runners void.${mns?` ${mns} winner(s) with no SP logged are left out.`:''}">1u singles at SP <b style="color:${plCol(mpl)};font-size:15px">${plTxt(mpl)}</b> · ${mb} bets · ROI <b style="color:${plCol(mpl)}">${mb?(mpl/mb*100).toFixed(1):'0'}%</b>${mns?` <span style="font-size:10px">(${mns} no SP)</span>`:''}</span>
+        <span title="${plTip}${mns?` ${mns} winner(s) with no SP logged are left out.`:''}">1u singles at SP <b style="color:${plCol(mpl)};font-size:15px">${plTxt(mpl)}</b> · ${mb} bets · ROI <b style="color:${plCol(mpl)}">${mb?(mpl/mb*100).toFixed(1):'0'}%</b>${mns?` <span style="font-size:10px">(${mns} no SP)</span>`:''}</span>
       </div>`:'<div style="font-size:12px;color:var(--muted);margin-bottom:10px">No results logged yet</div>'}
       <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;font-size:11px;text-align:center">
         <div style="color:var(--muted);font-weight:600">Mon</div><div style="color:var(--muted);font-weight:600">Tue</div><div style="color:var(--muted);font-weight:600">Wed</div><div style="color:var(--muted);font-weight:600">Thu</div><div style="color:var(--muted);font-weight:600">Fri</div><div style="color:var(--muted);font-weight:600">Sat</div><div style="color:var(--muted);font-weight:600">Sun</div>`;
@@ -7280,7 +7303,7 @@ function showGuide(){
         <li><b>☘ Draw bias (5)</b> — draw vs this track's logged draw results at this trip. <b>☘ Track fit (6)</b> — the Horse × Track cross analysis (validated checks only). <b>☘ Stable power (6)</b> — Irish trainer/jockey tiers in Irish name formats (e.g. "W P Mullins") + logged strike rates + RTF.</li>
         <li>Irish cards show a <b>☘ Emerald</b> badge and a faded <i>"Prixm would say…"</i> line for comparison. Every Irish runner keeps its Prixm score.</li>
         <li><b>Real money from 300 races:</b> Emerald picks sit in their own sidebar panel and are never counted in Prixm P&amp;L, Golden, Silver or Bronze. Once a profile (ire_flat / ire_nh) has 300 Emerald-scored races, the 💷 Ledger advisor gives real stakes on every Irish track, with the same +3% EV and ¼ Kelly rules as Prixm — until then they are paper.</li>
-        <li>Own results log, own calibration (☘ Emerald tab → Run Emerald calibration) and own version history — Prixm stays UK-only and is untouched.</li>
+        <li>Own results log, own calibration (Performance → ☘ Emerald → Run Emerald calibration) and own version history — Prixm stays UK-only and is untouched.</li>
       </ul>
     </div>
     <div class="guide-section" style="border-left-color:var(--va2)">
@@ -7289,7 +7312,7 @@ function showGuide(){
       <ul style="font-size:11.5px;margin:6px 0 0 16px;line-height:1.6">
         <li><b>Starter</b> — Prixm's base factors re-capped, plus 4 French factors: <b>Stall bias (5)</b> (the real stall from PMU vs this track's logged stall results), <b>Track fit (5)</b>, <b>Stable power (5)</b> (French trainers/jockeys + their logged strike rates) and <b>Earnings (4)</b> (career prize money per run vs the field — France's class signal).</li>
         <li>While a profile is Starter, French cards show a faded <i>"Prixm would say…"</i> line and each runner shows its Prixm score with ▲/▼. Ledger stakes on Vanta picks are <b>paper</b>.</li>
-        <li><b>Vanta 1.0</b> — once FR Flat or FR Jumps has ${VA_RECAL_STEP} Vanta-scored races, run the review in the <b>Vanta</b> tab and click <b>Apply</b>. Only then does that profile switch to its own weights: the Prixm comparison disappears and the 💷 Ledger gives real stakes (same +3% EV / ¼ Kelly gates). Nothing switches by itself. Each later review needs ${VA_RECAL_STEP} new races since the last Apply. Version numbers: updating one profile adds 0.1; once both FR Flat and FR Jumps have been updated since the last whole number it moves to the next whole number (1.0 → 1.1 → 2.0 → 2.1 → 3.0 …).</li>
+        <li><b>Vanta 1.0</b> — once FR Flat or FR Jumps has ${VA_RECAL_STEP} Vanta-scored races, run the review in <b>Performance → Vanta</b> and click <b>Apply</b>. Only then does that profile switch to its own weights: the Prixm comparison disappears and the 💷 Ledger gives real stakes (same +3% EV / ¼ Kelly gates). Nothing switches by itself. Each later review needs ${VA_RECAL_STEP} new races since the last Apply. Version numbers: updating one profile adds 0.1; once both FR Flat and FR Jumps have been updated since the last whole number it moves to the next whole number (1.0 → 1.1 → 2.0 → 2.1 → 3.0 …).</li>
         <li>Own results log, own picks panel, own calibration and versions. French results never enter Prixm or Emerald stats, calibration, Golden/Silver/Bronze, the 🔭 model or the qualifying Excel.</li>
         <li><b>Backfill Vanta.bat</b> logs every French gallop race since 1 April 2026, scored only with history from before each day. ROI uses PMU tote odds (not SP).</li>
       </ul>
@@ -8510,7 +8533,7 @@ function renderD1Sidebar(){
   // Vanta picks — French races (paper until that profile is Vanta 1.0)
   const vaPicks=getPrixmPicks(getTop10Picks(D,'vanta'),'vanta');
   const vaHtml=vaPicks.length?vaPicks.slice(0,5).map(p=>_pickCard(p,emHist,true)).join(''):'<div style="padding:12px 14px;font-size:12px;color:#9ca3af">No Vanta picks today</div>';
-  const vaState=VANTA_PROFILES.map(p=>vaLive(p)?`${p==='fr_flat'?'Flat':'Jumps'} ${vaProfVersion(p).toFixed(1)} · real`:(vaCount(p)>=VA_RECAL_STEP?`${p==='fr_flat'?'Flat':'Jumps'} paper · ready for review in the Vanta tab`:`${p==='fr_flat'?'Flat':'Jumps'} paper ${vaCount(p)}/${VA_RECAL_STEP}`)).join(' · ');
+  const vaState=VANTA_PROFILES.map(p=>vaLive(p)?`${p==='fr_flat'?'Flat':'Jumps'} ${vaProfVersion(p).toFixed(1)} · real`:(vaCount(p)>=VA_RECAL_STEP?`${p==='fr_flat'?'Flat':'Jumps'} paper · ready for review in Performance → Vanta`:`${p==='fr_flat'?'Flat':'Jumps'} paper ${vaCount(p)}/${VA_RECAL_STEP}`)).join(' · ');
   let plHtml='<div class="d1-pl-row"><span class="d1-pl-label">No results today</span></div>';
   if(hist&&hist.races&&date){
     const todayR=hist.races.filter(h=>h.date===date&&h.result);
@@ -14121,13 +14144,13 @@ window.toggleTheme=function(){
   const html=document.documentElement;
   const nav=document.getElementById('phNav'), more=document.getElementById('phMore');
   if(!nav||!more) return;
-  const ICON={tabRaces:'🏇',tabGolden:'⭐',tabLedger:'💷',tabEmerald:'☘',tabM:'🐎',tabTracked:'👁',tabEye:'🔭'};
+  const ICON={tabRaces:'🏇',tabGolden:'⭐',tabLedger:'💷',tabPerf:'📊',tabM:'🐎',tabTracked:'👁',tabEye:'🔭'};
   const label=b=>b.textContent.replace(/[^A-Za-z0-9&%' ]/g,'').replace(/\s+/g,' ').trim();
   const shown=b=>getComputedStyle(b).display!=='none';
   function build(){
     const btns=[...document.querySelectorAll('.tab-bar .tab-btn')].filter(shown);
     const byId=id=>btns.find(b=>b.id===id);
-    const main=['tabRaces','tabGolden',byId('tabLedger')?'tabLedger':'tabEmerald','tabM'].map(byId).filter(Boolean);
+    const main=['tabRaces','tabGolden',byId('tabLedger')?'tabLedger':'tabPerf','tabM'].map(byId).filter(Boolean);
     const rest=btns.filter(b=>!main.includes(b));
     const restOn=rest.some(b=>b.classList.contains('active'));
     nav.innerHTML=main.map(b=>`<button class="phn${b.classList.contains('active')?' on':''}" data-tab="${b.id}"><span class="ic">${ICON[b.id]||'•'}</span>${label(b)}</button>`).join('')
