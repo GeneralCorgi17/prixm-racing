@@ -16,7 +16,7 @@ total max 118 so scores, gaps and confidence tiers stay on the same scale as Pri
 Going / course / distance use the horse's own logged runs (neutral when none), like Emerald.
 Each runner keeps prixm_score / prixm_breakdown so the Starter can be compared with Prixm.
 
-Vanta 1.0 = the first time a profile (fr_flat / fr_nh) reaches 3000 logged races AND the user
+Vanta 1.0 = the first time a profile (fr_flat / fr_nh) reaches 5000 logged races AND the user
 clicks Apply on the recalibration in the Vanta tab. From then on that profile uses its own
 calibrated weights (applied in the HTML, like Prixm/Emerald) and the Prixm comparison is hidden.
 

@@ -1970,17 +1970,33 @@ function emeraldVersionHistory(){
   return out;
 }
 // Vanta (France) — STARTER (Prixm base + French factors, Prixm comparison shown) until a profile
-// (fr_flat / fr_nh) has VA_RECAL_STEP races AND the user clicks Apply in the Vanta tab → that profile is
-// Vanta 1.0 (own weights, comparison hidden, real Ledger stakes). Every later Apply on it → +0.1.
+// (fr_flat / fr_nh) has VA_RECAL_STEP (5000) races AND the user clicks Apply in the Vanta tab → that profile is
+// Vanta 1.0 (own weights, comparison hidden, real Ledger stakes). One ENGINE version (user rule 2026-11-22):
+// 1.0 = first Apply · an Apply that updates one profile → +0.1 · once BOTH Flat and Jumps have been updated since
+// the last whole number → next whole number. e.g. 1.0 (Flat) → 1.1 (Flat) → 2.0 (Jumps) → 2.1 → 3.0 …
+// Applies on the same date = one step (one Apply click can update both).
 const VANTA_NAME='Vanta';
 const VANTA_PROFILES=['fr_flat','fr_nh'];
-const VA_RECAL_STEP=3000;
+const VA_RECAL_STEP=5000;   // fixed: every review (first → Vanta 1.0, then each +0.1) needs 5000 new races since the last Apply (was 3000 until 2026-11-22)
 function classifyVantaProfile(race){return /hurdle|chase|nh flat|bumper|cross/i.test((race&&(race.race_type||race.type))||'')?'fr_nh':'fr_flat';}
 function isVantaRace(r){return !!r&&(r.engine==='vanta'||isFrance(r.venue||r.course));}
 function vaCals(p){return((window._vantaHistory&&window._vantaHistory.calibrations)||[]).filter(c=>c.applied&&(!p||c.profile===p)).sort((a,b)=>(a.date||'').localeCompare(b.date||''));}
-function vaProfVersion(p){const n=vaCals(p).length;return n?parseFloat((1+0.1*(n-1)).toFixed(1)):null;}  // null = Starter
+function vaVersionSeq(extra){ // [{v,date,profiles,cal}] one row per Apply date; extra = profiles of a not-yet-applied Apply
+  const by={};vaCals().forEach(c=>{(by[c.date||'unknown']=by[c.date||'unknown']||[]).push(c);});
+  const ev=Object.keys(by).sort().map(d=>({date:d,cal:by[d],profiles:[...new Set(by[d].map(c=>c.profile))]}));
+  if(extra&&extra.length)ev.push({date:'next',cal:[],profiles:[...new Set(extra)]});
+  let v=null,cycle=new Set();const out=[];
+  ev.forEach(e=>{e.profiles.forEach(p=>cycle.add(p));
+    if(v==null){v=1.0;if(VANTA_PROFILES.every(p=>cycle.has(p)))cycle=new Set();}
+    else if(VANTA_PROFILES.every(p=>cycle.has(p))){v=Math.floor(v+1e-9)+1;cycle=new Set();}
+    else v=parseFloat((v+0.1).toFixed(1));
+    out.push({...e,v});});
+  return out;
+}
+function vaNextVersion(profiles){const s=vaVersionSeq(profiles);return s[s.length-1].v;}
+function vaProfVersion(p){return vaCals(p).length?getVantaVersion():null;}  // null = Starter (profile never applied); else the engine version
 function vaLive(race){return vaProfVersion(typeof race==='string'?race:classifyVantaProfile(race))!=null;}
-function getVantaVersion(){const v=VANTA_PROFILES.map(vaProfVersion).filter(x=>x!=null);return v.length?Math.max(...v):null;}
+function getVantaVersion(){const s=vaVersionSeq();return s.length?s[s.length-1].v:null;}
 function vantaLabel(race){const v=race?vaProfVersion(typeof race==='string'?race:classifyVantaProfile(race)):getVantaVersion();return VANTA_NAME+' '+(v==null?'Starter':v.toFixed(1));}
 function vaCount(p){return((window._vantaHistory&&window._vantaHistory.races)||[]).filter(r=>r.profile===p&&(r.results||[]).some(x=>x.score_breakdown&&'class_earn' in x.score_breakdown)).length;}
 function allEngineCalibs(){return[...((window._resultsHistory&&window._resultsHistory.calibrations)||[]),...((window._emeraldHistory&&window._emeraldHistory.calibrations)||[]),...((window._vantaHistory&&window._vantaHistory.calibrations)||[])];}
@@ -4727,9 +4743,10 @@ window.renderEmeraldTab=render;
 /* ==================== VANTA TAB (French engine dashboard, 2026-11-16) ====================
    Reads window._vantaHistory (French races only — never mixed into Prixm or Emerald analytics).
    STARTER: Prixm base + 4 French factors, Prixm comparison shown, Ledger stakes are paper.
-   A profile (fr_flat / fr_nh) with VA_RECAL_STEP (3000) Vanta-scored races can be calibrated here;
-   clicking Apply makes that profile Vanta 1.0: own weights, Prixm comparison hidden, real Ledger stakes.
-   Later reviews every +3000 races (+0.1). Approved mockup: mockups/vanta_mockup.html. */
+   A profile (fr_flat / fr_nh) with VA_RECAL_STEP (5000) Vanta-scored races can be calibrated here;
+   clicking Apply makes that profile live (own weights, Prixm comparison hidden, real Ledger stakes); first Apply = Vanta 1.0.
+   Each later review needs 5000 new races since the last Apply. Version: one profile updated → +0.1, both updated
+   since the last whole number → next whole number (vaVersionSeq). Approved mockup: mockups/vanta_mockup.html. */
 (function(){
 'use strict';
 const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -4782,15 +4799,15 @@ function render(target){
     </div>`;
     // progress / calibration per profile
     const lastN=p=>{const c=vaCals(p).slice(-1)[0];return c?(c.races_used||0):0;};
-    h+=`<div class="va-prog">${VANTA_PROFILES.map(p=>{const n=byProf[p].length,live=vaLive(p),need=lastN(p)?lastN(p)+VA_RECAL_STEP:VA_RECAL_STEP,pct=Math.min(100,n/need*100);
-      return `<div class="va-pg"><div class="va-pgt"><b>${PN[p].toUpperCase()}</b><span>${live?`${vantaLabel(p)} live · ${n.toLocaleString()} races`:`${n.toLocaleString()} / ${VA_RECAL_STEP} races`}</span></div>
+    h+=`<div class="va-prog">${VANTA_PROFILES.map(p=>{const n=byProf[p].length,live=vaLive(p),need=lastN(p)+VA_RECAL_STEP,pct=Math.max(0,Math.min(100,(n-lastN(p))/VA_RECAL_STEP*100));
+      return `<div class="va-pg"><div class="va-pgt"><b>${PN[p].toUpperCase()}</b><span>${live?`${vantaLabel(p)} live · ${Math.max(0,n-lastN(p)).toLocaleString()} / ${VA_RECAL_STEP} new races`:`${n.toLocaleString()} / ${VA_RECAL_STEP} races`}</span></div>
         <div class="va-track"><i style="width:${pct}%"></i></div>
-        <div class="va-foot">${n>=need?`<b>Ready</b> — run the review below, then click Apply → ${live?'Vanta '+(vaProfVersion(p)+0.1).toFixed(1):'<b>Vanta 1.0</b>'}`:live?`${need-n} to the next review`:`${need-n} to go → review + Apply → <b>Vanta 1.0</b> (still Starter: Prixm base, comparison shown, paper stakes)`}</div></div>`;}).join('')}</div>`;
-    const ready=VANTA_PROFILES.some(p=>byProf[p].length>=(lastN(p)?lastN(p)+VA_RECAL_STEP:VA_RECAL_STEP));
+        <div class="va-foot">${n>=need?`<b>Ready</b> — run the review below, then click Apply → <b>Vanta ${vaNextVersion([p]).toFixed(1)}</b>`:live?`${need-n} to the next review`:`${need-n} to go → review + Apply → <b>Vanta ${vaNextVersion([p]).toFixed(1)}</b> (still Starter: Prixm base, comparison shown, paper stakes)`}</div></div>`;}).join('')}</div>`;
+    const ready=VANTA_PROFILES.some(p=>byProf[p].length>=(lastN(p)+VA_RECAL_STEP));
     let prop='';
     if(_proposals&&_proposals.length){
       prop=tbl(['Profile','Races','Top-pick placed: now → proposed','Weight changes'],_proposals.map(r=>[PN[r.profile],r.races,`${r.oldPct}% → <b style="color:${r.newPct>=r.oldPct?'#15803d':'#dc2626'}">${r.newPct}%</b>`,`<span style="font-size:11px">${Object.keys(r.newW).filter(f=>r.oldW[f]!==r.newW[f]).map(f=>`${f} ${r.oldW[f]}→${r.newW[f]}`).join(' · ')||'no change'}</span>`]))
-        +`<div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap" class="vo-hide"><button class="vbtn va-btn" onclick="window._vaApplyCal()">✓ Apply → ${_proposals.map(r=>PN[r.profile]+' '+(vaLive(r.profile)?(vaProfVersion(r.profile)+0.1).toFixed(1):'1.0')).join(' · ')}</button><button class="vbtn" onclick="window._vaCancelCal()">Cancel</button></div>
+        +`<div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap" class="vo-hide"><button class="vbtn va-btn" onclick="window._vaApplyCal()">✓ Apply → Vanta ${vaNextVersion(_proposals.map(r=>r.profile)).toFixed(1)} (${_proposals.map(r=>PN[r.profile]).join(' + ')})</button><button class="vbtn" onclick="window._vaCancelCal()">Cancel</button></div>
         <div style="font-size:11px;color:var(--muted);margin-top:6px">Apply = that profile runs on its own weights from the next load; the Prixm comparison disappears and the 💷 Ledger gives real stakes.</div>`;
     }
     if(ready&&!VIEW_ONLY&&!_proposals) prop=`<button class="vbtn va-btn vo-hide" onclick="window._vaRunCal()">Run Vanta review</button>`;
@@ -4812,16 +4829,18 @@ function render(target){
     }
     // version history
     const vh=[`<div class="va-vrow"><span class="va-ver" style="font-size:13px">STARTER</span><span>launch</span><span>Prixm base re-capped + 4 French factors (stall, track fit, stable, earnings). Prixm comparison shown.</span></div>`];
-    VANTA_PROFILES.forEach(p=>vaCals(p).forEach((c,i)=>vh.push(`<div class="va-vrow"><span class="va-ver">${(1+0.1*i).toFixed(1)}</span><span>${esc(c.date)}</span><span>${PN[p]} · ${c.races_used} races · own weights${i?'':', comparison removed, real Ledger stakes'}</span></div>`)));
-    VANTA_PROFILES.filter(p=>!vaLive(p)).forEach(p=>vh.push(`<div class="va-vrow" style="color:var(--muted)"><span class="va-ver" style="color:var(--muted)">1.0</span><span>at ${VA_RECAL_STEP}</span><span>${PN[p]}: review, then click Apply. Nothing switches by itself.</span></div>`));
-    h+=`<div class="va-two"><div>${card('Review · Vanta profiles',`<div style="font-size:12.5px;margin-bottom:8px">Each profile needs ${VA_RECAL_STEP} Vanta-scored races before its first review, then ${VA_RECAL_STEP} more for each later one.</div>`+prop)}${trackCard}</div><div>${fsCard}${card('Version history',vh.join(''))}</div></div>`;
+    const seen=new Set();
+    vaVersionSeq().forEach(e=>{const firsts=e.profiles.filter(p=>!seen.has(p));e.profiles.forEach(p=>seen.add(p));
+      vh.push(`<div class="va-vrow"><span class="va-ver">${e.v.toFixed(1)}</span><span>${esc(e.date)}</span><span>${e.cal.map(c=>`${PN[c.profile]} · ${c.races_used} races`).join(' · ')} · own weights${firsts.length?` · ${firsts.map(p=>PN[p]).join(' + ')} live: comparison removed, real Ledger stakes`:''}</span></div>`);});
+    VANTA_PROFILES.filter(p=>!vaLive(p)).forEach(p=>vh.push(`<div class="va-vrow" style="color:var(--muted)"><span class="va-ver" style="color:var(--muted)">${vaNextVersion([p]).toFixed(1)}</span><span>at ${VA_RECAL_STEP}</span><span>${PN[p]}: review, then click Apply. Nothing switches by itself.</span></div>`));
+    h+=`<div class="va-two"><div>${card('Review · Vanta profiles',`<div style="font-size:12.5px;margin-bottom:8px">Each profile needs ${VA_RECAL_STEP} Vanta-scored races before its first review, then ${VA_RECAL_STEP} new races for each later one.</div>`+prop)}${trackCard}</div><div>${fsCard}${card('Version history',vh.join(''))}</div></div>`;
     el.innerHTML=h;
   }catch(e){el.innerHTML=`<div style="padding:20px;color:#dc2626;background:#fef2f2;border:1px solid #fecaca;border-radius:8px"><b>Vanta tab error:</b> ${esc(e.message)}</div>`;console.error('VantaTab',e);}
 }
 window._vaRunCal=function(){
   const byProf=p=>vaRaces().filter(r=>r.profile===p).length;
   const last=p=>{const c=vaCals(p).slice(-1)[0];return c?(c.races_used||0):0;};
-  _proposals=VANTA_PROFILES.filter(p=>byProf(p)>=(last(p)?last(p)+VA_RECAL_STEP:VA_RECAL_STEP)).map(p=>_calibrateProfile(window._vantaHistory,p)).filter(Boolean);
+  _proposals=VANTA_PROFILES.filter(p=>byProf(p)>=(last(p)+VA_RECAL_STEP)).map(p=>_calibrateProfile(window._vantaHistory,p)).filter(Boolean);
   if(!_proposals.length)_proposals=null;
   render();
 };
@@ -6925,7 +6944,7 @@ function rejectUnifiedCalibration(){
 }
 
 /* ==================== VENUE EXCLUSION ==================== */
-const EXCLUDED_VENUES=['happy valley','sha tin','meydan','abu dhabi','bahrain','hanshin','chukyo','fukushima','nakayama','tokyo','niigata','kyoto','rosehill','flemington','morphettville','eagle farm','doomben','hawkesbury','ascot aus','gold coast','northam','scone','sunshine coast','caulfield','turffontein','scottsville','greyville','oaklawn park','gulfstream park','keeneland','aqueduct','santa anita','del mar','belmont park','belmont at the big a','churchill downs','laurel park','lone star park','percy warner','middleburg','great meadow','woodbine','saratoga','hipodromo','ciudad jardim','monterrico','gavea','palermo','san isidro','san siro','munich','dusseldorf','krefeld','hoppegarten','dortmund','baden baden','cologne','koln','firenze','randwick','free to air','scoop','worldwide stakes','world pool','bro park','hamburg','hanover','veliefendi','la zarzuela','kokura','sapporo','hakodate','ellerslie','hastings (nz)','monmouth park','colonial downs','kentucky downs','delaware park','parx','penn national','prairie meadows','presque isle','remington park','mountaineer','thistledown','los alamitos','century mile','club hipico'];
+const EXCLUDED_VENUES=['happy valley','sha tin','meydan','abu dhabi','bahrain','hanshin','chukyo','fukushima','nakayama','tokyo','niigata','kyoto','rosehill','flemington','morphettville','eagle farm','doomben','hawkesbury','ascot aus','gold coast','northam','scone','sunshine coast','caulfield','turffontein','scottsville','greyville','oaklawn park','gulfstream park','keeneland','aqueduct','santa anita','del mar','belmont park','belmont at the big a','churchill downs','laurel park','lone star park','percy warner','middleburg','great meadow','camden','woodbine','saratoga','hipodromo','ciudad jardim','monterrico','gavea','palermo','san isidro','san siro','munich','dusseldorf','krefeld','hoppegarten','dortmund','baden baden','cologne','koln','firenze','randwick','free to air','scoop','worldwide stakes','world pool','bro park','hamburg','hanover','veliefendi','la zarzuela','kokura','sapporo','hakodate','ellerslie','hastings (nz)','monmouth park','colonial downs','kentucky downs','delaware park','parx','penn national','prairie meadows','presque isle','remington park','mountaineer','thistledown','los alamitos','century mile','club hipico'];
 // French racing unhidden from display (Longchamp 2026-07-13, Deauville 2026-08-16, all of France 2026-10-04) —
 // but still excluded from all picks/flags/analysis via isFrance() below.
 function filterExcludedVenues(data){
@@ -7270,7 +7289,7 @@ function showGuide(){
       <ul style="font-size:11.5px;margin:6px 0 0 16px;line-height:1.6">
         <li><b>Starter</b> — Prixm's base factors re-capped, plus 4 French factors: <b>Stall bias (5)</b> (the real stall from PMU vs this track's logged stall results), <b>Track fit (5)</b>, <b>Stable power (5)</b> (French trainers/jockeys + their logged strike rates) and <b>Earnings (4)</b> (career prize money per run vs the field — France's class signal).</li>
         <li>While a profile is Starter, French cards show a faded <i>"Prixm would say…"</i> line and each runner shows its Prixm score with ▲/▼. Ledger stakes on Vanta picks are <b>paper</b>.</li>
-        <li><b>Vanta 1.0</b> — once FR Flat or FR Jumps has ${VA_RECAL_STEP} Vanta-scored races, run the review in the <b>Vanta</b> tab and click <b>Apply</b>. Only then does that profile switch to its own weights: the Prixm comparison disappears and the 💷 Ledger gives real stakes (same +3% EV / ¼ Kelly gates). Nothing switches by itself. Each later review needs ${VA_RECAL_STEP} more races (+0.1).</li>
+        <li><b>Vanta 1.0</b> — once FR Flat or FR Jumps has ${VA_RECAL_STEP} Vanta-scored races, run the review in the <b>Vanta</b> tab and click <b>Apply</b>. Only then does that profile switch to its own weights: the Prixm comparison disappears and the 💷 Ledger gives real stakes (same +3% EV / ¼ Kelly gates). Nothing switches by itself. Each later review needs ${VA_RECAL_STEP} new races since the last Apply. Version numbers: updating one profile adds 0.1; once both FR Flat and FR Jumps have been updated since the last whole number it moves to the next whole number (1.0 → 1.1 → 2.0 → 2.1 → 3.0 …).</li>
         <li>Own results log, own picks panel, own calibration and versions. French results never enter Prixm or Emerald stats, calibration, Golden/Silver/Bronze, the 🔭 model or the qualifying Excel.</li>
         <li><b>Backfill Vanta.bat</b> logs every French gallop race since 1 April 2026, scored only with history from before each day. ROI uses PMU tote odds (not SP).</li>
       </ul>
@@ -9893,8 +9912,12 @@ function splitEngineHistory(){
   const all=(window._allHistory&&window._allHistory.races&&h.races.length<window._allHistory.races.length)?window._allHistory.races:h.races;
   const emer=all.filter(isEmeraldRace), va=all.filter(r=>!isEmeraldRace(r)&&isVantaRace(r)), uk=all.filter(r=>!isEmeraldRace(r)&&!isVantaRace(r));
   window._allHistory={version:1,races:all};
-  window._emeraldHistory={version:1,races:emer,calibrations:(h.calibrations||[]).filter(c=>/^ire_/.test(c.profile||'')),weight_profiles:{}};
-  window._vantaHistory={version:1,races:va,calibrations:(h.calibrations||[]).filter(c=>/^fr_/.test(c.profile||'')),weight_profiles:{}};
+  // weight_profiles = each profile's latest APPLIED weights, so the next review starts from them (was {} → Vanta 1.1
+  // / Emerald recalibrations were computed from the Starter/base weights after a reload).
+  const latestW=cals=>{const w={};[...cals].filter(c=>c.applied&&c.new_weights).sort((a,b)=>(a.date||'').localeCompare(b.date||'')).forEach(c=>{w[c.profile]=c.new_weights;});return w;};
+  const emC=(h.calibrations||[]).filter(c=>/^ire_/.test(c.profile||'')), vaC=(h.calibrations||[]).filter(c=>/^fr_/.test(c.profile||''));
+  window._emeraldHistory={version:1,races:emer,calibrations:emC,weight_profiles:latestW(emC)};
+  window._vantaHistory={version:1,races:va,calibrations:vaC,weight_profiles:latestW(vaC)};
   h.races=uk;
   h.calibrations=(h.calibrations||[]).filter(c=>!/^(ire|fr)_/.test(c.profile||''));
   const badge=document.getElementById('dbStatusBadge');
