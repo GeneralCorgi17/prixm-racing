@@ -1,0 +1,407 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mockup · Prixm on the phone (whole app)</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0a0a;--card:#121212;--card2:#1a1a1a;--line:#262626;--text:#f5f2eb;--muted:#8a857c;--sand:#c8b89a;
+  --em:#5bb39a;--va:#aab4c3;--good:#4ade80;--bad:#f87171;--amb:#fbbf24;--blue:#60a5fa;--gold:#f5c542}
+*{box-sizing:border-box}
+body{margin:0;background:#050505;color:var(--text);font:13px/1.45 'DM Mono',monospace}
+button{font-family:inherit}
+.top{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;padding:22px 16px 6px}
+.top h1{width:100%;text-align:center;font:34px 'Bebas Neue';letter-spacing:.08em;color:var(--sand);margin:0 0 2px}
+.top p{width:100%;text-align:center;color:var(--muted);font-size:11.5px;margin:0 0 10px}
+.tbtn{background:var(--card);border:1px solid var(--line);color:var(--muted);border-radius:999px;padding:7px 14px;cursor:pointer;font-size:12px}
+.tbtn.on{background:var(--text);color:var(--bg);border-color:var(--text)}
+.page{display:flex;gap:32px;justify-content:center;align-items:flex-start;padding:18px 20px 40px;flex-wrap:wrap}
+.col h2{font:26px 'Bebas Neue';letter-spacing:.06em;margin:0 0 4px;color:var(--sand)}
+.col .sub{color:var(--muted);font-size:11px;margin-bottom:10px;max-width:390px}
+.now{width:390px;height:780px;overflow-y:auto;border-radius:34px;border:1px solid #333;background:#000}
+.now img{width:100%;display:block}
+.phone{width:390px;height:780px;border:1px solid #333;border-radius:34px;overflow:hidden;position:relative;background:var(--bg);box-shadow:0 20px 60px rgba(0,0,0,.6)}
+.scr{position:absolute;inset:0 0 60px 0;overflow-y:auto;display:none}
+.scr.on{display:block}
+.scr::-webkit-scrollbar{width:0}
+.hdr{display:flex;align-items:center;justify-content:space-between;padding:12px 16px 8px}
+.hdr b{font:28px 'Bebas Neue';letter-spacing:.12em}
+.hdr .r{display:flex;align-items:center;gap:12px;font:19px 'Bebas Neue';letter-spacing:.06em}
+.ib{background:none;border:1px solid var(--line);color:var(--text);border-radius:9px;width:34px;height:34px;font-size:15px;cursor:pointer}
+.sticky{position:sticky;top:0;z-index:5;background:rgba(10,10,10,.96);backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
+.chips{display:flex;gap:6px;overflow-x:auto;padding:8px 12px}
+.chips::-webkit-scrollbar{height:0}
+.chip{flex:0 0 auto;border:1px solid var(--line);border-radius:999px;padding:5px 11px;font-size:11px;color:var(--muted);background:none;cursor:pointer;white-space:nowrap}
+.chip.on{color:var(--bg);background:var(--text);border-color:var(--text)}
+.chip.f{border-style:dashed;color:var(--text)}
+.chip .n{display:inline-block;background:var(--sand);color:var(--bg);border-radius:999px;padding:0 5px;margin-left:4px;font-size:10px}
+.pos{color:var(--good)}.neg{color:var(--bad)}.mut{color:var(--muted)}
+.cap{font-size:9.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;padding:12px 14px 6px;display:flex;justify-content:space-between}
+/* races */
+.nextup{margin:4px 12px 0;border:1px solid var(--line);border-radius:12px;padding:10px 12px;display:flex;justify-content:space-between;align-items:center;background:linear-gradient(90deg,rgba(200,184,154,.10),transparent)}
+.nextup .t{font:26px/1 'Bebas Neue';letter-spacing:.04em}
+.nextup .c{font-size:10.5px;color:var(--muted)}
+.nextup .cd{font:22px 'Bebas Neue';color:var(--sand)}
+.stats{display:flex;gap:14px;padding:4px 16px 2px;font-size:11px;color:var(--muted)}
+.stats b{color:var(--text);font-weight:500}
+.picks{display:flex;gap:8px;overflow-x:auto;padding:0 12px 4px;scroll-snap-type:x mandatory}
+.picks::-webkit-scrollbar{height:0}
+.pk{flex:0 0 210px;scroll-snap-align:start;border:1px solid var(--line);border-radius:12px;padding:9px 11px;background:var(--card);cursor:pointer}
+.pk .cat{font-size:9px;letter-spacing:.1em;border-radius:5px;padding:1px 6px;display:inline-block}
+.pk .nm{font:20px/1.1 'Bebas Neue';letter-spacing:.04em;margin:5px 0 1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pk .m{font-size:10px;color:var(--muted)}
+.edge{height:4px;border-radius:2px;background:var(--card2);margin-top:6px;overflow:hidden}.edge i{display:block;height:100%}
+.earlier{margin:8px 12px 0;padding:9px 12px;border:1px dashed var(--line);border-radius:10px;color:var(--muted);font-size:11px;cursor:pointer;display:flex;justify-content:space-between}
+.rr{position:relative;display:grid;grid-template-columns:62px 1fr 58px;gap:10px;align-items:center;margin:6px 12px 0;padding:9px 10px 9px 12px;border:1px solid var(--line);border-radius:11px;background:var(--card);cursor:pointer}
+.rr:before{content:'';position:absolute;left:0;top:8px;bottom:8px;width:3px;border-radius:2px;background:var(--bc)}
+.rr .tm{font:24px/1 'Bebas Neue';letter-spacing:.03em}
+.rr .vn{font-size:9.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rr .hn{font:17px/1.1 'Bebas Neue';letter-spacing:.04em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rr .meta{font-size:9.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sbar{height:4px;background:var(--card2);border-radius:2px;margin:4px 0 3px;overflow:hidden}.sbar i{display:block;height:100%;background:var(--text)}
+.rr .gp{text-align:center}
+.rr .gp b{display:block;font:22px/1 'Bebas Neue'}
+.rr .gp span{font-size:8.5px;letter-spacing:.08em;color:var(--muted)}
+.bdg{font-size:9px;border-radius:4px;padding:0 4px;margin-left:3px;vertical-align:1px}
+.engt{font-size:8.5px;letter-spacing:.08em;border:1px solid var(--line);border-radius:4px;padding:0 4px;color:var(--muted)}
+/* sheet */
+.shade{position:absolute;inset:0;background:rgba(0,0,0,.55);opacity:0;pointer-events:none;transition:opacity .2s;z-index:20}
+.sheet{position:absolute;left:0;right:0;bottom:0;max-height:78%;background:#141414;border-top:1px solid #333;border-radius:18px 18px 0 0;transform:translateY(101%);transition:transform .25s;z-index:21;display:flex;flex-direction:column}
+.phone.sh .shade{opacity:1;pointer-events:auto}.phone.sh .sheet{transform:none}
+.grab{width:38px;height:4px;border-radius:2px;background:#444;margin:8px auto 2px;flex:0 0 auto}
+.sh-h{padding:6px 16px 10px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
+.sh-h b{font:22px 'Bebas Neue';letter-spacing:.06em}
+.sh-b{overflow-y:auto;padding:8px 16px 16px}
+.fg{margin-bottom:12px}.fg .l{font-size:9.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px}
+.fg .w{display:flex;gap:6px;flex-wrap:wrap}
+.sh-f{display:flex;gap:8px;padding:10px 16px 14px;border-top:1px solid var(--line)}
+.btn{flex:1;border-radius:10px;padding:10px;border:1px solid var(--line);background:var(--card2);color:var(--text);cursor:pointer;font-size:12px}
+.btn.p{background:var(--text);color:var(--bg);border-color:var(--text)}
+/* race view */
+.rvh{display:flex;align-items:center;gap:8px;padding:10px 12px 6px}
+.rvh .tt{flex:1;text-align:center}
+.rvh .tt b{font:24px/1 'Bebas Neue';letter-spacing:.06em;display:block}
+.rvh .tt span{font-size:10px;color:var(--muted)}
+.rname{padding:0 14px;font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer}
+.rname.full{white-space:normal}
+.mchips{display:flex;gap:5px;flex-wrap:wrap;padding:6px 14px 8px}
+.mchips span{font-size:10px;border:1px solid var(--line);border-radius:5px;padding:1px 6px;color:var(--muted)}
+.tabs{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line)}
+.tabs button{background:none;border:0;color:var(--muted);padding:9px 0;font-size:11px;cursor:pointer;border-bottom:2px solid transparent}
+.tabs button.on{color:var(--text);border-bottom-color:var(--sand)}
+.tpc{margin:10px 12px 0;border:1px solid var(--line);border-radius:12px;padding:10px 12px;display:grid;grid-template-columns:44px 1fr auto;gap:10px;align-items:center;background:linear-gradient(135deg,rgba(200,184,154,.12),transparent)}
+.silk{width:40px;height:40px;border-radius:8px;background:var(--card2);object-fit:contain}
+.tpc .nm{font:22px/1 'Bebas Neue';letter-spacing:.04em}
+.tpc .s{font-size:10px;color:var(--muted)}
+.tpc .k{text-align:right;font-size:10px;color:var(--muted)}
+.tpc .k b{display:block;font:24px/1 'Bebas Neue';color:var(--text)}
+.why{margin:8px 12px 0;font-size:11px}
+.why div{padding:3px 0}
+.hl{display:flex;justify-content:space-between;align-items:center;padding:10px 14px 4px}
+.run{margin:0 12px;border-top:1px solid var(--line);padding:8px 0}
+.run .row{display:grid;grid-template-columns:20px 34px 1fr 56px;gap:9px;align-items:center;cursor:pointer}
+.run .rk{font:18px 'Bebas Neue';color:var(--muted);text-align:center}
+.run .silk{width:32px;height:32px}
+.run .nm{font-weight:500;font-size:12.5px}
+.run .jt{font-size:9.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.run .sc{text-align:right}
+.run .sc b{font:20px/1 'Bebas Neue'}
+.run .sc span{display:block;font-size:8.5px;letter-spacing:.06em}
+.run .x{display:none;margin:8px 0 2px 63px}
+.run.open .x{display:block}
+.fb{display:grid;grid-template-columns:70px 1fr 30px;gap:6px;align-items:center;font-size:10px;padding:1.5px 0}
+.fb .b{height:5px;background:var(--card2);border-radius:3px;overflow:hidden}.fb .b i{display:block;height:100%}
+.acts{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:8px}
+.acts button{background:var(--card2);border:1px solid var(--line);color:var(--text);border-radius:8px;padding:7px 0;font-size:10.5px;cursor:pointer}
+.swhint{font-size:10px;color:var(--muted);text-align:center;padding:10px}
+/* ledger */
+.bank{margin:4px 12px 0;border:1px solid var(--line);border-radius:14px;padding:12px 14px;background:linear-gradient(135deg,rgba(74,222,128,.10),transparent)}
+.bank .l{font-size:9.5px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase}
+.bank .n{font:40px/1 'Bebas Neue';letter-spacing:.03em;margin:4px 0}
+.bank .g{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px}
+.bank .g div{font-size:9.5px;color:var(--muted)}.bank .g b{display:block;font:18px 'Bebas Neue';color:var(--text)}
+.plan{margin:6px 12px 0;border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--card)}
+.plan .top2{display:flex;justify-content:space-between;gap:10px}
+.plan .nm{font:19px/1.1 'Bebas Neue';letter-spacing:.04em}
+.plan .m{font-size:10px;color:var(--muted)}
+.plan .st{text-align:right}.plan .st b{font:26px/1 'Bebas Neue'}.plan .st span{display:block;font-size:10px;color:var(--muted)}
+.lad{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px}
+.lad span{font-size:10px;border:1px solid rgba(74,222,128,.35);color:var(--good);border-radius:6px;padding:1px 6px}
+.plan .ft{display:flex;gap:6px;margin-top:8px}
+.plan .ft button{flex:1;background:var(--card2);border:1px solid var(--line);color:var(--text);border-radius:8px;padding:7px;font-size:11px;cursor:pointer}
+.plan .ft button.p{background:var(--text);color:var(--bg)}
+.budget{margin:8px 12px 0;font-size:10.5px;color:var(--muted)}
+.budget .tr{height:6px;border-radius:3px;background:var(--card2);margin-top:5px;overflow:hidden}.budget .tr i{display:block;height:100%;background:var(--good)}
+.fold{margin:8px 12px 0;border:1px solid var(--line);border-radius:12px;background:var(--card)}
+.fold summary{list-style:none;padding:11px 14px;display:flex;justify-content:space-between;cursor:pointer;font:16px 'Bebas Neue';letter-spacing:.08em}
+.fold summary::-webkit-details-marker{display:none}
+.fold summary span{font:10.5px 'DM Mono';color:var(--muted);letter-spacing:0}
+.fold .b{padding:0 14px 12px;font-size:11px}
+/* more */
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:6px 12px}
+.tile{border:1px solid var(--line);border-radius:12px;padding:11px 12px;background:var(--card);cursor:pointer;min-height:84px}
+.tile i{font-style:normal;font-size:20px}
+.tile b{display:block;font:17px 'Bebas Neue';letter-spacing:.06em;margin-top:4px}
+.tile span{font-size:9.5px;color:var(--muted);line-height:1.35;display:block}
+.search{margin:4px 12px 2px;display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:10px;padding:8px 12px;color:var(--muted);font-size:11.5px}
+/* perf */
+.seg{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--line);border-radius:10px;overflow:hidden;margin:8px 12px 0}
+.seg button{background:none;border:0;color:var(--muted);font-size:11px;padding:8px 2px;cursor:pointer}
+.seg button small{display:block;font-size:9.5px}
+.seg button.on{background:var(--card2);color:var(--va);box-shadow:inset 0 -2px var(--va)}
+.kp{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:8px 12px}
+.kp div{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 10px;font-size:9.5px;color:var(--muted)}
+.kp b{display:block;font:26px/1.1 'Bebas Neue';color:var(--text)}
+/* nav + fab */
+.nav{position:absolute;left:0;right:0;bottom:0;height:60px;border-top:1px solid var(--line);background:#0d0d0d;display:grid;grid-template-columns:repeat(5,1fr);z-index:10}
+.nav button{background:none;border:0;color:var(--muted);font-size:9.5px;cursor:pointer;letter-spacing:.06em}
+.nav button i{display:block;font-style:normal;font-size:17px;margin-bottom:1px}
+.nav button.on{color:var(--text)}
+.nav button.bet i{width:38px;height:38px;line-height:38px;margin:-14px auto 2px;border-radius:50%;background:var(--text);color:var(--bg);font-size:20px;box-shadow:0 4px 14px rgba(0,0,0,.6)}
+.toast{position:absolute;left:50%;bottom:76px;transform:translateX(-50%);background:var(--text);color:var(--bg);border-radius:999px;padding:6px 14px;font-size:11px;opacity:0;transition:opacity .2s;z-index:30;pointer-events:none;white-space:nowrap}
+.toast.on{opacity:1}
+/* NEW (my suggestions) */
+.new{display:inline-block;font:500 8.5px 'DM Mono';letter-spacing:.1em;background:#e879f9;color:#1a0420;border-radius:4px;padding:1px 5px;vertical-align:2px;margin-left:4px}
+.newbox{outline:1.5px dashed #e879f9;outline-offset:2px}
+.stamp{font-size:9.5px;color:var(--muted);padding:0 16px 4px;display:flex;justify-content:space-between}
+.ts{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}.ts button{background:none;border:0;color:var(--text);padding:3px 7px;cursor:pointer;font-size:11px}
+.q-i{display:inline-block;width:14px;height:14px;border-radius:50%;border:1px solid var(--muted);color:var(--muted);font-size:9px;line-height:12px;text-align:center;cursor:pointer;margin-left:3px;font-style:normal}
+.scb{margin:4px 12px 0;border:1px solid var(--line);border-radius:14px;padding:12px 14px;background:linear-gradient(135deg,rgba(200,184,154,.12),transparent)}
+.scb .g{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:6px}
+.scb .g div{font-size:9.5px;color:var(--muted)}.scb .g b{display:block;font:26px/1.1 'Bebas Neue';color:var(--text)}
+.res{display:grid;grid-template-columns:46px 1fr 48px;gap:10px;align-items:center;margin:6px 12px 0;padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:var(--card)}
+.res .tm{font:18px/1 'Bebas Neue'}.res .vn{font-size:9px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.res .hn{font-weight:500;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.res .wn{font-size:9.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.res .fp{text-align:center;border-radius:7px;padding:4px 0;font:18px/1 'Bebas Neue'}
+.res .fp span{display:block;font:8.5px 'DM Mono';letter-spacing:.06em}
+body.big .phone{font-size:14.5px}body.big .rr .hn{font-size:20px}body.big .res .hn{font-size:14px}body.big .rr .meta,body.big .run .jt,body.big .res .wn{font-size:11.5px}body.big .run .nm{font-size:14.5px}
+/* notes */
+.notes{max-width:400px}
+.notes ol{padding-left:18px;margin:0}
+.notes li{margin-bottom:10px;color:#d8d3c8}
+.notes li b{color:var(--text)}
+.notes .all{margin-top:14px;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:var(--card);font-size:11.5px;color:#d8d3c8}
+.notes .all b{color:var(--sand)}
+.notes .q{margin-top:12px;padding:12px 14px;border:1px dashed #444;border-radius:10px;color:var(--muted);font-size:11.5px}
+</style></head><body>
+<div class="top">
+  <h1>Prixm on the phone — public view</h1>
+  <p>Read-only — the site other people open on their phones. No Ledger, no logging, no editing (you keep all that on your PC).<br>Left = today (real screenshot) · middle = proposed (tap around) · right = what changes. <span class="new">NEW</span> + dashed pink outline = my own suggestion — keep or drop each one.</p>
+  <button class="tbtn on" data-v="races">🏇 Races list</button>
+  <button class="tbtn" data-v="race">Race view</button>
+  <button class="tbtn" data-v="results">🏁 Results <span class="new">NEW</span></button>
+  <button class="tbtn" data-v="more">⋯ More</button>
+  <button class="tbtn" data-v="perf">📊 Performance</button>
+</div>
+<div class="page">
+  <div class="col"><h2>Now</h2><div class="sub" id="nowSub"></div><div class="now" id="now"><img id="nowImg" alt="current phone screen"></div></div>
+  <div class="col"><h2>Proposed</h2><div class="sub">Same data as today's card. Demo time 13:10.</div>
+    <div class="phone" id="phone">
+      <!-- RACES -->
+      <div class="scr on" id="v-races">
+        <div class="hdr"><b>PRIXM</b><div class="r">MON 23 NOV<span class="ts newbox" title="text size"><button onclick="document.body.classList.remove('big')">A</button><button onclick="document.body.classList.add('big')" style="font-size:15px">A</button></span><button class="ib" onclick="toast('☰ = theme · guide · PDF (as now)')">☰</button></div></div>
+        <div class="stamp"><span>Card 08:14 · results 17:52 <span class="new">NEW</span></span><span>A A = text size <span class="new">NEW</span></span></div>
+        <div class="sticky"><div class="chips" id="qchips"></div></div>
+        <div id="racesBody"></div>
+        <div style="height:24px"></div>
+      </div>
+      <!-- RACE VIEW -->
+      <div class="scr" id="v-race">
+        <div class="sticky">
+          <div class="rvh"><button class="ib" onclick="go('races')">←</button><div class="tt"><b id="rvT"></b><span id="rvS"></span></div><button class="ib newbox" onclick="toast('link copied: …/#race=KEMPTON-12:25')" title="share">↗</button><button class="ib" onclick="stepRace(-1)">‹</button><button class="ib" onclick="stepRace(1)">›</button></div>
+          <div class="tabs" id="rvTabs"><button class="on" data-t="run">Runners</button><button data-t="tp">Top pick</button><button data-t="pace">Pace &amp; track</button><button data-t="deep">Deep dive</button></div>
+        </div>
+        <div class="rname" id="rvName" onclick="this.classList.toggle('full')"></div>
+        <div class="mchips" id="rvChips"></div>
+        <div id="rvBody"></div>
+        <div class="swhint">swipe ← → or ‹ › for the next race at this meeting</div>
+      </div>
+      <!-- RESULTS (NEW) -->
+      <div class="scr" id="v-results">
+        <div class="hdr"><b>RESULTS<span class="new">NEW</span></b><div class="r" style="font:12px 'DM Mono'"><button class="chip on">Sun 22</button><button class="chip" onclick="toast('Today fills in as results land')">Today</button></div></div>
+        <div id="resBody"></div>
+        <div style="height:24px"></div>
+      </div>
+      <!-- MORE -->
+      <div class="scr" id="v-more">
+        <div class="hdr"><b>MORE</b></div>
+        <div class="search newbox">🔍 Search horse, track, jockey… <span class="new">NEW</span></div>
+        <div class="cap"><span>Analysis</span></div>
+        <div class="grid">
+          <div class="tile" onclick="go('perf')"><i>📊</i><b>Performance</b><span>Prixm · ☘ Emerald · Vanta results, calendars, calibration</span></div>
+          <div class="tile" onclick="toast('Track Explorer')"><i>🗺</i><b>Track Explorer</b><span>Layout, draw heat, today's runners fit</span></div>
+          <div class="tile" onclick="toast('Model')"><i>🔭</i><b>Model</b><span>Eye-catchers the data likes</span></div>
+          <div class="tile" onclick="toast('Top Finish')"><i>🏆</i><b>Top Finish</b><span>Rank-1 story + 💎 value play</span></div>
+          <div class="tile" onclick="toast('Trends')"><i>📈</i><b>Trends</b><span>Jockey / trainer form</span></div>
+          <div class="tile" onclick="toast('Combos')"><i>🤝</i><b>Combos</b><span>Horse × jockey × trainer</span></div>
+          <div class="tile" onclick="toast('Watchback')"><i>👁‍🗨</i><b>Watchback</b><span>Quality of losses</span></div>
+          <div class="tile" onclick="toast('Tracked')"><i>👁</i><b>Tracked</b><span>Your watchlist · notes</span></div>
+        </div>
+        <div class="cap"><span>App</span></div>
+        <div class="grid">
+          <div class="tile" onclick="toast('Guide')"><i>❓</i><b>Guide</b><span>How everything works</span></div>
+          <div class="tile newbox" onclick="openSheet('gloss')"><i>📖</i><b>Glossary<span class="new">NEW</span></b><span>Gap, score, confidence, Golden, Prime… in plain words</span></div>
+          <div class="tile newbox" onclick="toast('Add to Home Screen → opens full screen like an app')"><i>📲</i><b>Install<span class="new">NEW</span></b><span>Add Prixm to your home screen</span></div>
+          <div class="tile" onclick="toast('Theme toggle')"><i>◐</i><b>Theme</b><span>Nothing / Classic</span></div>
+        </div>
+        <div style="height:24px"></div>
+      </div>
+      <!-- PERFORMANCE -->
+      <div class="scr" id="v-perf">
+        <div class="hdr"><b>PERFORMANCE</b></div>
+        <div class="sticky" style="padding-bottom:0"><div class="seg"><button>PRIXM<small>2.2 · UK</small></button><button>☘ EMERALD<small>1.0 · IRE</small></button><button class="on">VANTA<small>Starter · FR</small></button></div>
+          <div class="chips"><button class="chip on">Overview</button><button class="chip">Calendar</button><button class="chip">Tracks</button><button class="chip">Factors</button><button class="chip">Calibration</button></div></div>
+        <div class="kp"><div>Top pick win<b>19.5%</b><span class="pos">+2.8</span> vs Prixm</div><div>Top pick place<b>45.8%</b><span class="pos">+4.3</span> vs Prixm</div><div>ROI at tote<b class="neg">−24.4%</b>1u every race</div><div>Random win<b>9.7%</b>1 ÷ field</div></div>
+        <div class="swhint" style="text-align:left;padding:4px 14px">Full Performance design: <b>mockups/phone_analysis_mockup.html</b> (calendar with Place/Win/P&amp;L toggle + day sheet, track list, folding sections).</div>
+      </div>
+      <div class="nav" id="nav">
+        <button data-v="races" class="on"><i>🏇</i>RACES</button>
+        <button data-v="golden" onclick="toast('Golden — same pattern: folding sections + lists')"><i>⭐</i>GOLDEN</button>
+        <button data-v="results"><i>🏁</i>RESULTS</button>
+        <button data-v="mt"><i>🐎</i>MT</button>
+        <button data-v="more"><i>⋯</i>MORE</button>
+      </div>
+      <div class="toast" id="toast"></div>
+      <div class="shade" id="shade"></div>
+      <div class="sheet" id="sheet"><div class="grab"></div><div class="sh-h"><b id="shT"></b><button class="ib" onclick="closeSheet()">✕</button></div><div class="sh-b" id="shB"></div><div class="sh-f" id="shF"></div></div>
+    </div>
+  </div>
+  <div class="col notes"><h2>What changes</h2><div class="sub">Phone only (≤700px). PC untouched.</div><ol id="notes"></ol>
+    <div class="all"><b>Everywhere:</b> read-only — no Ledger, no ＋ Log bet, no BET / TRACK buttons, no settings or calibration Apply (all that stays on your PC). One header style · pinned chip bar for filters / sections · long tables become lists or cards · panels fold shut (the phone remembers) · filters open as a bottom sheet · bottom bar: Races · Golden · Results · MT · More.</div>
+    <div class="q">Tell me what to change per screen, or "looks good" and I'll build it in stages (Races → Race view → Results → More → Performance/Golden/the rest).</div></div>
+</div>
+<script>
+const CARD={"races":[{"t":"09:54","c":"Nantes (FR)","n":"Prix Des Parieurs Pmu+","ty":"Hurdle","d":"2m1\u00bdf","g":"","f":9,"h":false,"e":"vanta","cls":null,"top":"Ritano Guapo","sc":54.7,"gap":4.9,"cf":"MODERATE","n2":"Bramdean Lad","s2":49.8,"silk":"https://assets.racingdata.pmu.fr/silks/20261123/PET/1/20261123-PET-1-1.png","pr":null},{"t":"10:24","c":"Nantes (FR)","n":"Prix De Saint-Malo","ty":"Hurdle","d":"2m1\u00bdf","g":"","f":8,"h":false,"e":"vanta","cls":null,"top":"Nanjaya","sc":49.1,"gap":0.4,"cf":"MODERATE","n2":"No Limit Star","s2":48.7,"silk":"https://assets.racingdata.pmu.fr/silks/20261123/PET/2/20261123-PET-2-2.png","pr":null},{"t":"10:59","c":"Nantes (FR)","n":"Prix President Herve De La Brosse","ty":"Hurdle","d":"2m3\u00bdf","g":"","f":11,"h":true,"e":"vanta","cls":null,"top":"Chadoc","sc":75.6,"gap":12.4,"cf":"TOP PICK","n2":"Kimfly","s2":63.2,"silk":"https://assets.racingdata.pmu.fr/silks/20261123/PET/3/20261123-PET-3-6.png","pr":null},{"t":"11:17","c":"Chantilly (FR)","n":"Prix Du Vergaly","ty":"Flat","d":"1m5\u00bdf","g":"Standard","f":10,"h":false,"e":"vanta","cls":null,"top":"Incremental","sc":74.8,"gap":7.1,"cf":"STRONG","n2":"User Amistoso","s2":67.7,"silk":"https://assets.racingdata.pmu.fr/silks/20261123/CHA/1/20261123-CHA-1-4.png","pr":null},{"t":"11:34","c":"Nantes (FR)","n":"Prix Roger Chaignon","ty":"Hurdle","d":"2m1\u00bdf","g":"","f":10,"h":false,"e":"vanta","cls":null,"top":"Malessia","sc":61.2,"gap":2.5,"cf":"SOLID","n2":"Kirkita","s2":58.7,"silk":"https://assets.racingdata.pmu.fr/silks/20261123/PET/4/20261123-PET-4-2.png","pr":null},{"t":"11:52","c":"Chantilly (FR)","n":"Prix Du Chateau De Pierrefonds","ty":"Flat","d":"2m","g":"Standard","f":13,"h":true,"e":"vanta","cls":null,"top":"Light Of Thunder","sc":70.0,"gap":4.0,"cf":"STRONG","n2":"New Chapter","s2":66.0,"silk":"https://assets.racingdata.pmu.fr/silks/20261123/CHA/2/20261123-CHA-2-1.png","pr":null},{"t":"12:05","c":"BANGOR-ON-DEE","n":"Bangor-On-Dee \"Chasing Excellence\" Beginners' Chase (GBB Race)","ty":"Chase","d":"2m1f","g":"Good To Soft","f":4,"h":false,"e":"prixm","cls":"3","top":"Le Beau Madrik","sc":79,"gap":14,"cf":"TOP PICK","n2":"Count Of Vendome","s2":65,"silk":"https://www.rp-assets.com/svg/7/1/0/356017.svg","pr":1.75},{"t":"12:09","c":"Nantes (FR)","n":"Prix Duralock","ty":"Hurdle","d":"2m3\u00bdf","g":"","f":12,"h":false,"e":"vanta","cls":null,"top":"Darsham","sc":65.1,"gap":8.6,"cf":"STRONG","n2":"Baron De Flandres","s2":56.5,"silk":"https://assets.racingdata.pmu.fr/silks/20261123/PET/5/20261123-PET-5-2.png","pr":null},{"t":"12:25","c":"KEMPTON","n":"CopyBet For Champions League Profit Boosts Juvenile Hurdle (GBB Race)","ty":"Hurdle","d":"2m","g":"Good","f":10,"h":false,"e":"prixm","cls":"4","top":"Aukus","sc":72,"gap":13,"cf":"STRONG","n2":"Thisonesforyou","s2":59,"silk":"https://www.rp-assets.com/svg/0/2/6/333620.svg","pr":4.0},{"t":"12:27","c":"Chantilly (FR)","n":"Prix Du Jardin De La Voliere","ty":"Flat","d":"1m","g":"Standard","f":12,"h":true,"e":"vanta","cls":null,"top":"Alpsee","sc":62.2,"gap":0.1,"cf":"SOLID","n2":"Petit Genie","s2":62.1,"silk":"https://assets.racingdata.pmu.fr/silks/20261123/CHA/3/20261123-CHA-3-2.png","pr":null},{"t":"12:35","c":"BANGOR-ON-DEE","n":"Boat At Erbistock Handicap Chase (GBB Race)","ty":"Chase","d":"2m1f","g":"Good To Soft","f":8,"h":true,"e":"prixm","cls":"4","top":"Air Apparent","sc":72,"gap":5,"cf":"STRONG","n2":"Falco Des Pins","s2":67,"silk":"https://www.rp-assets.com/svg/5/0/2/365205.svg","pr":1.88},{"t":"12:44","c":"Nantes (FR)","n":"Prix Regis Bertin","ty":"Chase","d":"2m5\u00bdf","g":"","f":8,"h":true,"e":"vanta","cls":null,"top":"Fun Love","sc":64.5,"gap":1.8,"cf":"SOLID","n2":"Major Du Large","s2":62.7,"silk":"https://assets.racingdata.pmu.fr/silks/20261123/PET/6/20261123-PET-6-5.png","pr":null},{"t":"12:45","c":"HUNTINGDON","n":"Annual Members At Huntingdon Maiden Hurdle (GBB Race)","ty":"Hurdle","d":"2m","g":"Good","f":8,"h":false,"e":"prixm","cls":"4","top":"My Mate AJ","sc":81,"gap":19,"cf":"TOP PICK","n2":"Double The Dance","s2":62,"silk":"https://www.rp-assets.com/svg/7/4/2/364247.svg","pr":null},{"t":"12:45","c":"Agen (FR)","n":"Prix Sergio Raffaello","ty":"Flat","d":"1m1f","g":"","f":8,"h":false,"e":"vanta","cls":null,"top":"Alassa","sc":60.1,"gap":1.3,"cf":"SOLID","n2":"Wish You Joy","s2":58.8,"silk":"https://assets.racingdata.pmu.fr/silks/20261123/AGE/1/20261123-AGE-1-6.png","pr":null},{"t":"12:55","c":"KEMPTON","n":"CopyBet Support Safer Gambling/EBF Stallions \"National Hunt\" Novices' Hurdle (Qualifier) (GBB Race)","ty":"Hurdle","d":"2m","g":"Good","f":4,"h":false,"e":"prixm","cls":"4","top":"Thatsnotmyname","sc":66,"gap":13,"cf":"STRONG","n2":"Stars Aligning","s2":53,"silk":"https://www.rp-assets.com/svg/6/5/4/277456.svg","pr":16.0},{"t":"13:05","c":"BANGOR-ON-DEE","n":"Bangor-On-Dee Memberships Now On Sale Novices' Handicap Chase (GBB Race)","ty":"Chase","d":"2m4f","g":"Good To Soft","f":11,"h":true,"e":"prixm","cls":"4","top":"Berkenshtaaap","sc":74,"gap":2,"cf":"STRONG","n2":"Hard Dealt","s2":72,"silk":"https://www.rp-assets.com/svg/9/8/9/378989.svg","pr":5.0},{"t":"13:12","c":"Chantilly (FR)","n":"Prix De L'Enclos Des Kangourous","ty":"Flat","d":"1m","g":"Standard","f":12,"h":true,"e":"vanta","cls":null,"top":"Golden Run","sc":63.1,"gap":5.3,"cf":"SOLID","n2":"Divo Two Times","s2":57.8,"silk":"https://assets.racingdata.pmu.fr/silks/20261123/CHA/4/20261123-CHA-4-2.png","pr":null},{"t":"13:15","c":"HUNTINGDON","n":"Christmas Parties At Huntingdon Racecourse Handicap Hurdle","ty":"Hurdle","d":"2m","g":"Good","f":12,"h":true,"e":"prixm","cls":"5","top":"Master Dunraven","sc":65,"gap":3,"cf":"STRONG","n2":"Chico Magnifica","s2":62,"silk":"https://www.rp-assets.com/svg/6/0/7/379706.svg","pr":12.0},{"t":"13:15","c":"Agen (FR)","n":"Prix Jean-Claude Chassenard","ty":"Flat","d":"6f","g":"","f":9,"h":false,"e":"vanta","cls":null,"top":"Prolixe","sc":66.1,"gap":9.8,"cf":"STRONG","n2":"Lark","s2":56.3,"silk":"https://assets.racingdata.pmu.fr/silks/20261123/AGE/2/20261123-AGE-2-1.png","pr":null},{"t":"13:19","c":"Nantes (FR)","n":"Prix Gilles Tartoue- Challenge De L'Obstacle Equinaxy (Px J. Brossais)","ty":"Chase","d":"2m5\u00bdf","g":"","f":5,"h":false,"e":"vanta","cls":null,"top":"Le Karma","sc":58.7,"gap":4.5,"cf":"SOLID","n2":"Tres Plumeur","s2":54.2,"silk":"https://assets.racingdata.pmu.fr/silks/20261123/PET/7/20261123-PET-7-3.png","pr":null},{"t":"13:25","c":"KEMPTON","n":"CopyBet Pay First Past The Post Novices' Limited Handicap Chase (GBB Race)","ty":"Chase","d":"2m2f","g":"Good","f":3,"h":true,"e":"prixm","cls":"3","top":"Bond Broker","sc":77,"gap":4,"cf":"TOP PICK","n2":"Dance And Glance","s2":73,"silk":"https://www.rp-assets.com/svg/0/1/1/336110.svg","pr":1.5},{"t":"13:35","c":"BANGOR-ON-DEE","n":"Wrexham Lager Novices' Handicap Chase (GBB Race)","ty":"Chase","d":"3m","g":"Good To Soft","f":12,"h":true,"e":"prixm","cls":"4","top":"Leading Choice","sc":71,"gap":2,"cf":"STRONG","n2":"Joltin N Jiving","s2":69,"silk":"https://www.rp-assets.com/svg/b/7/0/174407b.svg","pr":14.0},{"t":"13:45","c":"HUNTINGDON","n":"Conferences At Huntingdon \"Chasing Excellence\" Beginners' Chase (GBB Race)","ty":"Chase","d":"2m7f","g":"Good","f":5,"h":false,"e":"prixm","cls":"3","top":"Crystal Island","sc":82,"gap":6,"cf":"TOP PICK","n2":"Reckless Spending","s2":76,"silk":"https://www.rp-assets.com/svg/6/4/4/365446.svg","pr":null},{"t":"13:45","c":"Agen (FR)","n":"Prix Jerome Rambaud (Prix Dunamis)","ty":"Flat","d":"1m4\u00bdf","g":"","f":7,"h":false,"e":"vanta","cls":null,"top":"Iseult Du Pacs Aa","sc":56.3,"gap":1.0,"cf":"SOLID","n2":"Kirie Aa","s2":55.3,"silk":"https://assets.racingdata.pmu.fr/silks/20261123/AGE/3/20261123-AGE-3-5.png","pr":null},{"t":"13:47","c":"Chantilly (FR)","n":"Prix Des Statues Des Preuses","ty":"Flat","d":"1m","g":"Standard","f":11,"h":true,"e":"vanta","cls":null,"top":"Gray D'Albion","sc":64.4,"gap":7.4,"cf":"SOLID","n2":"Regalienne","s2":57.0,"silk":"https://assets.racingdata.pmu.fr/silks/20261123/CHA/5/20261123-CHA-5-3.png","pr":null},{"t":"13:55","c":"KEMPTON","n":"Pertemps Network Handicap Hurdle (Pertemps Hurdle Series Qualifier) (GBB Race)","ty":"Hurdle","d":"3m0f","g":"Good","f":6,"h":true,"e":"prixm","cls":"2","top":"Road To Wembley","sc":82,"gap":19,"cf":"TOP PICK","n2":"Idaho Fire","s2":63,"silk":"https://www.rp-assets.com/svg/8/5/6/250658.svg","pr":3.0},{"t":"14:07","c":"BANGOR-ON-DEE","n":"Outerspace Group \"National Hunt\" Maiden Hurdle (GBB Race)","ty":"Hurdle","d":"2m3f","g":"Good To Soft","f":14,"h":false,"e":"prixm","cls":"4","top":"Jetzet","sc":76,"gap":8,"cf":"TOP PICK","n2":"The Gift Shop","s2":68,"silk":"https://www.rp-assets.com/svg/0/9/8/260890.svg","pr":2.25},{"t":"14:15","c":"Agen (FR)","n":"Prix De Pau","ty":"Hurdle","d":"2m2f","g":"","f":11,"h":false,"e":"vanta","cls":null,"top":"Sweet Mary","sc":56.5,"gap":6.3,"cf":"SOLID","n2":"Nyrhone De Couely","s2":50.2,"silk":"https://assets.racingdata.pmu.fr/silks/20261123/AGE/4/20261123-AGE-4-8.png","pr":null},{"t":"14:18","c":"HUNTINGDON","n":"Book Hospitality At Huntingdon Handicap Chase (GBB Race)","ty":"Chase","d":"2m0f","g":"Good","f":7,"h":true,"e":"prixm","cls":"4","top":"Jamada","sc":84,"gap":15,"cf":"TOP PICK","n2":"Yes Indeed","s2":69,"silk":"https://www.rp-assets.com/svg/0/4/3/362340.svg","pr":2.25},{"t":"14:22","c":"Chantilly (FR)","n":"Prix Des Neufs Fameuses Guerrieres","ty":"Flat","d":"1m","g":"Standard","f":11,"h":true,"e":"vanta","cls":null,"top":"Markswoman","sc":65.6,"gap":0.4,"cf":"STRONG","n2":"Amouage","s2":65.2,"silk":"https://assets.racingdata.pmu.fr/silks/20261123/CHA/6/20261123-CHA-6-3.png","pr":null},{"t":"14:30","c":"KEMPTON","n":"CopyBet Follow Us On X Lilies Mares' Hurdle (Listed Race) (GBB Race)","ty":"Hurdle","d":"2m5f","g":"Good","f":5,"h":false,"e":"prixm","cls":"1","top":"Take No Chances","sc":79,"gap":20,"cf":"TOP PICK","n2":"La Pinsonniere","s2":59,"silk":"https://www.rp-assets.com/svg/b/9/5/165159b.svg","pr":1.25},{"t":"14:42","c":"BANGOR-ON-DEE","n":"Mount Vines Mares' Maiden Hurdle (GBB Race)","ty":"Hurdle","d":"2m0f","g":"Good To Soft","f":14,"h":false,"e":"prixm","cls":"4","top":"Mille Et Une Vies","sc":77,"gap":15,"cf":"TOP PICK","n2":"Perfect Package","s2":62,"silk":"https://www.rp-assets.com/svg/6/3/1/179136.svg","pr":null},{"t":"14:45","c":"Agen (FR)","n":"Prix Jean-Marie Hebrard","ty":"Chase","d":"2m5f","g":"","f":10,"h":false,"e":"vanta","cls":null,"top":"Fan De Chichoune","sc":61.3,"gap":3.5,"cf":"SOLID","n2":"Matador Forez","s2":57.8,"silk":"https://assets.racingdata.pmu.fr/silks/20261123/AGE/5/20261123-AGE-5-6.png","pr":null},{"t":"14:53","c":"HUNTINGDON","n":"Festive Fiver Raceday 21 December Mares' Novices' Handicap Hurdle","ty":"Hurdle","d":"2m4f","g":"Good","f":9,"h":true,"e":"prixm","cls":"5","top":"Midnight Pass","sc":71,"gap":4,"cf":"STRONG","n2":"Lets Go Mo","s2":67,"silk":"https://www.rp-assets.com/svg/1/3/3/229331.svg","pr":4.5},{"t":"14:57","c":"Chantilly (FR)","n":"Prix De La Salle Des Preuses","ty":"Flat","d":"1m","g":"Standard","f":10,"h":true,"e":"vanta","cls":null,"top":"Fly Half","sc":62.3,"gap":4.0,"cf":"SOLID","n2":"Casares","s2":58.3,"silk":"https://assets.racingdata.pmu.fr/silks/20261123/CHA/7/20261123-CHA-7-4.png","pr":null},{"t":"15:05","c":"KEMPTON","n":"CopyBet Supporting UK Horse Racing Handicap Chase (Challenger Staying Chase Series Qualifier) (GBB)","ty":"Chase","d":"3m","g":"Good","f":5,"h":true,"e":"prixm","cls":"3","top":"King Califet","sc":73,"gap":11,"cf":"STRONG","n2":"Tapley","s2":62,"silk":"https://www.rp-assets.com/svg/1/0/0/322001.svg","pr":1.88},{"t":"15:15","c":"Agen (FR)","n":"Grand Cross Country De La Garenne","ty":"Chase","d":"3m0\u00bdf","g":"","f":10,"h":false,"e":"vanta","cls":null,"top":"Fraga Has","sc":64.7,"gap":2.3,"cf":"SOLID","n2":"Jargauder","s2":62.4,"silk":"https://assets.racingdata.pmu.fr/silks/20261123/AGE/6/20261123-AGE-6-9.png","pr":null},{"t":"15:17","c":"BANGOR-ON-DEE","n":"Festive Meeting Saturday 28th November \"Newcomers\" National Hunt Flat Race (GBB Race)","ty":"NH Flat","d":"2m0f","g":"Good To Soft","f":7,"h":false,"e":"prixm","cls":"4","top":"Caveman","sc":63,"gap":1,"cf":"SOLID","n2":"Cross Allegation","s2":62,"silk":"https://www.rp-assets.com/svg/9/6/2/314269.svg","pr":1.5},{"t":"15:23","c":"HUNTINGDON","n":"Come Racing At Huntingdon Handicap Hurdle","ty":"Hurdle","d":"2m3f","g":"Good","f":11,"h":true,"e":"prixm","cls":"4","top":"Vivid Pink","sc":74,"gap":1,"cf":"STRONG","n2":"Faded Fantasy","s2":73,"silk":"https://www.rp-assets.com/svg/6/7/1/130176.svg","pr":8.0},{"t":"15:30","c":"NEWCASTLE (AW)","n":"Midnite A Next Generation Betting App Apprentice Handicap","ty":"Flat","d":"1m2f","g":"Standard","f":14,"h":true,"e":"prixm","cls":"5","top":"Jodhpur Blue","sc":76,"gap":3,"cf":"TOP PICK","n2":"Koko Blue","s2":73,"silk":"https://www.rp-assets.com/svg/7/7/0/21077.svg","pr":8.0},{"t":"15:32","c":"Chantilly (FR)","n":"Prix De La Route De La Vallee","ty":"Flat","d":"1m","g":"Standard","f":14,"h":false,"e":"vanta","cls":null,"top":"Belle Harmonie","sc":66.0,"gap":0.3,"cf":"STRONG","n2":"Sirat","s2":65.7,"silk":"https://assets.racingdata.pmu.fr/silks/20261123/CHA/8/20261123-CHA-8-10.png","pr":null},{"t":"15:40","c":"KEMPTON","n":"CopyBet Overnight Best Odds Guaranteed Conditional Jockeys' Handicap Hurdle","ty":"Hurdle","d":"2m","g":"Good","f":9,"h":true,"e":"prixm","cls":"4","top":"Woodstock City","sc":81,"gap":14,"cf":"TOP PICK","n2":"Gallivanted","s2":67,"silk":"https://www.rp-assets.com/svg/5/1/8/337815.svg","pr":2.0},{"t":"16:05","c":"NEWCASTLE (AW)","n":"All-Weather Championship Is Back EBF Restricted Maiden Stakes (Bands B-D) (GBB Race)","ty":"Flat","d":"7f","g":"Standard","f":11,"h":false,"e":"prixm","cls":"4","top":"Old Compton","sc":70,"gap":15,"cf":"STRONG","n2":"Radio Braga","s2":55,"silk":"https://www.rp-assets.com/svg/6/2/9/115926.svg","pr":1.75},{"t":"16:07","c":"Marseille Vivaux (FR)","n":"Prix De La Barben","ty":"Flat","d":"1m5f","g":"Standard","f":11,"h":true,"e":"vanta","cls":null,"top":"Welcome Charly","sc":69.6,"gap":1.6,"cf":"STRONG","n2":"Americano","s2":68.0,"silk":"https://assets.racingdata.pmu.fr/silks/20261123/PON/1/20261123-PON-1-1.png","pr":null},{"t":"16:30","c":"WOLVERHAMPTON (AW)","n":"Midnight A Next Generation Betting App Handicap","ty":"Flat","d":"1m1f","g":"Standard","f":13,"h":true,"e":"prixm","cls":"6","top":"Eighty Eight","sc":70,"gap":11,"cf":"STRONG","n2":"Law Of Design","s2":59,"silk":"https://www.rp-assets.com/svg/0/9/5/362590.svg","pr":1.62},{"t":"16:40","c":"NEWCASTLE (AW)","n":"AWC Finals Day At Newcastle 26th March Nursery Handicap","ty":"Flat","d":"5f","g":"Standard","f":7,"h":true,"e":"prixm","cls":"5","top":"Dowman","sc":72,"gap":6,"cf":"STRONG","n2":"Cyberspace","s2":66,"silk":"https://www.rp-assets.com/svg/0/1/2/370210.svg","pr":1.62},{"t":"16:42","c":"Marseille Vivaux (FR)","n":"Prix Du Rouet","ty":"Flat","d":"1m5f","g":"Standard","f":10,"h":true,"e":"vanta","cls":null,"top":"Port Santa Ponsa","sc":61.2,"gap":1.8,"cf":"SOLID","n2":"Lagoone Chope","s2":59.4,"silk":"https://assets.racingdata.pmu.fr/silks/20261123/PON/2/20261123-PON-2-2.png","pr":null},{"t":"17:00","c":"WOLVERHAMPTON (AW)","n":"All Weather Championship Is Back Nursery Handicap","ty":"Flat","d":"1m1f","g":"Standard","f":6,"h":true,"e":"prixm","cls":"5","top":"Capricious Star","sc":67,"gap":5,"cf":"STRONG","n2":"Hello You Ten","s2":62,"silk":"https://www.rp-assets.com/svg/7/1/0/375017.svg","pr":1.25},{"t":"17:15","c":"NEWCASTLE (AW)","n":"AWC Season 14 Has Begun Fillies' Novice Stakes (GBB Race)","ty":"Flat","d":"7f","g":"Standard","f":9,"h":false,"e":"prixm","cls":"3","top":"Ruby Sands","sc":74,"gap":17,"cf":"STRONG","n2":"Bintbossom","s2":57,"silk":"https://www.rp-assets.com/svg/2/2/6/213622.svg","pr":5.0},{"t":"17:15","c":"Marseille Vivaux (FR)","n":"Prix De La Criee","ty":"Flat","d":"1m2f","g":"Standard","f":12,"h":true,"e":"vanta","cls":null,"top":"Red Scotch","sc":68.7,"gap":3.7,"cf":"STRONG","n2":"Faith In You","s2":65.0,"silk":"https://assets.racingdata.pmu.fr/silks/20261123/PON/3/20261123-PON-3-1.png","pr":null},{"t":"17:30","c":"WOLVERHAMPTON (AW)","n":"AWC Finals Day At Newcastle - 26th March EBF Maiden Stakes (GBB Race)","ty":"Flat","d":"6f","g":"Standard","f":12,"h":false,"e":"prixm","cls":"4","top":"Casting Coach","sc":75,"gap":18,"cf":"STRONG","n2":"Queen Of Christmas","s2":57,"silk":"https://www.rp-assets.com/svg/8/8/8/379888.svg","pr":8.0},{"t":"17:45","c":"NEWCASTLE (AW)","n":"Midnite It's Actually Pretty Good Handicap (Div I)","ty":"Flat","d":"6f","g":"Standard","f":10,"h":true,"e":"prixm","cls":"5","top":"Encore","sc":70,"gap":3,"cf":"STRONG","n2":"Lumenbourg","s2":67,"silk":"https://www.rp-assets.com/svg/1/8/6/88681.svg","pr":5.5},{"t":"17:45","c":"Marseille Vivaux (FR)","n":"Prix Des Criques","ty":"Flat","d":"7\u00bdf","g":"Standard","f":9,"h":false,"e":"vanta","cls":null,"top":"Munch","sc":68.7,"gap":9.6,"cf":"STRONG","n2":"Si Noir","s2":59.1,"silk":"https://assets.racingdata.pmu.fr/silks/20261123/PON/4/20261123-PON-4-2.png","pr":null},{"t":"18:00","c":"WOLVERHAMPTON (AW)","n":"Make The Move To Midnite Handicap","ty":"Flat","d":"5f","g":"Standard","f":11,"h":true,"e":"prixm","cls":"6","top":"Bessie Wallis","sc":66,"gap":1,"cf":"STRONG","n2":"Our Planet","s2":65,"silk":"https://www.rp-assets.com/svg/4/8/2/376284.svg","pr":16.0},{"t":"18:15","c":"NEWCASTLE (AW)","n":"Midnite It's Actually Pretty Good Handicap (Div II)","ty":"Flat","d":"6f","g":"Standard","f":9,"h":true,"e":"prixm","cls":"5","top":"Go Victor","sc":76,"gap":17,"cf":"TOP PICK","n2":"Azure Zain","s2":59,"silk":"https://www.rp-assets.com/svg/1/0/2/374201.svg","pr":4.0},{"t":"18:15","c":"Marseille Vivaux (FR)","n":"Prix Reine Lumiere","ty":"Flat","d":"7\u00bdf","g":"Standard","f":8,"h":true,"e":"vanta","cls":null,"top":"Waziers","sc":63.8,"gap":0.9,"cf":"SOLID","n2":"Merci Elie","s2":62.9,"silk":"https://assets.racingdata.pmu.fr/silks/20261123/PON/5/20261123-PON-5-1.png","pr":null},{"t":"18:30","c":"WOLVERHAMPTON (AW)","n":"Make The Move To Midnite Handicap","ty":"Flat","d":"1m4f","g":"Standard","f":12,"h":true,"e":"prixm","cls":"5","top":"Barachiel","sc":74,"gap":7,"cf":"STRONG","n2":"Saxophonist","s2":67,"silk":"https://www.rp-assets.com/svg/b/6/8/212986b.svg","pr":3.0},{"t":"18:45","c":"NEWCASTLE (AW)","n":"Midnite: Built For 2026 Not 2006 Handicap","ty":"Flat","d":"6f","g":"Standard","f":14,"h":true,"e":"prixm","cls":"6","top":"Tomorrow Day","sc":77,"gap":13,"cf":"TOP PICK","n2":"Reenie's Dream","s2":64,"silk":"https://www.rp-assets.com/svg/3/6/7/293763.svg","pr":5.0},{"t":"18:45","c":"Marseille Vivaux (FR)","n":"Prix De Gardanne","ty":"Flat","d":"7\u00bdf","g":"Standard","f":9,"h":false,"e":"vanta","cls":null,"top":"It'S Pistachio","sc":75.9,"gap":8.8,"cf":"TOP PICK","n2":"Zarwalyah","s2":67.1,"silk":"https://assets.racingdata.pmu.fr/silks/20261123/PON/6/20261123-PON-6-1.png","pr":null},{"t":"19:00","c":"WOLVERHAMPTON (AW)","n":"AWC Season 14 Has Begun Handicap (Div I)","ty":"Flat","d":"7f","g":"Standard","f":12,"h":true,"e":"prixm","cls":"6","top":"Ridger","sc":81,"gap":11,"cf":"TOP PICK","n2":"Giorgio M","s2":70,"silk":"https://www.rp-assets.com/svg/5/2/4/13425.svg","pr":3.5},{"t":"19:15","c":"NEWCASTLE (AW)","n":"Make The Move To Midnite Handicap","ty":"Flat","d":"5f","g":"Standard","f":14,"h":true,"e":"prixm","cls":"6","top":"Simba's Pride","sc":70,"gap":10,"cf":"STRONG","n2":"Sunday River","s2":60,"silk":"https://www.rp-assets.com/svg/9/7/5/302579.svg","pr":4.0},{"t":"19:15","c":"Marseille Vivaux (FR)","n":"Prix Daniel Vergez","ty":"Flat","d":"1m5f","g":"Standard","f":7,"h":false,"e":"vanta","cls":null,"top":"Hugo Cabret","sc":78.6,"gap":15.3,"cf":"TOP PICK","n2":"Dissemble","s2":63.3,"silk":"https://assets.racingdata.pmu.fr/silks/20261123/PON/7/20261123-PON-7-1.png","pr":null},{"t":"19:30","c":"WOLVERHAMPTON (AW)","n":"AWC Season 14 Has Begun Handicap (Div II)","ty":"Flat","d":"7f","g":"Standard","f":12,"h":true,"e":"prixm","cls":"6","top":"Girls Allowed","sc":70,"gap":14,"cf":"STRONG","n2":"Romanovich","s2":56,"silk":"https://www.rp-assets.com/svg/3/4/8/360843.svg","pr":3.0},{"t":"19:45","c":"NEWCASTLE (AW)","n":"AW Trials Day - Lingfield 2nd Jan 2027 Handicap","ty":"Flat","d":"1m","g":"Standard","f":14,"h":true,"e":"prixm","cls":"6","top":"Concert Boy","sc":65,"gap":3,"cf":"STRONG","n2":"Barleybrown","s2":62,"silk":"https://www.rp-assets.com/svg/0/2/1/314120.svg","pr":4.0},{"t":"20:00","c":"WOLVERHAMPTON (AW)","n":"AWC Trials Day - Lingfield 2nd January 2027 Handicap","ty":"Flat","d":"7f","g":"Standard","f":11,"h":true,"e":"prixm","cls":"4","top":"Pietro","sc":74,"gap":13,"cf":"STRONG","n2":"Reciprocated","s2":61,"silk":"https://www.rp-assets.com/svg/9/6/9/344969.svg","pr":3.5},{"t":"20:30","c":"WOLVERHAMPTON (AW)","n":"AWC Season 14 Handicap","ty":"Flat","d":"1m0f","g":"Standard","f":10,"h":true,"e":"prixm","cls":"5","top":"He's A Gentleman","sc":66,"gap":6,"cf":"STRONG","n2":"Hitched","s2":60,"silk":"https://www.rp-assets.com/svg/2/6/7/276762.svg","pr":10.0}],"det":{"t":"12:25","c":"KEMPTON","n":"CopyBet For Champions League Profit Boosts Juvenile Hurdle (GBB Race)","d":"2m","g":"Good","ty":"Hurdle","cls":"4","f":10,"runners":[{"n":"Aukus","no":9,"j":"Freddie Gordon","tr":"Nicky Henderson","sc":72,"cf":"STRONG","form":"2","age":3,"lbs":147,"silk":"https://www.rp-assets.com/svg/0/2/6/333620.svg","pr":4.0,"rpr":108,"bd":{"form":5,"rating":15,"trainer":12,"jockey":3,"fitness":8,"class":4,"going":4,"course":3,"distance":3,"age":2,"weight":6,"draw":3,"headgear":3,"spotlight":1}},{"n":"Thisonesforyou","no":1,"j":"Gavin Sheehan","tr":"Olly Murphy","sc":59,"cf":"SOLID","form":"1","age":3,"lbs":161,"silk":"https://www.rp-assets.com/svg/9/6/2/111269.svg","pr":2.75,"rpr":102,"bd":{"form":7,"rating":5,"trainer":12,"jockey":3,"fitness":8,"class":4,"going":4,"course":3,"distance":3,"age":2,"weight":2,"draw":3,"headgear":2,"spotlight":1}},{"n":"Barbury Boy","no":2,"j":"Tom Bellamy","tr":"Alan King","sc":59,"cf":"SOLID","form":"2","age":3,"lbs":154,"silk":"https://www.rp-assets.com/svg/b/0/1/362910b.svg","pr":3.0,"rpr":102,"bd":{"form":5,"rating":5,"trainer":12,"jockey":3,"fitness":8,"class":4,"going":4,"course":3,"distance":3,"age":2,"weight":4,"draw":3,"headgear":2,"spotlight":1}},{"n":"John Harrison","no":4,"j":"Philip Armson","tr":"Alan King","sc":55,"cf":"MODERATE","form":"","age":3,"lbs":154,"silk":"https://www.rp-assets.com/svg/9/6/3/361369.svg","pr":20.0,"rpr":null,"bd":{"form":5,"rating":5,"trainer":12,"jockey":3,"fitness":4,"class":4,"going":4,"course":3,"distance":3,"age":2,"weight":4,"draw":3,"headgear":2,"spotlight":1}},{"n":"Mathoura","no":10,"j":"Ben Godfrey","tr":"Joe Tickle","sc":54,"cf":"MODERATE","form":"","age":3,"lbs":147,"silk":"https://www.rp-assets.com/svg/0/2/8/39820.svg","pr":25.0,"rpr":null,"bd":{"form":5,"rating":5,"trainer":9,"jockey":3,"fitness":4,"class":4,"going":4,"course":3,"distance":3,"age":2,"weight":6,"draw":3,"headgear":2,"spotlight":1}},{"n":"James Choice","no":3,"j":"Sam Twiston-Davies","tr":"Warren Greatrex","sc":52,"cf":"MODERATE","form":"","age":3,"lbs":154,"silk":"https://www.rp-assets.com/svg/5/9/0/327095.svg","pr":5.0,"rpr":null,"bd":{"form":5,"rating":5,"trainer":9,"jockey":3,"fitness":4,"class":4,"going":4,"course":3,"distance":3,"age":2,"weight":4,"draw":3,"headgear":2,"spotlight":1}},{"n":"Temple","no":8,"j":"Jonathan Burke","tr":"James Owen","sc":52,"cf":"MODERATE","form":"","age":3,"lbs":154,"silk":"https://www.rp-assets.com/svg/3/5/5/292553.svg","pr":9.0,"rpr":null,"bd":{"form":5,"rating":5,"trainer":9,"jockey":3,"fitness":4,"class":4,"going":4,"course":3,"distance":3,"age":2,"weight":4,"draw":3,"headgear":2,"spotlight":1}},{"n":"Kiss For An Angel","no":5,"j":"Marc Goldstein","tr":"Simon Hodgson","sc":52,"cf":"MODERATE","form":"","age":3,"lbs":154,"silk":"https://www.rp-assets.com/svg/3/0/6/5603.svg","pr":50.0,"rpr":null,"bd":{"form":5,"rating":5,"trainer":9,"jockey":3,"fitness":4,"class":4,"going":4,"course":3,"distance":3,"age":2,"weight":4,"draw":3,"headgear":2,"spotlight":1}},{"n":"Stepanov","no":7,"j":"Charlie Todd","tr":"Emma Lavelle","sc":51,"cf":"MODERATE","form":"4","age":3,"lbs":154,"silk":"https://www.rp-assets.com/svg/7/0/5/337507.svg","pr":12.0,"rpr":94,"bd":{"form":2,"rating":0,"trainer":12,"jockey":3,"fitness":8,"class":4,"going":4,"course":3,"distance":3,"age":2,"weight":4,"draw":3,"headgear":2,"spotlight":1}},{"n":"Pantile's Gift","no":6,"j":"Harry Reed","tr":"Harry Derham","sc":50,"cf":"MODERATE","form":"3","age":3,"lbs":154,"silk":"https://www.rp-assets.com/svg/0/2/3/340320.svg","pr":12.0,"rpr":90,"bd":{"form":4,"rating":0,"trainer":9,"jockey":3,"fitness":8,"class":4,"going":4,"course":3,"distance":3,"age":2,"weight":4,"draw":3,"headgear":2,"spotlight":1}}]}}
+;
+const NOW={races:['races.png','Races tab — 66 races, each card ~300px tall (≈20,000px of scrolling). 9 filter pills fill a screen before the first race. Picks strip shows one pick at a time.'],
+  race:['detail.png','Race view — 4-line title, then 14 highlight pills before the runners. Horse names cut to "Pa…" by TRACK / BET / +CMP. Next race = back out and find it.'],
+  results:['races.png','There is no results screen today — visitors have to open Performance or each race to see how the picks did. (Screenshot = Races tab, for reference.)'],
+  mt:['races.png','🐎 MT stays as it is today.'],
+  more:['more.png','More — plain text list of 8 tabs, no icons or hints.'],
+  perf:['performance.png','Performance → Vanta — engine buttons wrap, ~6 screens long, wide tables cut off.']};
+const NOTES={races:[
+  ['Next up card','the race that\'s off next, with a countdown. Races already run fold into "Earlier today (n)".'],
+  ['Compact race rows','~70px instead of ~300px: time + track · top pick + score bar + 2nd · gap. Same colour stripe (UK/IRE/FR × hcap), ⭐ 🎯 HCP as small badges. ~8 races per screen instead of 2.'],
+  ['Quick chips, pinned','All · ⭐ Golden · 🎯 Prime · UK · IRE · FR · meetings. The 9 filter pills move into one ⚙ Filters sheet (count shown on the chip).'],
+  ['Picks strip swipes','every Prixm / Emerald / Vanta pick as a swipe card, tap → race.'],
+  ['Group by time or meeting','toggle at the top of the list (now venue tabs only).'],
+  ['Last-updated stamp <span class="new">NEW</span>','"Card 08:14 · results 17:52" so visitors know how fresh it is.'],
+  ['Text size A / A <span class="new">NEW</span>','bigger text for easier reading, remembered on that phone.'],
+  ['Tap ? for meaning <span class="new">NEW</span>','tap the ? next to GAP → short plain-words explanation.']],
+ race:[
+  ['Short header, pinned','12:25 KEMPTON + ‹ › to step through the meeting (or swipe). Race name one line, tap to expand.'],
+  ['Tabs','Runners · Top pick · Pace & track · Deep dive (the current Cross / Gap % sub-tabs live under Deep dive).'],
+  ['Top pick mini-card','silk, name, score, gap, win chance on one line above the runners. Full "why" under the Top pick tab.'],
+  ['Runner rows get the full name','TRACK / BET / +CMP leave the row (TRACK + BET removed on the public site). Tap a runner → factor bars + Compare · Stats.'],
+  ['Share race <span class="new">NEW</span>','↗ button sends a link that opens straight on this race (phone share menu: WhatsApp, Messages…).'],
+  ['Highlights in a sheet','the 14 attribute pills become one "Highlight ▾" button.']],
+ results:[
+  ['Scoreboard <span class="new">NEW</span>','one card per day: top picks won / placed / ran and 1u P/L at SP. Today fills in as Fetch Results runs.'],
+  ['Every race on one line','time · track · top pick · finishing position (green = won, amber = placed) · SP · who won if it was not us.'],
+  ['Filter','All · ⭐ Golden · Prixm · ☘ Emerald · Vanta · Won · Lost.'],
+  ['Why','the public site has no quick "how did it do?" view — likely the screen most visitors open first.']],
+ mt:[['Unchanged','galloping silk replay, same as today.']],
+ more:[
+  ['Icon tiles','each with a one-line "what it is for".'],
+  ['Search','horse / track / jockey across the app.'],
+  ['Grouped','Analysis vs App. Golden, Results and MT stay in the bottom bar.'],
+  ['Glossary <span class="new">NEW</span>','plain-words page for Gap, Score, Confidence, Golden / Silver / Bronze, Prime, engines — for people who are not you.'],
+  ['Install <span class="new">NEW</span>','"Add to Home Screen" so it opens full screen like an app.'],
+  ['Search <span class="new">NEW</span>','find a horse / track / jockey across today\'s card and the logged results.']],
+ perf:[
+  ['Pinned engine switch','one row, version under each name.'],
+  ['Jump chips','Overview · Calendar · Tracks · Factors · Calibration.'],
+  ['Detail','see mockups/phone_analysis_mockup.html (already built).']]};
+const $=id=>document.getElementById(id);
+const bc=r=>r.c.includes('(FR)')?(r.h?'#a855f7':'#aab4c3'):/\(IRE\)/.test(r.c)?(r.h?'#f87171':'#10b981'):(r.h?'#f59e0b':'#3b82f6');
+const cfc=c=>({'TOP PICK':'var(--good)','STRONG':'var(--blue)','SOLID':'var(--sand)','MODERATE':'var(--amb)'}[c]||'var(--muted)');
+const eng=r=>r.e==='vanta'?'<span class="engt" style="color:var(--va)">VANTA</span>':r.e==='emerald'?'<span class="engt" style="color:var(--em)">☘</span>':'';
+const reg=r=>r.c.includes('(FR)')?'fr':/\(IRE\)/.test(r.c)?'ire':'uk';
+const isG=r=>reg(r)==='uk'&&!r.h&&r.gap>=18&&r.sc>=74, isP=r=>reg(r)==='uk'&&!r.h&&r.f<=5&&r.gap>=12;
+const NOWT='13:10';let qf='all',showEarly=false,curRace=0,mode='time';
+function toast(t){const e=$('toast');e.textContent=t;e.classList.add('on');clearTimeout(toast._t);toast._t=setTimeout(()=>e.classList.remove('on'),1600);}
+function cname(c){return c.replace(/ \((FR|IRE|AW)\)/g,'').replace(/\b\w/g,m=>m).toLowerCase().replace(/\b\w/g,m=>m.toUpperCase());}
+function renderRaces(){
+  const R=CARD.races;const meets=[...new Set(R.map(r=>cname(r.c)))];
+  const nf=R.filter(isG).length,np=R.filter(isP).length;
+  $('qchips').innerHTML=[['all','All '+R.length],['g','⭐ Golden '+nf],['p','🎯 Prime '+np],['uk','UK'],['ire','IRE'],['fr','FR']].map(([k,l])=>`<button class="chip ${qf===k?'on':''}" onclick="setQ('${k}')">${l}</button>`).join('')
+    +`<button class="chip f" onclick="openSheet('filters')">⚙ Filters<span class="n">0</span></button>`+meets.map(m=>`<button class="chip ${qf==='m:'+m?'on':''}" onclick="setQ('m:${m}')">${m}</button>`).join('');
+  let L=R.filter(r=>qf==='all'||(qf==='g'&&isG(r))||(qf==='p'&&isP(r))||reg(r)===qf||qf==='m:'+cname(r.c));
+  const early=L.filter(r=>r.t<NOWT),up=L.filter(r=>r.t>=NOWT);
+  const nx=up[0];
+  const picks=R.filter(r=>(r.cf==='TOP PICK'||r.cf==='STRONG')&&r.gap>=8).sort((a,b)=>b.gap-a.gap).slice(0,8);
+  let h=`<div class="stats"><span><b>${R.length}</b> races</span><span>⭐ <b>${nf}</b></span><span>🎯 <b>${np}</b></span><span>${meets.length} meetings</span></div>`;
+  if(nx)h+=`<div class="nextup" onclick="openRace(${R.indexOf(nx)})"><div><div class="c">NEXT UP</div><div class="t">${nx.t} ${cname(nx.c)}</div><div class="c">★ ${nx.top} · gap ${nx.gap}</div></div><div class="cd">${mins(nx.t)}m</div></div>`;
+  h+=`<div class="cap"><span>Picks · swipe</span><span>${picks.length}</span></div><div class="picks">${picks.map(p=>{const c=p.gap>=18?['NAP','#a855f7']:p.gap>=12?['WIN','#22c55e']:['STRONG','#3b82f6'];
+    return `<div class="pk" onclick="openRace(${R.indexOf(p)})"><span class="cat" style="background:${c[1]}33;color:${c[1]}">${c[0]}</span> ${eng(p)}<div class="nm">${p.top}</div><div class="m">${p.t} ${cname(p.c)} · gap ${p.gap}</div><div class="edge"><i style="width:${Math.min(100,p.gap*4)}%;background:${c[1]}"></i></div></div>`;}).join('')}</div>`;
+  h+=`<div class="cap"><span>Races</span><span><a style="color:${mode==='time'?'var(--text)':'var(--muted)'};cursor:pointer" onclick="setMode('time')">by time</a> · <a style="color:${mode==='meet'?'var(--text)':'var(--muted)'};cursor:pointer" onclick="setMode('meet')">by meeting</a></span></div>`;
+  if(early.length)h+=`<div class="earlier" onclick="showEarly=!showEarly;renderRaces()"><span>${showEarly?'▾':'▸'} Earlier today (${early.length})</span><span>results when in</span></div>`;
+  const rows=(showEarly?early:[]).concat(up);
+  const row=r=>`<div class="rr" style="--bc:${bc(r)}${r.t<NOWT?';opacity:.55':''}" onclick="openRace(${R.indexOf(r)})"><div><div class="tm">${r.t}</div><div class="vn">${cname(r.c)}</div></div>
+    <div style="min-width:0"><div class="hn">★ ${r.top}${isG(r)?'<span class="bdg" style="background:rgba(245,197,66,.18);color:var(--gold)">⭐</span>':''}${isP(r)?'<span class="bdg" style="background:rgba(200,184,154,.2);color:var(--sand)">🎯</span>':''}${r.h?'<span class="bdg" style="border:1px solid var(--line);color:var(--muted)">HCP</span>':''}</div>
+    <div class="sbar"><i style="width:${r.sc/118*100*1.3}%"></i></div><div class="meta">${r.sc} · 2nd ${r.n2} ${r.s2} · ${r.f}r ${r.ty||''} ${eng(r)}</div></div>
+    <div class="gp"><b style="color:${cfc(r.cf)}">${r.gap}</b><span>GAP<i class="q-i" onclick="event.stopPropagation();openSheet('gloss')">?</i></span></div></div>`;
+  if(mode==='meet'){const by={};rows.forEach(r=>(by[cname(r.c)]=by[cname(r.c)]||[]).push(r));Object.entries(by).forEach(([m,rs])=>{h+=`<div class="cap"><span>${m}</span><span>${rs.length}</span></div>`+rs.map(row).join('');});}
+  else h+=rows.map(row).join('');
+  $('racesBody').innerHTML=h;
+}
+function mins(t){const[a,b]=t.split(':').map(Number),[c,d]=NOWT.split(':').map(Number);return (a*60+b)-(c*60+d);}
+function setQ(k){qf=qf===k?'all':k;renderRaces();}
+function setMode(m){mode=m;renderRaces();}
+// race view (runner detail = real Kempton 12:25 card; other races show their summary)
+function openRace(i){curRace=i;go('race');renderRace();}
+function stepRace(d){const R=CARD.races,c=R[curRace].c;let i=curRace;do{i+=d;}while(R[i]&&R[i].c!==c);if(R[i]){curRace=i;renderRace();}else toast(d>0?'last race of the meeting':'first race of the meeting');}
+let rvTab='run';
+function renderRace(){
+  const r=CARD.races[curRace],det=CARD.det,isDet=r.c===det.c&&r.t===det.t;
+  const same=CARD.races.filter(x=>x.c===r.c),pos=same.indexOf(r)+1;
+  $('rvT').textContent=r.t+' '+cname(r.c).toUpperCase();$('rvS').textContent=`race ${pos} of ${same.length}`;
+  $('rvName').textContent=r.n;$('rvChips').innerHTML=[r.d,r.g,r.ty,r.f+' runners',r.cls?'Class '+r.cls:'',r.h?'Handicap':''].filter(Boolean).map(x=>`<span>${x}</span>`).join('');
+  document.querySelectorAll('#rvTabs button').forEach(b=>b.classList.toggle('on',b.dataset.t===rvTab));
+  const top=isDet?det.runners[0]:null;
+  let h=`<div class="tpc"><img class="silk" src="${(top&&top.silk)||r.silk}" onerror="this.style.visibility='hidden'"><div><div class="s">TOP PICK · <span style="color:${cfc(r.cf)}">${r.cf}</span></div><div class="nm">${r.top}</div><div class="s">${top?top.j+' · '+top.tr:''}</div></div><div class="k">score<b>${r.sc}</b>gap ${r.gap}</div></div>`;
+  if(rvTab==='tp'){h+=`<div class="why"><div>✓ Strongest on <b>draw &amp; kit</b> (70%) and <b>connections</b> (68%)</div><div>✓ Biggest edge over ${r.n2}: <b>class &amp; weight</b></div><div class="neg">! CDP 0/4 proven (class · distance · going · course)</div><div class="mut" style="margin-top:6px">= today's "Why it's on top" lines, CDP, track fit, RPR/OR — unchanged, just on their own tab.</div></div>`;}
+  else if(rvTab!=='run'){h+=`<div class="swhint" style="text-align:left;padding:14px">${rvTab==='pace'?'Pace map · Horse × Track fit · track profile link — same panels as today, stacked as folding cards.':'Deep dive · ⚡ Cross · Gap % — today\'s sub-tabs, each a folding card.'}</div>`;}
+  else if(isDet){
+    h+=`<div class="hl"><span class="mut" style="font-size:10px">${det.runners.length} runners · tap a horse</span><button class="chip f" onclick="openSheet('hl')">Highlight ▾</button></div>`;
+    const keys=['form','rating','trainer','jockey','fitness','class','going','weight'];const MX={form:20,rating:15,trainer:12,jockey:10,fitness:8,class:8,going:8,weight:8};
+    h+=det.runners.map((x,i)=>`<div class="run" id="run${i}"><div class="row" onclick="document.getElementById('run${i}').classList.toggle('open')"><div class="rk">${i+1}</div><img class="silk" src="${x.silk}" onerror="this.style.visibility='hidden'">
+      <div style="min-width:0"><div class="nm">${x.n}</div><div class="jt">${x.j} · ${x.tr}</div><div class="jt">form ${x.form||'—'} · ${x.age}yo · ${Math.floor(x.lbs/14)}st${x.lbs%14}lb${x.pr?' · '+x.pr:''}</div></div>
+      <div class="sc"><b>${x.sc}</b><span style="color:${cfc(x.cf)}">${(x.cf||'').replace('MODERATE','MOD')}</span></div></div>
+      <div class="x">${keys.map(k=>{const v=(x.bd||{})[k]||0,p=v/MX[k];return `<div class="fb"><span class="mut">${k}</span><span class="b"><i style="width:${p*100}%;background:${p>=.7?'var(--good)':p>=.4?'var(--amb)':'var(--bad)'}"></i></span><span>${v}</span></div>`;}).join('')}
+      <div class="acts" style="grid-template-columns:repeat(2,1fr)"><button onclick="toast('added to compare')">⚖ Compare</button><button onclick="toast('📊 stats')">📊 Stats</button></div></div></div>`).join('');
+  }else h+=`<div class="swhint" style="text-align:left;padding:14px">Runner list here looks like Kempton 12:25 — open that race (‹ › / swipe, or the Kempton chip) to try the rows.</div>`;
+  $('rvBody').innerHTML=h;
+}
+document.querySelectorAll('#rvTabs button').forEach(b=>b.onclick=()=>{rvTab=b.dataset.t;renderRace();});
+(()=>{let x0=null;const s=$('v-race');s.addEventListener('pointerdown',e=>x0=e.clientX);s.addEventListener('pointerup',e=>{if(x0==null)return;const dx=e.clientX-x0;x0=null;if(Math.abs(dx)>70)stepRace(dx<0?1:-1);});})();
+// sheets
+function openSheet(k){
+  const F={filters:['Filters',`${[['Region',['UK','Ireland','France','Europe','USA']],['Engine',['Prixm','☘ Emerald','Vanta']],['Race type',['ENG NH','ENG HCP','IRE NH','IRE HCP','FR NH','FR HCP']],['Field size',['2–4','5–7','8–15','16+']],['Gap',['Tight <5','Competitive 5–12','Clear 12+']],['Confidence',['TOP PICK','STRONG','SOLID','MODERATE']],['Track fit',['❌ hide unsuited top picks']]].map(([l,o])=>`<div class="fg"><div class="l">${l}</div><div class="w">${o.map(x=>`<button class="chip" onclick="this.classList.toggle('on')">${x}</button>`).join('')}</div></div>`).join('')}`,'<button class="btn" onclick="closeSheet()">Clear</button><button class="btn p" onclick="closeSheet();toast(\'filters applied\')">Show races</button>'],
+    hl:['Highlight',`<div class="fg"><div class="w">${['Soft/Heavy Specialist','Course Proven','Distance Proven','Class Drop','Underrated (RPR>OR)','First-Time Headgear 1','Favourable Draw','Fresh & Fit 5','Weight Advantage 2','Improving Form','Unlucky Last Time 1','Connection Upgrade 5'].map(x=>`<button class="chip" onclick="this.classList.toggle('on')">${x}</button>`).join('')}</div></div>`,'<button class="btn" onclick="closeSheet()">Clear</button><button class="btn p" onclick="closeSheet()">Highlight</button>'],
+    gloss:['Glossary','<div class="fg"><div class="l">Score</div>How strong the horse looks on paper, out of 118 (form, ratings, trainer, jockey, going, course, distance…).</div><div class="fg"><div class="l">Gap</div>Points between the top pick and the 2nd best. Bigger = clearer top pick on our numbers. Under 5 = tight race.</div><div class="fg"><div class="l">Confidence</div>TOP PICK › STRONG › SOLID › MODERATE.</div><div class="fg"><div class="l">⭐ Golden · 🎯 Prime</div>Race types where the top pick has won most often (non-handicap, big gap / small field).</div><div class="fg"><div class="l">Engines</div>Prixm = UK · ☘ Emerald = Ireland · Vanta = France.</div>','<button class="btn p" onclick="closeSheet()">Got it</button>']}[k];
+  $('shT').textContent=F[0];$('shB').innerHTML=F[1];$('shF').innerHTML=F[2];$('phone').classList.add('sh');}
+function closeSheet(){$('phone').classList.remove('sh');}
+$('shade').onclick=closeSheet;
+// nav + view switch
+function go(v){document.querySelectorAll('.scr').forEach(s=>s.classList.toggle('on',s.id==='v-'+v));
+  document.querySelectorAll('#nav button[data-v]').forEach(b=>b.classList.toggle('on',b.dataset.v===v||(v==='race'&&b.dataset.v==='races')||(v==='perf'&&b.dataset.v==='more')));
+  document.querySelectorAll('.tbtn').forEach(b=>b.classList.toggle('on',b.dataset.v===v));
+  const n=NOW[v];if(n){$('nowImg').src='phone_now/'+n[0];$('nowSub').textContent=n[1];$('now').scrollTop=0;}
+  $('notes').innerHTML=(NOTES[v]||[]).map(([a,b])=>`<li><b>${a}</b> — ${b}</li>`).join('');
+  closeSheet();}
+document.querySelectorAll('#nav button[data-v]').forEach(b=>{if(b.dataset.v==='mt')b.onclick=()=>toast('🐎 MT — unchanged, same as today');else if(b.dataset.v!=='golden')b.onclick=()=>go(b.dataset.v);});
+document.querySelectorAll('.tbtn').forEach(b=>b.onclick=()=>{const v=b.dataset.v;if(v==='race'){const k=CARD.races.findIndex(r=>r.c===CARD.det.c&&r.t===CARD.det.t);curRace=k;go('race');renderRace();}else go(v);});
+const YD=[{"t":"09:35","c":"Lyon Parilly (FR)","e":"vanta","top":"Nobel Du Chenet","fp":5,"nr":false,"sp":4.7,"w":"Little Choeur","wsp":3.7,"pl":2,"seg":"vanta"},{"t":"10:10","c":"Lyon Parilly (FR)","e":"vanta","top":"Time Is Money","fp":3,"nr":false,"sp":2.4,"w":"Nessblue","wsp":13.0,"pl":3,"seg":"vanta"},{"t":"10:29","c":"Fontainebleau (FR)","e":"vanta","top":"Shaniyn","fp":7,"nr":false,"sp":5.0,"w":"Pari","wsp":12.0,"pl":3,"seg":"vanta"},{"t":"10:43","c":"Lyon Parilly (FR)","e":"vanta","top":"Magnifica","fp":4,"nr":false,"sp":8.8,"w":"Barrosa","wsp":4.1,"pl":3,"seg":"vanta"},{"t":"10:59","c":"Fontainebleau (FR)","e":"vanta","top":"French Poetry","fp":12,"nr":false,"sp":5.1,"w":"Bay River","wsp":7.9,"pl":4,"seg":"vanta"},{"t":"11:15","c":"Lyon Parilly (FR)","e":"vanta","top":"Un Chic Cheval","fp":2,"nr":false,"sp":7.9,"w":"New York Strip","wsp":4.7,"pl":3,"seg":"vanta"},{"t":"11:25","c":"LINGFIELD (AW)","e":"prixm","top":"Lady Mariko","fp":3,"nr":false,"sp":7.0,"w":"This Farh","wsp":11.0,"pl":3,"seg":"handicap"},{"t":"11:30","c":"Meslay Du Maine (FR)","e":"vanta","top":"Audace Du Mathan","fp":null,"nr":true,"sp":null,"w":"Niagara Des Mottes","wsp":2.4,"pl":2,"seg":"vanta"},{"t":"11:31","c":"Fontainebleau (FR)","e":"vanta","top":"Nirano De Palma","fp":4,"nr":false,"sp":2.9,"w":"Nitro Forez","wsp":13.0,"pl":2,"seg":"vanta"},{"t":"11:47","c":"Lyon Parilly (FR)","e":"vanta","top":"My Gemme","fp":1,"nr":false,"sp":4.3,"w":"My Gemme","wsp":4.3,"pl":3,"seg":"vanta"},{"t":"11:55","c":"LINGFIELD (AW)","e":"prixm","top":"Arkat","fp":4,"nr":false,"sp":2.38,"w":"Toderby","wsp":29.0,"pl":3,"seg":"other"},{"t":"12:00","c":"PUNCHESTOWN (IRE)","e":"emerald","top":"Stumptown","fp":4,"nr":false,"sp":1.5,"w":"Fountain House","wsp":4.5,"pl":3,"seg":"emerald"},{"t":"12:03","c":"Fontainebleau (FR)","e":"vanta","top":"Louisa Banbou","fp":1,"nr":false,"sp":1.4,"w":"Louisa Banbou","wsp":1.4,"pl":2,"seg":"vanta"},{"t":"12:10","c":"Nancy (FR)","e":"vanta","top":"Topinambur","fp":12,"nr":false,"sp":7.5,"w":"Kaleocreek","wsp":12.0,"pl":3,"seg":"vanta"},{"t":"12:19","c":"CORK (IRE)","e":"emerald","top":"Hansel The Purse","fp":4,"nr":false,"sp":7.0,"w":"Our Destiny","wsp":41.0,"pl":3,"seg":"emerald"},{"t":"12:19","c":"Lyon Parilly (FR)","e":"vanta","top":"Roi Danaos","fp":3,"nr":false,"sp":2.1,"w":"Avaya","wsp":2.6,"pl":2,"seg":"vanta"},{"t":"12:25","c":"LINGFIELD (AW)","e":"prixm","top":"Lady's Mantle","fp":4,"nr":false,"sp":12.0,"w":"Magari","wsp":29.0,"pl":3,"seg":"other"},{"t":"12:30","c":"PUNCHESTOWN (IRE)","e":"emerald","top":"Theflyingking","fp":1,"nr":false,"sp":2.1,"w":"Theflyingking","wsp":2.1,"pl":3,"seg":"emerald"},{"t":"12:30","c":"Maure De Bretagne (FR)","e":"vanta","top":"Mister Pom","fp":2,"nr":false,"sp":63.0,"w":"It'S Milanna","wsp":2.4,"pl":3,"seg":"vanta"},{"t":"12:30","c":"Meslay Du Maine (FR)","e":"vanta","top":"Mils Bam'S","fp":null,"nr":true,"sp":null,"w":"Miko De Beauchene","wsp":2.6,"pl":2,"seg":"vanta"},{"t":"12:37","c":"EXETER","e":"prixm","top":"Our Wee Horse","fp":2,"nr":false,"sp":2.25,"w":"Golden Dagger","wsp":4.0,"pl":2,"seg":"dead_zone"},{"t":"12:40","c":"Fontainebleau (FR)","e":"vanta","top":"Dachkova","fp":3,"nr":false,"sp":4.4,"w":"Soif De Vivre","wsp":20.0,"pl":3,"seg":"vanta"},{"t":"12:40","c":"Nancy (FR)","e":"vanta","top":"Nicklaus","fp":1,"nr":false,"sp":3.1,"w":"Nicklaus","wsp":3.1,"pl":3,"seg":"vanta"},{"t":"12:49","c":"CORK (IRE)","e":"emerald","top":"Darby O'Gill","fp":1,"nr":false,"sp":5.5,"w":"Darby O'Gill","wsp":5.5,"pl":3,"seg":"emerald"},{"t":"12:51","c":"Lyon Parilly (FR)","e":"vanta","top":"Beau Charentais","fp":1,"nr":false,"sp":1.1,"w":"Beau Charentais","wsp":1.1,"pl":1,"seg":"vanta"},{"t":"12:55","c":"LINGFIELD (AW)","e":"prixm","top":"Medaali","fp":3,"nr":false,"sp":12.0,"w":"Olympic Charter","wsp":1.67,"pl":3,"seg":"other"},{"t":"13:00","c":"PUNCHESTOWN (IRE)","e":"emerald","top":"Santo Sospir","fp":2,"nr":false,"sp":9.5,"w":"J'Arrive de L'Est","wsp":4.33,"pl":3,"seg":"emerald"},{"t":"13:07","c":"EXETER","e":"prixm","top":"Poet's Muse","fp":2,"nr":false,"sp":2.2,"w":"Seventeenothree","wsp":2.88,"pl":2,"seg":"other"},{"t":"13:10","c":"Nancy (FR)","e":"vanta","top":"Vivre Libre","fp":3,"nr":false,"sp":10.0,"w":"Grand Terroir","wsp":2.8,"pl":3,"seg":"vanta"},{"t":"13:15","c":"Fontainebleau (FR)","e":"vanta","top":"Revoir","fp":1,"nr":false,"sp":3.4,"w":"Revoir","wsp":3.4,"pl":4,"seg":"vanta"},{"t":"13:19","c":"CORK (IRE)","e":"emerald","top":"Soul Asylum","fp":1,"nr":false,"sp":2.62,"w":"Soul Asylum","wsp":2.62,"pl":3,"seg":"emerald"},{"t":"13:23","c":"Lyon Parilly (FR)","e":"vanta","top":"Irundo","fp":null,"nr":false,"sp":2.5,"w":"Nicar Del Avignon","wsp":3.8,"pl":1,"seg":"vanta"},{"t":"13:25","c":"LINGFIELD (AW)","e":"prixm","top":"Merci Monsieur","fp":7,"nr":false,"sp":3.5,"w":"Politely","wsp":3.25,"pl":3,"seg":"handicap"},{"t":"13:30","c":"PUNCHESTOWN (IRE)","e":"emerald","top":"World As One","fp":2,"nr":false,"sp":3.12,"w":"Maxfort","wsp":8.5,"pl":3,"seg":"emerald"},{"t":"13:30","c":"Maure De Bretagne (FR)","e":"vanta","top":"Messua De Labrunie","fp":2,"nr":false,"sp":2.6,"w":"King De Ceres","wsp":8.3,"pl":3,"seg":"vanta"},{"t":"13:30","c":"Meslay Du Maine (FR)","e":"vanta","top":"N'Attendons Pas","fp":1,"nr":false,"sp":2.6,"w":"N'Attendons Pas","wsp":2.6,"pl":3,"seg":"vanta"},{"t":"13:37","c":"EXETER","e":"prixm","top":"Rickety Bridge","fp":4,"nr":false,"sp":7.0,"w":"Silver Hill","wsp":3.25,"pl":2,"seg":"handicap"},{"t":"13:40","c":"Nancy (FR)","e":"vanta","top":"Mer Secrete","fp":2,"nr":false,"sp":3.9,"w":"Shadow Of Shadow","wsp":6.8,"pl":3,"seg":"vanta"},{"t":"13:49","c":"CORK (IRE)","e":"emerald","top":"Echoing Silence","fp":1,"nr":false,"sp":4.5,"w":"Echoing Silence","wsp":4.5,"pl":3,"seg":"emerald"},{"t":"13:50","c":"Fontainebleau (FR)","e":"vanta","top":"Trevor Senora","fp":1,"nr":false,"sp":4.5,"w":"Trevor Senora","wsp":4.5,"pl":3,"seg":"vanta"},{"t":"13:55","c":"LINGFIELD (AW)","e":"prixm","top":"Maria Da Silva","fp":2,"nr":false,"sp":2.62,"w":"Lady Milton","wsp":7.0,"pl":3,"seg":"handicap"},{"t":"14:00","c":"PUNCHESTOWN (IRE)","e":"emerald","top":"Oldschool Outlaw","fp":3,"nr":false,"sp":1.62,"w":"Daboya","wsp":6.0,"pl":2,"seg":"emerald"},{"t":"14:07","c":"EXETER","e":"prixm","top":"Son Of Hypnos","fp":3,"nr":false,"sp":29.0,"w":"Mwabani","wsp":3.5,"pl":2,"seg":"handicap"},{"t":"14:10","c":"Nancy (FR)","e":"vanta","top":"Triptajika","fp":8,"nr":false,"sp":16.0,"w":"Go For It","wsp":9.9,"pl":3,"seg":"vanta"},{"t":"14:19","c":"CORK (IRE)","e":"emerald","top":"Rockonliam","fp":7,"nr":false,"sp":8.5,"w":"Al Kalila","wsp":12.0,"pl":3,"seg":"emerald"},{"t":"14:25","c":"LINGFIELD (AW)","e":"prixm","top":"La Belle Forest","fp":7,"nr":false,"sp":12.0,"w":"Nuevo Slovo","wsp":12.0,"pl":3,"seg":"handicap"},{"t":"14:30","c":"PUNCHESTOWN (IRE)","e":"emerald","top":"Lovely Hurling","fp":3,"nr":false,"sp":4.5,"w":"Ocastle Des Mottes","wsp":2.88,"pl":2,"seg":"emerald"},{"t":"14:30","c":"Maure De Bretagne (FR)","e":"vanta","top":"La Ronda","fp":5,"nr":false,"sp":8.0,"w":"Lanzarote","wsp":12.0,"pl":3,"seg":"vanta"},{"t":"14:30","c":"Meslay Du Maine (FR)","e":"vanta","top":"Nupsala Nolimit","fp":1,"nr":false,"sp":3.7,"w":"Nupsala Nolimit","wsp":3.7,"pl":2,"seg":"vanta"},{"t":"14:32","c":"Fontainebleau (FR)","e":"vanta","top":"Van Blutch","fp":11,"nr":false,"sp":6.2,"w":"Weemagatee","wsp":11.0,"pl":3,"seg":"vanta"},{"t":"14:37","c":"EXETER","e":"prixm","top":"It's A Breeze","fp":null,"nr":false,"sp":15.0,"w":"Koukeo","wsp":3.75,"pl":3,"seg":"handicap"},{"t":"14:40","c":"Nancy (FR)","e":"vanta","top":"Lazher","fp":1,"nr":false,"sp":4.0,"w":"Lazher","wsp":4.0,"pl":3,"seg":"vanta"},{"t":"14:49","c":"CORK (IRE)","e":"emerald","top":"Some Song","fp":10,"nr":false,"sp":4.5,"w":"Gin Tonic","wsp":17.0,"pl":3,"seg":"emerald"},{"t":"14:55","c":"LINGFIELD (AW)","e":"prixm","top":"Poke The Bear","fp":3,"nr":false,"sp":5.0,"w":"Manton Road","wsp":11.0,"pl":3,"seg":"handicap"},{"t":"15:00","c":"PUNCHESTOWN (IRE)","e":"emerald","top":"Gaelic Warrior","fp":3,"nr":false,"sp":1.91,"w":"Final Demand","wsp":9.0,"pl":3,"seg":"emerald"},{"t":"15:07","c":"EXETER","e":"prixm","top":"Bandjo","fp":4,"nr":false,"sp":3.0,"w":"Modern Style","wsp":6.0,"pl":2,"seg":"handicap"},{"t":"15:07","c":"Toulouse (FR)","e":"vanta","top":"Villequier","fp":8,"nr":false,"sp":10.0,"w":"Haute Gamme","wsp":12.0,"pl":3,"seg":"vanta"},{"t":"15:10","c":"Nancy (FR)","e":"vanta","top":"Peurderien","fp":2,"nr":false,"sp":6.0,"w":"Spirit De Charnie","wsp":1.9,"pl":2,"seg":"vanta"},{"t":"15:19","c":"CORK (IRE)","e":"emerald","top":"Lanzhou","fp":1,"nr":false,"sp":4.5,"w":"Lanzhou","wsp":4.5,"pl":3,"seg":"emerald"},{"t":"15:25","c":"LINGFIELD (AW)","e":"prixm","top":"In The Post","fp":6,"nr":false,"sp":3.5,"w":"Notable Charm","wsp":10.0,"pl":3,"seg":"handicap"},{"t":"15:30","c":"PUNCHESTOWN (IRE)","e":"emerald","top":"Water Mill","fp":3,"nr":false,"sp":4.5,"w":"Ceasar's Ball","wsp":2.5,"pl":3,"seg":"emerald"},{"t":"15:30","c":"Maure De Bretagne (FR)","e":"vanta","top":"Kalca Mome","fp":1,"nr":false,"sp":4.1,"w":"Kalca Mome","wsp":4.1,"pl":3,"seg":"vanta"},{"t":"15:37","c":"EXETER","e":"prixm","top":"Romany Brown","fp":6,"nr":false,"sp":4.33,"w":"Locked Down Lad","wsp":4.33,"pl":3,"seg":"handicap"},{"t":"15:42","c":"Toulouse (FR)","e":"vanta","top":"Belle De Clhoe","fp":7,"nr":false,"sp":22.0,"w":"Lanceur D'Alerte","wsp":5.3,"pl":3,"seg":"vanta"},{"t":"15:49","c":"CORK (IRE)","e":"emerald","top":"Jackmoon","fp":12,"nr":false,"sp":9.5,"w":"Drumconnor Hill","wsp":11.0,"pl":3,"seg":"emerald"},{"t":"16:17","c":"Toulouse (FR)","e":"vanta","top":"Idoloditrexenta","fp":2,"nr":false,"sp":7.9,"w":"Zanobia","wsp":11.0,"pl":3,"seg":"vanta"},{"t":"16:52","c":"Toulouse (FR)","e":"vanta","top":"Marie De Prusse","fp":10,"nr":false,"sp":7.2,"w":"Ready To Go","wsp":22.0,"pl":4,"seg":"vanta"},{"t":"17:27","c":"Toulouse (FR)","e":"vanta","top":"Persiana","fp":1,"nr":false,"sp":2.2,"w":"Persiana","wsp":2.2,"pl":3,"seg":"vanta"},{"t":"18:02","c":"Toulouse (FR)","e":"vanta","top":"Alexander Maximus","fp":1,"nr":false,"sp":2.5,"w":"Alexander Maximus","wsp":2.5,"pl":2,"seg":"vanta"},{"t":"18:34","c":"Toulouse (FR)","e":"vanta","top":"Miss Parano","fp":11,"nr":false,"sp":4.3,"w":"Snatcher","wsp":4.8,"pl":3,"seg":"vanta"}]
+;let rf='all';
+function renderResults(){
+  const L=YD.filter(r=>rf==='all'||(rf==='won'&&r.fp===1)||(rf==='lost'&&r.fp!==1)||(rf==='g'&&r.seg==='golden')||r.e===rf);
+  const run=YD.filter(r=>!r.nr),w=run.filter(r=>r.fp===1).length,p=run.filter(r=>r.fp&&r.fp<=r.pl).length;
+  const pl=run.reduce((a,r)=>a+(r.fp===1?(r.sp||1)-1:-1),0);
+  let h=`<div class="scb newbox"><div style="font-size:9.5px;color:var(--muted);letter-spacing:.1em">SUN 22 NOV · TOP PICK IN EVERY RACE</div><div class="g"><div>Won<b class="pos">${w}</b>of ${run.length}</div><div>Placed<b>${p}</b>${Math.round(p/run.length*100)}%</div><div>1u at SP<b class="${pl>=0?'pos':'neg'}">${pl>=0?'+':'−'}${Math.abs(pl).toFixed(1)}u</b>ROI ${(pl/run.length*100).toFixed(0)}%</div></div></div>`;
+  h+=`<div class="chips">${[['all','All'],['g','⭐ Golden'],['prixm','Prixm'],['emerald','☘ Emerald'],['vanta','Vanta'],['won','Won'],['lost','Lost']].map(([k,l])=>`<button class="chip ${rf===k?'on':''}" onclick="setRf('${k}')">${l}</button>`).join('')}</div>`;
+  h+=L.map(r=>{const won=r.fp===1,plc=r.fp&&r.fp<=r.pl;const c=won?'background:rgba(74,222,128,.22);color:var(--good)':plc?'background:rgba(251,191,36,.16);color:var(--amb)':'background:var(--card2);color:var(--muted)';
+    return `<div class="res"><div><div class="tm">${r.t}</div><div class="vn">${cname(r.c)}</div></div><div style="min-width:0"><div class="hn">★ ${r.top} ${eng(r)}</div><div class="wn">${won?'won':r.nr?'non-runner':'won by '+r.w+(r.wsp?' · '+r.wsp:'')}${r.sp&&!r.nr?' · ours '+r.sp:''}</div></div><div class="fp" style="${c}">${r.nr?'NR':r.fp||'—'}<span>${won?'WON':plc?'PLACED':''}</span></div></div>`;}).join('')||'<div class="swhint">nothing matches</div>';
+  $('resBody').innerHTML=h;}
+function setRf(k){rf=(rf===k)?'all':k;renderResults();}
+renderResults();renderRaces();go('races');
+</script>
+</body></html>

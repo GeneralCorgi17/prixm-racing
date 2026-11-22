@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<title>📱 Prixm phone simulator</title>
+<style>
+/* Local phone simulator — loads the REAL daily_racing_analyzer.html inside a phone-sized frame so the phone
+   layout can be checked before committing/pushing. Nothing here is published or changes any data. */
+*{box-sizing:border-box}
+body{margin:0;background:#0b0b0c;color:#e9e5dc;font:13px/1.4 system-ui,Segoe UI,Arial,sans-serif;height:100vh;display:flex;overflow:hidden}
+.side{width:300px;flex:0 0 300px;padding:18px 18px;border-right:1px solid #222;overflow:auto}
+.side h1{font-size:18px;margin:0 0 4px;letter-spacing:.04em}
+.side p{color:#8c877d;font-size:11.5px;margin:0 0 14px}
+.g{margin-bottom:16px}
+.g label{display:block;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#8c877d;margin-bottom:6px}
+.seg{display:flex;flex-wrap:wrap;gap:6px}
+.seg button,.btn{background:#161616;border:1px solid #2a2a2a;color:#e9e5dc;border-radius:8px;padding:7px 10px;font:inherit;font-size:12px;cursor:pointer}
+.seg button.on{background:#e9e5dc;color:#0b0b0c;border-color:#e9e5dc}
+.btn{width:100%;margin-top:6px;text-align:left}
+input[type=time]{background:#161616;border:1px solid #2a2a2a;color:#e9e5dc;border-radius:8px;padding:6px 8px;font:inherit}
+.note{font-size:11px;color:#8c877d;margin-top:6px}
+.stage{flex:1;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.dev{position:relative;background:#000;border-radius:52px;padding:14px;box-shadow:0 0 0 2px #2b2b2b,0 0 0 9px #111,0 30px 80px rgba(0,0,0,.7);transform-origin:center center}
+.screen{position:relative;border-radius:40px;overflow:hidden;background:#0a0a0a}
+.screen iframe{border:0;display:block;background:#0a0a0a}
+.island{position:absolute;top:10px;left:50%;transform:translateX(-50%);width:110px;height:30px;border-radius:20px;background:#000;z-index:5;pointer-events:none}
+.status{height:48px;display:flex;justify-content:space-between;align-items:center;padding:0 30px;font-size:14px;font-weight:600;color:#fff;background:#000;pointer-events:none}
+.dev.android .status{height:30px;font-size:12px;padding:0 20px}
+.dev.android{border-radius:34px}.dev.android .screen{border-radius:24px}.dev.android .island{width:14px;height:14px;top:14px}
+.dev.se{border-radius:44px;padding:56px 14px 64px}.dev.se .screen{border-radius:4px}.dev.se .island{display:none}.dev.se .status{display:none}
+.dev.se::after{content:'';position:absolute;bottom:12px;left:50%;transform:translateX(-50%);width:44px;height:44px;border-radius:50%;border:2px solid #2b2b2b}
+.size{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);font-size:11px;color:#6d685f}
+</style></head><body>
+<div class="side">
+  <h1>📱 PRIXM PHONE SIMULATOR</h1>
+  <p>Runs the real app (this folder's <b>daily_racing_analyzer.html</b>) at phone size. Use it to check the phone layout before committing / pushing. Start the DB server first (Start App.bat) for full data — without it the app falls back to the JSON files.</p>
+  <div class="g"><label>Device</label><div class="seg" id="devs"></div></div>
+  <div class="g"><label>Mode</label><div class="seg" id="mode">
+    <button data-m="public" class="on">Public (what people see)</button><button data-m="owner">Owner (you)</button></div>
+    <div class="note">Public = read-only: no Ledger, no Bet / Track, no calibration buttons.</div></div>
+  <div class="g"><label>Pretend time (UK)</label>
+    <div class="seg" id="tmode"><button data-t="real" class="on">Real clock</button><button data-t="fake">Pretend</button></div>
+    <div style="margin-top:8px"><input type="time" id="tval" value="13:10"></div>
+    <div class="note">Pretend treats the loaded card as "today" at this time — to see Next up, the countdown and Earlier today folding.</div></div>
+  <div class="g"><label>Zoom</label><div class="seg" id="zoom"><button data-z="fit" class="on">Fit</button><button data-z="1">100%</button></div></div>
+  <div class="g"><label>Actions</label>
+    <button class="btn" id="reload">⟳ Reload app</button>
+    <button class="btn" id="open">↗ Open this size in a new tab</button></div>
+  <div class="note">Tip: theme (dark / Classic) is in the app's ☰ menu, the same as on a real phone.</div>
+</div>
+<div class="stage" id="stage">
+  <div class="dev" id="dev"><div class="screen" id="scr"><div class="island"></div><div class="status"><span id="clk">9:41</span><span>●●● 5G ▮</span></div><iframe id="app" title="Prixm app"></iframe></div></div>
+  <div class="size" id="sz"></div>
+</div>
+<script>
+const DEV=[['iPhone 15',393,852,'ios'],['iPhone 15 Pro Max',430,932,'ios'],['iPhone SE',375,667,'se'],['Pixel 8',412,915,'android'],['Galaxy S24',360,780,'android']];
+const S=JSON.parse(localStorage.getItem('phSim')||'{}');
+S.dev=S.dev??0;S.mode=S.mode||'public';S.t=S.t||'real';S.tv=S.tv||'13:10';S.z=S.z||'fit';
+const $=id=>document.getElementById(id);
+function save(){localStorage.setItem('phSim',JSON.stringify(S));}
+function url(){const q=[];if(S.mode==='public')q.push('public=1');if(S.t==='fake')q.push('phnow='+S.tv.replace(':',''));return 'daily_racing_analyzer.html'+(q.length?'?'+q.join('&'):'');}
+function layout(){const [n,w,h,k]=DEV[S.dev];const d=$('dev'),f=$('app');
+  d.className='dev '+(k==='ios'?'':k);f.style.width=w+'px';f.style.height=h+'px';
+  const sb=k==='ios'?48:k==='android'?30:0;f.style.height=(h-sb)+'px';$('scr').style.width=w+'px';$('scr').style.height=h+'px';
+  const st=$('stage').getBoundingClientRect(),dw=w+(k==='se'?28:28),dh=h+(k==='se'?120:28);
+  const sc=S.z==='fit'?Math.min(1,(st.height-60)/dh,(st.width-60)/dw):1;d.style.transform=`scale(${sc})`;
+  $('sz').textContent=`${n} · ${w}×${h}${sc<1?` · shown at ${Math.round(sc*100)}%`:''}`;}
+function load(){$('app').src=url();layout();}
+function seg(id,key,attr){$(id).querySelectorAll('button').forEach(b=>{b.classList.toggle('on',b.dataset[attr]===String(S[key]));
+  b.onclick=()=>{S[key]=b.dataset[attr];save();seg(id,key,attr);(key==='z')?layout():load();};});}
+$('devs').innerHTML=DEV.map((d,i)=>`<button data-d="${i}">${d[0]}</button>`).join('');
+$('devs').querySelectorAll('button').forEach(b=>{b.classList.toggle('on',+b.dataset.d===S.dev);b.onclick=()=>{S.dev=+b.dataset.d;save();$('devs').querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));layout();};});
+seg('mode','mode','m');seg('tmode','t','t');seg('zoom','z','z');
+$('tval').value=S.tv;$('tval').onchange=e=>{S.tv=e.target.value||'13:10';save();if(S.t==='fake')load();};
+$('reload').onclick=load;
+$('open').onclick=()=>{const [n,w,h]=DEV[S.dev];window.open(url(),'prixmPhone',`width=${w},height=${h}`);};
+window.addEventListener('resize',layout);
+setInterval(()=>{const d=new Date();$('clk').textContent=d.getHours()+':'+String(d.getMinutes()).padStart(2,'0');},10000);
+load();
+</script>
+</body></html>
