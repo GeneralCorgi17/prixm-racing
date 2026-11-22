@@ -1462,10 +1462,12 @@ html[data-theme="nothing"] svg text[fill="#6b7280"],html[data-theme="nothing"] s
    ≤700px only — the PC layout is untouched. Works in both themes (uses the vars).
    Option A — tabs at the bottom.
    · Header → PRIXM + date + ☰. The header's buttons/badges (.hdr-r) become the ☰ sheet.
-   · Top tab bar hidden → #phNav bottom bar (Races / Golden / Ledger|Emerald / MT / More), built from the real .tab-btn's.
+   · Top tab bar hidden → #phNav bottom bar (Races / Golden / Ledger|Performance / MT / More), built from the real .tab-btn's.
    · Prixm Picks → swipe strip above the race cards; other sidebar panels below the cards.
    · Runner table (.rtbl) → stacked runner cards. JS: 📱 PHONE LAYOUT JS block at file end. */
 #phNav,#phMore,.ph-burger,.ph-date{display:none}
+/* 📱 public phone view (2026-11-23) — phone-only bits are hidden on PC */
+.ph-only,#phQuick,#phNext,#phEarly,#phShade,#phSheet,#phPerfChips,.rc-ph,.ph-rvh,.ph-acts,.ph-hl-btn,.ph-tpc-more,.pcv,.pcal-pm{display:none}
 @media(max-width:700px){
   html[data-theme] body{padding-bottom:calc(70px + env(safe-area-inset-bottom))}
 
@@ -1573,6 +1575,152 @@ html[data-theme="nothing"] svg text[fill="#6b7280"],html[data-theme="nothing"] s
   html[data-theme] .exp-inner{padding:12px 4px!important}
   html[data-theme] .exp-inner [style*="grid-template-columns"]{grid-template-columns:1fr!important}
 
+  /* ==================== 📱 PUBLIC PHONE VIEW (2026-11-23, mockups/phone_app_mockup.html) ====================
+     Read-friendly layer for ≤700px. Same data, same filters, same click handlers — only the look changes.
+     JS: 📱 PHONE PUBLIC VIEW block at file end. */
+  html[data-theme] .d1-stats-strip,html[data-theme] .venues-bar,html[data-theme] .back-btn,html[data-theme] .sumstrip{display:none!important}
+  /* quick bar (pinned) */
+  html[data-theme] #phQuick{display:block;position:sticky;top:0;z-index:60;background:var(--bg);margin:-12px -14px 8px;padding:8px 14px 8px;border-bottom:1px solid var(--border)}
+  html[data-theme] .phq-stats{display:flex;gap:12px;font-size:11px;color:var(--muted);margin-bottom:7px;flex-wrap:wrap}
+  html[data-theme] .phq-stats b{color:var(--text);font-weight:600}
+  html[data-theme] .phq-row{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin:0 -14px;padding:0 14px}
+  html[data-theme] .phq-row::-webkit-scrollbar{display:none}
+  html[data-theme] .phq-chip{flex:0 0 auto;border:1px solid var(--border);background:none;color:var(--muted);padding:0 12px;min-height:34px;font:inherit;font-size:11.5px;white-space:nowrap;border-radius:999px;cursor:pointer}
+  html[data-theme] .phq-chip.on{background:var(--text);color:var(--bg);border-color:var(--text)}
+  html[data-theme] .phq-chip.f{border-style:dashed;color:var(--text)}
+  html[data-theme] .phq-chip .n{display:inline-block;background:var(--accent);color:var(--bg);border-radius:999px;padding:0 6px;margin-left:5px;font-size:10px}
+  html[data-theme] .phq-meta{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:10.5px;color:var(--muted);margin-top:7px;white-space:nowrap}
+  html[data-theme] .phq-meta a{color:var(--muted);cursor:pointer;text-decoration:none}
+  html[data-theme] .phq-meta a.on{color:var(--text);font-weight:600}
+  html[data-theme] .phq-ts{display:inline-flex;border:1px solid var(--border);border-radius:8px;overflow:hidden;vertical-align:middle;margin-left:6px}
+  html[data-theme] .phq-ts button{background:none;border:0;color:var(--muted);padding:2px 8px;cursor:pointer;font:inherit;font-size:11px}
+  html[data-theme] .phq-ts button.on{background:var(--text);color:var(--bg)}
+  html[data-theme] .phq-ts button+button{font-size:14px}
+  /* next up + earlier today */
+  html[data-theme] #phNext:not(:empty){display:flex;justify-content:space-between;align-items:center;gap:10px;border:1px solid var(--border);border-radius:12px;padding:10px 13px;margin:0 0 10px;cursor:pointer;background:linear-gradient(90deg,color-mix(in srgb,var(--accent) 14%,transparent),transparent)}
+  html[data-theme] #phNext .l{font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+  html[data-theme] #phNext .t{font-size:22px;font-weight:700;line-height:1.1}
+  html[data-theme="nothing"] #phNext .t{font-family:'Bebas Neue',sans-serif;font-weight:400;font-size:28px;letter-spacing:.04em}
+  html[data-theme] #phNext .s{font-size:11px;color:var(--muted);margin-top:2px}
+  html[data-theme] #phNext .cd{font-size:20px;font-weight:700;white-space:nowrap;color:var(--accent)}
+  html[data-theme="nothing"] #phNext .cd{font-family:'Bebas Neue',sans-serif;font-weight:400;font-size:26px}
+  html[data-theme] #phEarly:not(:empty){display:flex;justify-content:space-between;border:1px dashed var(--border);border-radius:10px;padding:10px 12px;margin:0 0 8px;font-size:11.5px;color:var(--muted);cursor:pointer}
+  html[data-theme] .landing .rc.rc-past{display:none!important}
+  html.ph-early-on[data-theme] .landing .rc.rc-past{display:block!important;opacity:.55}
+  /* compact race rows — the full card stays for PC, the phone shows only .rc-ph */
+  html[data-theme] .landing .race-cards{margin:0!important;gap:6px!important;display:flex!important;flex-direction:column}
+  html[data-theme] .landing .rc{padding:0!important;min-height:0!important;border:1px solid var(--border)!important;border-radius:11px!important;overflow:hidden;box-shadow:none!important;transform:none!important}
+  html[data-theme] .landing .rc>*:not(.rc-ph){display:none!important}
+  html[data-theme] .landing .rc::before{top:8px!important;bottom:8px!important;width:3px!important;border-radius:2px}
+  html[data-theme] .rc-ph{display:grid;grid-template-columns:58px minmax(0,1fr) 54px;gap:10px;align-items:center;padding:10px 10px 10px 14px}
+  html[data-theme] .rcp-t{font-size:19px;font-weight:700;line-height:1}
+  html[data-theme="nothing"] .rcp-t{font-family:'Bebas Neue',sans-serif;font-weight:400;font-size:25px;letter-spacing:.03em}
+  html[data-theme] .rcp-v{font-size:9.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
+  html[data-theme] .rcp-n{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  html[data-theme="nothing"] .rcp-n{font-family:'Bebas Neue',sans-serif;font-weight:400;font-size:18px;letter-spacing:.04em}
+  html[data-theme] .rcp-bar{height:4px;background:var(--border);border-radius:2px;margin:4px 0 3px;overflow:hidden}
+  html[data-theme] .rcp-bar i{display:block;height:100%;background:var(--text)}
+  html[data-theme] .rcp-m{font-size:10px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  html[data-theme] .rcp-g{text-align:center}
+  html[data-theme] .rcp-g b{display:block;font-size:20px;line-height:1}
+  html[data-theme="nothing"] .rcp-g b{font-family:'Bebas Neue',sans-serif;font-weight:400;font-size:25px}
+  html[data-theme] .rcp-g span{font-size:8.5px;letter-spacing:.08em;color:var(--muted)}
+  html[data-theme] .rcp-b{font-size:9.5px;border-radius:4px;padding:0 4px;margin-left:4px;vertical-align:2px;font-family:inherit;letter-spacing:0;border:1px solid var(--border);color:var(--muted)}
+  html[data-theme] .rcp-b.g{border-color:transparent;background:rgba(245,197,66,.2);color:#d9a521}
+  html[data-theme] .rcp-b.p{border-color:transparent;background:color-mix(in srgb,var(--accent) 22%,transparent);color:var(--text)}
+  html[data-theme] .ph-q{display:inline-block;width:15px;height:15px;border-radius:50%;border:1px solid var(--muted);color:var(--muted);font-size:9px;line-height:13px;text-align:center;margin-left:3px;font-style:normal;cursor:pointer}
+  html[data-theme] .ph-ghdr{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:10px 2px 2px;display:flex;justify-content:space-between}
+  /* sheets: shade + generic sheet + filters + highlight */
+  html[data-theme] #phShade{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:1650}
+  html.ph-filt-on[data-theme] #phShade,html.ph-hl-on[data-theme] #phShade,html.ph-sheet-on[data-theme] #phShade{display:block}
+  html[data-theme] #fieldSizeBar{display:none!important}
+  html.ph-filt-on[data-theme] #fieldSizeBar{display:block!important;position:fixed;left:0;right:0;bottom:0;max-height:78vh;overflow:auto;z-index:1700;background:var(--card);border-top:1px solid var(--border);border-radius:16px 16px 0 0;padding:46px 14px calc(24px + env(safe-area-inset-bottom))!important;margin:0!important}
+  html.ph-filt-on[data-theme] #fieldSizeBar::before{content:'FILTERS  ·  tap outside to close';position:absolute;top:16px;left:16px;font-size:10px;letter-spacing:.14em;color:var(--muted)}
+  html[data-theme] .attr-hl{display:none!important}
+  html.ph-hl-on[data-theme] .attr-hl{display:block!important;position:fixed;left:0;right:0;bottom:0;max-height:75vh;overflow:auto;z-index:1700;background:var(--card);border-radius:16px 16px 0 0;padding:16px 14px calc(24px + env(safe-area-inset-bottom))!important;margin:0!important}
+  html[data-theme] .ph-hl-btn{display:inline-flex;align-items:center;gap:6px;border:1px dashed var(--border);background:none;color:var(--text);border-radius:999px;padding:0 13px;min-height:34px;font:inherit;font-size:11.5px;cursor:pointer;margin:4px 0 8px}
+  html[data-theme] #phSheet{display:flex;flex-direction:column;position:fixed;left:0;right:0;bottom:0;max-height:80vh;z-index:1700;background:var(--card);border-top:1px solid var(--border);border-radius:16px 16px 0 0;transform:translateY(102%);transition:transform .25s;visibility:hidden}
+  html.ph-sheet-on[data-theme] #phSheet{transform:none;visibility:visible}
+  html[data-theme] .phs-h{display:flex;justify-content:space-between;align-items:center;padding:14px 16px 10px;border-bottom:1px solid var(--border)}
+  html[data-theme] .phs-h b{font-size:16px}
+  html[data-theme="nothing"] .phs-h b{font-family:'Bebas Neue',sans-serif;font-weight:400;font-size:22px;letter-spacing:.06em}
+  html[data-theme] .phs-h button{background:none;border:1px solid var(--border);color:var(--text);width:34px;height:34px;border-radius:9px;cursor:pointer;font-size:14px}
+  html[data-theme] .phs-b{overflow-y:auto;padding:10px 16px calc(22px + env(safe-area-inset-bottom));font-size:12.5px;line-height:1.55}
+  html[data-theme] .phs-b .gl{margin-bottom:12px}
+  html[data-theme] .phs-b .gl b{display:block;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
+  html[data-theme] .phs-row{display:grid;grid-template-columns:46px minmax(0,1fr) auto;gap:10px;align-items:center;padding:9px 0;border-top:1px solid var(--border);cursor:pointer}
+  html[data-theme] .phs-row:first-child{border-top:0}
+  html[data-theme] .phs-row .m{font-size:10.5px;color:var(--muted)}
+  html[data-theme] .phs-fp{min-width:38px;text-align:center;border-radius:7px;padding:3px 4px;font-weight:700;font-size:12px;background:var(--border);color:var(--muted)}
+  html[data-theme] .phs-fp.w{background:rgba(74,222,128,.22);color:#16a34a}
+  html[data-theme] .phs-fp.p{background:rgba(251,191,36,.18);color:#b7791f}
+  html[data-theme] .phs-in{width:100%;background:var(--bg);border:1px solid var(--border);color:var(--text);border-radius:10px;padding:11px 12px;font:inherit;font-size:14px}
+  /* race view */
+  html[data-theme] .ph-rvh{display:flex;align-items:center;gap:6px;position:sticky;top:0;z-index:60;background:var(--bg);margin:-12px -14px 8px;padding:8px 10px;border-bottom:1px solid var(--border)}
+  html[data-theme] .ph-rvh button{background:none;border:1px solid var(--border);color:var(--text);width:38px;height:38px;flex:0 0 38px;border-radius:9px;cursor:pointer;font-size:15px}
+  html[data-theme] .ph-rvh button:disabled{opacity:.3}
+  html[data-theme] .ph-rvh .tt{flex:1;min-width:0;text-align:center}
+  html[data-theme] .ph-rvh .tt b{display:block;font-size:17px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  html[data-theme="nothing"] .ph-rvh .tt b{font-family:'Bebas Neue',sans-serif;font-weight:400;font-size:23px;letter-spacing:.05em}
+  html[data-theme] .ph-rvh .tt span{font-size:10px;color:var(--muted)}
+  html[data-theme] .race-title{font-size:13px!important;line-height:1.35!important;font-family:inherit!important;letter-spacing:0!important;border-left-width:3px!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer;color:var(--muted)!important;font-weight:400!important;text-transform:none!important}
+  html[data-theme] .race-title.ph-full{white-space:normal}
+  html[data-theme] .race-sub{gap:5px!important;margin-top:6px!important}
+  html[data-theme] .race-sub>span{font-size:10.5px!important;padding:1px 7px!important}
+  html[data-theme] .detail-tabs{position:sticky;top:55px;z-index:55;background:var(--bg)}
+  html[data-theme] .tpc{grid-template-columns:1fr!important;padding:12px!important;cursor:pointer}
+  html[data-theme] .tpc>div:nth-child(2){display:none}
+  html[data-theme] .tpc.ph-open>div:nth-child(2){display:block}
+  html[data-theme] .tpc-stats{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:6px!important}
+  html[data-theme] .tpc-stats>div{padding:7px 8px!important}
+  html[data-theme] .tpc-stats b{font-size:20px!important}
+  html[data-theme] .ph-tpc-more{display:block;font-size:10.5px;color:var(--muted);margin-top:8px;letter-spacing:.06em}
+  html[data-theme] .tpc.ph-open .ph-tpc-more{display:none}
+  html[data-theme] .rtbl tr.expandable>td:nth-child(2)>div:first-child>button,html[data-theme] .rtbl tr.expandable .cmpsel-btn{display:none!important}
+  html[data-theme] .rtbl tr.expandable>td:nth-child(2)>div:first-child::after{display:none}
+  html[data-theme] tr.ph-acts{display:block!important}
+  html[data-theme] tr.ph-acts>td{display:block!important;padding:4px 4px 10px!important}
+  html[data-theme] .ph-acts-g{display:grid;grid-template-columns:repeat(auto-fit,minmax(0,1fr));gap:6px}
+  html[data-theme] .ph-acts-g button{background:var(--card);border:1px solid var(--border);color:var(--text);border-radius:9px;min-height:40px;font:inherit;font-size:11.5px;cursor:pointer}
+  html[data-theme] .ph-swipe{display:block;text-align:center;font-size:10px;color:var(--muted);padding:14px 0 4px}
+  /* bigger text (A A in the quick bar) */
+  html.ph-big[data-theme] #landingView,html.ph-big[data-theme] #detailView,html.ph-big[data-theme] #perfView,html.ph-big[data-theme] #goldenView,html.ph-big[data-theme] #tracksView,
+  html.ph-big[data-theme] #combosView,html.ph-big[data-theme] #trendsView,html.ph-big[data-theme] #topFinishView,html.ph-big[data-theme] #watchbackView,html.ph-big[data-theme] #trackedView,html.ph-big[data-theme] #eyeView{zoom:1.12}
+  /* More sheet → tiles + search */
+  html[data-theme] #phMore{display:block!important;max-height:78vh;overflow-y:auto;background:var(--bg)!important;padding:12px 12px 16px}
+  html[data-theme] .phm-cap{font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);padding:10px 2px 6px}
+  html[data-theme] .phm-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  html[data-theme] #phMore .phm-t{display:block;background:var(--card)!important;border:1px solid var(--border)!important;border-radius:12px;padding:11px 12px!important;min-height:84px!important;text-align:left;cursor:pointer;color:var(--text);font:inherit;text-transform:none!important;letter-spacing:0!important}
+  html[data-theme] #phMore .phm-t.on{box-shadow:inset 0 0 0 1px var(--accent)}
+  html[data-theme] .phm-t i{font-style:normal;font-size:19px;display:block}
+  html[data-theme] .phm-t b{display:block;font-size:13px;margin-top:4px}
+  html[data-theme="nothing"] .phm-t b{font-family:'Bebas Neue',sans-serif;font-weight:400;font-size:17px;letter-spacing:.06em}
+  html[data-theme] .phm-t span{display:block;font-size:10px;color:var(--muted);line-height:1.35;margin-top:2px}
+  html[data-theme] .phm-search{display:flex;gap:8px;align-items:center;border:1px solid var(--border);border-radius:10px;padding:0 12px;min-height:42px;color:var(--muted);font-size:12px;cursor:pointer;background:var(--card)}
+  /* Performance: one-row engine switch, pinned, + jump chips */
+  html[data-theme] #perfEngineBar{position:sticky;top:0;z-index:60;background:var(--bg);margin:-14px -14px 0;padding:8px 14px 0}
+  html[data-theme] #perfEngineBar>div{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:0!important;margin-bottom:0!important;border:1px solid var(--border);border-radius:10px;overflow:hidden}
+  html[data-theme] #perfEngineBar>div>button{border:0!important;border-radius:0!important;margin:0!important;min-height:44px;font-size:10.5px!important;padding:4px 2px!important;white-space:normal;line-height:1.25}
+  html[data-theme] #perfEngineBar>div>button+button{border-left:1px solid var(--border)!important}
+  html[data-theme] #perfEngineBar>div>span{display:none!important}
+  html[data-theme] #phPerfChips:not(:empty){display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;position:sticky;top:52px;z-index:59;background:var(--bg);margin:0 -14px 10px;padding:8px 14px;border-bottom:1px solid var(--border)}
+  html[data-theme] #phPerfChips::-webkit-scrollbar{display:none}
+  /* calendar: one big number per day, tap a day for its picks */
+  html[data-theme] .pcal-pm{display:inline-flex;border:1px solid var(--border);border-radius:8px;overflow:hidden;margin:2px 0 8px}
+  html[data-theme] .pcal-pm button{background:none;border:0;color:var(--muted);padding:5px 10px;font:inherit;font-size:11px;cursor:pointer}
+  html[data-theme] .pcal-pm button.on{background:var(--text);color:var(--bg)}
+  html[data-theme] .pcd{cursor:pointer!important;padding:6px 1px!important}
+  html[data-theme] .pcd>div:not(:first-child):not(.pcv){display:none}
+  html[data-theme] .pcd>div:first-child{font-size:9.5px;font-weight:400!important;color:var(--muted)}
+  html[data-theme] .pcv{display:block;font-size:15px;font-weight:700;line-height:1.1}
+  html[data-theme="nothing"] .pcv{font-family:'Bebas Neue',sans-serif;font-weight:400;font-size:19px}
+  html[data-theme] .pcv::after{content:attr(data-p)}
+  html[data-pcm="w"][data-theme] .pcv::after{content:attr(data-w)}
+  html[data-pcm="pl"][data-theme] .pcv::after{content:attr(data-pl)}
+  html[data-pcm="pl"][data-theme] .pcv{font-size:12.5px}
+  html[data-pcm="pl"][data-theme] .pcv.neg{color:#dc2626}
+  html[data-pcm="pl"][data-theme] .pcv.pos{color:#16a34a}
+
   /* ---- other tabs: wide tables scroll inside their own box ---- */
   html[data-theme] #perfView table,html[data-theme] #combosView table,html[data-theme] #trendsView table,html[data-theme] #goldenView table,
   html[data-theme] #tracksView table,html[data-theme] #watchbackView table,html[data-theme] #emeraldView table,html[data-theme] #vantaView table,html[data-theme] #ledgerView table,
@@ -1624,6 +1772,7 @@ html[data-theme="nothing"] svg text[fill="#6b7280"],html[data-theme="nothing"] s
   <button class="tab-btn" id="tabM" onclick="switchTab('m')" title="🐎 Race track animation">🐎 MT</button>
 </div>
 <nav id="phNav" aria-label="Tabs"></nav><div id="phMore"></div>
+<div id="phShade" onclick="window.phCloseAll&&phCloseAll()"></div><div id="phSheet" role="dialog"><div class="phs-h"><b id="phSheetT"></b><button onclick="phCloseAll()" aria-label="Close">✕</button></div><div class="phs-b" id="phSheetB"></div></div>
 
 
 <div class="landing" id="landingView">
@@ -1631,9 +1780,12 @@ html[data-theme="nothing"] svg text[fill="#6b7280"],html[data-theme="nothing"] s
 <div id="watchlistSection"></div>
 <div id="d1StatsStrip" class="d1-stats-strip"></div>
 <div class="venues-bar" id="venueBar"></div>
+<div id="phQuick"></div>
+<div id="phNext" onclick="window.phOpenNext&&phOpenNext()"></div>
 <div class="d1-layout">
   <div>
     <div id="fieldSizeBar" style="padding:0;margin-bottom:10px"></div>
+    <div id="phEarly" onclick="window.phToggleEarly&&phToggleEarly()"></div>
     <div class="race-cards" id="raceCards"></div>
   </div>
   <div class="d1-aside" id="d1Aside"></div>
@@ -1648,7 +1800,7 @@ window.addEventListener('load',f);window.addEventListener('resize',f);setTimeout
 </div>
 
 <div id="perfView" style="display:none;padding:20px 28px;max-width:1200px;margin:0 auto">
-  <div id="perfEngineBar"></div><div id="perfContent">Loading performance data...</div>
+  <div id="perfEngineBar"></div><div id="phPerfChips"></div><div id="perfContent">Loading performance data...</div>
 </div>
 
 <div id="combosView" style="display:none;padding:20px 28px;max-width:1200px;margin:0 auto">
@@ -4625,7 +4777,7 @@ function perf(races,key){
   return {n,sr:n?w/n*100:0,pr:n?p/n*100:0,roi:stake?(ret-stake)/stake*100:null};
 }
 function tile(l,v,sub,col){return `<div style="background:#fff;border:1px solid var(--border);border-radius:10px;padding:12px 14px"><div style="font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)">${l}</div><div style="font-size:22px;font-weight:800;${col?'color:'+col:''}">${v}</div><div style="font-size:11px;color:var(--muted)">${sub||''}</div></div>`;}
-const card=(t,b,extra)=>`<div style="background:#fff;border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:12px${extra||''}"><div style="font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700;margin-bottom:8px">${t}</div>${b}</div>`;
+const card=(t,b,extra)=>`<div style="background:#fff;border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:12px${extra||''}"><div data-phsec="1" style="font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700;margin-bottom:8px">${t}</div>${b}</div>`;
 const tbl=(head,rows)=>`<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:12.5px"><tr>${head.map(h=>`<th style="text-align:left;font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);padding:6px 8px;border-bottom:1px solid var(--border);white-space:nowrap">${h}</th>`).join('')}</tr>${rows.map(r=>`<tr>${r.map(c=>`<td style="padding:6px 8px;border-bottom:1px solid var(--border);white-space:nowrap">${c}</td>`).join('')}</tr>`).join('')}</table></div>`;
 
 function prixmVersionHistory(){
@@ -6195,7 +6347,7 @@ function renderPicksCalendar(engine){
   if(engine!=='prixm'){
     const dailyStats=engineTopPickDailyStats(engine==='emerald'?window._emeraldHistory:window._vantaHistory);
     const allDates=Object.keys(dailyStats).sort().reverse();
-    return allDates.length?pcalHTML(allDates,dailyStats,title,'Top-scored runner of each logged race, backed as a 1u WIN single at SP'+(engine==='vanta'?' (PMU tote)':'')+'. Non-runners void.'):'';
+    return allDates.length?pcalHTML(allDates,dailyStats,title,'Top-scored runner of each logged race, backed as a 1u WIN single at SP'+(engine==='vanta'?' (PMU tote)':'')+'. Non-runners void.',engine):'';
   }
   const allDates=getAllPicksDates();
   const hist=window._resultsHistory;
@@ -6217,9 +6369,9 @@ function renderPicksCalendar(engine){
       dailyStats[date]={winPct:null,placePct:null,wins:0,places:0,logged:0,total:perf.total};
     }
   });
-  return pcalHTML(allDates,dailyStats,title,'Every pick backed as a 1u WIN single at SP. Non-runners void.');
+  return pcalHTML(allDates,dailyStats,title,'Every pick backed as a 1u WIN single at SP. Non-runners void.','prixm');
 }
-function pcalHTML(allDates,dailyStats,title,plTip){
+function pcalHTML(allDates,dailyStats,title,plTip,eng){
   // Group by month
   const months={};
   allDates.forEach(d=>{
@@ -6232,12 +6384,13 @@ function pcalHTML(allDates,dailyStats,title,plTip){
   const nM=sortedMonths.length;let cur=Math.min(Math.max(window._pcalIdx||0,0),nM-1);
   let html=`<div id="pcal" data-n="${nM}" style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 18px;margin-bottom:16px;max-width:760px">
     <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px">
-      <div style="font-size:13px;font-weight:700">${title}</div>
+      <div style="font-size:13px;font-weight:700" data-phsec="Calendar">${title}</div>
       <div style="display:flex;align-items:center;gap:4px">
         <button class="vbtn" data-pcal="1" onclick="pcalNav(1)" aria-label="Previous month" style="padding:2px 9px;font-size:13px">‹</button>
         <span id="pcalLbl" style="font-size:12px;font-weight:600;min-width:112px;text-align:center"></span>
         <button class="vbtn" data-pcal="-1" onclick="pcalNav(-1)" aria-label="Next month" style="padding:2px 9px;font-size:13px">›</button>
-      </div></div>`;
+      </div></div>
+    <div class="pcal-pm">${[['p','Place %'],['w','Win %'],['pl','P&L']].map(([k,l])=>`<button class="${(document.documentElement.dataset.pcm||'p')===k?'on':''}" onclick="window.phPcm&&phPcm('${k}',this)">${l}</button>`).join('')}</div>`;
   sortedMonths.forEach((ym,mi)=>{
     const [yr,mo]=ym.split('-');
     const monthName=new Date(yr,mo-1,1).toLocaleString('en-GB',{month:'long',year:'numeric'});
@@ -6268,11 +6421,12 @@ function pcalHTML(allDates,dailyStats,title,plTip){
         const bg=stat.placePct>=70?'rgba(5,150,105,.25)':stat.placePct>=50?'rgba(5,150,105,.15)':stat.placePct>=30?'rgba(251,191,36,.15)':'rgba(239,68,68,.15)';
         const border=stat.placePct>=70?'rgba(5,150,105,.5)':stat.placePct>=50?'rgba(5,150,105,.3)':stat.placePct>=30?'rgba(251,191,36,.3)':'rgba(239,68,68,.3)';
         const wCol=stat.winPct>=40?'var(--accent)':stat.winPct>=20?'var(--gold)':'var(--danger)';
-        html+=`<div style="padding:7px 2px;border-radius:5px;background:${bg};border:1px solid ${border};cursor:default;line-height:1.15" title="${dateStr}:\nWin: ${stat.winPct}% (${stat.wins}/${stat.logged})\nPlace: ${stat.placePct}% (${stat.places}/${stat.logged})\n1u singles at SP: ${stat.pl>=0?"+":""}${(stat.pl||0).toFixed(2)}u (${stat.plBets} bets)${stat.noSp?" · "+stat.noSp+" winner(s) no SP":""}">
+        html+=`<div class="pcd" onclick="window.phPcalDay&&phPcalDay('${eng||'prixm'}','${dateStr}')" style="padding:7px 2px;border-radius:5px;background:${bg};border:1px solid ${border};cursor:default;line-height:1.15" title="${dateStr}:\nWin: ${stat.winPct}% (${stat.wins}/${stat.logged})\nPlace: ${stat.placePct}% (${stat.places}/${stat.logged})\n1u singles at SP: ${stat.pl>=0?"+":""}${(stat.pl||0).toFixed(2)}u (${stat.plBets} bets)${stat.noSp?" · "+stat.noSp+" winner(s) no SP":""}">
           <div style="font-weight:700">${day}</div>
           <div style="font-size:10px;color:${wCol}">W${stat.winPct}%</div>
           <div style="font-size:10px;color:var(--text)">P${stat.placePct}%</div>
           ${stat.plBets?`<div style="font-size:10px;font-weight:700;color:${stat.pl>0?'#16a34a':stat.pl<0?'#dc2626':'var(--muted)'}">${stat.pl>0?'+':stat.pl<0?'−':''}${Math.abs(stat.pl).toFixed(1)}u</div>`:''}
+          <div class="pcv ${(stat.pl||0)>0?'pos':(stat.pl||0)<0?'neg':''}" data-p="${stat.placePct}%" data-w="${stat.winPct}%" data-pl="${stat.plBets?((stat.pl>0?'+':stat.pl<0?'−':'')+Math.abs(stat.pl).toFixed(1)+'u'):'—'}"></div>
         </div>`;
       }
     }
@@ -10281,6 +10435,8 @@ function renderRaceCards(){
   else if(st.fitFilter==='hideU') races=races.filter(r=>{const t=r.runners&&[...r.runners].sort((a,b)=>b.score-a.score)[0];return !(t&&t.track_fit&&t.track_fit.verdict==='u');});
   // 🎯 Prime filter — races with a Prime spot (getPrimeFlags)
   if(st.primeFilter) races=races.filter(r=>{try{return !!getPrimeFlags(r);}catch(e){return false;}});
+  // 📱 phone quick chip ⭐ Golden
+  if(st.phGolden) races=races.filter(r=>{try{return !!getGoldenFlags(r);}catch(e){return false;}});
   // Apply race code filter (Flat/Hurdle/Chase)
   if(st.raceCodeFilter&&st.raceCodeFilter!=='all'){
     races=races.filter(r=>(r.race_type||'').trim()===st.raceCodeFilter);
@@ -10307,6 +10463,9 @@ function renderRaceCards(){
     });
   }
   races.sort((a,b)=>a.time.localeCompare(b.time));
+  // 📱 phone "by meeting" grouping
+  const _phMeet=st.phGroup==='meet'&&window.matchMedia&&matchMedia('(max-width:700px)').matches;
+  if(_phMeet) races.sort((a,b)=>(a.course||'').localeCompare(b.course||'')||a.time.localeCompare(b.time));
 
   // Pre-build XA signals per race — scan every runner, surface only strong
   // positive cross-analysis backing (any horse, not just the top pick).
@@ -10346,6 +10505,7 @@ function renderRaceCards(){
   const _nextIds=new Set(races.map(r=>`raceCard_${r.venueKey}_${r.raceIdx}`));
   const _toCollapse=[...el.querySelectorAll('.rc[id]')].filter(c=>!_nextIds.has(c.id)&&!c.classList.contains('rc-collapsing'));
   function _doRender(){
+  let _phLastC=null;
   el.innerHTML=races.map(r=>{
     const top=r.runners&&r.runners[0];
     const topConf=top?top.confidence:'';
@@ -10381,7 +10541,16 @@ function renderRaceCards(){
     const _uIcon=ru=>ru&&ru.track_fit&&ru.track_fit.verdict==='u'?` <span class="rc-fit-u" title="🧭 Unsuited to this track — open the race for the reasons">❌</span>`:'';
     const _topU=top&&sortedR[0]&&sortedR[0].track_fit&&sortedR[0].track_fit.verdict==='u'?sortedR[0]:null;
     const _topUReason=_topU?(_topU.track_fit.checks.filter(c=>c[0]==='❌'&&c[4]==='valid').map(c=>c[1]).slice(0,2).join(' · ')||'track demands'):'';
-    return `<div class="rc ${cardExtraCls} ${xaCls}" id="${cardId}" data-seg="${dataSeg}" style="--rc-bc:${getRaceBorderColor(r)}" onclick="openRace('${r.venueKey}',${r.raceIdx}).catch(e=>console.error('openRace error:',e))">
+    // 📱 phone compact row (only .rc-ph shows ≤700px; PC shows the full card below)
+    const _phC=(r.course||'').replace(/\s*\((?:FR|IRE|GB|AW)\)/gi,'').toLowerCase().replace(/\b\w/g,m=>m.toUpperCase());
+    const _phHdr=_phMeet&&_phLastC!==r.course?`<div class="ph-ghdr"><span>${_phC}</span><span>${races.filter(x=>x.course===r.course).length} races</span></div>`:'';_phLastC=r.course;
+    const _phRow=`<div class="rc-ph"><div><div class="rcp-t">${r.time}</div><div class="rcp-v">${_phC}</div></div>
+      <div style="min-width:0"><div class="rcp-n">★ ${top?top.name:'—'}${_gf?'<span class="rcp-b g">⭐</span>':_sf?'<span class="rcp-b">🥈</span>':_bf?'<span class="rcp-b">🥉</span>':''}${getPrimeFlags(r)?'<span class="rcp-b p">🎯</span>':''}${r.handicap||/handicap/i.test(r.race_name||'')?'<span class="rcp-b">HCP</span>':''}${_topU?'<span class="rcp-b">❌</span>':''}${logged?'<span class="rcp-b">✓</span>':''}</div>
+        <div class="rcp-bar"><i style="width:${topPct}%"></i></div>
+        <div class="rcp-m">${topScore}${second?` · 2nd ${second.name} ${second.score}`:''} · ${r.field_size||r.runners.length}r${r.race_type?' '+r.race_type:''}${_em?' · ☘':_va?' · Vanta':''}</div></div>
+      <div class="rcp-g"><b class="${gapCls}">${gap||'—'}</b><span>GAP<i class="ph-q" onclick="event.stopPropagation();window.phGloss&&phGloss()">?</i></span></div></div>`;
+    return `${_phHdr}<div class="rc ${cardExtraCls} ${xaCls}" id="${cardId}" data-seg="${dataSeg}" data-t="${r.time}" data-c="${(r.course||'').replace(/"/g,'')}" data-top="${top?top.name.replace(/"/g,''):''}" data-gap="${gap}" style="--rc-bc:${getRaceBorderColor(r)}" onclick="openRace('${r.venueKey}',${r.raceIdx}).catch(e=>console.error('openRace error:',e))">
+  ${_phRow}
   <div class="rc-ch">
     <div>
       <span class="rc-card-time">${r.time}</span>
@@ -10446,7 +10615,9 @@ function renderRaceCards(){
       }
     });
   }
+  try{window.phAfterCards&&phAfterCards();}catch(e){}
   } // end _doRender
+  try{window.phRenderQuick&&phRenderQuick();}catch(e){}
   if(_toCollapse.length){_toCollapse.forEach(c=>c.classList.add('rc-collapsing'));setTimeout(_doRender,290);}
   else _doRender();
 }
@@ -10490,7 +10661,7 @@ function renderTopPickCard(runners,race){
   if(t.track_fit&&t.track_fit.verdict==='s')why.push(['p','✓','Track fit: <b>suits</b> this course']);
   if(t.track_fit&&t.track_fit.verdict==='u')why.push(['n','!','Track fit: <b>unsuited</b> to this course']);
   try{const d=rprDivergenceFlag(t.ofr,t.rpr);if(d){const up=d.icon==='⬆️';why.push([up?'p':'n',up?'✓':'!',`RPR ${t.rpr} vs OR ${t.ofr}`]);}}catch(e){}
-  return `<div class="tpc">
+  return `<div class="tpc" onclick="if(window.matchMedia&&matchMedia('(max-width:700px)').matches)this.classList.toggle('ph-open')">
     <div><div class="tpc-lab"><span>Top pick</span>${race.handicap?'<span>Handicap</span>':''}</div>
       <div class="tpc-id">${t.silk_url?`<img src="${t.silk_url}" alt="" onerror="this.style.visibility='hidden'">`:''}<div style="min-width:0"><div class="tpc-name">${t.name}</div>
         <div class="tpc-sub">${t.jockey||''} · ${t.trainer||''}</div>${t.confidence?`<span class="tpc-conf">${t.confidence}</span>`:''}</div></div>
@@ -10499,7 +10670,7 @@ function renderTopPickCard(runners,race){
         ${gap!=null?`<div><b>${gap}</b><small>Gap to 2nd</small></div>`:''}
         ${win!=null?`<div><b>${win}%</b><small>Win chance</small></div>`:''}
         ${t.price?`<div><b>${t.price}</b><small>Price</small></div>`:''}
-      </div></div>
+      </div>${why.length?'<span class="ph-tpc-more">WHY IT\'S ON TOP ▾</span>':''}</div>
     ${why.length?`<div><div class="tpc-lab"><span>Why it's on top</span></div><div class="tpc-why">${why.map(([c,i,txt])=>`<div><span class="tpc-i ${c}">${i}</span><span>${txt}</span></div>`).join('')}</div></div>`:''}
   </div>`;
 }
@@ -10529,8 +10700,8 @@ async function renderDetail(){
   const tab=st.detailTab||'main';
 
   // Header (shared between tabs)
-  let html=`
-  <div class="race-title" style="border-left:9px solid ${getRaceBorderColor(race)};padding-left:10px">${race.time} — ${race.name||race.race_name||''}</div>
+  let html=`${window.phRaceHeader?phRaceHeader(race,vk,ri):''}
+  <div class="race-title" onclick="this.classList.toggle('ph-full')" style="border-left:9px solid ${getRaceBorderColor(race)};padding-left:10px">${race.time} — ${race.name||race.race_name||''}</div>
   <div class="race-sub">
     <span>${race.course}</span><span>${race.distance}</span><span>${race.going}</span>
     <span>${race.race_type}</span><span>${race.field_size} runners</span>
@@ -11026,7 +11197,7 @@ function renderAttrFilterBar(runners, attrMap){
   }).join('');
   const orOn=st.attrFilter.logic==='OR', andOn=!orOn;
   const n=st.attrFilter.active.size;
-  return `<div style="padding:10px 0;margin-bottom:8px;border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+  return `<button class="ph-hl-btn" onclick="window.phHl&&phHl(true)">✦ Highlight ▾${n?` <b>(${n})</b>`:''}</button><div class="attr-hl" style="padding:10px 0;margin-bottom:8px;border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:8px">
       <span style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;font-weight:700">Highlight by Attribute</span>
       <div style="display:flex;align-items:center;gap:8px">
@@ -11118,7 +11289,7 @@ function renderMainTab(runners,race,vk,ri){
       }).join('');
       rows+=`<tr class="attr-reason-tr"><td colspan="12" style="padding:2px 10px 10px 44px;background:rgba(0,0,0,.02)">${reasonItems}</td></tr>`;
     }
-    if(isExp) rows+=renderExpandedRow(r, race.field_size||runners.length, race);
+    if(isExp) rows+=(window.phRunnerActs?phRunnerActs(r,race,vk,ri):'')+renderExpandedRow(r, race.field_size||runners.length, race);
     return rows;
   }).join('')}
   </tbody></table>`;
@@ -14155,7 +14326,7 @@ window.toggleTheme=function(){
     const restOn=rest.some(b=>b.classList.contains('active'));
     nav.innerHTML=main.map(b=>`<button class="phn${b.classList.contains('active')?' on':''}" data-tab="${b.id}"><span class="ic">${ICON[b.id]||'•'}</span>${label(b)}</button>`).join('')
       +`<button class="phn${restOn||html.classList.contains('ph-more-on')?' on':''}" data-more="1"><span class="ic">⋯</span>More</button>`;
-    more.innerHTML=rest.map(b=>`<button class="${b.classList.contains('active')?'on':''}" data-tab="${b.id}">${label(b)}</button>`).join('');
+    more.innerHTML=window.phBuildMore?phBuildMore(rest):rest.map(b=>`<button class="${b.classList.contains('active')?'on':''}" data-tab="${b.id}">${label(b)}</button>`).join('');
   }
   function go(id){
     html.classList.remove('ph-more-on','ph-menu-on');
@@ -14188,6 +14359,230 @@ window.toggleTheme=function(){
   build(); syncDate(); setTimeout(()=>{build();syncDate();},1200);
 })();
 </script>
+<script>
+/* ==================== 📱 PHONE PUBLIC VIEW (2026-11-23) ====================
+   Read-friendly phone layer (≤700px) for the public site. Approved mockup: mockups/phone_app_mockup.html.
+   Display only — never changes scores, picks, filters' meaning or any data. PC (>700px) never sees any of it.
+   · Races: pinned quick bar (stats · All/⭐/🎯/UK/IRE/FR/meetings · ⚙ Filters sheet · card time · A/A text size · by time/meeting),
+     live Next up + Earlier today (UK clock, Europe/London — works for viewers abroad), compact rows (.rc-ph, built in renderRaceCards).
+   · Race view: pinned header (← · time+track · ↗ share · ‹ ›), swipe between races of the meeting, #race= deep link,
+     top pick card folds, Highlight pills in a sheet, runner actions (Compare · Stats; Track/Bet only off the public site).
+   · More: icon tiles + search (today's card + logged horses) + Glossary + Install. Performance: jump chips, calendar metric + day sheet.
+   CSS: the "PUBLIC PHONE VIEW" part of <style id="phoneLayout">. */
+(function(){
+'use strict';
+const html=document.documentElement;
+const isPh=()=>window.matchMedia&&matchMedia('(max-width:700px)').matches;
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const cname=c=>(c||'').replace(/\s*\((?:FR|IRE|GB|AW)\)/gi,'').toLowerCase().replace(/\b\w/g,m=>m.toUpperCase());
+try{if(localStorage.getItem('phTextBig')==='1')html.classList.add('ph-big');}catch(e){}
+try{const m=localStorage.getItem('phPcm');if(m)html.dataset.pcm=m;}catch(e){}
+
+/* ---------- UK clock (race times are UK times) ---------- */
+function ukNow(){
+  const p={};new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/London',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false})
+    .formatToParts(new Date()).forEach(x=>p[x.type]=x.value);
+  const hh=p.hour==='24'?'00':p.hour;
+  return {date:`${p.year}-${p.month}-${p.day}`,hm:`${hh}:${p.minute}`,mins:(+hh)*60+(+p.minute)};
+}
+const toMins=t=>{const m=/^(\d{1,2}):(\d{2})/.exec(t||'');return m?(+m[1])*60+(+m[2]):null;};
+
+/* ---------- sheets ---------- */
+window.phSheet=function(title,body){document.getElementById('phSheetT').textContent=title;document.getElementById('phSheetB').innerHTML=body;html.classList.remove('ph-filt-on','ph-hl-on','ph-more-on','ph-menu-on');html.classList.add('ph-sheet-on');};
+window.phCloseAll=function(){html.classList.remove('ph-sheet-on','ph-filt-on','ph-hl-on');};
+window.phHl=function(on){html.classList.toggle('ph-hl-on',!!on);};
+document.addEventListener('keydown',e=>{if(e.key==='Escape')phCloseAll();});
+
+window.phGloss=function(){phSheet('Glossary',[
+  ['Score','How strong the horse looks on paper, out of 118 — form, ratings, trainer, jockey, fitness, class, going, course, distance, age, weight, draw, headgear.'],
+  ['Gap','Points between the top pick and the 2nd best. Bigger = clearer top pick on our numbers. Under 5 is a tight race; 18+ is a big edge.'],
+  ['Confidence','How the top pick rates against the maximum: TOP PICK › STRONG › SOLID › MODERATE.'],
+  ['⭐ Golden · 🥈 Silver · 🥉 Bronze','Race shapes where the top pick has done best historically: UK non-handicaps with a big gap and a good score (Golden = gap 18+ and score 74+).'],
+  ['🎯 Prime','UK non-handicap, 5 runners or fewer, gap 12+. The top pick has won about 58% of these.'],
+  ['Picks (NAP · WIN · STRONG · PLACE)','The day\'s best selections by edge over the rest of the field. NAP = the strongest of the day.'],
+  ['❌ Unsuited','The top pick\'s past runs say this track doesn\'t suit it (checked against results, only proven checks count).'],
+  ['HCP','Handicap — weights are set to even the field out, so the top pick wins less often.'],
+  ['Engines','Prixm scores UK racing · ☘ Emerald scores Ireland · Vanta scores France. Each learns from its own results.'],
+  ['Times','All race times are UK time.']
+].map(([k,v])=>`<div class="gl"><b>${esc(k)}</b>${esc(v)}</div>`).join(''));};
+
+/* ---------- quick bar ---------- */
+function activeFilters(){let n=0;
+  if(st.fieldFilter&&st.fieldFilter.size)n++;if(st.raceTypeFilter&&st.raceTypeFilter!=='all')n++;if(st.engineFilter&&st.engineFilter!=='all')n++;
+  if(st.fitFilter&&st.fitFilter!=='all')n++;if(st.raceCodeFilter&&st.raceCodeFilter!=='all')n++;if(st.comboFilter)n++;
+  if(st.confidenceFilter&&st.confidenceFilter!=='all')n++;if(st.gapFilter&&st.gapFilter.size)n++;return n;}
+function cardStamp(){const g=D&&D.generated_at;if(!g)return'';const d=new Date(g);if(isNaN(d))return'';
+  return 'Card '+d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})+' · '+d.toLocaleDateString('en-GB',{weekday:'short',day:'numeric'});}
+window.phRenderQuick=function(){
+  const el=document.getElementById('phQuick');if(!el||!D||!D.venues)return;
+  const all=[];Object.entries(D.venues).forEach(([vk,v])=>v.races.forEach((r,ri)=>all.push(r)));
+  let nG=0,nP=0;all.forEach(r=>{try{if(getGoldenFlags(r))nG++;}catch(e){}try{if(getPrimeFlags(r))nP++;}catch(e){}});
+  const reg=st.regionFilter&&st.regionFilter.size===1?[...st.regionFilter][0]:null;
+  const isAll=!st.phGolden&&!st.primeFilter&&!(st.regionFilter&&st.regionFilter.size)&&st.venue==='all';
+  const chip=(on,cls,act,l)=>`<button class="phq-chip${on?' on':''}${cls}" onclick="${act}">${l}</button>`;
+  const nf=activeFilters();
+  el.innerHTML=`<div class="phq-stats"><span><b>${all.length}</b> races</span><span>⭐ <b>${nG}</b></span><span>🎯 <b>${nP}</b></span><span><b>${Object.keys(D.venues).length}</b> meetings</span></div>
+  <div class="phq-row">${chip(isAll,'',"phQ('all')",'All')}${chip(st.phGolden,'',"phQ('g')",'⭐ Golden '+nG)}${chip(st.primeFilter,'',"phQ('p')",'🎯 Prime '+nP)}
+    ${chip(reg==='uk','',"phQ('r','uk')",'UK')}${chip(reg==='ire','',"phQ('r','ire')",'IRE')}${chip(reg==='fr','',"phQ('r','fr')",'FR')}
+    ${chip(false,' f',"phFilt()",'⚙ Filters'+(nf?`<span class="n">${nf}</span>`:''))}
+    ${Object.entries(D.venues).map(([vk,v])=>chip(st.venue===vk,'',`phQ('v','${vk}')`,esc(cname(v.course))+' '+v.races.length)).join('')}</div>
+  <div class="phq-meta"><span>${cardStamp()}</span><span><a class="${st.phGroup!=='meet'?'on':''}" onclick="phGroup('time')">by time</a> · <a class="${st.phGroup==='meet'?'on':''}" onclick="phGroup('meet')">by meeting</a>
+    <span class="phq-ts" title="Text size"><button class="${html.classList.contains('ph-big')?'':'on'}" onclick="phText(0)">A</button><button class="${html.classList.contains('ph-big')?'on':''}" onclick="phText(1)">A</button></span></span></div>`;
+};
+window.phQ=function(k,x){
+  if(k==='all'){st.phGolden=false;st.primeFilter=false;st.regionFilter=new Set();st.venue='all';}
+  else if(k==='g')st.phGolden=!st.phGolden;
+  else if(k==='p')st.primeFilter=!st.primeFilter;
+  else if(k==='r'){const on=st.regionFilter&&st.regionFilter.size===1&&st.regionFilter.has(x);st.regionFilter=on?new Set():new Set([x]);}
+  else if(k==='v')st.venue=st.venue===x?'all':x;
+  try{renderVenueBar();renderFieldSizeBar();}catch(e){}renderRaceCards();
+};
+window.phFilt=function(){html.classList.remove('ph-sheet-on','ph-hl-on');html.classList.add('ph-filt-on');};
+window.phGroup=function(m){st.phGroup=m;renderRaceCards();};
+window.phText=function(big){html.classList.toggle('ph-big',!!big);try{localStorage.setItem('phTextBig',big?'1':'0');}catch(e){}phRenderQuick();};
+
+/* ---------- live Next up + Earlier today ---------- */
+window.phToggleEarly=function(){html.classList.toggle('ph-early-on');phAfterCards();};
+let _next=null;
+window.phOpenNext=function(){if(_next)_next.click();};
+window.phAfterCards=function(){
+  html.classList.remove('ph-hl-on');
+  const nx=document.getElementById('phNext'),ea=document.getElementById('phEarly');if(!nx||!ea||!D)return;
+  const cards=[...document.querySelectorAll('#raceCards .rc[data-t]')];
+  const now=ukNow(),today=D.date===now.date,future=D.date>now.date;
+  let past=0;_next=null;
+  cards.forEach(c=>{const m=toMins(c.dataset.t);const isPast=today&&m!=null&&m<now.mins;c.classList.toggle('rc-past',isPast);if(isPast)past++;});
+  const up=cards.filter(c=>!c.classList.contains('rc-past')).sort((a,b)=>a.dataset.t.localeCompare(b.dataset.t));
+  ea.innerHTML=past?`<span>${html.classList.contains('ph-early-on')?'▾':'▸'} Earlier today (${past})</span><span>${html.classList.contains('ph-early-on')?'hide':'show'}</span>`:'';
+  if((today||future)&&up.length){
+    _next=up[0];const m=toMins(_next.dataset.t);let cd='';
+    if(today){const d=m-now.mins;cd=d<=0?'OFF':d<60?d+'m':Math.floor(d/60)+'h '+String(d%60).padStart(2,'0')+'m';}
+    else cd=new Date(D.date+'T12:00:00').toLocaleDateString('en-GB',{weekday:'short'}).toUpperCase();
+    nx.innerHTML=`<div style="min-width:0"><div class="l">${today?'Next up':'First race'}</div><div class="t">${esc(_next.dataset.t)} ${esc(cname(_next.dataset.c))}</div><div class="s">★ ${esc(_next.dataset.top)} · gap ${esc(_next.dataset.gap)}</div></div><div class="cd">${cd}</div>`;
+  }else nx.innerHTML='';
+};
+setInterval(()=>{if(isPh()&&document.getElementById('landingView').style.display!=='none')phAfterCards();},30000);
+
+/* ---------- race view: header · share · ‹ › · swipe · deep link ---------- */
+window.phRaceHeader=function(race,vk,ri){
+  const n=(D.venues[vk]&&D.venues[vk].races.length)||1;
+  return `<div class="ph-rvh"><button onclick="goBack()" aria-label="Back">←</button><button onclick="phStep(-1)" ${ri<=0?'disabled':''} aria-label="Previous race">‹</button>
+    <div class="tt"><b>${esc(race.time)} ${esc(cname(race.course).toUpperCase())}</b><span>race ${ri+1} of ${n}</span></div>
+    <button onclick="phStep(1)" ${ri>=n-1?'disabled':''} aria-label="Next race">›</button><button onclick="phShare()" aria-label="Share">↗</button></div>`;
+};
+window.phStep=function(d){if(!st.openRace)return;const {vk,ri}=st.openRace;const v=D.venues[vk];if(!v)return;const n=ri+d;if(n<0||n>=v.races.length)return;html.classList.remove('ph-hl-on');openRace(vk,n);};
+window.phShare=async function(){
+  if(!st.openRace)return;const {vk,ri}=st.openRace;const r=D.venues[vk].races[ri];
+  const url=location.origin+location.pathname+'#race='+encodeURIComponent((r.course||'')+'|'+r.time);
+  const title=`${r.time} ${cname(r.course)} — Prixm`;
+  try{if(navigator.share){await navigator.share({title,url});return;}}catch(e){return;}
+  try{await navigator.clipboard.writeText(url);phSheet('Link copied',`<div class="gl">${esc(url)}</div>`);}catch(e){phSheet('Share this race',`<input class="phs-in" value="${esc(url)}" onfocus="this.select()" readonly>`);}
+};
+(function(){const dv=document.getElementById('detailView');if(!dv)return;let x0=null,y0=null,ok=false;
+  dv.addEventListener('touchstart',e=>{if(!isPh()||e.touches.length!==1){ok=false;return;}
+    let n=e.target;ok=true;while(n&&n!==dv){if(n.scrollWidth>n.clientWidth+4&&/(auto|scroll)/.test(getComputedStyle(n).overflowX)){ok=false;break;}n=n.parentElement;}
+    x0=e.touches[0].clientX;y0=e.touches[0].clientY;},{passive:true});
+  dv.addEventListener('touchend',e=>{if(!ok||x0==null)return;const dx=e.changedTouches[0].clientX-x0,dy=e.changedTouches[0].clientY-y0;x0=null;
+    if(Math.abs(dx)>80&&Math.abs(dx)>Math.abs(dy)*2)phStep(dx<0?1:-1);},{passive:true});})();
+(function(){const m=/^#race=(.+)$/.exec(location.hash||'');if(!m)return;const [c,t]=decodeURIComponent(m[1]).split('|');let tries=0;
+  const go=()=>{if(!window.D||!D.venues){if(++tries<60)setTimeout(go,250);return;}
+    for(const [vk,v] of Object.entries(D.venues)){const ri=v.races.findIndex(r=>r.course===c&&r.time===t);if(ri>=0){openRace(vk,ri);return;}}};
+  setTimeout(go,400);})();
+window.phRunnerActs=function(r,race,vk,ri){
+  const nm=String(r.name).replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/"/g,'&quot;');
+  const b=[`<button onclick="event.stopPropagation();hcmpToggle('${nm}');this.textContent=st.compareSelect.has('${nm}')?'✓ In compare':'⚖ Compare'">${st.compareSelect.has(r.name)?'✓ In compare':'⚖ Compare'}</button>`,
+    `<button onclick="event.stopPropagation();hsOpen('${nm}','${vk}',${ri})">📊 Stats</button>`];
+  if(st.compareSelect.size>=2)b.push(`<button onclick="event.stopPropagation();hcmpOpen()">⚖ Open (${st.compareSelect.size})</button>`);
+  if(!VIEW_ONLY){const c=(race.course||'').replace(/'/g,"\\'"),n2=(race.name||'').replace(/'/g,"\\'"),t=(race.time||'').replace(/'/g,"\\'");
+    b.push(`<button onclick="event.stopPropagation();toggleWatch('${nm}','${c}','${n2}')">👁 Track</button>`,`<button onclick="event.stopPropagation();toggleBet('${nm}','${t}','${c}',${r.score||0})">💷 Bet</button>`);}
+  return `<tr class="ph-acts"><td colspan="12"><div class="ph-acts-g">${b.join('')}</div></td></tr>`;
+};
+
+/* ---------- More: tiles + search + glossary + install ---------- */
+const TILE={tabPerf:['📊','Prixm · ☘ Emerald · Vanta results, calendars'],tabTracks:['🗺','Track layouts, draw heat, today\'s fit'],tabEye:['🔭','Eye-catchers the data likes'],
+  tabTopFinish:['🏆','Top pick story + 💎 value play'],tabTrends:['📈','Jockey / trainer form'],tabCombos:['🤝','Horse × jockey × trainer'],tabWatchback:['👁‍🗨','How the losers were beaten'],
+  tabTracked:['👁','Watchlist horses'],tabGolden:['⭐','Golden · Silver · Bronze record'],tabM:['🐎','Race replay with silks'],tabLedger:['💷','Money tracker'],tabRaces:['🏇','Today\'s races']};
+window.phBuildMore=function(rest){
+  const lbl=b=>b.textContent.replace(/[^A-Za-z0-9&%' ]/g,'').replace(/\s+/g,' ').trim();
+  return `<div class="phm-search" onclick="phSearch()">🔍 Search horse, track, jockey…</div>
+    <div class="phm-cap">Analysis</div><div class="phm-grid">${rest.map(b=>{const t=TILE[b.id]||['•',''];return `<button class="phm-t${b.classList.contains('active')?' on':''}" data-tab="${b.id}"><i>${t[0]}</i><b>${esc(lbl(b))}</b><span>${esc(t[1])}</span></button>`;}).join('')}</div>
+    <div class="phm-cap">Help</div><div class="phm-grid">
+      <button class="phm-t" onclick="phGloss()"><i>📖</i><b>Glossary</b><span>Gap, score, Golden, Prime… in plain words</span></button>
+      <button class="phm-t" onclick="document.documentElement.classList.remove('ph-more-on');showGuide()"><i>❓</i><b>Guide</b><span>How everything works</span></button>
+      <button class="phm-t" onclick="phInstall()"><i>📲</i><b>Install</b><span>Add Prixm to your home screen</span></button>
+      <button class="phm-t" onclick="toggleTheme()"><i>◐</i><b>Theme</b><span>Dark / light</span></button></div>`;
+};
+let _bip=null;window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();_bip=e;});
+window.phInstall=function(){
+  if(_bip){_bip.prompt();_bip=null;return;}
+  phSheet('Add to home screen',`<div class="gl"><b>iPhone (Safari)</b>Tap the Share button <b style="display:inline;letter-spacing:0">⬆</b> → <i>Add to Home Screen</i>.</div>
+    <div class="gl"><b>Android (Chrome)</b>Tap ⋮ (top right) → <i>Add to Home screen</i> / <i>Install app</i>.</div>
+    <div class="gl">It then opens full screen like an app, straight onto today's races.</div>`);
+};
+window.phSearch=function(){
+  phSheet('Search',`<input class="phs-in" id="phSq" placeholder="Horse, track, jockey or trainer" oninput="phSearchRun(this.value)" autocomplete="off"><div id="phSr" style="margin-top:10px"></div>`);
+  setTimeout(()=>{const i=document.getElementById('phSq');if(i)i.focus();},60);
+};
+window.phSearchRun=function(q){
+  const out=document.getElementById('phSr');if(!out)return;q=(q||'').trim().toLowerCase();if(q.length<2){out.innerHTML='';return;}
+  const rows=[];
+  Object.entries((D&&D.venues)||{}).forEach(([vk,v])=>v.races.forEach((r,ri)=>{
+    if(cname(r.course).toLowerCase().includes(q)&&!rows.some(x=>x.k==='c'+vk))rows.push({k:'c'+vk,h:`<div class="phs-row" onclick="phCloseAll();phQ('v','${vk}');switchTab('races')"><b>🏟</b><div><b>${esc(cname(r.course))}</b><div class="m">${v.races.length} races today</div></div><span></span></div>`});
+    (r.runners||[]).forEach(x=>{const hit=[x.name,x.jockey,x.trainer].some(s=>(s||'').toLowerCase().includes(q));
+      if(hit&&rows.length<40)rows.push({k:'r',h:`<div class="phs-row" onclick="phCloseAll();switchTab('races');openRace('${vk}',${ri})"><b>${esc(r.time)}</b><div style="min-width:0"><b>${esc(x.name)}</b><div class="m">${esc(cname(r.course))} · ${esc(x.jockey||'')} · ${esc(x.trainer||'')}</div></div><span class="phs-fp">${x.score!=null?x.score:''}</span></div>`});});
+  }));
+  const H=(window._allHistory&&window._allHistory.races)||[];const seen={};
+  for(let i=H.length-1;i>=0&&Object.keys(seen).length<8;i--){(H[i].results||[]).forEach(x=>{const n=x.name||'';if(n.toLowerCase().includes(q)&&!seen[n]){seen[n]={r:H[i],x};}});}
+  const hist=Object.entries(seen).map(([n,{r,x}])=>`<div class="phs-row" style="cursor:default"><b style="font-size:10px">${esc((r.date||'').slice(5))}</b><div style="min-width:0"><b>${esc(n)}</b><div class="m">last logged run · ${esc(cname(r.venue))} ${esc(r.time||'')}</div></div><span class="phs-fp ${x.finish_pos===1?'w':''}">${x.non_runner?'NR':x.finish_pos||'—'}</span></div>`).join('');
+  out.innerHTML=(rows.length?`<div class="phm-cap">Today</div>`+rows.map(x=>x.h).join(''):'')+(hist?`<div class="phm-cap">Logged results</div>`+hist:'')||'<div class="gl" style="color:var(--muted)">Nothing found.</div>';
+};
+
+/* ---------- Performance: jump chips + calendar metric + day sheet ---------- */
+function perfChips(){
+  const box=document.getElementById('phPerfChips'),pc=document.getElementById('perfContent');if(!box||!pc)return;
+  if(!isPh()){box.innerHTML='';return;}
+  const cand=[...pc.querySelectorAll('[data-phsec],.va-h,.va-prog,.va-kpis,div[style*="font-weight:700"],div[style*="font-weight:800"]')].filter(n=>{
+    if(n.closest('table'))return false;const t=(n.textContent||'').trim();if(n.classList.contains('va-prog')||n.classList.contains('va-kpis'))return true;
+    const fs=parseFloat(getComputedStyle(n).fontSize);return t.length>=3&&t.length<=48&&(n.hasAttribute('data-phsec')||n.classList.contains('va-h')||(fs>=12.5&&fs<=17&&n.children.length<=2));});
+  const seen=new Set(),list=[];
+  cand.forEach(n=>{let t=n.classList.contains('va-prog')?'Calibration':n.classList.contains('va-kpis')?'Overview':(n.getAttribute('data-phsec')==='Calendar'?'Calendar':(n.textContent||'').trim());
+    t=t.replace(/^[^A-Za-z0-9☘]+/,'').replace(/\s*·.*$/,'').replace(/\(.*?\)/g,'').trim();if(t.length>22)t=t.slice(0,21)+'…';
+    const k=t.toLowerCase();if(!t||seen.has(k))return;seen.add(k);list.push([t,n]);});
+  list.sort((a,b)=>a[1].getBoundingClientRect().top-b[1].getBoundingClientRect().top);
+  window._phPerfT=list.slice(0,12).map(x=>x[1]);
+  box.innerHTML=list.length>1?list.slice(0,12).map(([t],i)=>`<button class="phq-chip" onclick="phPerfGo(${i})">${esc(t)}</button>`).join(''):'';
+}
+window.phPerfGo=function(i){const n=(window._phPerfT||[])[i];if(!n)return;const y=n.getBoundingClientRect().top+window.scrollY-112;window.scrollTo({top:Math.max(0,y),behavior:'smooth'});
+  document.querySelectorAll('#phPerfChips .phq-chip').forEach((b,k)=>b.classList.toggle('on',k===i));};
+(function(){const pc=document.getElementById('perfContent');if(!pc)return;let t=null;
+  new MutationObserver(()=>{clearTimeout(t);t=setTimeout(perfChips,200);}).observe(pc,{childList:true,subtree:true});
+  window.addEventListener('resize',()=>{clearTimeout(t);t=setTimeout(perfChips,200);});})();
+window.phPcm=function(k,btn){html.dataset.pcm=k;try{localStorage.setItem('phPcm',k);}catch(e){}
+  document.querySelectorAll('.pcal-pm button').forEach(b=>b.classList.toggle('on',b===btn||b.getAttribute('onclick').includes(`'${k}'`)));};
+window.phPcalDay=function(eng,date){
+  if(!isPh())return;
+  let rows=[];
+  const pl=fs=>typeof getPlaceLimit==='function'?getPlaceLimit(fs):(fs<=7?2:fs<=15?3:4);
+  if(eng==='emerald'||eng==='vanta'){
+    const h=eng==='emerald'?window._emeraldHistory:window._vantaHistory;
+    ((h&&h.races)||[]).filter(r=>r.date===date).sort((a,b)=>(a.time||'').localeCompare(b.time||'')).forEach(r=>{
+      const rs=r.results||[];if(rs.length<2)return;const t=rs.reduce((a,b)=>((b.predicted_score??-1)>(a.predicted_score??-1)?b:a));
+      const w=rs.find(x=>x.finish_pos===1)||{};const fs=r.field_size||rs.filter(x=>!x.non_runner).length;
+      rows.push({t:r.time,c:r.venue,h:t.name,fp:t.non_runner?'NR':t.finish_pos,pl:pl(fs),sp:t.sp,w:w.name,wsp:w.sp});});
+  }else{
+    const pd=loadPrixmPicksForCalendar(date),hist=window._resultsHistory;
+    ((pd&&pd.picks)||[]).forEach(p=>{let res=null;try{res=getPickResult(p,hist,date);}catch(e){}const s2=res&&res.status;
+      rows.push({t:p.time,c:p.venue,h:p.horse,fp:!res?'—':s2==='nr'?'NR':s2==='pu'?'PU':res.pos,pl:s2==='placed'?99:0,sp:res&&res.sp,cat:p.category});});
+  }
+  const n=rows.filter(r=>r.fp!=='NR'&&r.fp!=='—').length,w=rows.filter(r=>r.fp===1).length,p=rows.filter(r=>r.fp===1||r.fp==='P'||(typeof r.fp==='number'&&r.fp<=r.pl)).length;
+  const d=new Date(date+'T12:00:00').toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'});
+  phSheet(d,`<div class="gl" style="color:var(--muted)">${rows.length} ${eng==='prixm'?'picks':'top picks'} · won ${w}/${n} · placed ${p}/${n}</div>`+rows.map(r=>{
+    const won=r.fp===1,plc=!won&&(r.fp==='P'||(typeof r.fp==='number'&&r.fp<=r.pl));
+    return `<div class="phs-row" style="cursor:default"><b>${esc(r.t||'')}</b><div style="min-width:0"><b>${esc(r.h)}</b>${r.cat?` <span class="m">${esc(r.cat)}</span>`:''}<div class="m">${esc(cname(r.c))}${r.sp?' · SP '+esc(r.sp):''}${!won&&r.w?' · won by '+esc(r.w)+(r.wsp?' '+esc(r.wsp):''):''}</div></div><span class="phs-fp ${won?'w':plc?'p':''}">${esc(r.fp==null?'—':r.fp)}</span></div>`;}).join('')||'<div class="gl">No picks saved for this day.</div>');
+};
+})();
+</script>
+
 <script>
 /* ==================== 👁 TRACKED TAB (watchlist horses — full info) ====================
    Tab tabTracked / switchTab('tracked') / #trackedView. Built from the approved standalone mockup
