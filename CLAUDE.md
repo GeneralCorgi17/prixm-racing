@@ -148,6 +148,14 @@ Top-level tab `tabTracked` / `switchTab('tracked')` / `#trackedView` → `window
 - KPIs (tracked · running today · since-tracked W-P-U · strike rate), filter chips All / Running today / With notes + search, list (silk, note, last-6 form squares, TODAY time + ★ pick / days since run), detail (note, running-today card with Open race / Log bet / 📊 Stats, since-tracked record, finishing pos vs Prixm rank SVG, conditions bars, run log with Watchback tag + run style + in-running comment, jockeys). No 1u P/L here (user rule).
 - Watchlist notes: TRACK → `wlNotePrompt()` (optional note, Ctrl+Enter saves) · `getWatchNote()` / `saveWatchNote()` · ✏️ in Manage Watchlist · tooltip on TRACKING. `toggleWatch`/`saveWatchNote` call `trackedTabRefresh()`.
 
+## 🎯 Picks Tab (added 2026-11-24)
+
+Top-level tab `tabPicks` / `switchTab('picks')` / `#picksView` → `window.renderPicksTab()` (IIFE `🎯 PICKS TAB`, last script block; CSS injected as `<style id="picksTabCss">`, all rules under `.pkt`, theme vars `--p-*`; `ntRemap()` skips `.pkt`). Approved mockup `mockups/prixm_picks_mockup.html`.
+- **Today** = live `getTop10Picks(D)` → `getPrixmPicks()` + `getPrixmBetRec()` + `runVerificationPass()` (NAP/WIN) — same picks as the sidebar panel. **Past days** = saved `prixmPicks_DATE` (same source as the 📅 Daily Prixm Picks calendar, this device only) + the logged race in `_resultsHistory` (`raceFromHist()` pseudo card: field scores/breakdowns, no silks/prices; no verification).
+- KPIs (selections · top of day · W-P-U · day 1u P/L at SP · 30-day win/place %), chips (category · To run/Resulted · sort Rank/Time/Edge), list + detail: edge build-up (`edgeParts()` = the `getPrixmPicks` formula) + category ladder + "missed next category", bet rec + tags, verification, factor bars, CDP, top 5, context chips, result (+ watchback, run comment), Open race / 📊 Stats / Log bet (today only, Log bet hidden in VIEW_ONLY). Record table by category + bet type. Phone (≤900px): detail opens full-screen.
+- Found while building: card Distance/Going/Course factors are neutral (3/6, 4/8, 3/6 = "untested"), so CDP rarely passes 1/4 → **NAP/WIN almost never qualify** (31-day rebuild: 0 of 196). Engine left unchanged; the tab says so.
+- Display only — never changes scores, picks, segments or the Ledger.
+
 ## 🔭 Model — eye-catchers + soft blend (display only, added 2026-11-16)
 
 `engine/eye_model.py` (needs scikit-learn + numpy; skipped quietly without). Gradient-boosted model on every logged runner — features from archived racecards + history strictly before each race (class drop, quick return, trainer RTF, course/distance/going wins, OR change, draw vs expected, track fit, top RPR/TS, pace style, rank/gap/score). **No market prices as inputs.** Mockup: `mockups/model_eyecatchers_mockup.html`; research: `scripts/research/`.

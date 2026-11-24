@@ -1685,7 +1685,7 @@ html[data-theme="nothing"] svg text[fill="#6b7280"],html[data-theme="nothing"] s
   html[data-theme] .ph-swipe{display:block;text-align:center;font-size:10px;color:var(--muted);padding:14px 0 4px}
   /* bigger text (A A in the quick bar) */
   html.ph-big[data-theme] #landingView,html.ph-big[data-theme] #detailView,html.ph-big[data-theme] #perfView,html.ph-big[data-theme] #goldenView,html.ph-big[data-theme] #tracksView,
-  html.ph-big[data-theme] #combosView,html.ph-big[data-theme] #trendsView,html.ph-big[data-theme] #topFinishView,html.ph-big[data-theme] #watchbackView,html.ph-big[data-theme] #trackedView,html.ph-big[data-theme] #eyeView{zoom:1.12}
+  html.ph-big[data-theme] #combosView,html.ph-big[data-theme] #trendsView,html.ph-big[data-theme] #topFinishView,html.ph-big[data-theme] #watchbackView,html.ph-big[data-theme] #trackedView,html.ph-big[data-theme] #picksView,html.ph-big[data-theme] #eyeView{zoom:1.12}
   /* More sheet → tiles + search */
   html[data-theme] #phMore{display:block!important;max-height:78vh;overflow-y:auto;background:var(--bg)!important;padding:12px 12px 16px}
   html[data-theme] .phm-cap{font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);padding:10px 2px 6px}
@@ -1811,6 +1811,7 @@ html[data-theme="nothing"] svg text[fill="#6b7280"],html[data-theme="nothing"] s
   <button class="tab-btn" id="tabPerf" onclick="switchTab('performance')">Performance</button>
   <button class="tab-btn" id="tabCombos" onclick="switchTab('combos')">Combos</button>
   <button class="tab-btn" id="tabTrends" onclick="switchTab('trends')">Trends</button>
+  <button class="tab-btn" id="tabPicks" onclick="switchTab('picks')" title="🎯 Prixm Picks — today's NAP / WIN / STRONG / PLACE selections with every detail">🎯 Picks</button>
   <button class="tab-btn" id="tabGolden" onclick="switchTab('golden')">Golden</button>
   <button class="tab-btn" id="tabTracks" onclick="switchTab('tracks')">🗺 Track Explorer</button>
   <button class="tab-btn" id="tabTopFinish" onclick="switchTab('topfinish')">Top Finish</button>
@@ -1868,6 +1869,7 @@ window.addEventListener('load',f);window.addEventListener('resize',f);setTimeout
 <div id="watchbackView" style="display:none;padding:20px 28px;max-width:1200px;margin:0 auto"><div id="watchbackContent">Loading...</div></div>
 <div id="ledgerView" class="vo-hide" style="display:none;padding:20px 28px 90px;max-width:1200px;margin:0 auto"><div id="ledgerContent">Loading...</div></div>
 <div id="mView" style="display:none;padding:20px 28px;max-width:1300px;margin:0 auto"><div id="mContent">Loading...</div></div>
+<div id="picksView" style="display:none;padding:20px 28px;max-width:1360px;margin:0 auto"><div id="picksContent">Loading...</div></div>
 <div id="trackedView" style="display:none;padding:20px 28px;max-width:1360px;margin:0 auto"><div id="trackedContent">Loading...</div></div>
 <div id="eyeView" style="display:none;padding:20px 28px;max-width:1240px;margin:0 auto"><div id="eyeContent">Loading...</div></div>
 <button id="lgFab" class="lg-fab vo-hide" onclick="window.lgOpen&&window.lgOpen()" title="Log a bet (shortcut: B)">＋<span class="lgf-x"> Log bet <small id="lgFabSub"></small><span class="kbd">B</span></span></button>
@@ -2623,6 +2625,7 @@ function switchTab(tab){
   document.getElementById('tabLedger').classList.toggle('active',tab==='ledger');
   document.getElementById('tabM').classList.toggle('active',tab==='m');
   document.getElementById('tabTracked').classList.toggle('active',tab==='tracked');
+  document.getElementById('tabPicks').classList.toggle('active',tab==='picks');
   document.getElementById('tabEye').classList.toggle('active',tab==='eye');
   document.getElementById('landingView').style.display=tab==='races'?'block':'none';
   document.getElementById('detailView').style.display='none';
@@ -2636,6 +2639,7 @@ function switchTab(tab){
   document.getElementById('ledgerView').style.display=tab==='ledger'&&!VIEW_ONLY?'block':'none';
   document.getElementById('mView').style.display=tab==='m'?'block':'none';
   document.getElementById('trackedView').style.display=tab==='tracked'?'block':'none';
+  document.getElementById('picksView').style.display=tab==='picks'?'block':'none';
   document.getElementById('eyeView').style.display=tab==='eye'?'block':'none';
   if(tab==='performance') renderPerformance();
   if(tab==='combos') renderCombos();
@@ -2646,6 +2650,7 @@ function switchTab(tab){
   if(tab==='watchback') window.renderWatchbackDashboard&&window.renderWatchbackDashboard();
   if(tab==='ledger') window.renderLedger&&window.renderLedger();
   if(tab==='tracked') window.renderTrackedTab&&window.renderTrackedTab();
+  if(tab==='picks') window.renderPicksTab&&window.renderPicksTab();
   if(tab==='eye') window.renderEyeTab&&window.renderEyeTab();
   if(tab==='m') window.renderMTab&&window.renderMTab();
   else if(window.MTSim) MTSim.stop();
@@ -7469,7 +7474,7 @@ function showGuide(){
   document.getElementById('modalContainer').innerHTML=`<div class="modal-bg" onclick="if(event.target===this)closeModal()"><div class="modal" style="max-width:820px">
     <button class="mclose" onclick="closeModal()">&times;</button>
     <h2 style="display:flex;align-items:center;gap:8px;margin-bottom:4px">📖 Daily Racing Analyzer — Complete Guide</h2>
-    <p style="font-size:11px;color:var(--muted);margin-bottom:16px">Prixm (UK) + ☘ Emerald (Ireland) + Vanta (France) · 14-variable scoring · 🧭 Horse × Track · 🗺 Track Explorer · 🔭 Model · 👁 Tracked · 💷 Ledger · Auto-calibration · PDF export</p>
+    <p style="font-size:11px;color:var(--muted);margin-bottom:16px">Prixm (UK) + ☘ Emerald (Ireland) + Vanta (France) · 14-variable scoring · 🧭 Horse × Track · 🗺 Track Explorer · 🎯 Picks · 🔭 Model · 👁 Tracked · 💷 Ledger · Auto-calibration · PDF export</p>
 
     <div class="guide-section info">
       <h3><span class="gi">◐</span> Look — Nothing / Classic</h3>
@@ -7579,6 +7584,17 @@ function showGuide(){
         <li>Top-level <b>🐎 MT</b> tab: pick a venue chip and a race time (or ◀ ▶), then <b>▶ Run it</b>. Galloping horses — each jockey wearing the runner's <b>real silks</b> — run the race's <b>own track</b> (left/right-handed oval, or a wide straight course) and pull up after the line. The winner gets a ring and <b>🏆 WINNER</b>. Speed 0.5× / 1× / 2×.</li>
         <li>Finishing order = the engine's predicted order and gaps at the line = predicted lengths (same as 🔮 Predict). Early positions from the pace map + draw; the mid-race moves are for show — <b>illustrative, not a real race</b>.</li>
         <li>Race header shows gap / score / confidence and the ⭐ / 🥈 / 🥉 badge. <b>Open race →</b> jumps to the full race view. Display only — never changes scores or segments.</li>
+      </ul>
+    </div>
+
+    <!-- 🎯 PICKS -->
+    <div class="guide-section" style="border-left-color:#93b4e8">
+      <h3><span class="gi">🎯</span> Picks tab — Prixm picks of the day</h3>
+      <ul style="font-size:11.5px;margin:6px 0 0 16px;line-height:1.6">
+        <li>Every Prixm selection (NAP / WIN / STRONG / PLACE, UK only, edge ≥ 40) on one page — the same picks as the sidebar panel. ‹ › steps back through earlier days (picks saved on this device).</li>
+        <li>Top boxes: selections, top of the day, results (won-placed-unplaced), day 1u win P/L at SP, and win % / place % over the last 30 saved days. Filter by category, To run / Resulted, sort by Rank / Time / Edge.</li>
+        <li>Click a pick: score, gap, edge, win / place chance (BT model + fair price), form trend, <b>why it's a pick</b> (each part of the edge with its points + what stopped it reaching the next category), bet recommendation and reasons, verification (NAP / WIN), factor breakdown, CDP, the top 5 in the race, context (⭐/🥈/🥉, 🎯 Prime, track fit, weight, model, connections, watchback) and the result.</li>
+        <li>NAP needs CDP ≥ 3/4 and WIN ≥ 2/4 — Distance / Going / Course sit at a neutral value on most cards, so most picks land STRONG or PLACE. Display only — never changes scores, picks or the Ledger.</li>
       </ul>
     </div>
 
@@ -14300,7 +14316,7 @@ window.toggleTheme=function(){
   // dark text sitting on a cream/sand surface (e.g. the Log bet button) must stay dark
   function onKeptBg(el){for(let e=el,i=0;e&&i<6;e=e.parentElement,i++){const b=parse(getComputedStyle(e).backgroundColor);if(b&&b.a>.5)return keep(b);}return false;}
   function fix(el){
-    if(SKIP.has(el.tagName)||el.closest('svg')||el.classList.contains('nt-cursor')||el.classList.contains('nt-ring')||el.classList.contains('seg-btn')) return; // seg-btn: own theme rules (selected state must stay visible)
+    if(SKIP.has(el.tagName)||el.closest('svg')||el.classList.contains('nt-cursor')||el.classList.contains('nt-ring')||el.classList.contains('seg-btn')||el.closest('.pkt')) return; // .pkt = 🎯 Picks tab (own theme vars) · seg-btn: own theme rules (selected state must stay visible)
     const cs=getComputedStyle(el);
     // background
     const bg=parse(cs.backgroundColor);
@@ -14368,7 +14384,7 @@ window.toggleTheme=function(){
   const html=document.documentElement;
   const nav=document.getElementById('phNav'), more=document.getElementById('phMore');
   if(!nav||!more) return;
-  const ICON={tabRaces:'🏇',tabGolden:'⭐',tabLedger:'💷',tabPerf:'📊',tabM:'🐎',tabTracked:'👁',tabEye:'🔭'};
+  const ICON={tabRaces:'🏇',tabPicks:'🎯',tabGolden:'⭐',tabLedger:'💷',tabPerf:'📊',tabM:'🐎',tabTracked:'👁',tabEye:'🔭'};
   const label=b=>b.textContent.replace(/[^A-Za-z0-9&%' ]/g,'').replace(/\s+/g,' ').trim();
   const shown=b=>getComputedStyle(b).display!=='none';
   function build(){
@@ -14559,7 +14575,7 @@ window.phRunnerActs=function(r,race,vk,ri){
 /* ---------- More: tiles + search + glossary + install ---------- */
 const TILE={tabPerf:['📊','Prixm · ☘ Emerald · Vanta results, calendars'],tabTracks:['🗺','Track layouts, draw heat, today\'s fit'],tabEye:['🔭','Eye-catchers the data likes'],
   tabTopFinish:['🏆','Top pick story + 💎 value play'],tabTrends:['📈','Jockey / trainer form'],tabCombos:['🤝','Horse × jockey × trainer'],tabWatchback:['👁‍🗨','How the losers were beaten'],
-  tabTracked:['👁','Watchlist horses'],tabGolden:['⭐','Golden · Silver · Bronze record'],tabM:['🐎','Race replay with silks'],tabLedger:['💷','Money tracker'],tabRaces:['🏇','Today\'s races']};
+  tabTracked:['👁','Watchlist horses'],tabPicks:['🎯','Prixm picks of the day — full detail'],tabGolden:['⭐','Golden · Silver · Bronze record'],tabM:['🐎','Race replay with silks'],tabLedger:['💷','Money tracker'],tabRaces:['🏇','Today\'s races']};
 window.phBuildMore=function(rest){
   const lbl=b=>b.textContent.replace(/[^A-Za-z0-9&%' ]/g,'').replace(/\s+/g,' ').trim();
   return `<div class="phm-search" onclick="phSearch()">🔍 Search horse, track, jockey…</div>
@@ -14601,7 +14617,7 @@ const html=document.documentElement;
 const isPh=()=>window.matchMedia&&matchMedia('(max-width:700px)').matches;
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const cname=c=>(c||'').replace(/\s*\((?:FR|IRE|GB|AW)\)/gi,'').toLowerCase().replace(/\b\w/g,m=>m.toUpperCase());
-const TITLES={emerald:'Performance',vanta:'Performance',races:'Today',performance:'Performance',combos:'Combos',trends:'Trends',golden:'Golden',tracks:'Tracks',topfinish:'Top Finish',watchback:'Watchback',tracked:'Tracked',eye:'Model',ledger:'Ledger',m:'MT Replay'};
+const TITLES={emerald:'Performance',vanta:'Performance',races:'Today',performance:'Performance',combos:'Combos',trends:'Trends',golden:'Golden',tracks:'Tracks',topfinish:'Top Finish',watchback:'Watchback',tracked:'Tracked',picks:'Prixm Picks',eye:'Model',ledger:'Ledger',m:'MT Replay'};
 function setTitle(tab){const t=document.getElementById('phTitleT'),s=document.getElementById('phTitleS');if(!t)return;
   t.textContent=TITLES[tab]||'Prixm';
   if(s)s.textContent=window.D&&D.date?new Date(D.date+'T12:00:00').toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'}):'';
@@ -14612,7 +14628,7 @@ function measure(){const h=document.querySelector('.hdr'),q=document.getElementB
 window.addEventListener('resize',measure);
 // wrap global navigation so the app bar / race screen follow it
 const _sw=window.switchTab;window.switchTab=function(tab){const r=_sw.apply(this,arguments);html.classList.toggle('ph-race',tab==='races'&&!!st.openRace&&document.getElementById('detailView').style.display!=='none');setTitle(tab);return r;};
-const ID2TAB={tabRaces:'races',tabPerf:'performance',tabCombos:'combos',tabTrends:'trends',tabGolden:'golden',tabTracks:'tracks',tabTopFinish:'topfinish',tabWatchback:'watchback',tabTracked:'tracked',tabEye:'eye',tabLedger:'ledger',tabM:'m'};
+const ID2TAB={tabRaces:'races',tabPerf:'performance',tabCombos:'combos',tabTrends:'trends',tabGolden:'golden',tabTracks:'tracks',tabTopFinish:'topfinish',tabWatchback:'watchback',tabTracked:'tracked',tabPicks:'picks',tabEye:'eye',tabLedger:'ledger',tabM:'m'};
 const _or=window.openRace;window.openRace=async function(vk,ri,fromHistory){
   const was=st.openRace,dir=was&&was.vk===vk?(ri<was.ri?'l':'r'):'r';
   html.classList.add('ph-race');const r=await _or.apply(this,arguments);
@@ -15091,6 +15107,369 @@ function render(){
   HL=null;
 }
 window.renderEyeTab=render;
+})();
+</script>
+
+<script>
+/* ==================== 🎯 PICKS TAB (Prixm picks of the day — full detail) ====================
+   Tab tabPicks / switchTab('picks') / #picksView → window.renderPicksTab(). Approved mockup: mockups/prixm_picks_mockup.html (2026-11-24).
+   Today = live getTop10Picks(D) → getPrixmPicks() + getPrixmBetRec() + runVerificationPass() (same as the sidebar panel).
+   Past days = saved prixmPicks_DATE (localStorage, same source as the 📅 Daily Prixm Picks calendar) + the logged race in
+   _resultsHistory (field scores, results). Pure reads — never changes scores, picks, segments or the Ledger. Both themes. */
+(function(){
+'use strict';
+const CSS=`
+.pkt{--p-bg:#fff;--p-card:#fafaf8;--p-card2:#f3f1ec;--p-line:#e5e0d8;--p-line2:#d6d0c6;--p-text:#111827;--p-muted:#6b7280;--p-muted2:#4b5563;--p-acc:#9a7b4f;--p-inv:#111827;--p-invt:#fff;
+  --p-win:#15803d;--p-place:#1d4ed8;--p-lose:#dc2626;--p-gold:#b45309;--p-nap:#7c3aed;--p-wincat:#15803d;--p-strong:#1d4ed8;--p-plc:#c2620c}
+html[data-theme="nothing"] .pkt{--p-bg:#0a0a0a;--p-card:#111;--p-card2:#161616;--p-line:#1f1f1f;--p-line2:#2a2a2a;--p-text:#f5f2eb;--p-muted:#7d786f;--p-muted2:#9a948a;--p-acc:#c8b89a;--p-inv:#f5f2eb;--p-invt:#0a0a0a;
+  --p-win:#9fd6ae;--p-place:#93b4e8;--p-lose:#e59a8c;--p-gold:#d9b25c;--p-nap:#c79bf0;--p-wincat:#9fd6ae;--p-strong:#93b4e8;--p-plc:#e8b07a}
+.pkt{color:var(--p-text);font-family:'DM Mono',ui-monospace,monospace;font-size:12px;line-height:1.45}
+.pkt .bb{font-family:'Bebas Neue',Impact,'Arial Narrow',sans-serif;font-weight:400}
+.pkt .top{display:flex;align-items:flex-end;gap:16px;flex-wrap:wrap}
+.pkt h1{font-family:'Bebas Neue',Impact,sans-serif;font-weight:400;font-size:56px;letter-spacing:.02em;line-height:.92;margin:0;color:var(--p-text)}
+.pkt h1 span{-webkit-text-stroke:1px var(--p-text);color:transparent}
+.pkt .sub{color:var(--p-muted);font-size:10px;letter-spacing:.18em;text-transform:uppercase;margin-top:6px}
+.pkt .sp{flex:1}
+.pkt .dsw{display:flex;align-items:center;border:1px solid var(--p-line2)}
+.pkt .dsw button{background:none;border:none;color:var(--p-text);font:inherit;font-size:16px;padding:8px 14px;cursor:pointer}
+.pkt .dsw button:disabled{opacity:.25;cursor:default}
+.pkt .dsw .d{font-family:'Bebas Neue',Impact,sans-serif;font-size:24px;letter-spacing:.04em;padding:4px 14px;border-left:1px solid var(--p-line2);border-right:1px solid var(--p-line2);min-width:190px;text-align:center}
+.pkt .dsw .d small{display:block;font-family:'DM Mono',monospace;font-size:9.5px;letter-spacing:.2em;color:var(--p-muted);margin-top:-2px}
+.pkt .kpis{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));border:1px solid var(--p-line);margin:18px 0 14px}
+.pkt .kpi{padding:14px 16px;border-right:1px solid var(--p-line);min-width:0}.pkt .kpi:last-child{border-right:none}
+.pkt .kpi .l,.pkt .st .l{font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--p-muted)}
+.pkt .kpi .v{font-family:'Bebas Neue',Impact,sans-serif;font-size:36px;line-height:1;margin-top:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pkt .kpi .s{font-size:10.5px;color:var(--p-muted2)}
+.pkt .bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+.pkt .chip{border:1px solid var(--p-line2);background:transparent;color:var(--p-muted);font:inherit;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;padding:7px 12px;cursor:pointer;border-radius:0}
+.pkt .chip:hover{color:var(--p-text)}.pkt .chip.on{background:var(--p-inv);color:var(--p-invt);border-color:var(--p-inv)}
+.pkt .chip b{font-weight:500;opacity:.7;margin-left:4px}
+.pkt .sep{width:1px;height:22px;background:var(--p-line2);margin:0 4px}
+.pkt .grid{display:grid;grid-template-columns:400px minmax(0,1fr);gap:16px;align-items:start}
+.pkt .list{border:1px solid var(--p-line)}
+.pkt .row{display:grid;grid-template-columns:4px 34px minmax(0,1fr) auto;gap:10px;align-items:center;padding:11px 12px 11px 0;border-bottom:1px solid var(--p-line);cursor:pointer;position:relative}
+.pkt .row:last-child{border-bottom:none}
+.pkt .row:hover{background:var(--p-card)}.pkt .row.sel{background:var(--p-card2)}
+.pkt .row.sel::after{content:'';position:absolute;right:-1px;top:0;bottom:0;width:2px;background:var(--p-text)}
+.pkt .row.lostrow{opacity:.6}
+.pkt .acc{align-self:stretch}
+.pkt .silk{width:34px;height:34px;object-fit:contain;background:var(--p-card2);border:1px solid var(--p-line)}
+.pkt .nosilk{visibility:hidden}
+.pkt .rn{font-size:14px;color:var(--p-text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pkt .rm{font-size:10.5px;color:var(--p-muted);letter-spacing:.04em}
+.pkt .pcr{display:flex;align-items:center;gap:6px;margin-bottom:2px}
+.pkt .cat{font-size:9px;letter-spacing:.2em;font-weight:500}
+.pkt .rr{text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:5px}
+.pkt .betc{font-size:9.5px;letter-spacing:.14em;border:1px solid currentColor;padding:2px 7px;white-space:nowrap}
+.pkt .eb{display:flex;align-items:center;gap:6px;font-size:10px;color:var(--p-muted)}
+.pkt .eb i{display:block;width:54px;height:3px;background:var(--p-line2);position:relative}
+.pkt .eb i u{position:absolute;left:0;top:0;bottom:0;text-decoration:none}
+.pkt .res{font-size:9.5px;letter-spacing:.12em;padding:2px 7px;white-space:nowrap}
+.pkt .res.won{background:var(--p-win);color:var(--p-invt)}.pkt .res.placed{background:var(--p-place);color:var(--p-invt)}
+.pkt .res.lost{border:1px solid var(--p-lose);color:var(--p-lose)}.pkt .res.pend{border:1px dashed var(--p-line2);color:var(--p-muted)}
+.pkt .res.nr,.pkt .res.pu{border:1px solid var(--p-muted);color:var(--p-muted)}
+.pkt .det{border:1px solid var(--p-line);min-height:400px;background:var(--p-bg)}
+.pkt .hero{display:grid;grid-template-columns:76px minmax(0,1fr) auto;gap:16px;padding:18px;border-bottom:1px solid var(--p-line);align-items:center}
+.pkt .hero .silk{width:76px;height:76px}
+.pkt .hn{font-family:'Bebas Neue',Impact,sans-serif;font-size:44px;line-height:.95;letter-spacing:.02em}
+.pkt .hm{color:var(--p-muted2);font-size:11.5px;margin-top:4px}
+.pkt .hr{text-align:right}
+.pkt .big{font-family:'Bebas Neue',Impact,sans-serif;font-size:30px;line-height:1}
+.pkt .stats{display:grid;grid-template-columns:repeat(6,1fr);border-bottom:1px solid var(--p-line)}
+.pkt .st{padding:12px 14px;border-right:1px solid var(--p-line)}.pkt .st:last-child{border-right:none}
+.pkt .st .v{font-family:'Bebas Neue',Impact,sans-serif;font-size:28px;line-height:1.05}
+.pkt .st .s{font-size:10px;color:var(--p-muted2)}
+.pkt .sec{padding:16px 18px;border-bottom:1px solid var(--p-line)}
+.pkt .sec:last-child{border-bottom:none}
+.pkt .sh{font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--p-acc);margin-bottom:10px;display:flex;justify-content:space-between;gap:8px}
+.pkt .sh span{color:var(--p-muted);letter-spacing:.1em}
+.pkt .two{display:grid;grid-template-columns:1fr 1fr}
+.pkt .two>.sec:first-child{border-right:1px solid var(--p-line)}
+.pkt .eline{display:grid;grid-template-columns:minmax(0,1fr) 140px 44px;gap:10px;align-items:center;font-size:11.5px;padding:4px 0}
+.pkt .eline .b,.pkt .fac .b{height:6px;background:var(--p-line);position:relative}
+.pkt .eline .b u,.pkt .fac .b u{position:absolute;top:0;bottom:0;text-decoration:none}
+.pkt .eline .n{text-align:right}
+.pkt .etot{border-top:1px solid var(--p-line2);margin-top:6px;padding-top:8px;display:flex;justify-content:space-between;font-size:12px}
+.pkt .ladder{display:flex;gap:4px;margin-top:10px}
+.pkt .ladder div{flex:1;font-size:9px;letter-spacing:.14em;text-align:center;padding:5px 0;border:1px solid var(--p-line2);color:var(--p-muted)}
+.pkt .ladder div.on{color:var(--p-invt)}
+.pkt .tags{display:flex;flex-wrap:wrap;gap:6px}
+.pkt .tag{font-size:10.5px;padding:3px 8px;border:1px solid var(--p-line2)}
+.pkt .tag.pos{color:var(--p-win)}.pkt .tag.neg{color:var(--p-lose)}.pkt .tag.neu{color:var(--p-muted2)}
+.pkt .fac{display:grid;grid-template-columns:84px minmax(0,1fr) 54px;gap:10px;align-items:center;font-size:11px;padding:3px 0}
+.pkt .fac .b{height:8px}.pkt .fac .b u{left:0}
+.pkt .fac .n{text-align:right;color:var(--p-muted2)}
+.pkt .cdp{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.pkt .cd{border:1px solid var(--p-line2);padding:10px}
+.pkt .cd .i{font-size:16px}.pkt .cd .t{font-size:10px;letter-spacing:.16em;color:var(--p-muted);text-transform:uppercase;margin-top:4px}
+.pkt .cd .s{font-size:11px;margin-top:4px;letter-spacing:.08em}
+.pkt .cd .x{font-size:10px;color:var(--p-muted2);margin-top:3px;overflow-wrap:anywhere}
+.pkt .riv{width:100%;border-collapse:collapse;font-size:11.5px}
+.pkt .riv td,.pkt .riv th{padding:6px 8px;border-bottom:1px solid var(--p-line);text-align:left}
+.pkt .riv th{font-size:9px;letter-spacing:.18em;color:var(--p-muted);font-weight:400;text-transform:uppercase}
+.pkt .riv tr.me td{background:var(--p-card2);font-weight:500}
+.pkt .riv img{width:22px;height:22px;vertical-align:middle;margin-right:6px}
+.pkt .riv .r{text-align:right}
+.pkt .ctx{display:flex;flex-wrap:wrap;gap:8px}
+.pkt .cx{border:1px solid var(--p-line2);padding:7px 10px;font-size:11px;max-width:100%}
+.pkt .cx b{font-weight:500}.pkt .cx small{display:block;color:var(--p-muted);font-size:10px;margin-top:2px}
+.pkt .verd{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.pkt .vb{font-family:'Bebas Neue',Impact,sans-serif;font-size:26px;letter-spacing:.04em;padding:2px 12px;border:1px solid currentColor}
+.pkt .resbox{display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:center}
+.pkt .resbig{font-family:'Bebas Neue',Impact,sans-serif;font-size:56px;line-height:.9}
+.pkt .acts{display:flex;gap:8px;padding:14px 18px;flex-wrap:wrap}
+.pkt .btn{border:1px solid var(--p-text);background:none;color:var(--p-text);font:inherit;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;padding:9px 14px;cursor:pointer;border-radius:0}
+.pkt .btn.pri{background:var(--p-inv);color:var(--p-invt)}
+.pkt .empty{padding:40px;text-align:center;color:var(--p-muted)}
+.pkt .rec{margin-top:22px;border:1px solid var(--p-line)}
+.pkt .rec table{width:100%;border-collapse:collapse;font-size:12px}
+.pkt .rec th,.pkt .rec td{padding:9px 14px;border-bottom:1px solid var(--p-line);text-align:right}
+.pkt .rec th:first-child,.pkt .rec td:first-child{text-align:left}
+.pkt .rec th{font-size:9px;letter-spacing:.2em;color:var(--p-muted);font-weight:400;text-transform:uppercase}
+.pkt .rech{display:flex;justify-content:space-between;gap:8px;padding:12px 14px;border-bottom:1px solid var(--p-line)}
+.pkt .rech .t{font-size:10px;letter-spacing:.22em;color:var(--p-acc);text-transform:uppercase}
+.pkt .rec .two>div+div{border-left:1px solid var(--p-line)}
+.pkt .note{margin-top:14px;font-size:10.5px;color:var(--p-muted);border-left:2px solid var(--p-acc);padding:6px 10px;line-height:1.6}
+.pkt .pos{color:var(--p-win)}.pkt .neg{color:var(--p-lose)}
+.pkt .back{display:none}
+@media(max-width:900px){.pkt .grid{grid-template-columns:minmax(0,1fr)}.pkt .det{display:none}
+  .pkt .det.open{display:block;position:fixed;inset:0;z-index:5000;overflow:auto;overflow-x:hidden;border:none;padding-bottom:30px}
+  .pkt .back{display:block;padding:12px 18px;border-bottom:1px solid var(--p-line);font-size:11px;letter-spacing:.16em;cursor:pointer;position:sticky;top:0;background:var(--p-bg);z-index:2}
+  .pkt .kpis{grid-template-columns:repeat(3,minmax(0,1fr))}.pkt .kpi{border-bottom:1px solid var(--p-line)}.pkt .kpi:nth-child(3n){border-right:none}
+  .pkt .stats{grid-template-columns:repeat(3,1fr)}.pkt .two{grid-template-columns:minmax(0,1fr)}.pkt .riv{display:block;overflow-x:auto}.pkt .two>.sec:first-child{border-right:none;border-bottom:1px solid var(--p-line)}
+  .pkt .rec .two>div+div{border-left:none;border-top:1px solid var(--p-line)}
+  .pkt .cdp{grid-template-columns:repeat(2,1fr)}.pkt h1{font-size:44px}.pkt .hn{font-size:32px}.pkt .hero{grid-template-columns:56px minmax(0,1fr)}.pkt .hero .silk{width:56px;height:56px}.pkt .hero .hr{grid-column:1/-1;text-align:left}}
+@media(max-width:600px){.pkt .kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.pkt .kpi:nth-child(3n){border-right:1px solid var(--p-line)}.pkt .kpi:nth-child(2n){border-right:none}.pkt .kpi .v{font-size:30px}
+  .pkt .top{flex-direction:column;align-items:stretch}.pkt .top .sp{display:none}.pkt .dsw .d{flex:1;min-width:0}
+  .pkt .bar{flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px}.pkt .bar .chip{flex:none}.pkt .bar .sp{display:none}
+  .pkt .row{grid-template-columns:4px 30px minmax(0,1fr) auto;gap:8px}.pkt .eb i{width:30px}.pkt .eb{font-size:0}.pkt .eb b{font-size:11px}
+  .pkt .rec>div{overflow-x:auto}.pkt .rec table{min-width:420px}.pkt .rec th,.pkt .rec td{padding:8px 6px}.pkt .rech{flex-direction:column}
+  .pkt .stats{grid-template-columns:repeat(2,1fr)}.pkt .eline{grid-template-columns:minmax(0,1fr) 70px 36px}.pkt .rm{overflow-wrap:anywhere}}
+`;
+const CATC={NAP:'var(--p-nap)',WIN:'var(--p-wincat)',STRONG:'var(--p-strong)',PLACE:'var(--p-plc)'};
+const CATS=['NAP','WIN','STRONG','PLACE'];
+const S={di:null,cat:'all',stf:'all',sort:'rank',sel:0};
+let DATES=[],CACHE={};
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const tc=s=>String(s||'').toLowerCase().replace(/\b\w/g,c=>c.toUpperCase()).replace(/\((aw|ire|fr)\)/i,m=>m.toUpperCase());
+const num=(x,d)=>{const n=parseFloat(x);return isNaN(n)?(d===undefined?0:d):n;};
+const isH=v=>v===true||v==='True'||v==='true'||v===1;
+const fmtD=d=>new Date(d+'T12:00:00').toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'});
+function parseBd(bd){if(!bd)return{};if(typeof bd==='object')return bd;try{return JSON.parse(bd)}catch(e){try{return JSON.parse(String(bd).replace(/'/g,'"'))}catch(e2){return{}}}}
+const today=()=>(window.D&&D.date)||'';
+function betCol(b){return b==='WIN'?'var(--p-win)':b==='EW'?'var(--p-gold)':b==='SKIP'?'var(--p-muted)':'var(--p-place)';}
+function pl1u(p){const r=p.res;if(!r||r.status==='nr'||r.status==='pu'&&!r.pos)return r&&r.status==='pu'?-1:0;const sp=parseFloat(r.sp);return r.status==='won'?(sp>1?sp-1:0):-1;}
+function stats(ps){const rs=ps.filter(p=>p.res&&p.res.status!=='nr');const w=rs.filter(p=>p.res.status==='won').length,pl=rs.filter(p=>p.res.status==='won'||p.res.status==='placed').length;
+  const pnl=rs.reduce((a,p)=>a+pl1u(p),0);return{n:ps.length,r:rs.length,w,pl,l:rs.length-pl,pnl,wp:rs.length?Math.round(w/rs.length*100):null,pp:rs.length?Math.round(pl/rs.length*100):null,roi:rs.length?Math.round(pnl/rs.length*100):null};}
+
+// logged race lookup (date|venue|time) — built once per render
+let HIDX=null;
+function histIdx(){const h=window._resultsHistory;if(!h||!h.races)return{};if(HIDX&&HIDX._n===h.races.length)return HIDX;
+  HIDX={_n:h.races.length};h.races.forEach(r=>{HIDX[r.date+'|'+r.venue+'|'+r.time]=r;});return HIDX;}
+// pseudo racecard from a logged race (past days: field scores + breakdowns, no silks/prices)
+function raceFromHist(hr){if(!hr)return null;
+  return{course:hr.venue,time:hr.time,race_name:hr.race_name,going:hr.going,handicap:isH(hr.handicap),race_class:hr.race_class,
+    distance:hr.distance_f?(+hr.distance_f>=16?(Math.floor(hr.distance_f/8)+'m'+(hr.distance_f%8?Math.round(hr.distance_f%8)+'f':'')):(+hr.distance_f>=8?'1m'+(hr.distance_f-8?Math.round(hr.distance_f-8)+'f':''):Math.round(hr.distance_f)+'f')):'',
+    race_type:hr.race_type,field_size:num(hr.field_size)||(hr.results||[]).length,_hist:true,
+    runners:(hr.results||[]).filter(r=>!isH(r.non_runner)).map(r=>({name:r.name,score:num(r.predicted_score),score_breakdown:parseBd(r.score_breakdown),jockey:r.jockey,trainer:r.trainer,draw:r.draw,age:r.age,lbs:r.lbs,form:''}))};}
+
+function edgeParts(p,race){
+  const gap=p.gap||0,fs=p.fieldSize||(race&&(race.field_size||race.runners.length))||0,m=p.momLabel||'UNKNOWN';
+  const a=[['Gap +'+gap+' × 2.5 (cap 30)',Math.min(gap*2.5,30)],['CDP proven '+p.cdpProven+' × 8',p.cdpProven*8],
+    ['Score '+p.scorePct+'% of max',p.scorePct>=64?15:p.scorePct>=55?10:5],
+    ['Momentum '+m,{HOT:12,IMPROVING:8,STEADY:4,DECLINING:-5,COLD:-10}[m]||0],['Field '+fs+' runners',fs<=8?6:fs<=12?0:-4]];
+  if(race&&isH(race.handicap))a.push(['Handicap',-5]);
+  return a.map(x=>[x[0],Math.round(x[1]*10)/10]);}
+
+function enrich(p,race,date){
+  p.date=date;p.race=race||null;
+  const runner=race&&race.runners?race.runners.find(r=>r.name===p.horse):null;p.runner=runner||null;
+  if(runner){if(!runner.score_breakdown||!Object.keys(runner.score_breakdown).length)runner.score_breakdown=p.scoreBreakdown||{};
+    if(!runner.form&&p.form)runner.form=p.form;}
+  const r0=runner||{name:p.horse,score:p.score,score_breakdown:p.scoreBreakdown||{},form:p.form};
+  if(p.cdpProven==null){const c=buildCDP(r0,race||{});p.cdpProven=c.proven;}
+  if(p.momLabel==null){const m=calcMomentum(p.form||'');p.momLabel=m.label;p.momIcon=m.icon;}
+  if(p.scorePct==null)p.scorePct=Math.round((p.score||0)/MAX_SCORE*100);
+  p.cdp=buildCDP(r0,race||{});
+  if(race&&race.runners&&race.runners.length){
+    if(!p.betRec)p.betRec=getPrixmBetRec(p,race);
+    if(!p.verifResult&&(p.category==='NAP'||p.category==='WIN')&&runner&&!race._hist){try{p.verifResult=runVerificationPass(p,race,runner);}catch(e){}}
+    const scores=race.runners.map(r=>r.score||0),fs=p.fieldSize||race.runners.length,pt=getPlaceLimit(fs);
+    p.pwin=calcCompetitiveProb(p.score,scores,1);p.placeTerms=pt;p.pplace=pt>1?calcCompetitiveProb(p.score,scores,pt):p.pwin;
+    p.rivals=[...race.runners].sort((a,b)=>b.score-a.score).slice(0,5).map(r=>({name:r.name,score:r.score,silk:r.silk_url,jockey:r.jockey,price:r.price,pwin:calcCompetitiveProb(r.score,scores,1)}));
+  }
+  p.edgeParts=edgeParts(p,race);
+  p.res=getPickResult(p,window._resultsHistory,date)||null;
+  if(p.res){const hr=histIdx()[date+'|'+p.venueKey+'|'+p.time];const hrr=hr&&(hr.results||[]).find(r=>r.name===p.horse);if(hrr)p.res.comment=hrr.run_comment;}
+  return p;}
+
+function buildDay(date){
+  if(CACHE[date])return CACHE[date];
+  let ps=[];
+  if(date===today()&&window.D&&D.venues){
+    ps=getPrixmPicks(getTop10Picks(D)).map(p=>{const v=D.venues[p.venueKey];return enrich({...p},v?v.races[p.raceIdx]:null,date);});
+  }else{
+    const pd=loadPrixmPicksForCalendar(date);
+    ps=(pd&&pd.picks||[]).filter(p=>p.category).map(p=>enrich({...p,fieldSize:p.fieldSize},raceFromHist(histIdx()[date+'|'+p.venueKey+'|'+p.time]),date));
+  }
+  return(CACHE[date]=ps);}
+
+function shown(ps){let a=ps.map((p,i)=>Object.assign(p,{_i:i}));
+  if(S.cat!=='all')a=a.filter(p=>p.category===S.cat);
+  if(S.stf==='pend')a=a.filter(p=>!p.res);if(S.stf==='done')a=a.filter(p=>p.res);
+  if(S.sort==='time')a=[...a].sort((x,y)=>(x.time||'').localeCompare(y.time||''));if(S.sort==='edge')a=[...a].sort((x,y)=>y.edge-x.edge);
+  return a;}
+function resChip(p){const r=p.res;if(!r)return`<span class="res pend">${esc(p.time)}</span>`;
+  const t={won:'WON',placed:'PLACED '+ordinal(r.pos),lost:'LOST '+(r.pos?ordinal(r.pos):''),nr:'NR',pu:'PU'}[r.status];
+  return`<span class="res ${r.status}">${t}${r.sp&&r.status!=='nr'?' · '+esc(r.sp):''}</span>`;}
+function silk(u,cls){return u?`<img class="${cls||'silk'}" src="${esc(u)}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">`:`<span class="${cls||'silk'} nosilk"></span>`;}
+
+function render(){
+  const root=document.getElementById('picksContent');if(!root)return;
+  if(!document.getElementById('picksTabCss')){const s=document.createElement('style');s.id='picksTabCss';s.textContent=CSS;document.head.appendChild(s);}
+  CACHE={};HIDX=null;
+  const set=new Set(getAllPicksDates().filter(d=>{const pd=loadPrixmPicksForCalendar(d);return pd&&pd.picks&&pd.picks.some(p=>p.category);}));
+  if(today())set.add(today());
+  DATES=[...set].sort();
+  if(S.di==null||S.di>=DATES.length)S.di=DATES.length-1;
+  if(!DATES.length){root.innerHTML='<div class="pkt"><div class="empty">No racecard loaded.</div></div>';return;}
+  const date=DATES[S.di],ps=buildDay(date),st=stats(ps);
+  const recent=DATES.slice(-30),all=recent.flatMap(buildDay),a=stats(all);
+  const cnt=c=>ps.filter(p=>p.category===c).length;
+  const best=ps[0];
+  const sh=shown(ps);if(!sh.find(p=>p._i===S.sel))S.sel=sh.length?sh[0]._i:0;
+  const c=(k,v,l,n)=>`<button class="chip ${S[k]===v?'on':''}" data-k="${k}" data-v="${v}">${l}${n!=null?`<b>${n}</b>`:''}</button>`;
+  const kpi=(l,v,s)=>`<div class="kpi"><div class="l">${l}</div><div class="v">${v}</div><div class="s">${s}</div></div>`;
+  const isToday=date===today();
+  root.innerHTML=`<div class="pkt">
+   <div class="top"><div><h1>PRIXM <span>PICKS</span></h1><div class="sub">Daily selection · NAP · WIN · STRONG · PLACE · UK only</div></div><div class="sp"></div>
+     <div class="dsw"><button data-a="prev" ${S.di===0?'disabled':''} aria-label="Previous day">‹</button><div class="d">${fmtD(date)}<small>${isToday?'TODAY':date}</small></div><button data-a="next" ${S.di===DATES.length-1?'disabled':''} aria-label="Next day">›</button></div></div>
+   <div class="kpis">
+     ${kpi('Selections',ps.length,`${cnt('NAP')} NAP · ${cnt('WIN')} WIN · ${cnt('STRONG')} STR · ${cnt('PLACE')} PLC`)}
+     ${kpi('Top of the day',best?`<span style="font-size:26px">${esc(best.horse)}</span>`:'—',best?`${best.category} · ${esc(best.time)} ${esc(tc(best.venue))}`:'')}
+     ${kpi('Results',st.r?`${st.w}-${st.pl-st.w}-${st.l}`:'—',st.r?`won · placed · unplaced (${st.r}/${ps.length} run)`:'none run yet')}
+     ${kpi('Day 1u at SP',st.r?`<span class="${st.pnl>=0?'pos':'neg'}">${st.pnl>=0?'+':''}${st.pnl.toFixed(2)}u</span>`:'—','1u win on every pick')}
+     ${kpi(recent.length+'-day win %',a.wp==null?'—':a.wp+'%',`${a.r} picks resulted`)}
+     ${kpi(recent.length+'-day place %',a.pp==null?'—':a.pp+'%',a.roi==null?'':`ROI at SP ${a.roi>=0?'+':''}${a.roi}%`)}
+   </div>
+   <div class="bar">${c('cat','all','All',ps.length)}${CATS.map(x=>c('cat',x,x,cnt(x))).join('')}<span class="sep"></span>${c('stf','all','Any')}${c('stf','pend','To run',ps.filter(p=>!p.res).length)}${c('stf','done','Resulted',ps.filter(p=>p.res).length)}<span class="sp"></span>${c('sort','rank','Rank')}${c('sort','time','Time')}${c('sort','edge','Edge')}</div>
+   <div class="grid"><div class="list">${sh.length?sh.map(rowHTML).join(''):`<div class="empty">${ps.length?'No picks match.':'No selections qualified (edge ≥ 40 needed).'}</div>`}</div>
+     <div class="det" id="pktDet">${detHTML(ps[S.sel])}</div></div>
+   ${recHTML(all,recent)}
+   <div class="note">NAP needs edge ≥70 · gap ≥10 · CDP ≥3/4 · WIN needs edge ≥60 · gap ≥7 · CDP ≥2/4. On most cards Distance / Going / Course sit at a neutral value ("untested"), so CDP rarely passes 1/4 and most picks land STRONG or PLACE. Past days come from picks saved on this device. Display only — nothing here changes scores, picks or the Ledger.</div>
+  </div>`;
+  bind(root);}
+
+function rowHTML(p){const cc=CATC[p.category],br=p.betRec||{type:p.bet||'—'};
+  const seg=p.race&&p.race.runners&&!p.race._hist?(getGoldenFlags(p.race)?'⭐':getSilverFlags(p.race)?'🥈':getBronzeFlags(p.race)?'🥉':''):'';
+  const prime=p.race&&!p.race._hist&&getPrimeFlags(p.race)?'🎯':'';
+  return`<div class="row ${p._i===S.sel?'sel':''} ${p.res&&p.res.status==='lost'?'lostrow':''}" data-i="${p._i}" tabindex="0">
+   <div class="acc" style="background:${cc}"></div>${silk(p.runner&&p.runner.silk_url)}
+   <div style="min-width:0"><div class="pcr"><span class="cat" style="color:${cc}">● ${p.category==='NAP'?'NAP — BEST BET':p.category}</span>${seg?`<span class="cat">${seg}</span>`:''}${prime?`<span class="cat">${prime}</span>`:''}</div>
+     <div class="rn">${esc(p.horse)}</div><div class="rm">${esc(p.time)} ${esc(tc(p.venue))} · ${p.fieldSize||'?'} run${p.jockey?' · '+esc(p.jockey):''}</div></div>
+   <div class="rr"><span class="betc" style="color:${betCol(br.type)}">${esc(br.type)}</span>
+     <span class="eb">EDGE<i><u style="width:${p.edge}%;background:${cc}"></u></i><b style="color:${cc}">${p.edge}</b></span>${resChip(p)}</div></div>`;}
+
+function detHTML(p){
+  if(!p)return'<div class="empty">No selections for this day.</div>';
+  const cc=CATC[p.category],race=p.race,rn=p.runner||{},br=p.betRec||{type:p.bet||'—',tags:[]},live=race&&!race._hist;
+  const fm=(typeof fmFor==='function')?fmFor(p.scoreBreakdown):FM;
+  const bd=(rn.score_breakdown&&Object.keys(rn.score_breakdown).length?rn.score_breakdown:p.scoreBreakdown)||{};
+  const maxE=Math.max(30,...p.edgeParts.map(x=>Math.abs(x[1])));
+  const eRows=p.edgeParts.map(([l,v])=>`<div class="eline"><span>${esc(l)}</span><span class="b"><u style="${v>=0?'left:0':'right:0'};width:${Math.abs(v)/maxE*100}%;background:${v>=0?cc:'var(--p-lose)'}"></u></span><span class="n ${v<0?'neg':''}">${v>0?'+':''}${v}</span></div>`).join('');
+  const lad=[['PLACE',40],['STRONG',50],['WIN',60],['NAP',70]].map(([c,t])=>`<div class="${p.category===c?'on':''}" style="${p.category===c?'background:'+CATC[c]+';border-color:'+CATC[c]:''}">${c} ≥${t}</div>`).join('');
+  const why={NAP:'Edge ≥70 · gap ≥10 · CDP ≥3/4 · form not declining',WIN:'Edge ≥60 · gap ≥7 · CDP ≥2/4',STRONG:'Edge ≥50 · gap ≥4',PLACE:'Edge ≥40'}[p.category];
+  const miss=p.category==='STRONG'?(p.cdpProven<2?`Missed WIN: CDP ${p.cdpProven}/4 (needs 2)`:p.edge<60?`Missed WIN: edge ${p.edge} (needs 60)`:p.gap<7?`Missed WIN: gap ${p.gap} (needs 7)`:''):
+    p.category==='PLACE'?(p.edge<50?`Missed STRONG: edge ${p.edge} (needs 50)`:`Missed STRONG: gap ${p.gap} (needs 4)`):
+    p.category==='WIN'?(p.edge<70?`Missed NAP: edge ${p.edge} (needs 70)`:p.gap<10?`Missed NAP: gap ${p.gap} (needs 10)`:p.cdpProven<3?`Missed NAP: CDP ${p.cdpProven}/4 (needs 3)`:'Only one NAP a day'):'';
+  const bdT=Object.keys(fm).reduce((s,k)=>s+num(bd[k]),0);
+  const fac=Object.entries(fm).map(([k,f])=>{const v=num(bd[k]),pc=v/f.mx*100,col=pc>=70?'#5D4A66':pc>=50?'#C1CEFE':pc>=30?'#B2BD7E':'#EC7357';
+    return`<div class="fac"><span>${esc(f.l)}</span><span class="b"><u style="width:${Math.min(100,pc)}%;background:${col}"></u></span><span class="n">${+v.toFixed(1)}/${f.mx}</span></div>`;}).join('');
+  const cdp=(p.cdp&&p.cdp.cards||[]).map(c=>{const col=c.status==='proven'?'var(--p-win)':c.status==='untested'?'var(--p-gold)':'var(--p-lose)';
+    return`<div class="cd" style="border-top:2px solid ${col}"><div class="i">${c.icon}</div><div class="t">${esc(c.label)}</div><div class="s" style="color:${col}">${esc(c.statusLabel)}</div><div class="x">${c.pct}% of max</div></div>`;}).join('');
+  const top=p.rivals&&p.rivals[0];
+  const riv=(p.rivals||[]).map((r,i)=>`<tr class="${r.name===p.horse?'me':''}"><td>${i+1}</td><td>${r.silk?`<img src="${esc(r.silk)}" alt="" onerror="this.style.visibility='hidden'">`:''}${esc(r.name)}</td><td>${esc(r.jockey||'')}</td><td class="r">${r.score}</td><td class="r">${i===0?'—':'−'+(top.score-r.score).toFixed(1)}</td><td class="r">${r.pwin}%</td><td class="r">${r.price?esc(r.price):'—'}</td></tr>`).join('');
+  const cx=[];
+  if(live){if(getGoldenFlags(race))cx.push(['⭐ GOLDEN','non-hcap · gap ≥18 · score ≥74']);else if(getSilverFlags(race))cx.push(['🥈 SILVER','non-hcap · gap 10–12 · turf']);else if(getBronzeFlags(race))cx.push(['🥉 BRONZE','non-hcap · gap 8–10 · good/GF']);
+    if(getPrimeFlags(race))cx.push(['🎯 Prime','non-hcap · ≤5 runners · gap ≥12 (≈58% win)']);}
+  const tf=rn.track_fit;if(tf&&tf.verdict){cx.push(['🧭 Track fit '+(tf.verdict==='s'?'✅ suits':tf.verdict==='u'?'❌ unsuited':'⚠ query'),(tf.checks||[]).slice(0,2).map(c=>c[0]+' '+c[1]).join(' · ')]);}
+  const w=rn.wt_change;if(w&&w.kind&&w.prev)cx.push(['⚖ '+(w.kind==='up'?'OR +'+w.dor:w.kind==='pen'?'Pen +'+w.dl+' lb':'+'+w.dl+' lb'),`vs ${tc(w.prev.venue)} ${w.prev.date}${w.prev.pos?' ('+ordinal(w.prev.pos)+(w.prev.field?' of '+w.prev.field:'')+')':''}`]);
+  const ey=rn.eye;if(ey&&ey.pm!=null)cx.push(['🔭 Model '+ey.pm+'%','engine-rank chance '+ey.pr+'%'+(ey.pos&&ey.pos[0]?' · '+ey.pos[0][0]:'')]);
+  const rd=typeof rprDivergenceFlag==='function'?rprDivergenceFlag(rn.ofr,rn.rpr):null;if(rd)cx.push([rd.icon+' '+rd.label,'RPR '+rn.rpr+' vs OR '+rn.ofr]);
+  const cc2=typeof detectConnectionChange==='function'&&live?detectConnectionChange(rn):null;if(cc2&&(cc2.jockey||cc2.trainer))cx.push(['🔄 '+(cc2.jockey&&cc2.trainer?'New jockey + trainer':cc2.jockey?'New jockey':'New trainer'),[cc2.jockey?'J '+cc2.jockey.from+' → '+cc2.jockey.to:'',cc2.trainer?'T '+cc2.trainer.from+' → '+cc2.trainer.to:''].filter(Boolean).join(' · ')]);
+  const wb=typeof getWatchbackContext==='function'&&live?getWatchbackContext(p.horse):null;if(wb&&typeof watchbackContextText==='function')cx.push([(WATCHBACK_CONTEXT_ICON[wb.classification]||'')+' Watchback',watchbackContextText(wb)]);
+  if(race&&race.pace&&typeof race.pace==='object'){const k=['FR','P','MD','HU'].find(k=>Array.isArray(race.pace[k])&&race.pace[k].includes(p.horse));if(k)cx.push(['🏁 '+{FR:'Front-runner',P:'Prominent',MD:'Mid-division',HU:'Held up'}[k],race.pace.verdict||'']);}
+  if(rn.comment)cx.push(['Card note',rn.comment,1]);
+  const v=p.verifResult;
+  const verifH=v?`<div class="sec"><div class="sh">Verification pass<span>NAP / WIN only · never changes the score</span></div>
+     <div class="verd"><span class="vb" style="color:${v.verdict==='CONFIRMED'?'var(--p-win)':v.verdict==='FLAGGED'?'var(--p-lose)':'var(--p-gold)'}">${v.verdictIcon} ${v.verdict}</span>
+     <div>CAS <b>${v.cas}</b>/100 · adjusted confidence <b>${v.confidence}</b><div class="rm">${(v.casFlags||[]).map(esc).join(' · ')||'No counter-arguments'}${(v.unverifiedPositives||[]).length?' · unverified: '+v.unverifiedPositives.map(u=>esc(u.factor)).join(', '):''}</div></div></div></div>`
+    :`<div class="sec"><div class="sh">Verification pass<span>runs on NAP / WIN only</span></div><div class="rm">${p.category==='NAP'||p.category==='WIN'?'Only run on the live card (today).':'Not run — '+p.category+' pick.'}</div></div>`;
+  const r=p.res,wbq=r&&r.watchback&&r.watchback.quality;
+  const resH=r?`<div class="sec"><div class="sh">Result<span>${getPlaceLimit(p.fieldSize||12)} places paid</span></div><div class="resbox">
+     <div class="resbig" style="color:${r.status==='won'?'var(--p-win)':r.status==='placed'?'var(--p-place)':r.status==='lost'?'var(--p-lose)':'var(--p-muted)'}">${r.status==='nr'?'NR':r.status==='pu'?'PU':ordinal(r.pos)}</div>
+     <div><b>${{won:'Won',placed:'Placed',lost:'Unplaced',nr:'Non-runner',pu:'Did not finish'}[r.status]}</b>${r.sp?' · SP '+esc(r.sp):''}${r.status!=='won'&&r.watchback&&r.watchback.winner_name?` · winner ${esc(r.watchback.winner_name)}${r.watchback.winner_sp?' ('+esc(r.watchback.winner_sp)+')':''}${r.watchback.beaten_distance?' · beaten '+esc(r.watchback.beaten_distance)+'L':''}`:''}
+     <div class="rm">${wbq?'Watchback: '+esc(String(wbq).replace(/_/g,' '))+' · ':''}1u win P/L <span class="${pl1u(p)>=0?'pos':'neg'}">${pl1u(p)>=0?'+':''}${pl1u(p).toFixed(2)}u</span></div>
+     ${r.comment?`<div class="rm" style="margin-top:6px;font-style:italic">“${esc(r.comment)}”</div>`:''}</div></div></div>`
+    :`<div class="sec"><div class="sh">Result<span>off ${esc(p.time)}</span></div><div class="rm">Not run yet — fills in after Fetch Results.</div></div>`;
+  const fair=p.pwin?(100/p.pwin).toFixed(1):null;
+  const meta2=race?[race.distance,race.going,race.race_class&&race.race_class!=='None'?'Class '+race.race_class:'',(p.fieldSize||'?')+' runners',isH(race.handicap)?'Handicap':'Non-handicap',race.race_type].filter(Boolean).map(esc).join(' · '):'';
+  const meta3=['J '+esc(p.jockey||rn.jockey||'—'),'T '+esc(p.trainer||rn.trainer||'—')+(rn.trainer_rtf&&rn.trainer_rtf!=='None'?' ('+esc(rn.trainer_rtf)+'% RTF)':''),rn.age?esc(rn.age)+'yo':'',rn.lbs?esc(rn.lbs)+'lb':'',rn.draw&&rn.draw!=='None'?'draw '+esc(rn.draw):'',p.form?'form <b>'+esc(p.form)+'</b>':''].filter(Boolean).join(' · ');
+  const momCol={HOT:'var(--p-win)',IMPROVING:'var(--p-win)',DECLINING:'var(--p-lose)',COLD:'var(--p-lose)'}[p.momLabel]||'inherit';
+  const canAct=p.date===today()&&live;
+  return`<div class="back" data-a="close">‹ BACK TO PICKS</div>
+   <div class="hero">${silk(rn.silk_url)}
+     <div style="min-width:0"><div class="cat" style="color:${cc}">● ${p.category==='NAP'?'NAP — BEST BET OF THE DAY':p.category}${p.targetLabel?' · TARGET '+esc(p.targetLabel).toUpperCase():''}</div>
+       <div class="hn">${esc(p.horse)}</div>
+       <div class="hm">${esc(p.time)} ${esc(tc(p.venue))}${p.raceName||(race&&race.race_name)?' · '+esc(p.raceName||race.race_name):''}</div>
+       ${meta2?`<div class="hm">${meta2}</div>`:''}<div class="hm">${meta3}</div></div>
+     <div class="hr"><span class="betc" style="color:${betCol(br.type)};font-size:13px;padding:5px 12px">${esc(br.type)}</span><div class="big" style="margin-top:8px">${rn.price?esc(rn.price):'—'}</div><div class="rm">card price</div></div></div>
+   <div class="stats">
+     <div class="st"><div class="l">Score</div><div class="v">${p.score}</div><div class="s">${p.scorePct}% of ${MAX_SCORE}</div></div>
+     <div class="st"><div class="l">Gap to 2nd</div><div class="v">+${p.gap}</div><div class="s">${p.gap>=12?'clear':p.gap>=5?'competitive':'tight'}</div></div>
+     <div class="st"><div class="l">Edge</div><div class="v" style="color:${cc}">${p.edge}</div><div class="s">qualify ≥40</div></div>
+     <div class="st"><div class="l">Win chance</div><div class="v">${p.pwin!=null?p.pwin+'%':'—'}</div><div class="s">${fair?'BT model · fair '+fair:'no field data'}</div></div>
+     <div class="st"><div class="l">Place chance</div><div class="v">${p.pplace!=null?p.pplace+'%':'—'}</div><div class="s">${p.placeTerms?'top '+p.placeTerms:''}</div></div>
+     <div class="st"><div class="l">Form</div><div class="v" style="color:${momCol}">${p.momLabel&&p.momLabel!=='UNKNOWN'?p.momLabel:'—'}</div><div class="s">trend of last runs</div></div></div>
+   <div class="two">
+     <div class="sec"><div class="sh">Why it's a pick — edge build-up<span>${p.edge}/100</span></div>${eRows}
+       <div class="etot"><span>Edge total</span><b style="color:${cc}">${p.edge}</b></div>
+       <div class="ladder">${lad}</div><div class="rm" style="margin-top:6px">${why}${miss?' · '+miss:''}</div></div>
+     <div class="sec"><div class="sh">Bet recommendation<span>${p.placeTerms===1?'win only market':p.placeTerms?p.placeTerms+' places':''}</span></div>
+       <div style="display:flex;align-items:baseline;gap:12px;margin-bottom:10px;flex-wrap:wrap"><span class="big" style="color:${betCol(br.type)}">${esc(br.type)}</span>
+       <span class="rm">${br.type==='WIN'?'Rank 1, clear win chance':br.type==='EW'?'Place chance '+p.pplace+'% with '+p.placeTerms+' places':String(br.type).startsWith('TOP')?'Place frame — win chance only '+p.pwin+'%':br.type==='SKIP'?'Nothing clears the bar':''}</span></div>
+       <div class="tags">${(br.tags||[]).map(t=>`<span class="tag ${t.c}">${t.c==='pos'?'✓':t.c==='neg'?'✗':'—'} ${esc(t.t)}</span>`).join('')}</div>
+       ${fair?`<div class="rm" style="margin-top:10px">Value only when the price beats fair (${fair}).</div>`:''}</div></div>
+   ${verifH}
+   <div class="two"><div class="sec"><div class="sh">Factor breakdown<span>${bdT.toFixed(1)} / ${MAX_SCORE}</span></div>${fac}</div>
+     <div class="sec"><div class="sh">CDP — proven form<span>${p.cdpProven}/4 proven</span></div><div class="cdp">${cdp}</div>
+       ${riv?`<div class="sh" style="margin-top:16px">The race<span>top 5 by score</span></div><table class="riv"><tr><th>#</th><th>Horse</th><th>Jockey</th><th class="r">Score</th><th class="r">Gap</th><th class="r">Win</th><th class="r">Price</th></tr>${riv}</table>`:''}</div></div>
+   ${cx.length?`<div class="sec"><div class="sh">Context<span>display only</span></div><div class="ctx">${cx.map(x=>`<div class="cx"${x[2]?' style="flex-basis:100%"':''}><b>${esc(x[0])}</b>${x[1]?`<small>${esc(x[1])}</small>`:''}</div>`).join('')}</div></div>`:''}
+   ${resH}
+   ${canAct?`<div class="acts"><button class="btn pri" data-a="race">Open race ›</button><button class="btn" data-a="stats">📊 Stats</button>${VIEW_ONLY?'':'<button class="btn" data-a="bet">＋ Log bet</button>'}</div>`:''}`;}
+
+function recHTML(all,recent){
+  if(!all.length)return'';
+  const rows=CATS.map(c=>[c,stats(all.filter(p=>p.category===c)),CATC[c]]);
+  const bets=['WIN','EW','TOP 2','TOP 3','TOP 4','SKIP'].map(b=>[b,stats(all.filter(p=>p.betRec&&p.betRec.type===b)),betCol(b)]).filter(x=>x[1].n);
+  const tr=([l,s,col])=>`<tr><td><span style="color:${col}">● </span>${l}</td><td>${s.n}</td><td>${s.r}</td><td>${s.wp==null?'—':s.wp+'%'}</td><td>${s.pp==null?'—':s.pp+'%'}</td><td class="${s.pnl>=0?'pos':'neg'}">${s.r?(s.pnl>=0?'+':'')+s.pnl.toFixed(1)+'u':'—'}</td><td class="${(s.roi||0)>=0?'pos':'neg'}">${s.roi==null?'—':(s.roi>=0?'+':'')+s.roi+'%'}</td></tr>`;
+  const head=t=>`<tr><th>${t}</th><th>Picks</th><th>Run</th><th>Win %</th><th>Place %</th><th>1u P/L</th><th>ROI</th></tr>`;
+  return`<div class="rec"><div class="rech"><span class="t">Track record · last ${recent.length} day${recent.length>1?'s':''}</span><span class="rm">${recent[0]} → ${recent[recent.length-1]} · 1u win at SP · NR void</span></div>
+   <div class="two"><div><table>${head('By category')}${rows.map(tr).join('')}</table></div><div><table>${head('By bet type')}${bets.map(tr).join('')}</table></div></div></div>`;}
+
+function bind(root){
+  root.querySelectorAll('.pkt .chip').forEach(b=>b.onclick=()=>{S[b.dataset.k]=b.dataset.v;render();});
+  root.querySelectorAll('.pkt .row').forEach(r=>{r.onclick=()=>{S.sel=+r.dataset.i;render();const d=document.getElementById('pktDet');if(d&&window.innerWidth<=900){d.classList.add('open');d.scrollTop=0;}};
+    r.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();r.click();}};});
+  root.querySelectorAll('.pkt [data-a]').forEach(b=>b.onclick=()=>{
+    const a=b.dataset.a,p=(CACHE[DATES[S.di]]||[])[S.sel];
+    if(a==='prev'||a==='next'){S.di+=a==='prev'?-1:1;S.sel=0;render();return;}
+    if(a==='close'){document.getElementById('pktDet').classList.remove('open');return;}
+    if(!p)return;
+    if(a==='race'){switchTab('races');openRace(p.venueKey,p.raceIdx).catch(e=>console.error(e));}
+    else if(a==='stats'&&typeof hsOpen==='function')hsOpen(p.horse,p.venueKey,p.raceIdx);
+    else if(a==='bet'&&window.lgOpen)window.lgOpen(p.venueKey,p.raceIdx,p.horse);});}
+window.renderPicksTab=render;
 })();
 </script>
 
